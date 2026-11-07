@@ -1,0 +1,158 @@
+# 2026 Science Bee practice questions, grades 2-4 — questions 61 to 91 of 91.
+# Source: docs/2026_Science_Bee_Practice_Questions_Grades_2_to_4.docx
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee Practice · Part 3
+description: "Grades 2–4 practice questions 61–91 (of 91). Read-aloud style: the easiest clue comes last."
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: An object can have this even while keeping the same speed if it turns. It happens when velocity changes, and a car has it when speeding up or braking. Name how quickly speed or direction changes, a word often used to mean speeding up.
+    options: [ Velocity, Acceleration, Gravity, Momentum ]
+    answer: Acceleration
+
+  - question: Bits of dust left by this object create meteor showers as Earth passes through them. It is named for an astronomer who realized that several sightings were really the same returning object. Name this famous comet that visits about every 76 years and is expected back in 2061.
+    options:
+      - Halley's Comet
+      - Comet Hale–Bopp
+      - Comet Shoemaker–Levy 9
+      - Comet Encke
+    answer: Halley's Comet
+
+  - question: These infectious agents have no DNA or RNA. They are proteins with the wrong shape that can cause other proteins to fold incorrectly and damage the brain. Name these misfolded proteins linked to mad cow disease, whose name starts with “pri.”
+    options: [ Viruses, Bacteria, Fungi, Prions ]
+    answer: Prions
+
+  - question: Combining several of these basic devices can make a more complicated tool. They can change the size or direction of a force and help people lift or move things. Name this group of basic tools that includes levers, pulleys, ramps, and wedges.
+    options: [ Engines, Robots, Simple machines, Circuits ]
+    answer: Simple machines
+
+  - question: Every point on the edge of this shape is the same distance from its center. Its distance around is called the circumference, and a line across its center is a diameter. Name this round, flat shape that you can trace around a coin.
+    options: [ Ellipse, Circle, Square, Triangle ]
+    answer: Circle
+
+  - question: Inside this device, turning wheels changed one letter into another. German forces used it to hide messages during World War II, and codebreakers including Alan Turing worked to read them. Name this famous code machine whose name also means a mystery or puzzle.
+    options: [ Enigma machine, Telegraph, Typewriter, Radar ]
+    answer: Enigma machine
+
+  - question: The largest member of this group, Ganymede, is wider than Mercury. The group includes volcanic Io and icy Europa, and four large members were seen by Galileo through a telescope. Name these moons that orbit Jupiter, the largest planet in our solar system.
+    options:
+      - Moons of Saturn
+      - Rings of Saturn
+      - Moons of Mars
+      - Moons of Jupiter
+    answer: Moons of Jupiter
+    explanation: The four big ones — Io, Europa, Ganymede and Callisto — are called the Galilean moons.
+
+  - question: Some of these cells swallow germs, while others help the body recognize particular invaders. They travel in blood and body tissues and work as part of the immune system. Name these germ-fighting blood cells, contrasted with red blood cells that carry oxygen.
+    options: [ Red blood cells, Platelets, White blood cells, Nerve cells ]
+    answer: White blood cells
+
+  - question: Some systems in this field learn patterns from many examples. They can recognize speech, identify objects in photos, and help computers play games. Name this kind of computer technology that performs tasks linked to human intelligence, often shortened to AI.
+    options:
+      - Virtual reality
+      - Artificial intelligence
+      - Spreadsheets
+      - The Internet
+    answer: Artificial intelligence
+
+  - question: Ice crystals can form near the top of this very tall kind of cloud. Strong rising air inside it can help make hail, and its top often spreads into an anvil shape. Name these towering storm clouds that bring thunder and lightning.
+    options: [ Cumulonimbus clouds, Cirrus clouds, Stratus clouds, Fog ]
+    answer: Cumulonimbus clouds
+
+  - question: The first birds appeared during this period in Earth's history. Stegosaurus and long-necked dinosaurs lived during it, between the Triassic and Cretaceous periods. Name this dinosaur-age period that fills the blank in the movie title “___ Park.”
+    options: [ Triassic Period, Cretaceous Period, Ice Age, Jurassic Period ]
+    answer: Jurassic Period
+
+  - question: Each of these image parts can hold its own color information. A digital picture has rows and columns of them, and zooming in can make them visible. Name the tiny squares that make up a digital image, also called picture elements.
+    options: [ Bytes, Icons, Pixels, Fonts ]
+    answer: Pixels
+
+  - question: Finding this for a square's area tells you the length of one side. It reverses multiplying a number by itself, so doing it to 25 gives 5. Name this operation that gives 3 for 9 and 4 for 16, written with a radical sign.
+    options: [ Exponent, Square root, Fraction, Percent ]
+    answer: Square root
+
+  - question: This material can cool into smooth, ropy surfaces or rough, sharp ones. It may glow orange when very hot and hardens into rock as it cools. Name melted rock that has come out of a volcano, called magma while it is still underground.
+    options: [ Lava, Magma, Obsidian, Ash ]
+    answer: Lava
+    explanation: It's magma while still underground and lava once it comes out.
+
+  - question: Some examples glow with their own light, while others reflect nearby starlight. These objects can be places where new stars form, and famous examples include the Orion and Horsehead clouds. Name a huge cloud of gas and dust in space, whose name begins with N.
+    options: [ Galaxy, Comet, Black hole, Nebula ]
+    answer: Nebula
+
+  - question: The name of this element family means “salt-formers.” Its members belong to Group 17 and include fluorine, bromine, and iodine. Name this group of elements that also includes chlorine, the element used to help keep swimming pools clean.
+    options: [ Noble gases, Alkali metals, Halogens, Metalloids ]
+    answer: Halogens
+
+  - question: The order of four different chemical building blocks helps this molecule store instructions. It is found in chromosomes, and its shape looks like a twisted ladder. Name this molecule that carries genetic instructions, known by the three letters D, N, and A.
+    options: [ RNA, DNA, ATP, Protein ]
+    answer: DNA
+    explanation: DNA stands for deoxyribonucleic acid.
+
+  - question: This idea says that moving clocks and clocks in different strengths of gravity can tick at different rates. It changed how scientists understand space, time, and gravity and includes the famous equation E equals m c squared. Name Einstein's theory that has “special” and “general” forms.
+    options: [ Relativity, Evolution, Big Bang theory, Plate tectonics ]
+    answer: Relativity
+
+  - question: Tiny openings in this plant part let gases move in and out. Its veins carry water and sugars, and its broad surface helps catch sunlight for photosynthesis. Name this usually green plant part that grows from a stem and may turn red or yellow in autumn.
+    options: [ Root, Stem, Flower, Leaf ]
+    answer: Leaf
+
+  - question: This number's decimal digits keep going without repeating in a fixed pattern. Dividing a circle's distance around by its distance across the center always gives this same number. Name this number used in circle formulas, usually rounded to 3.14.
+    options: [ Zero, Infinity, Pi, Square root of 2 ]
+    answer: Pi
+
+  - question: This metal is so easy to shape that it can be hammered into very thin sheets. It does not rust, and jewelers describe its purity using karats. Name this valuable yellow metal used in rings and coins, often won as a medal for first place.
+    options: [ Silver, Gold, Iron, Copper ]
+    answer: Gold
+
+  - question: Astronomers also call this galaxy M31. It is a huge spiral about two and a half million light-years away and is the nearest large galaxy to our Milky Way. Name this galaxy whose name begins with “Andro.”
+    options:
+      - Andromeda Galaxy
+      - Milky Way
+      - Whirlpool Galaxy
+      - Triangulum Galaxy
+    answer: Andromeda Galaxy
+
+  - question: The number e belongs to this group, but the square root of two does not. These numbers cannot be written as fractions of whole numbers, and their decimal digits never end or repeat in a fixed pattern. Name this special group of numbers that includes pi and e, whose name begins with “trans.”
+    options:
+      - Irrational numbers
+      - Prime numbers
+      - Whole numbers
+      - Transcendental numbers
+    answer: Transcendental numbers
+    explanation: √2 is irrational but not transcendental, so "irrational numbers" is not the answer.
+
+  - question: Tiny hairs on these plant parts increase the area that takes in water. Some plants have one thick main one, while others have a branching network of thin ones. Name these usually underground parts that anchor a plant and take in water and minerals.
+    options: [ Leaves, Stems, Roots, Seeds ]
+    answer: Roots
+
+  - question: Scientists measure this quantity in units called newtons. Gravity is one example, and changing it can make an object speed up, slow down, or turn. Name this science word for a push or a pull.
+    options: [ Energy, Force, Mass, Speed ]
+    answer: Force
+
+  - question: A photograph saved as a JPEG is usually this type of image. Enlarging it too much can reveal a grid of tiny squares and make its edges look blocky. Name this type of picture made from pixels, also called a bitmap.
+    options: [ Raster image, Vector image, 3D model, Video ]
+    answer: Raster image
+    explanation: Also called a bitmap.
+
+  - question: This event can leave behind a neutron star or a black hole. For a short time, it can shine as brightly as a whole galaxy and send a star's material flying through space. Name this huge explosion of a star, whose name starts with “super.”
+    options: [ Nova, Solar flare, Comet, Supernova ]
+    answer: Supernova
+
+  - question: Enzymes in your body are examples of these substances. They help chemical reactions happen faster and are not used up overall in the process. Name a substance that speeds up a chemical reaction, a word beginning with “cat.”
+    options: [ Solvent, Mixture, Catalyst, Acid ]
+    answer: Catalyst
+
+  - question: Animals in this group have three tiny bones in each middle ear. They breathe air with lungs, and their bodies have hair or fur at some point in their lives. Name this group of animals whose mothers make milk for their babies, including dogs, cats, and humans.
+    options: [ Reptiles, Mammals, Birds, Amphibians ]
+    answer: Mammals
+
+  - question: This material breaks into curved pieces with very sharp edges. People have used it to make arrowheads, and it forms when lava cools without growing visible crystals. Name this usually black volcanic glass, whose name starts with “ob.”
+    options: [ Obsidian, Granite, Pumice, Marble ]
+    answer: Obsidian
+
+  - question: Turning a collar on this device changes how much air mixes with its fuel. It has a metal tube and can produce a yellow flame or a hotter blue flame. Name this laboratory gas burner named for a scientist called Robert Bunsen.
+    options: [ Hot plate, Alcohol lamp, Candle, Bunsen burner ]
+    answer: Bunsen burner

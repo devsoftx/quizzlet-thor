@@ -1,0 +1,178 @@
+# National Geography Bee 2026-27 — Red Set "Terms for Further Study".
+# The guide only lists these terms; the clues are written for this deck.
+# Source: docs/2026-27-Red-Set-Geography-Study-Guide-1 (2).pdf
+
+title: Geography Bee · Red Set Terms
+description: The 30 "terms for further study" from the 2026-27 Red Set geography guide.
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: What is a hot spring that regularly shoots hot water and steam into the air, like Old Faithful in Yellowstone?
+    options: [ Glacier, Geyser, Lagoon, Fjord ]
+    answer: Geyser
+
+  - question: What is the capital of Saudi Arabia?
+    options: [ Riyadh, Jeddah, Mecca, Doha ]
+    answer: Riyadh
+    explanation: Doha is the capital of Qatar.
+
+  - question: Which region of the Pacific Ocean, whose name means "small islands," includes Guam, Palau and the Marshall Islands?
+    options: [ Melanesia, Polynesia, Indonesia, Micronesia ]
+    answer: Micronesia
+    explanation: "Micronesia is also the name of a country there: the Federated States of Micronesia."
+
+  - question: What is the name of the dry strip of land that runs along the southern edge of the Sahara Desert?
+    options: [ Kalahari, Maghreb, Sahel, Serengeti ]
+    answer: Sahel
+    explanation: Sahel comes from the Arabic word for "shore" — the shore of the Sahara.
+
+  - question: What term describes minerals such as tin, tungsten and gold that are mined in war zones, like the eastern Democratic Republic of the Congo, and sold to pay for fighting?
+    options:
+      - Rare earth elements
+      - Conflict minerals
+      - Fossil fuels
+      - Precious gems
+    answer: Conflict minerals
+
+  - question: What is the name of the group of European countries that have removed passport checks at their shared borders?
+    options: [ Schengen Area, Eurozone, Benelux, Balkans ]
+    answer: Schengen Area
+    explanation: It is named after Schengen, a village in Luxembourg where the agreement was signed in 1985.
+
+  - question: Which national park in Utah is famous for its hoodoos — tall, thin spires of orange and red rock?
+    options:
+      - Yosemite National Park
+      - Everglades National Park
+      - Glacier National Park
+      - Bryce Canyon National Park
+    answer: Bryce Canyon National Park
+
+  - question: What is a long, steep slope or cliff that separates two fairly flat areas of land at different heights?
+    options: [ Plateau, Delta, Escarpment, Isthmus ]
+    answer: Escarpment
+
+  - question: Which river flows from China through northern Vietnam, past Hanoi, to the Gulf of Tonkin, and is named for its reddish-brown, muddy water?
+    options: [ Mekong River, Red River, Yangtze River, Irrawaddy River ]
+    answer: Red River
+
+  - question: Which U.S. state is home to the Grand Canyon and has its capital at Phoenix?
+    options: [ Arizona, New Mexico, Nevada, Utah ]
+    answer: Arizona
+
+  - question: Which country on the Horn of Africa has its capital at Mogadishu and the longest coastline on mainland Africa?
+    options: [ Ethiopia, Kenya, Eritrea, Somalia ]
+    answer: Somalia
+
+  - question: Which Japanese city, known as "the nation's kitchen" for its food, hosted the 2025 World Expo?
+    options: [ Kyoto, Hiroshima, Osaka, Sapporo ]
+    answer: Osaka
+
+  - question: Which volcanic island off the north coast of Sicily erupts so often that it is called the "Lighthouse of the Mediterranean"?
+    options: [ Mount Etna, Stromboli, Vesuvius, Santorini ]
+    answer: Stromboli
+
+  - question: Which neighborhood of Los Angeles is famous as the center of the American movie industry?
+    options: [ Hollywood, Beverly Hills, Malibu, Pasadena ]
+    answer: Hollywood
+
+  - question: What is the word for the place where a river meets the sea and fresh water mixes with salt water?
+    options: [ Tributary, Oasis, Aquifer, Estuary ]
+    answer: Estuary
+    explanation: A tributary is a smaller river that flows into a bigger one.
+
+  - question: Which U.S. state has its capital at Little Rock and is home to Crater of Diamonds State Park, where visitors can dig for real diamonds?
+    options: [ Kansas, Oklahoma, Arkansas, Missouri ]
+    answer: Arkansas
+
+  - question: Which wide avenue in Mexico City is lined with monuments such as the Angel of Independence?
+    options:
+      - Champs-Élysées
+      - Paseo de la Reforma
+      - Las Ramblas
+      - Avenida Paulista
+    answer: Paseo de la Reforma
+    explanation: The Champs-Élysées is in Paris, Las Ramblas in Barcelona, and Avenida Paulista in São Paulo.
+
+  - question: What is the smallest country in the Western Hemisphere, a two-island Caribbean nation with its capital at Basseterre?
+    options:
+      - Saint Kitts and Nevis
+      - Antigua and Barbuda
+      - Trinidad and Tobago
+      - Saint Vincent and the Grenadines
+    answer: Saint Kitts and Nevis
+
+  - question: Which narrow waterway between Iran and Oman links the Persian Gulf to the open ocean and carries much of the world's oil?
+    options:
+      - Strait of Gibraltar
+      - Bab-el-Mandeb
+      - Suez Canal
+      - Strait of Hormuz
+    answer: Strait of Hormuz
+
+  - question: Which group of islands in Lake Superior, off northern Wisconsin, is famous for its sandstone sea caves and lighthouses?
+    options:
+      - Thousand Islands
+      - Channel Islands
+      - Apostle Islands
+      - Florida Keys
+    answer: Apostle Islands
+
+  - question: What are the Dutch-speaking people of northern Belgium called?
+    options: [ Walloons, Flemish, Basques, Frisians ]
+    answer: Flemish
+    explanation: The French-speaking people of southern Belgium are called Walloons.
+
+  - question: Which lake in northern Kenya is the world's largest permanent desert lake and is nicknamed the "Jade Sea" for its color?
+    options: [ Lake Turkana, Lake Victoria, Lake Tanganyika, Lake Chad ]
+    answer: Lake Turkana
+
+  - question: Which coastal town in Connecticut is famous for its Seaport Museum, where visitors can board the old wooden whaling ship Charles W. Morgan?
+    options: [ New Haven, Hartford, Greenwich, Mystic ]
+    answer: Mystic
+
+  - question: What extremely crowded settlement in Hong Kong, torn down in the 1990s, was once one of the most densely populated places on Earth?
+    options:
+      - Forbidden City
+      - Victoria Peak
+      - Kowloon Walled City
+      - Lantau Island
+    answer: Kowloon Walled City
+
+  - question: Volcanic islands such as Hawaii and Iceland often have beaches of this color, because their sand comes from broken-down lava rock. What color are they?
+    options: [ White, Black, Pink, Yellow ]
+    answer: Black
+
+  - question: What is the world's second-largest tropical rainforest, in Central Africa, home to gorillas and okapis?
+    options:
+      - Congo rainforest
+      - Amazon rainforest
+      - Daintree Rainforest
+      - Borneo rainforest
+    answer: Congo rainforest
+    explanation: Only the Amazon rainforest is larger.
+
+  - question: Which Hawaiian island is home to Honolulu, Pearl Harbor and Waikiki Beach?
+    options: [ Maui, Kauai, Molokai, Oahu ]
+    answer: Oahu
+
+  - question: Which peninsula in Washington State has a national park with one of the few temperate rainforests in the U.S., the Hoh Rainforest?
+    options:
+      - Delmarva Peninsula
+      - Upper Peninsula
+      - Olympic Peninsula
+      - Kenai Peninsula
+    answer: Olympic Peninsula
+
+  - question: What is the largest research base in Antarctica, run by the United States on Ross Island?
+    options:
+      - Amundsen–Scott South Pole Station
+      - McMurdo Station
+      - Vostok Station
+      - Palmer Station
+    answer: McMurdo Station
+
+  - question: What is the third-highest mountain in the world, on the border between Nepal and India?
+    options: [ Kangchenjunga, K2, Lhotse, Makalu ]
+    answer: Kangchenjunga
+    explanation: Mount Everest is first and K2 is second.

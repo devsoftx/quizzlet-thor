@@ -1,0 +1,68 @@
+# Example deck. Every .yaml / .yml file in this folder shows up in the app.
+title: Norse Mythology
+description: Thor, his family, and the Nine Realms.
+shuffle: true          # shuffle the card order each session (default: true)
+shuffleOptions: true   # shuffle the options on each card (default: true)
+
+cards:
+  - question: Who is Thor's father?
+    options:
+      - Odin
+      - Loki
+      - Tyr
+      - Heimdall
+    answer: Odin
+    explanation: Odin, the All-Father, rules Asgard. Thor's mother is the giantess Jörð.
+
+  - question: What is the name of Thor's hammer?
+    options: [Gungnir, Mjölnir, Gram, Hofund]
+    answer: Mjölnir
+    explanation: Gungnir is Odin's spear; Gram is Sigurd's sword.
+
+  - question: Which goats pull Thor's chariot?
+    options:
+      - Huginn and Muninn
+      - Geri and Freki
+      - Tanngrisnir and Tanngnjóstr
+      - Sleipnir and Svaðilfari
+    answer: Tanngrisnir and Tanngnjóstr
+    explanation: Thor can eat the goats and bring them back to life with Mjölnir. Huginn and Muninn are Odin's ravens.
+
+  - question: Who is Thor's wife?
+    options: [Freyja, Frigg, Sif, Idun]
+    answer: Sif
+    explanation: Sif is known for her golden hair, which Loki once cut off.
+
+  - question: Which day of the week is named after Thor?
+    options: [Tuesday, Wednesday, Thursday, Friday]
+    answer: Thursday
+    explanation: "Thursday comes from Old English Þunresdæg: Thor's day."
+
+  - question: How many realms are connected by the world tree Yggdrasil?
+    options: [7, 9, 12]
+    answer: 9
+    shuffleOptions: false   # keep numbers in order for this card
+
+  - question: Which creature is Thor fated to kill (and die fighting) at Ragnarök?
+    options:
+      - Fenrir
+      - Jörmungandr
+      - Níðhöggr
+      - Surtr
+    answer: Jörmungandr
+    explanation: Thor slays the Midgard Serpent, walks nine steps, and falls from its venom.
+
+  - question: What is the name of the rainbow bridge to Asgard?
+    options: [Bifröst, Gjallarbrú, Valaskjálf, Glaðsheimr]
+    answer: Bifröst
+    explanation: Heimdall guards Bifröst.
+
+  - question: Which magical belt doubles Thor's strength?
+    options: [Brísingamen, Megingjörð, Draupnir, Andvaranaut]
+    answer: Megingjörð
+    explanation: Brísingamen is Freyja's necklace; Draupnir is Odin's gold ring.
+
+  - question: Who disguised himself as Thor's bridesmaid to recover the stolen hammer?
+    options: [Loki, Baldur, Heimdall, Freyr]
+    answer: Loki
+    explanation: In the Þrymskviða, Thor dresses as Freyja and Loki as her maid to fool the giant Þrymr.

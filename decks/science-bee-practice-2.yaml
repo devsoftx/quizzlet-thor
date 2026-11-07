@@ -1,0 +1,137 @@
+# 2026 Science Bee practice questions, grades 2-4 — questions 31 to 60 of 91.
+# Source: docs/2026_Science_Bee_Practice_Questions_Grades_2_to_4.docx
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee Practice · Part 2
+description: "Grades 2–4 practice questions 31–60 (of 91). Read-aloud style: the easiest clue comes last."
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: This organ has four spaces inside it called chambers. Valves keep blood moving the right way, and its strong muscles squeeze again and again. Name this beating organ in your chest that pumps blood around your body.
+    options: [ Lungs, Heart, Brain, Stomach ]
+    answer: Heart
+
+  - question: Rising warm, wet air helps these storms grow. Their clouds can bring heavy rain and hail, and some strong ones can produce tornadoes. Name these storms with bright lightning flashes and loud claps of thunder.
+    options: [ Thunderstorms, Blizzards, Sandstorms, Fog ]
+    answer: Thunderstorms
+
+  - question: Elements with similar properties appear together in this chart's columns. Its boxes show names, symbols, and numbers for substances such as oxygen, iron, and gold. Name this chart that organizes all the chemical elements into rows and columns.
+    options: [ Punnett square, Food web, Multiplication table, Periodic table ]
+    answer: Periodic table
+
+  - question: These bacteria can live on pet turtles and other reptiles without making the animals look sick. They can also get into food and cause stomach cramps and diarrhea. Name these food-poisoning bacteria often linked to raw eggs and undercooked chicken, whose name begins with “sal.”
+    options: [ E. coli, Streptococcus, Salmonella, Lactobacillus ]
+    answer: Salmonella
+
+  - question: These islands formed as a moving ocean plate passed over a hot spot. They lie in the Pacific Ocean and include Maui, Oahu, and the Big Island. Name this island chain that makes up the fiftieth state of the United States.
+    options:
+      - Galápagos Islands
+      - Hawaiian Islands
+      - Aleutian Islands
+      - Florida Keys
+    answer: Hawaiian Islands
+
+  - question: This scientist left empty spaces for elements that had not yet been discovered. He correctly predicted some of their properties and arranged known elements by patterns in how they behaved. Name this Russian scientist famous for making an early periodic table, whose last name begins with M.
+    options: [ Dmitri Mendeleev, Marie Curie, Isaac Newton, Antoine Lavoisier ]
+    answer: Dmitri Mendeleev
+
+  - question: Tiny pieces called platelets help this liquid form clots that stop bleeding. Its red cells carry oxygen, while its white cells help fight germs. Name this red liquid that your heart pumps through your body.
+    options: [ Water, Saliva, Sweat, Blood ]
+    answer: Blood
+
+  - question: This process moves heat by moving the material that carries it. In a pot of water, warmer water can rise while cooler water sinks to take its place. Name this heat transfer by moving liquids or gases, often seen as a rising-and-sinking current.
+    options: [ Conduction, Radiation, Convection, Evaporation ]
+    answer: Convection
+    explanation: Conduction moves heat by touch; radiation moves heat through space, like sunlight.
+
+  - question: Gravity from its planet stretches and squeezes this moon, helping warm its inside. Its cracked, icy surface may cover a deep ocean where scientists wonder whether life could exist. Name this icy moon of Jupiter whose name begins with “Euro.”
+    options: [ Io, Europa, Ganymede, Titan ]
+    answer: Europa
+
+  - question: Many harmless members of this kind of bacteria normally live in our intestines. Some harmful kinds can get into food or water, including beef that is not cooked enough. Name these bacteria whose shortened name starts with the letter E, followed by “coli.”
+    options: [ E. coli, Salmonella, Streptococcus, Listeria ]
+    answer: E. coli
+    explanation: Short for Escherichia coli.
+
+  - question: Far out at sea, these waves can be low enough that ships hardly notice them. They can grow much taller near shore after an earthquake suddenly moves the ocean floor. Name these powerful ocean waves that can flood a coast, whose name begins with T.
+    options: [ Tides, Typhoons, Rip currents, Tsunamis ]
+    answer: Tsunamis
+
+  - question: This scientist found that uranium could mark a covered photographic plate even in the dark. He shared a Nobel Prize with Marie and Pierre Curie, and a unit for measuring radioactivity has his name. Name this French scientist who discovered natural radioactivity, whose first name was Henri.
+    options: [ Marie Curie, Albert Einstein, Henri Becquerel, Louis Pasteur ]
+    answer: Henri Becquerel
+
+  - question: Flowering plants spread during this period in Earth's history. Tyrannosaurus rex and Triceratops lived near its end, when a giant asteroid struck Earth. Name this last period of the age of dinosaurs, which came after the Jurassic.
+    options: [ Jurassic Period, Cretaceous Period, Triassic Period, Ice Age ]
+    answer: Cretaceous Period
+
+  - question: The inside angles of this flat shape add to 180 degrees. Some examples have three equal sides, while others have two equal sides or no equal sides. Name this shape with three straight sides and three corners.
+    options: [ Triangle, Square, Circle, Pentagon ]
+    answer: Triangle
+
+  - question: This field helps scientists make new medicines and plastics. It includes the study of fuels, sugars, and many molecules found in living things. Name this branch of chemistry that studies carbon compounds and is often paired with the word “inorganic.”
+    options: [ Inorganic chemistry, Physics, Geology, Organic chemistry ]
+    answer: Organic chemistry
+
+  - question: Each box in this diagram shows one possible combination of genes from two parents. Scientists put possible gene versions along its top and side to predict the chances of traits in offspring. Name this genetics chart shaped like a square and named after scientist Reginald Punnett.
+    options: [ Periodic table, Venn diagram, Punnett square, Food web ]
+    answer: Punnett square
+
+  - question: You can draw this shape by keeping a loop of string tight around two fixed pins. Planets follow paths with this shape, and it has a long axis and a short axis. Name this oval-shaped curve that looks like a stretched circle.
+    options: [ Circle, Ellipse, Square, Spiral ]
+    answer: Ellipse
+
+  - question: Oil on moving machine parts can reduce this force. It helps shoes grip the floor and slows a book sliding across a table. Name this rubbing force that makes your hands warm when you rub them together.
+    options: [ Friction, Gravity, Magnetism, Buoyancy ]
+    answer: Friction
+
+  - question: The babies in this animal group are born very tiny and need much more time to develop. Many members live in Australia, and their young drink milk while growing close to their mothers. Name this group of mammals that often carry their babies in pouches, including kangaroos and koalas.
+    options: [ Reptiles, Rodents, Primates, Marsupials ]
+    answer: Marsupials
+
+  - question: Atoms of this element can join in sheets, chains, or strong crystal shapes. Diamond and graphite are both made of it, and it is found in the molecules of all living things. Name this element with the symbol C, also found in carbon dioxide.
+    options: [ Calcium, Chlorine, Carbon, Copper ]
+    answer: Carbon
+    explanation: Calcium is Ca, chlorine is Cl and copper is Cu.
+
+  - question: A day on this planet lasts only about ten hours. It is mostly made of gas and has moons named Io, Europa, and Ganymede. Name the largest planet in our solar system, known for its Great Red Spot.
+    options: [ Saturn, Jupiter, Neptune, Mars ]
+    answer: Jupiter
+
+  - question: A slippery coating protects this organ from the acid inside it. Its muscles churn food, and its digestive juices help break food into smaller parts. Name this food-holding organ in your belly that receives food after you swallow.
+    options: [ Stomach, Liver, Lungs, Kidneys ]
+    answer: Stomach
+
+  - question: This property helps explain why a small metal cube can have more mass than a large sponge. It also helps explain why oil floats on water and compares mass with the space something takes up. Name this property found by dividing mass by volume.
+    options: [ Volume, Weight, Temperature, Density ]
+    answer: Density
+
+  - question: Scientists use instruments called seismometers to record these events. They often happen when rocks suddenly slip along a fault, sending waves through Earth. Name these events that make the ground shake and can knock down buildings.
+    options: [ Volcanic eruptions, Landslides, Earthquakes, Tornadoes ]
+    answer: Earthquakes
+
+  - question: This animal's name means “wing finger.” It was a prehistoric reptile with toothed jaws and wings supported by very long fingers. Name this ancient flying reptile, a name often used loosely for pterosaurs, beginning with the sound “ter-oh.”
+    options: [ Archaeopteryx, Pterodactyl, Plesiosaur, Velociraptor ]
+    answer: Pterodactyl
+
+  - question: Computer programmers can show one of these using a flowchart. It gives clear steps in an order and may tell you to repeat a step or make a choice. Name this step-by-step set of instructions for solving a problem.
+    options: [ Algorithm, Flowchart, Hypothesis, Spreadsheet ]
+    answer: Algorithm
+    explanation: A flowchart is one way to draw an algorithm.
+
+  - question: At this speed, something could travel around Earth more than seven times in one second. In empty space, it is about 300,000 kilometers per second, and sunlight takes about eight minutes to reach Earth. Name this speed that describes how fast light travels.
+    options: [ Speed of sound, Escape velocity, Wind speed, Speed of light ]
+    answer: Speed of light
+
+  - question: Scientists use half-life to describe how quickly this process happens in a large sample. Unstable atoms give off particles or energy during it, and uranium is one material in which it occurs. Name this process of atoms giving off radiation, also called radioactive decay.
+    options: [ Photosynthesis, Magnetism, Radioactivity, Evaporation ]
+    answer: Radioactivity
+
+  - question: A virus causes this disease by attacking the brain and nerves. Infected mammals, including bats and raccoons, can spread it through their saliva, and sick animals may drool heavily. Name this disease that people can catch from an infected animal's bite, sometimes described as making an animal foam at the mouth.
+    options: [ Malaria, Rabies, Chickenpox, Influenza ]
+    answer: Rabies
+
+  - question: Some of these features have wide, gentle slopes, while others form steep cones. They can grow as layers of melted rock and ash build up around an opening in Earth's crust. Name these features, often mountains, that erupt lava and ash.
+    options: [ Volcanoes, Glaciers, Canyons, Geysers ]
+    answer: Volcanoes

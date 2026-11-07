@@ -1,0 +1,7 @@
+node_modules
+dist
+.DS_Store
+*.local
+
+# Source study guides (third-party material, kept local only)
+docs/

@@ -1,0 +1,173 @@
+# National History Bee 2026-27 — Red Question Set study guide (key facts).
+# Source: docs/2026-27-Red-Set-History-Study-Guide (2).pdf
+
+title: History Bee · Red Set Study Guide
+description: Key facts from the 2026-27 Red Set history study guide.
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: What was the system of racial segregation enforced in South Africa from 1948 to 1994 called?
+    options: [ Jim Crow, Apartheid, Colonialism, Feudalism ]
+    answer: Apartheid
+    explanation: Jim Crow laws were a similar system of segregation in the southern United States.
+
+  - question: The word "apartheid" means "apartness" in which language?
+    options: [ Afrikaans, Zulu, Swahili, English ]
+    answer: Afrikaans
+
+  - question: Which desert was a vital trade route connecting North Africa with Sub-Saharan Africa?
+    options: [ Kalahari Desert, Gobi Desert, Namib Desert, Sahara Desert ]
+    answer: Sahara Desert
+    explanation: Camel caravans carried gold, salt and other goods across the Sahara.
+
+  - question: In 1953, who became one of the first two people to reach the summit of Mount Everest, together with Edmund Hillary?
+    options:
+      - George Mallory
+      - Reinhold Messner
+      - Tenzing Norgay
+      - Roald Amundsen
+    answer: Tenzing Norgay
+    explanation: Tenzing Norgay was a Sherpa mountaineer from Nepal; Hillary was from New Zealand.
+
+  - question: In what year did Edmund Hillary and Tenzing Norgay first reach the top of Mount Everest?
+    options: [ "1912", "1937", "1953", "1969" ]
+    answer: "1953"
+    shuffleOptions: false
+
+  - question: India is the birthplace of Hinduism, Jainism, and which other religion?
+    options: [ Sikhism, Shinto, Taoism, Judaism ]
+    answer: Sikhism
+    explanation: Buddhism also began in India.
+
+  - question: In 1938, at age two, Tenzin Gyatso was recognized as the 14th holder of which Tibetan Buddhist title?
+    options: [ Panchen Lama, Shogun, Maharaja, Dalai Lama ]
+    answer: Dalai Lama
+
+  - question: Angkor Wat, the world's largest religious structure, appears on the flag of which country?
+    options: [ Thailand, Laos, Cambodia, Myanmar ]
+    answer: Cambodia
+
+  - question: Which Japanese warrior class began in the 10th century as guards for wealthy landowners and ended in the late 1800s, when Japan modernized its military?
+    options: [ Ninja, Samurai, Shoguns, Daimyo ]
+    answer: Samurai
+    explanation: Shoguns were military rulers and daimyo were powerful lords; the samurai served them.
+
+  - question: Mesopotamia, part of the Fertile Crescent, lay on the floodplains of which two rivers?
+    options:
+      - Tigris and Euphrates
+      - Nile and Congo
+      - Indus and Ganges
+      - Yellow and Yangtze
+    answer: Tigris and Euphrates
+    explanation: Mesopotamia means "land between the rivers."
+
+  - question: Which pharaoh of ancient Egypt died in 30 BCE, marking the start of Roman rule in Egypt?
+    options: [ Tutankhamun, Ramses II, Hatshepsut, Cleopatra ]
+    answer: Cleopatra
+
+  - question: The Punic Wars were fought between the Roman Republic and which rival power, over control of the Mediterranean?
+    options: [ Persia, Egypt, Carthage, Macedonia ]
+    answer: Carthage
+    explanation: Carthage was a city in North Africa, in today's Tunisia. Its general Hannibal famously led war elephants over the Alps.
+
+  - question: Which two royal houses fought the Wars of the Roses for the English throne?
+    options:
+      - Tudor and Stuart
+      - Lancaster and York
+      - Windsor and Hanover
+      - Bourbon and Habsburg
+    answer: Lancaster and York
+    explanation: Lancaster's symbol was a red rose and York's a white rose.
+
+  - question: When France abolished its monarchy during the French Revolution, which king and queen were overthrown?
+    options:
+      - Louis XVI and Marie Antoinette
+      - Louis XIV and Maria Theresa
+      - Henry VIII and Anne Boleyn
+      - Ferdinand and Isabella
+    answer: Louis XVI and Marie Antoinette
+
+  - question: Which document, signed by King John of England in 1215, established that the king was not above the law?
+    options:
+      - Domesday Book
+      - Bill of Rights
+      - Declaration of Independence
+      - Magna Carta
+    answer: Magna Carta
+    explanation: Magna Carta is Latin for "Great Charter."
+
+  - question: Which indigenous Mesoamerican civilization spanned modern-day Mexico, Guatemala, Belize, Honduras and El Salvador?
+    options: [ Inca, Aztec, Maya, Olmec ]
+    answer: Maya
+    explanation: The Inca lived in South America, along the Andes mountains.
+
+  - question: The Aztec Empire was ruled from which city, on the site of today's Mexico City?
+    options: [ Cusco, Tenochtitlan, Teotihuacan, Chichén Itzá ]
+    answer: Tenochtitlan
+    explanation: Cusco was the capital of the Inca Empire, in Peru.
+
+  - question: Which Spanish conquistador led the conquest of the Aztec Empire in the early 1500s?
+    options:
+      - Hernán Cortés
+      - Francisco Pizarro
+      - Christopher Columbus
+      - Ferdinand Magellan
+    answer: Hernán Cortés
+    explanation: Francisco Pizarro conquered the Inca Empire.
+
+  - question: The Interstate Highway System was created under which U.S. president?
+    options:
+      - Franklin D. Roosevelt
+      - Harry S. Truman
+      - John F. Kennedy
+      - Dwight D. Eisenhower
+    answer: Dwight D. Eisenhower
+
+  - question: Which building is the headquarters of the U.S. Department of Defense?
+    options: [ The White House, The Capitol, The Pentagon, Fort Knox ]
+    answer: The Pentagon
+    explanation: It is named for its five-sided shape.
+
+  - question: Which president enacted the New Deal, creating programs such as the Civilian Conservation Corps and Social Security?
+    options:
+      - Theodore Roosevelt
+      - Franklin D. Roosevelt
+      - Herbert Hoover
+      - Woodrow Wilson
+    answer: Franklin D. Roosevelt
+
+  - question: The Jamestown settlement in Virginia interacted closely with which Native American group, which included Pocahontas?
+    options:
+      - Powhatan Confederacy
+      - Iroquois Confederacy
+      - Cherokee Nation
+      - Wampanoag
+    answer: Powhatan Confederacy
+
+  - question: What was the secret network of routes and safe houses that helped enslaved people escape to freedom?
+    options:
+      - Oregon Trail
+      - Pony Express
+      - Trail of Tears
+      - Underground Railroad
+    answer: Underground Railroad
+    explanation: Harriet Tubman was one of its most famous guides, who were called "conductors."
+
+  - question: At which mission in San Antonio were Texian and Tejano defenders overrun by the Mexican Army after a 13-day siege?
+    options: [ Fort Sumter, Fort McHenry, The Alamo, Little Bighorn ]
+    answer: The Alamo
+    explanation: '"Remember the Alamo!" became a battle cry of the Texas Revolution (1836).'
+
+  - question: Which horse-mounted mail service connected Missouri to California from 1860 to 1861?
+    options:
+      - Transcontinental Railroad
+      - Pony Express
+      - Oregon Trail
+      - Erie Canal
+    answer: Pony Express
+    explanation: It shut down once the telegraph could send messages across the country.
+
+  - question: Which folk hero of the American Revolution made a "midnight ride" to warn colonial militias that British troops were coming?
+    options: [ Paul Revere, Benjamin Franklin, Nathan Hale, John Hancock ]
+    answer: Paul Revere

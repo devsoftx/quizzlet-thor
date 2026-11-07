@@ -1,0 +1,169 @@
+# National Geography Bee 2026-27 — Red Question Set study guide (key facts).
+# Source: docs/2026-27-Red-Set-Geography-Study-Guide-1 (2).pdf
+
+title: Geography Bee · Red Set Study Guide
+description: Key facts from the 2026-27 Red Set geography study guide.
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: What is the third-longest river in Africa, which shares its name with a West African country?
+    options: [ Congo River, Niger River, Zambezi River, Orange River ]
+    answer: Niger River
+    explanation: The Nile is Africa's longest river, then the Congo, then the Niger.
+
+  - question: Which country is home to Mount Kilimanjaro, the tallest mountain in Africa?
+    options: [ Tanzania, Kenya, Ethiopia, Uganda ]
+    answer: Tanzania
+
+  - question: Which Southeast Asian country, made up of thousands of islands, has its capital at Manila?
+    options: [ Indonesia, Malaysia, Vietnam, Philippines ]
+    answer: Philippines
+
+  - question: What is the longest river in China?
+    options: [ Yellow River, Mekong River, Yangtze River, Pearl River ]
+    answer: Yangtze River
+
+  - question: Bangkok, the capital of Thailand, lies in the delta of which river?
+    options: [ Mekong River, Chao Phraya River, Irrawaddy River, Ganges River ]
+    answer: Chao Phraya River
+
+  - question: Which city in Israel is considered holy by followers of Judaism, Christianity and Islam?
+    options: [ Jerusalem, Tel Aviv, Haifa, Mecca ]
+    answer: Jerusalem
+    explanation: Mecca, in Saudi Arabia, is Islam's holiest city — but it isn't holy to Judaism or Christianity.
+
+  - question: "Which large island is shared by three countries: Indonesia, Malaysia and Brunei?"
+    options: [ Sumatra, Java, New Guinea, Borneo ]
+    answer: Borneo
+    explanation: "New Guinea is shared by just two countries: Indonesia and Papua New Guinea."
+
+  - question: Which city is the largest in Turkey and home to the Hagia Sophia?
+    options: [ Ankara, Izmir, Istanbul, Antalya ]
+    answer: Istanbul
+    explanation: Istanbul is the largest city, but Ankara is Turkey's capital.
+
+  - question: Off the coast of Australia lies the largest structure on Earth built by living things. What is it?
+    options:
+      - Uluru
+      - Great Barrier Reef
+      - Great Dividing Range
+      - Twelve Apostles
+    answer: Great Barrier Reef
+    explanation: The reef is built by tiny animals called coral polyps.
+
+  - question: What is Earth's southernmost continent?
+    options: [ Antarctica, Australia, South America, Africa ]
+    answer: Antarctica
+
+  - question: Which is the southernmost country of Oceania?
+    options: [ Australia, Fiji, Papua New Guinea, New Zealand ]
+    answer: New Zealand
+
+  - question: Which strait divides the Asian and European parts of Turkey?
+    options:
+      - Strait of Gibraltar
+      - English Channel
+      - Bosporus
+      - Strait of Hormuz
+    answer: Bosporus
+    explanation: Istanbul sits on both sides of the Bosporus.
+
+  - question: Vienna, the capital of Austria, sits on which river, the second-longest in Europe?
+    options: [ Rhine River, Danube River, Volga River, Seine River ]
+    answer: Danube River
+    explanation: The Volga is Europe's longest river; the Danube is second.
+
+  - question: Which capital city is home to the Trevi Fountain and the Colosseum?
+    options: [ Rome, Athens, Paris, Madrid ]
+    answer: Rome
+
+  - question: Which strategically important sea borders the Crimean Peninsula?
+    options: [ Caspian Sea, Baltic Sea, Red Sea, Black Sea ]
+    answer: Black Sea
+
+  - question: What is the largest island in the Mediterranean Sea by area?
+    options: [ Sardinia, Cyprus, Sicily, Crete ]
+    answer: Sicily
+
+  - question: Which two countries share the Iberian Peninsula?
+    options:
+      - Spain and France
+      - Spain and Portugal
+      - Italy and Greece
+      - Portugal and Morocco
+    answer: Spain and Portugal
+
+  - question: The Akershus Fortress stands in Oslo, the capital of which country?
+    options: [ Norway, Sweden, Denmark, Finland ]
+    answer: Norway
+
+  - question: Which Louisiana city is known for its Cajun food and its yearly Mardi Gras celebration?
+    options: [ Baton Rouge, Memphis, Houston, New Orleans ]
+    answer: New Orleans
+
+  - question: What is the largest island of Canada?
+    options: [ Victoria Island, Newfoundland, Baffin Island, Vancouver Island ]
+    answer: Baffin Island
+
+  - question: Movement of the tectonic plates under California is slowly bringing Los Angeles closer to which city?
+    options: [ San Diego, San Francisco, Las Vegas, Sacramento ]
+    answer: San Francisco
+    explanation: The two cities sit on opposite sides of the San Andreas Fault.
+
+  - question: Which Great Lake is the largest freshwater lake in the world by surface area?
+    options: [ Lake Superior, Lake Michigan, Lake Huron, Lake Erie ]
+    answer: Lake Superior
+
+  - question: Which of these is NOT one of the five Great Lakes?
+    options: [ Lake Ontario, Lake Huron, Lake Erie, Lake Champlain ]
+    answer: Lake Champlain
+    explanation: The five Great Lakes are Superior, Michigan, Huron, Erie and Ontario.
+
+  - question: What is the longest mountain system in North America?
+    options:
+      - Appalachian Mountains
+      - Sierra Nevada
+      - Rocky Mountains
+      - Cascade Range
+    answer: Rocky Mountains
+
+  - question: The island of Newfoundland forms a Canadian province together with which region?
+    options: [ Nova Scotia, Labrador, Quebec, Nunavut ]
+    answer: Labrador
+    explanation: The province is called Newfoundland and Labrador.
+
+  - question: Which national park in California once recorded the hottest temperature ever measured on Earth?
+    options:
+      - Death Valley National Park
+      - Yosemite National Park
+      - Joshua Tree National Park
+      - Grand Canyon National Park
+    answer: Death Valley National Park
+    explanation: It reached 134 °F (56.7 °C) in 1913.
+
+  - question: Cape Cod in Massachusetts lies across the water from which island?
+    options: [ Long Island, Staten Island, Mackinac Island, Martha's Vineyard ]
+    answer: Martha's Vineyard
+
+  - question: Located on a harbor of the same name, which city is the largest by population in South Carolina?
+    options: [ Columbia, Savannah, Charleston, Myrtle Beach ]
+    answer: Charleston
+    explanation: Columbia is South Carolina's capital, and Savannah is in Georgia.
+
+  - question: Which Central American country borders El Salvador and Nicaragua and has its capital at Tegucigalpa?
+    options: [ Guatemala, Honduras, Costa Rica, Panama ]
+    answer: Honduras
+
+  - question: In which country is the Perito Moreno Glacier?
+    options: [ Argentina, Chile, Peru, Bolivia ]
+    answer: Argentina
+
+  - question: What is the largest lake in South America by area?
+    options: [ Lake Nicaragua, Lake Poopó, Lake Atitlán, Lake Titicaca ]
+    answer: Lake Titicaca
+    explanation: Lake Titicaca sits high in the Andes, on the border of Peru and Bolivia.
+
+  - question: What is the capital of Cuba?
+    options: [ Santo Domingo, San Juan, Havana, Kingston ]
+    answer: Havana

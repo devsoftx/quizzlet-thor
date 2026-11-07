@@ -1,0 +1,145 @@
+# 2026 Science Bee practice questions, grades 2-4 — questions 1 to 30 of 91.
+# Source: docs/2026_Science_Bee_Practice_Questions_Grades_2_to_4.docx
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee Practice · Part 1
+description: "Grades 2–4 practice questions 1–30 (of 91). Read-aloud style: the easiest clue comes last."
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: An energy pyramid uses these positions to show how food energy moves through an ecosystem. Plants usually occupy the first position, plant-eaters the second, and animals that eat those plant-eaters the third. Name these feeding levels in a food chain, whose first word begins with “troph.”
+    options: [ Food webs, Trophic levels, Habitats, Biomes ]
+    answer: Trophic levels
+    explanation: Also called feeding levels.
+
+  - question: Scientists rate these storms by looking at the damage their winds cause. They can grow beneath powerful storm clouds and send dust and other objects spinning through the air. Name these rotating columns of air that touch the ground, often look like funnels, and are also called twisters.
+    options: [ Tornadoes, Hurricanes, Blizzards, Tsunamis ]
+    answer: Tornadoes
+    explanation: Also called twisters.
+
+  - question: Almost all of an atom's mass is packed into this tiny part. Electrons are found outside it, and it usually contains protons and neutrons. Name this dense center of an atom, which shares its name with the control center of a cell.
+    options: [ Electron, Neutron, Molecule, Nucleus ]
+    answer: Nucleus
+
+  - question: Some of these living things help make yogurt and cheese. Each is made of just one cell, and some help our bodies while others can make us sick. Name these tiny organisms that include E. coli and Salmonella, some of which are germs treated with antibiotics.
+    options: [ Viruses, Fungi, Bacteria, Algae ]
+    answer: Bacteria
+
+  - question: Oxygen gas and ozone are examples of different forms of one element. Carbon can also have very different properties depending on how its atoms are arranged, as in diamond and graphite. Name this ability of one element to exist in different forms, a word beginning with “allo.”
+    options: [ Alloys, Allotropy, Isotopes, Evaporation ]
+    answer: Allotropy
+    explanation: Diamond and graphite are allotropes (different forms) of carbon.
+
+  - question: This property stays the same when an object moves from Earth to the Moon. Objects with more of it are harder to speed up or slow down, and it differs from weight. Name the amount of matter in an object, measured in grams or kilograms.
+    options: [ Mass, Weight, Volume, Density ]
+    answer: Mass
+    explanation: Your mass is the same on the Moon, but your weight is less.
+
+  - question: These animals had hard outer coverings divided into three lengthwise lobes. They lived in ancient oceans, and many could curl up like pill bugs. Name these extinct sea animals often found as segmented fossils, whose name begins with “tri.”
+    options: [ Triceratops, Ammonites, Horseshoe crabs, Trilobites ]
+    answer: Trilobites
+
+  - question: Water molecules arrange in six-sided patterns as crystals of this material grow. Its crystals form in cold clouds and can stick together into larger flakes. Name this frozen precipitation that falls in white flakes and can be used to build a snowman.
+    options: [ Hail, Sleet, Snow, Rain ]
+    answer: Snow
+
+  - question: The number of these particles tells scientists which element an atom belongs to. They sit in the atom's center with neutrons, and their electric charge is opposite to an electron's. Name these positively charged particles in an atom's nucleus.
+    options: [ Electron, Proton, Neutron, Photon ]
+    answer: Proton
+
+  - question: This organ has sections that travel up, across, and down inside your belly. It takes water out of leftover food and helps turn the remains into solid waste. Name this main part of the large intestine whose five-letter name begins with C.
+    options: [ Colon, Stomach, Liver, Appendix ]
+    answer: Colon
+
+  - question: Deep inside Earth, great heat and pressure can turn carbon into this crystal. It scratches other minerals and is also used on tools that cut hard materials. Name this hardest natural mineral, a sparkling gem often set in rings.
+    options: [ Quartz, Graphite, Ruby, Diamond ]
+    answer: Diamond
+
+  - question: Water does this at a lower temperature on a high mountain than at sea level. During it, bubbles of water vapor form throughout the liquid and rise to the surface. Name what water does when heated to about 100 degrees Celsius at sea level, bubbling in a pot.
+    options: [ Freezing, Melting, Boiling, Condensing ]
+    answer: Boiling
+
+  - question: This body framework stores minerals such as calcium. It protects organs and works with muscles to help you move. Name the framework made of all your bones, including your skull, ribs, and backbone.
+    options: [ Muscles, Skeleton, Skin, Nervous system ]
+    answer: Skeleton
+
+  - question: Some examples of this landform grow as a series of underwater volcanoes reach the surface. Indonesia and the Philippines are examples, with water separating many pieces of land. Name this word for a group or chain of islands, such as Hawaii.
+    options: [ Archipelago, Peninsula, Isthmus, Continent ]
+    answer: Archipelago
+
+  - question: Scientists think some comets begin their long trips toward the Sun in this region. It is a huge, distant shell of icy objects far beyond the planets and the Kuiper Belt. Name this proposed cloud of comets named after astronomer Jan Oort.
+    options: [ Kuiper Belt, Asteroid belt, Milky Way, Oort cloud ]
+    answer: Oort cloud
+
+  - question: This dinosaur's name means “tyrant lizard king.” It hunted on two powerful back legs and had huge jaws but very small arms. Name this famous meat-eating dinosaur often called T. rex.
+    options: [ Velociraptor, Stegosaurus, Tyrannosaurus rex, Brachiosaurus ]
+    answer: Tyrannosaurus rex
+
+  - question: Refineries separate this material into parts that have different boiling temperatures. It comes from underground and is used to make gasoline, diesel fuel, and many plastics. Name this liquid fossil fuel also called crude oil.
+    options: [ Natural gas, Petroleum, Coal, Uranium ]
+    answer: Petroleum
+    explanation: Also called crude oil.
+
+  - question: Marine iguanas that swim for food live naturally on these islands. Giant tortoises and birds called Darwin's finches also live on this island group belonging to Ecuador. Name these Pacific islands famous for Charles Darwin's visit and their unusual animals.
+    options:
+      - Galápagos Islands
+      - Hawaiian Islands
+      - Canary Islands
+      - Falkland Islands
+    answer: Galápagos Islands
+
+  - question: The cells in this plant tissue form tubes that move dissolved sugar. It carries food made in leaves to growing parts and storage areas, including roots and fruits. Name this sugar-carrying tissue, the partner of water-carrying xylem, whose name rhymes with “foam.”
+    options: [ Xylem, Chlorophyll, Stomata, Phloem ]
+    answer: Phloem
+    explanation: Xylem carries water up from the roots; phloem carries sugar.
+
+  - question: A star called Sirius B is an example of this object. It can pack about the Sun's mass into something about Earth's size and slowly cools as it ages. Name this small, dense leftover center of a Sun-like star, whose name combines a color with a word meaning very small.
+    options: [ Red giant, Black hole, White dwarf, Neutron star ]
+    answer: White dwarf
+
+  - question: Differences between warm and cold air help create these fast-moving bands of wind. They usually blow from west to east high above the ground and help move weather systems. Name these high-speed air currents that airplanes can ride to make a trip faster.
+    options: [ Trade winds, Jet streams, Ocean currents, Monsoons ]
+    answer: Jet streams
+
+  - question: Changes in a cell's instructions can lead to this group of diseases. Cells grow out of control, and some can form harmful lumps or spread to other parts of the body. Name this group of diseases often treated with surgery, chemotherapy, or radiation.
+    options: [ Cancer, Diabetes, Influenza, Asthma ]
+    answer: Cancer
+
+  - question: A strong smell is added to this fuel to help people notice leaks. It comes from underground, is mostly methane, and often travels through pipelines to buildings. Name this gas fuel used in many kitchen stoves and home heaters.
+    options: [ Gasoline, Coal, Wood, Natural gas ]
+    answer: Natural gas
+
+  - question: Cutting a bar-shaped example in half gives two smaller ones, each with two poles. These objects can pull on iron, and matching poles push away from each other. Name an object with north and south poles, often used to hold a note on a refrigerator.
+    options: [ Battery, Light bulb, Magnet, Lever ]
+    answer: Magnet
+
+  - question: Tiny, fingerlike bumps line this organ and help it take nutrients out of food. It is a long, coiled tube where much of digestion and nutrient absorption happens. Name this digestive organ that comes after the stomach and before the large intestine.
+    options: [ Large intestine, Small intestine, Esophagus, Stomach ]
+    answer: Small intestine
+
+  - question: Chemicals once used in some sprays and refrigerators damaged this part of the atmosphere. It is high above most clouds and contains a gas made of three oxygen atoms. Name this protective layer that blocks much of the Sun's harmful ultraviolet light.
+    options: [ Ozone layer, Troposphere, Ionosphere, Magnetosphere ]
+    answer: Ozone layer
+
+  - question: Two cars moving equally fast can have different values of this if they travel in different directions. Scientists describe it using both a number and a direction, such as ten meters per second east. Name this word for speed in a certain direction.
+    options: [ Speed, Acceleration, Distance, Velocity ]
+    answer: Velocity
+    explanation: Velocity is speed in a certain direction — plain "speed" has no direction.
+
+  - question: This cell structure has a large piece and a small piece that work together. It follows a message copied from DNA and joins building blocks called amino acids into chains. Name this tiny cell structure that makes proteins, sometimes called a cell's protein factory.
+    options: [ Nucleus, Mitochondrion, Ribosome, Cell membrane ]
+    answer: Ribosome
+
+  - question: This process changes some matter into energy deep inside stars. It joins tiny atomic centers together and turns hydrogen into helium in the Sun. Name this nuclear process that joins rather than splits atoms and gives the Sun its energy.
+    options: [ Nuclear fission, Nuclear fusion, Combustion, Photosynthesis ]
+    answer: Nuclear fusion
+    explanation: Fission splits atoms apart; fusion joins them together.
+
+  - question: Iron filings can show the pattern of this invisible region. It surrounds a current-carrying wire or a magnet, and a compass needle lines up with it. Name this field around a magnet where magnetic forces act.
+    options:
+      - Magnetic field
+      - Gravitational field
+      - Electric current
+      - Sound wave
+    answer: Magnetic field

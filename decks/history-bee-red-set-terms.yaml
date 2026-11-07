@@ -1,0 +1,182 @@
+# National History Bee 2026-27 — Red Set "Terms for Further Study".
+# The guide only lists these terms; the clues are written for this deck.
+# Source: docs/2026-27-Red-Set-History-Study-Guide (2).pdf
+
+title: History Bee · Red Set Terms
+description: The 30 "terms for further study" from the 2026-27 Red Set history guide.
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Which civil rights organization, founded in 1909 with W. E. B. Du Bois among its founders, fought segregation in court cases like Brown v. Board of Education?
+    options:
+      - ACLU
+      - NAACP
+      - Red Cross
+      - Southern Christian Leadership Conference
+    answer: NAACP
+    explanation: NAACP stands for National Association for the Advancement of Colored People.
+
+  - question: Which Chinese dynasty first unified China in 221 BCE, under an emperor who was buried with the Terracotta Army?
+    options: [ Qin dynasty, Han dynasty, Ming dynasty, Tang dynasty ]
+    answer: Qin dynasty
+    explanation: The name "China" is thought to come from Qin (pronounced "chin").
+
+  - question: Which German inventor built a printing press with movable metal type around 1450 and printed a famous Bible?
+    options:
+      - Martin Luther
+      - Galileo Galilei
+      - Leonardo da Vinci
+      - Johannes Gutenberg
+    answer: Johannes Gutenberg
+
+  - question: Which empire ruled much of India from the 1500s to the 1800s and built the Taj Mahal?
+    options: [ Ottoman Empire, Maurya Empire, Mughal Empire, Mongol Empire ]
+    answer: Mughal Empire
+
+  - question: Which U.S. president visited China in 1972 and is the only president to resign, after the Watergate scandal?
+    options: [ Gerald Ford, Richard Nixon, Lyndon B. Johnson, Jimmy Carter ]
+    answer: Richard Nixon
+
+  - question: Which empire was ruled by Charlemagne, who was crowned Emperor of the Romans in 800 CE?
+    options:
+      - Carolingian Empire
+      - Byzantine Empire
+      - Ottoman Empire
+      - Mongol Empire
+    answer: Carolingian Empire
+    explanation: '"Carolingian" comes from Carolus, the Latin form of Charles.'
+
+  - question: Which British author, who flew as a fighter pilot in World War II, wrote Charlie and the Chocolate Factory and Matilda?
+    options: [ J. R. R. Tolkien, C. S. Lewis, Beatrix Potter, Roald Dahl ]
+    answer: Roald Dahl
+
+  - question: In which city was President John F. Kennedy assassinated in November 1963?
+    options: [ Houston, Chicago, Dallas, "Washington, D.C." ]
+    answer: Dallas
+
+  - question: What were the armed fighters called who battled each other or wild animals to entertain crowds in ancient Rome's Colosseum?
+    options: [ Centurions, Gladiators, Senators, Knights ]
+    answer: Gladiators
+
+  - question: What was the movement to end slavery called, supported by people like Frederick Douglass and Harriet Tubman?
+    options: [ Abolitionism, Prohibition, Suffrage, Isolationism ]
+    answer: Abolitionism
+    explanation: Suffrage is the right to vote; prohibition was the ban on alcohol.
+
+  - question: Which English naturalist visited the Galápagos Islands on HMS Beagle and wrote On the Origin of Species?
+    options: [ Isaac Newton, Gregor Mendel, Louis Pasteur, Charles Darwin ]
+    answer: Charles Darwin
+
+  - question: Which Chinese dynasty (1368–1644) built most of the Great Wall that stands today and the Forbidden City in Beijing?
+    options: [ Qin dynasty, Han dynasty, Ming dynasty, Qing dynasty ]
+    answer: Ming dynasty
+
+  - question: Which war (1861–1865) was fought between the Union and the Confederacy?
+    options:
+      - American Revolutionary War
+      - American Civil War
+      - War of 1812
+      - Spanish–American War
+    answer: American Civil War
+
+  - question: President Franklin D. Roosevelt's "Day of Infamy" speech asked Congress to declare war after a surprise attack on December 7, 1941. Where was the attack?
+    options: [ Pearl Harbor, Midway Island, Normandy, Hiroshima ]
+    answer: Pearl Harbor
+
+  - question: Which capital city was built on top of the Aztec capital Tenochtitlan, on a dried-up lake bed that makes it slowly sink?
+    options: [ Lima, Bogotá, Guatemala City, Mexico City ]
+    answer: Mexico City
+
+  - question: Who was the longest-serving Chief Justice of the U.S. Supreme Court, whose decision in Marbury v. Madison (1803) established judicial review?
+    options: [ John Jay, Earl Warren, John Marshall, Thurgood Marshall ]
+    answer: John Marshall
+    explanation: Judicial review is the power of courts to strike down laws that break the Constitution. Thurgood Marshall was the first Black Supreme Court justice.
+
+  - question: Which religion, the world's largest by number of followers, is based on the life and teachings of Jesus?
+    options: [ Islam, Christianity, Judaism, Buddhism ]
+    answer: Christianity
+
+  - question: Which British scientist spent decades studying wild chimpanzees at Gombe, in Tanzania?
+    options: [ Jane Goodall, Dian Fossey, Rachel Carson, Marie Curie ]
+    answer: Jane Goodall
+    explanation: Dian Fossey studied mountain gorillas in Rwanda.
+
+  - question: Which war (1775–1783) won the Thirteen Colonies their independence from Great Britain?
+    options:
+      - War of 1812
+      - French and Indian War
+      - American Civil War
+      - American Revolutionary War
+    answer: American Revolutionary War
+
+  - question: What were NASA's reusable spacecraft, flown from 1981 to 2011, that launched like rockets and landed like airplanes?
+    options:
+      - Apollo capsules
+      - Saturn V rockets
+      - Space Shuttles
+      - Sputnik satellites
+    answer: Space Shuttles
+    explanation: The five shuttles that flew in space were Columbia, Challenger, Discovery, Atlantis and Endeavour.
+
+  - question: Who led the Bolsheviks in the Russian Revolution of 1917 and became the first leader of the Soviet state?
+    options: [ Joseph Stalin, Vladimir Lenin, Nicholas II, Leon Trotsky ]
+    answer: Vladimir Lenin
+    explanation: Nicholas II was the last tsar, overthrown in 1917.
+
+  - question: Which long series of wars (1337–1453) between England and France included the Battle of Agincourt and Joan of Arc?
+    options:
+      - Hundred Years' War
+      - Wars of the Roses
+      - Thirty Years' War
+      - The Crusades
+    answer: Hundred Years' War
+    explanation: Despite its name, it lasted 116 years.
+
+  - question: Which document, written in Philadelphia in 1787, set up the three branches of the U.S. government and begins "We the People"?
+    options:
+      - Declaration of Independence
+      - Bill of Rights
+      - Articles of Confederation
+      - U.S. Constitution
+    answer: U.S. Constitution
+
+  - question: In Greek legend, whose departure from Sparta with the Trojan prince Paris started the Trojan War?
+    options: [ Cleopatra, Penelope, Helen of Troy, Athena ]
+    answer: Helen of Troy
+    explanation: She is called "the face that launched a thousand ships."
+
+  - question: What is the idea, championed by Nicolaus Copernicus, that Earth and the other planets orbit the Sun?
+    options: [ Geocentrism, Heliocentrism, Relativity, Evolution ]
+    answer: Heliocentrism
+    explanation: '"Helios" is Greek for Sun. Geocentrism is the older idea that everything circles Earth.'
+
+  - question: Which powerful royal family from Austria ruled the Holy Roman Empire for centuries and also ruled Spain in the 1500s and 1600s?
+    options: [ Habsburgs, Tudors, Romanovs, Bourbons ]
+    answer: Habsburgs
+    explanation: Also spelled Hapsburgs.
+
+  - question: Which colony did the Pilgrims found in 1620 after crossing the Atlantic on the Mayflower?
+    options:
+      - Jamestown
+      - Roanoke Colony
+      - Massachusetts Bay Colony
+      - Plymouth Colony
+    answer: Plymouth Colony
+
+  - question: Which art movement, started in France in the 1870s by painters like Claude Monet, captured light and color with quick brushstrokes?
+    options: [ Cubism, Surrealism, Impressionism, Baroque ]
+    answer: Impressionism
+    explanation: It was named after Monet's painting Impression, Sunrise.
+
+  - question: What was the violent period of the French Revolution (1793–1794), led by Maximilien Robespierre, when thousands were executed by guillotine?
+    options:
+      - Hundred Days
+      - Reign of Terror
+      - Glorious Revolution
+      - Storming of the Bastille
+    answer: Reign of Terror
+
+  - question: Which Italian Renaissance artist and inventor painted the Mona Lisa and The Last Supper?
+    options: [ Leonardo da Vinci, Michelangelo, Raphael, Donatello ]
+    answer: Leonardo da Vinci
