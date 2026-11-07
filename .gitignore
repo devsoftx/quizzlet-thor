@@ -5,3 +5,5 @@ dist
 
 # Source study guides (third-party material, kept local only)
 docs/
+.vercel
+.env*
