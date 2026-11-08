@@ -1,5 +1,5 @@
 import { useRef, useState, type DragEvent } from "react";
-import type { DeckEntry } from "../library";
+import { isVisible, type DeckEntry } from "../library";
 
 interface Props {
   decks: DeckEntry[];
@@ -11,6 +11,7 @@ interface Props {
 
 const EXAMPLE = `title: Norse Mythology
 description: Gods, realms and legends
+enabled: true          # required: only enabled decks are shown
 shuffle: true          # shuffle card order (default: true)
 shuffleOptions: true   # shuffle answer options (default: true)
 
@@ -24,9 +25,11 @@ cards:
     answer: Odin
     explanation: Odin, the All-Father, rules Asgard.  # optional`;
 
-export function DeckList({ decks, bestScores, onStart, onImport, onRemove }: Props) {
+export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRemove }: Props) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
+  const decks = allDecks.filter(isVisible);
+  const hidden = allDecks.filter((d) => !isVisible(d));
 
   function yamlFiles(list: FileList | null): File[] {
     return Array.from(list ?? []).filter((f) => /\.ya?ml$/i.test(f.name));
@@ -79,10 +82,21 @@ export function DeckList({ decks, bestScores, onStart, onImport, onRemove }: Pro
 
       {decks.length === 0 ? (
         <div className="empty">
-          <p>No decks yet.</p>
-          <p className="muted">
-            Add <code>.yaml</code> files to the <code>decks/</code> folder, or drop one here.
-          </p>
+          {hidden.length > 0 ? (
+            <>
+              <p>No enabled decks.</p>
+              <p className="muted">
+                Set <code>enabled: true</code> in a deck's YAML file to show it here.
+              </p>
+            </>
+          ) : (
+            <>
+              <p>No decks yet.</p>
+              <p className="muted">
+                Add <code>.yaml</code> files to the <code>decks/</code> folder, or drop one here.
+              </p>
+            </>
+          )}
         </div>
       ) : (
         <ul className="decks">
@@ -138,11 +152,39 @@ export function DeckList({ decks, bestScores, onStart, onImport, onRemove }: Pro
         </ul>
       )}
 
+      {hidden.length > 0 && (
+        <details className="hidden-decks">
+          <summary>
+            {hidden.length} deck{hidden.length === 1 ? "" : "s"} hidden (not enabled)
+          </summary>
+          <p className="muted">
+            Set <code>enabled: true</code> at the top of the YAML file to show a deck.
+          </p>
+          <ul>
+            {hidden.map((entry) => (
+              <li key={entry.id}>
+                <span>
+                  {entry.ok ? entry.deck.title : entry.fileName}{" "}
+                  <span className="muted">· {entry.fileName}</span>
+                  {entry.source === "imported" && <span className="tag">Imported</span>}
+                </span>
+                {entry.source === "imported" && (
+                  <button type="button" className="btn btn--ghost" onClick={() => onRemove(entry)}>
+                    Remove
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+
       <details className="format-help">
         <summary>How to write a deck (YAML format)</summary>
         <p className="muted">
           Put files in the project's <code>decks/</code> folder (they show up automatically), or import
-          one here. <code>answer</code> must match one of the <code>options</code> exactly.
+          one here. Only decks with <code>enabled: true</code> are shown, and <code>answer</code> must
+          match one of the <code>options</code> exactly.
         </p>
         <pre>
           <code>{EXAMPLE}</code>

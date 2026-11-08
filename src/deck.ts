@@ -14,6 +14,8 @@ export interface Card {
 export interface Deck {
   title: string;
   description?: string;
+  /** Only decks with `enabled: true` are shown in the app (default: false). */
+  enabled: boolean;
   /** Shuffle card order each session (default: true). */
   shuffle: boolean;
   /** Shuffle the options inside each card (default: true). */
@@ -23,7 +25,23 @@ export interface Deck {
 
 export type ParseResult =
   | { ok: true; deck: Deck }
-  | { ok: false; errors: string[] };
+  /** `enabled` is null when it can't be read (broken YAML or a bad value). */
+  | { ok: false; errors: string[]; enabled: boolean | null };
+
+/**
+ * Reads the deck-level `enabled` flag. Missing means disabled. Accepts
+ * true/false, plus the words "enabled"/"disabled".
+ */
+function parseEnabled(raw: unknown): { value: boolean | null; error?: string } {
+  if (raw === undefined || raw === null) return { value: false };
+  if (typeof raw === "boolean") return { value: raw };
+  if (typeof raw === "string") {
+    const word = raw.trim().toLowerCase();
+    if (word === "true" || word === "enabled") return { value: true };
+    if (word === "false" || word === "disabled") return { value: false };
+  }
+  return { value: null, error: `"enabled" must be true or false (got "${String(raw)}").` };
+}
 
 type Rng = () => number;
 
@@ -100,39 +118,44 @@ function parseCard(raw: unknown, index: number, errors: string[]): Card | null {
 }
 
 /**
- * Parse a deck from YAML. The file is either a mapping with a `cards:` list,
- * or just a bare list of cards (the title then comes from `fallbackTitle`).
+ * Parse a deck from YAML. The file is a mapping with a `cards:` list.
+ * (A bare list of cards still parses, but it has nowhere to say
+ * `enabled: true`, so it is always disabled.)
  */
 export function parseDeck(source: string, fallbackTitle: string): ParseResult {
   let data: unknown;
   try {
     data = parse(source);
   } catch (err) {
-    return { ok: false, errors: [`Invalid YAML: ${(err as Error).message}`] };
+    return { ok: false, errors: [`Invalid YAML: ${(err as Error).message}`], enabled: null };
   }
 
   const root = Array.isArray(data) ? { cards: data } : data;
-  if (!isRecord(root) || !Array.isArray(root.cards)) {
-    return {
-      ok: false,
-      errors: ['The file needs a "cards:" list (or must itself be a list of cards).'],
-    };
-  }
-  if (root.cards.length === 0) {
-    return { ok: false, errors: ['"cards" is empty — add at least one card.'] };
+  if (!isRecord(root)) {
+    return { ok: false, errors: ['The file needs a "cards:" list.'], enabled: null };
   }
 
-  const errors: string[] = [];
-  const cards = root.cards
+  const enabled = parseEnabled(root.enabled);
+  const errors: string[] = enabled.error ? [enabled.error] : [];
+
+  if (!Array.isArray(root.cards)) {
+    errors.push('The file needs a "cards:" list.');
+  } else if (root.cards.length === 0) {
+    errors.push('"cards" is empty — add at least one card.');
+  }
+  const cards = (Array.isArray(root.cards) ? root.cards : [])
     .map((raw, i) => parseCard(raw, i, errors))
     .filter((c): c is Card => c !== null);
-  if (errors.length > 0) return { ok: false, errors };
+  if (errors.length > 0 || enabled.value === null) {
+    return { ok: false, errors, enabled: enabled.value };
+  }
 
   return {
     ok: true,
     deck: {
       title: toText(root.title) || fallbackTitle,
       description: toText(root.description) || undefined,
+      enabled: enabled.value,
       shuffle: optionalBool(root.shuffle, true),
       shuffleOptions: optionalBool(root.shuffleOptions, true),
       cards,

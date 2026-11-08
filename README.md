@@ -30,14 +30,19 @@ There are two ways:
 2. **Import it in the browser** with the *Import YAML…* button (or drag the file
    onto the page). Imported decks are saved in your browser's local storage.
 
+**Only decks with `enabled: true` are shown.** Set `enabled: false` (or leave
+the line out) to hide a deck without deleting it; hidden decks are listed in a
+collapsed "hidden (not enabled)" section at the bottom of the deck list.
+
 A deck with mistakes still shows up in the list, with a description of what's
-wrong, so you can fix the file.
+wrong, so you can fix the file — unless it isn't enabled.
 
 ## Deck format
 
 ```yaml
 title: Norse Mythology            # optional, defaults to the file name
 description: Gods and realms      # optional
+enabled: true                     # required to show the deck (true / false)
 shuffle: true                     # shuffle card order (default: true)
 shuffleOptions: true              # shuffle the options on each card (default: true)
 
@@ -59,14 +64,14 @@ cards:
 
 Rules:
 
+- `enabled: true` shows the deck; `enabled: false` or no `enabled` line hides
+  it. (`enabled` / `disabled` also work as values.)
 - Each card needs a `question`, at least two `options`, and an `answer`.
 - `answer` is the **text** of the correct option (matched exactly, or
   ignoring upper/lower case).
 - Numbers are fine as options (`[7, 9, 12]`); they're treated as text.
 - Wrap text in quotes if it contains a `:` followed by a space, or starts with
   a special character like `*`, `&`, `!`, `[` or `{`.
-- A file can also be just a list of cards with no `title:`/`cards:` wrapper —
-  see [`decks/quick-math.yml`](decks/quick-math.yml).
 
 ## Keyboard shortcuts
 

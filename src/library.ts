@@ -6,7 +6,15 @@ export type DeckEntry = {
   id: string;
   fileName: string;
   source: DeckSource;
-} & ({ ok: true; deck: Deck } | { ok: false; errors: string[] });
+} & ({ ok: true; deck: Deck } | { ok: false; errors: string[]; enabled: boolean | null });
+
+/**
+ * Only enabled decks are listed. A broken deck still shows its errors so the
+ * author can fix it — unless its file says it's disabled (or doesn't say).
+ */
+export function isVisible(entry: DeckEntry): boolean {
+  return entry.ok ? entry.deck.enabled : entry.enabled !== false;
+}
 
 interface StoredDeck {
   fileName: string;
