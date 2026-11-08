@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
+import type { SaveState } from "../App";
 import type { Deck } from "../deck";
+import { LeaderboardTable } from "./LeaderboardTable";
 import type { AnswerRecord } from "./Quiz";
 
 interface Props {
@@ -7,6 +9,9 @@ interface Props {
   results: AnswerRecord[];
   isRetry: boolean;
   newBest: boolean;
+  save: SaveState;
+  onRetrySave: () => void;
+  onNewSession: () => void;
   onRetryMissed: () => void;
   onRestart: () => void;
   onExit: () => void;
@@ -19,10 +24,84 @@ function message(percent: number): string {
   return "Tough round. Try the missed cards again.";
 }
 
-export function Results({ deck, results, isRetry, newBest, onRetryMissed, onRestart, onExit }: Props) {
+function PointsAndLeaderboard({
+  save,
+  roundPoints,
+  onRetrySave,
+  onNewSession,
+}: {
+  save: SaveState;
+  roundPoints: number;
+  onRetrySave: () => void;
+  onNewSession: () => void;
+}) {
+  switch (save.status) {
+    case "saving":
+      return (
+        <p className="muted" role="status">
+          Saving your +{roundPoints} points…
+        </p>
+      );
+    case "expired":
+      return (
+        <div className="save-problem" role="alert">
+          <p>Your 60-minute session ended before this round finished, so these points weren't saved.</p>
+          <button type="button" className="btn btn--primary" onClick={onNewSession}>
+            Start a new session
+          </button>
+        </div>
+      );
+    case "error":
+      return (
+        <div className="save-problem" role="alert">
+          <p>Couldn't save your points: {save.message}</p>
+          <button type="button" className="btn btn--secondary" onClick={onRetrySave}>
+            Try again
+          </button>
+        </div>
+      );
+    case "saved": {
+      const { result } = save;
+      return (
+        <>
+          <div className="points-summary">
+            <div className="points-summary__earned">
+              <span className="points-summary__big">+{result.pointsEarned}</span>
+              <span className="muted">points this round</span>
+            </div>
+            <div className="points-summary__totals">
+              <span>
+                This session <strong>{result.sessionPoints.toLocaleString()}</strong>
+              </span>
+              <span>
+                All-time total <strong>{result.totalPoints.toLocaleString()}</strong>
+              </span>
+            </div>
+          </div>
+          <h2 className="section-title">🏆 Leaderboard</h2>
+          <LeaderboardTable board={result.leaderboard} />
+        </>
+      );
+    }
+  }
+}
+
+export function Results({
+  deck,
+  results,
+  isRetry,
+  newBest,
+  save,
+  onRetrySave,
+  onNewSession,
+  onRetryMissed,
+  onRestart,
+  onExit,
+}: Props) {
   const correct = results.filter((r) => r.correct).length;
   const missed = results.length - correct;
   const percent = Math.round((correct / results.length) * 100);
+  const roundPoints = results.reduce((sum, r) => sum + r.points, 0);
 
   return (
     <div className="results">
@@ -61,6 +140,15 @@ export function Results({ deck, results, isRetry, newBest, onRetryMissed, onRest
           </button>
         </div>
       </header>
+
+      <section className="results__board" aria-live="polite">
+        <PointsAndLeaderboard
+          save={save}
+          roundPoints={roundPoints}
+          onRetrySave={onRetrySave}
+          onNewSession={onNewSession}
+        />
+      </section>
 
       <section>
         <h2 className="section-title">Review</h2>
