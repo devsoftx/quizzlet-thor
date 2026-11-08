@@ -1,0 +1,172 @@
+# Science Bee 2018–19 · Regional 1 · Round 1 — 32 tossups.
+# Source: docs/2018-2019-EMS-SB-1-Set-1.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2018–19 · Regional 1 · Round 1
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: In 2016, the project LIGO reported the detection of waves of this force. General relativity states that this force is responsible for the curvature of spacetime. Of all four fundamental forces, this is the weakest. Newton formed a universal inverse-square law for this force, which produces an acceleration of 9.8 meters per second on Earth’s surface. Name this force described by constants big G and small g, the attraction between two masses.
+    options:
+      - Gravity
+      - Electromagnetism
+      - Strong nuclear force
+      - Weak nuclear force
+    answer: Gravity
+
+  - question: Using only a heat source, one type of this device without movable parts was invented by Leo Szilard and Albert Einstein. This device uses a vapor compression cycle that runs through condensing, evaporating, and compressing phases. Working fluids that helped expand the use of these devices include chlorofluorocarbons like Freon. The icebox was replaced by, for the point, what household appliance that keeps food cold?
+    options: [ Dishwashers, Microwave ovens, Washing machines, Refrigerators ]
+    answer: Refrigerators
+
+  - question: Bernice Eddy discovered that millions of people were injected with cancer-causing monkey cells from vaccines that targeted this disease. Vaccines for this disease were created by Albert Sabin and Jonas Salk. Franklin Delano Roosevelt suffered from, for the point, what disease that causes infantile paralysis?
+    options: [ Measles, Smallpox, Polio, Tuberculosis ]
+    answer: Polio
+    explanation: "Also accepted: poliomyelitis."
+
+  - question: Every natural number greater than 1 can be factored into these numbers according to the fundamental theorem of arithmetic. If two numbers have a greatest common factor of 1, they are said to be “co-” this property. 2 is the only even number with this property, and they are contrasted with composite numbers. Name these numbers whose only factors are one and themselves.
+    options:
+      - Composite numbers
+      - Prime numbers
+      - Perfect numbers
+      - Square numbers
+    answer: Prime numbers
+
+  - question: This particle can’t share the exact same spin state by the Pauli exclusion principle. This particle, discovered by J.J. Thomson, is present in lone pairs in free radicals. Atoms like to have a certain number of this particle by the octet rule. This particle is donated in ionic bonds and shared in covalent bonds. Name this negatively charged particle that circles the nucleus of atoms.
+    options: [ Electrons, Protons, Neutrons, Photons ]
+    answer: Electrons
+
+  - question: In this organ, vasopressin can stimulate reabsorption of water from collecting ducts. Fluid that enters this organ diffuses from the glomerulus to a surrounding Bowman’s capsule. Ions are absorbed by this organ’s Loops of Henle, which are found in thousands of functional units called nephrons. The ureters connect these organs to the bladder. Identify these bean-shaped organs that filter blood to produce urine.
+    options: [ Lungs, Adrenal glands, Intestines, Kidneys ]
+    answer: Kidneys
+
+  - question: This force is described by Amonton’s law and is proportional to the normal force on an object. Drag is the aerodynamic equivalent of this force which comes in static and kinetic forms. This force often opposes change in motion and can be reduced with lubricants. Name this resistive force, that generates heat when you rub your hands together.
+    options: [ Normal force, Tension, Friction, Gravity ]
+    answer: Friction
+
+  - question: These objects are the subject of the no-hair theorem which holds that they can be characterized by only their mass, charge, and angular momentum. The mass of one of these objects determines its Schwarzschild radius and thus its event horizon or “point of no return.” Name these astronomical objects with singularities at their centers that let nothing, even light, escape.
+    options: [ Neutron stars, Black holes, White dwarfs, Red giants ]
+    answer: Black holes
+
+  - question: The replication of this molecule is semi-conservative and it is transcribed in the first step of the Central Dogma. It is made up of a sugar-phosphate backbone and a sequence of nucleotide base-pairs formed from adenine, thymine, cytosine, and guanine. Rosalind Franklin originally discovered this molecule’s double-helix structure which was then published by Watson and Crick. Name this molecule that stores information in the genetic code.
+    options: [ DNA, RNA, ATP, Glucose ]
+    answer: DNA
+    explanation: "Also accepted: deoxyribonucleic acid."
+
+  - question: An isotope of this element is bombarded with neutrons in a method for producing tritium. Salts of this element are frequently used to treat psychiatric disorders. This element is sometimes used to increase the efficiency of smelting aluminum. Ions of this element are frequently used in rechargeable batteries found in phones and laptops. Name this element with atomic number 3 represented by the symbol Li.
+    options: [ Beryllium, Potassium, Magnesium, Lithium ]
+    answer: Lithium
+
+  - question: Baily’s beads are a visual phenomenon seen during one of these events. An alternating pattern of dark and light lines called shadow bands are produced immediately before and after one of these events. A variation of one of these events is called total and results in the darkening of a daytime sky. Name these astronomical events in which the Sun is at least partially blocked by the Moon.
+    options:
+      - Lunar eclipses
+      - Planetary transits
+      - Solar eclipses
+      - Solar flares
+    answer: Solar eclipses
+
+  - question: The largest fossil of this dinosaur was excavated at the Cheyenne River Indian Reservation in South Dakota and is nicknamed after its discoverer Sue Hendrickson. That fossil of this dinosaur is in the Field Museum of Natural History in Chicago. This bipedal carnivore had a large head and short forelimbs. Name this large Cretaceous period dinosaur whose name translates to “Tyrant Lizard King.”
+    options: [ Velociraptor, Tyrannosaurus rex, Triceratops, Stegosaurus ]
+    answer: Tyrannosaurus rex
+    explanation: "Also accepted: T. rex."
+
+  - question: This element, like Nitrogen, can achieve a liquid form at 4.2 Kelvin and is often used for overclocking processors. Alpha particles are identical to nuclei of this element, the second most abundant in the universe. Name this element, often used for inflating balloons, symbolized He.
+    options: [ Helium, Neon, Argon, Krypton ]
+    answer: Helium
+
+  - question: The “singularity” is a hypothesis that the invention of the “super” form of this technology will trigger growth that may lead to human extinction. Advances in this technology include the creation of AlphaZero, by DeepMind, that defeated Stockfish in a match of one thousand rounds of chess. Elon Musk frequently warns about the danger of this technology. IBM’s Watson is an example of, for the point, what technology of “thinking machines?”
+    options:
+      - Quantum computing
+      - Virtual reality
+      - Cloud computing
+      - Artificial intelligence
+    answer: Artificial intelligence
+    explanation: "Also accepted: AI, artificial superintelligence."
+
+  - question: Some species of cuckoo birds participate in the brood form of this relationship by laying eggs in other birds nests. Helminths and protozoa can cause diseases by establishing this relationship. This relationship is defined as one species benefiting at the expense of another species. Name this relationship which fleas, ticks, and tape worms participate in.
+    options: [ Mutualism, Commensalism, Parasitism, Competition ]
+    answer: Parasitism
+
+  - question: In 1883, John Augustus Roebling designed one of these structures as a cable-stay hybrid to provide extra support to the deck. The suspended span is supported by anchor arms in the balanced cantilever variety of these structures. Akashi Kaikyo is the longest suspension variety of these structures. Name these structures that include the international orange painted Golden Gate one in San Francisco.
+    options: [ Dams, Bridges, Tunnels, Skyscrapers ]
+    answer: Bridges
+    explanation: The Roebling clue refers to the Brooklyn Bridge, which opened in 1883.
+
+  - question: This type of rock can be felsic or mafic depending on their chemical composition, and peridotite is one of them found mainly in the mantle. Examples of them include granite and basalt and they can be extrusive or intrusive depending on whether they are formed from lava or magma. Name this class of rocks that is contrasted with sedimentary and metamorphic.
+    options:
+      - Igneous rocks
+      - Sedimentary rocks
+      - Metamorphic rocks
+      - Clastic rocks
+    answer: Igneous rocks
+
+  - question: In this structure’s inner membrane, electrons are passed from ubiquinone to cytochrome c to power oxidative phosphorylation. This organelle contains a circular maternally-inherited genome. Oxaloacetate combines with acetyl-CoA to begin the citric acid cycle in this organelle, which has folds called cristae. FtP, name this eukaryotic organelle that generates ATP, the “powerhouse of the cell.”
+    options: [ Nucleus, Golgi apparatus, Endoplasmic reticulum, Mitochondrion ]
+    answer: Mitochondrion
+
+  - question: In quantum mechanics, the Hamiltonian operator describes the total sum of this property for a system. The first law of thermodynamics holds that this property is always conserved. This property is measured in Joules and is defined as the ability for a system to do work. Coming in “kinetic” and “potential” forms is, for the point, what property that gives a material the ability to move?
+    options: [ Momentum, Power, Energy, Force ]
+    answer: Energy
+
+  - question: Dijkstra’s algorithm is used on weighted examples of these objects. If one of these mathematical objects has no cycles of odd length, it is called bipartite and can be colored with two colors. If a connected one of these objects has no cycles it is called a tree. Name these objects made up of vertices connected by edges.
+    options: [ Matrices, Graphs, Vectors, Sets ]
+    answer: Graphs
+
+  - question: Gaps in this structure are called plasmodesmata. Bacteria have peptidoglycan in this structure, and in fungi it is composed of chitin. Cellulose is the main protein that makes up this tough structure in plants which gives them their rigidity. Name this structure that surrounds the cell membrane that is not found in animal cells.
+    options: [ Cell wall, Cell membrane, Cytoskeleton, Nuclear envelope ]
+    answer: Cell wall
+    explanation: "Note: cellulose is a carbohydrate (polysaccharide), not a protein as the question says."
+
+  - question: In infants, this structure contains soft fontanelles that allow the calvaria to expand. The sagittal suture bisects this structure, which contains a hole at its base called the foramen magnum. This structure’s zygomatic bone articulates with the maxilla to form the floor of the orbital cavity. One division of the trigeminal nerve in this structure runs along the mandible, or jawbone. Name this bony structure that houses the brain.
+    options: [ Rib cage, Pelvis, Spinal column, Skull ]
+    answer: Skull
+    explanation: "Also accepted: cranium."
+
+  - question: Bose-Einstein condensates only exist at points near this condition. The third law of thermodynamics states that at this value, crystals have no entropy. This condition, the lowest on the Rankine and Kelvin scales, cannot be reached by a physical apparatus. Name this coldest possible temperature.
+    options:
+      - Triple point of water
+      - Freezing point of water
+      - Absolute zero
+      - Critical point
+    answer: Absolute zero
+    explanation: Absolute zero is 0 kelvin, about -273.15 degrees Celsius.
+
+  - question: This biome is the primary home of the rock ptarmigan whose Svalbard variety is a terrestrial bird unique to the archipelago. The treeline is the point at which this biome and the Taiga meet. This biome’s vegetation includes lichen and moss, but not trees due to high elevation, permafrost subsoil, and low temperatures. Name this cold biome that makes up most of the Arctic circle.
+    options: [ Taiga, Tundra, Steppe, Savanna ]
+    answer: Tundra
+
+  - question: Pepsinogen in this organ becomes active after hydrochloric acid is secreted into this organ. Ulcers in this organ can be caused by infections of Helicobacter Pylori. The chyme produced in this organ is fed to the duodenum of the small intestine. Name this organ between the esophagus and the small intestine that secretes gastric acid to digest food.
+    options: [ Stomach, Esophagus, Pancreas, Large intestine ]
+    answer: Stomach
+
+  - question: These features form cryptodomes and leave behind calderas when they collapse. Varieties of a substance produced by these features include pahoehoe come in shield, cone, and composite varieties. More than 75% of the world’s active ones are in the Ring of Fire. Vesuvius and Mount St. Helens are examples of, for the point, what openings in the earth’s crust that expel lava?
+    options: [ Geysers, Hydrothermal vents, Sinkholes, Volcanoes ]
+    answer: Volcanoes
+
+  - question: This element bonds to oxygen and sodium in bleach. Its diatomic form is a yellow gas, which was the first gas used in chemical warfare in World War I. This halogen is below fluorine and above bromine on the periodic table. It is often used to clean swimming pools and its ion is bound to sodium in table salt. Name this element with atomic number 17 and symbol Cl.
+    options: [ Iodine, Sulfur, Chlorine, Argon ]
+    answer: Chlorine
+
+  - question: These events can be described by elastic-rebound theory, and they are common at strike-slip faults. These disasters originate at a point known as their epicenter, and when that point is under the sea, these events can cause tsunamis. The Richter scale measures, for the point, what natural disasters that cause the ground to shake?
+    options: [ Tsunamis, Earthquakes, Tornadoes, Floods ]
+    answer: Earthquakes
+    explanation: "Also accepted: tremors, temblors."
+
+  - question: This element is produced via the fusion of oxygen and helium in the alpha process. Out of all elements with a complete p shell, this element is the lightest. Along with another element, this element forms a laser that produces light at 633 nanometers. This element is frequently used in signs due to its ability to produce a characteristic, bright light. Name this second lightest noble gas with symbol Ne.
+    options: [ Neon, Fluorine, Xenon, Radon ]
+    answer: Neon
+
+  - question: These pathogens are classified using the Baltimore classification scheme, and their name comes from the Latin for “poison.” These infectious agents are known as phages when they infect bacteria, and it is still debated whether they can be classified as living organisms. Name these infectious agents that include Hepatitis and Ebola which overtake a host’s molecular machinery to create copies of their own genome.
+    options: [ Bacteria, Prions, Protozoa, Viruses ]
+    answer: Viruses
+    explanation: "Also accepted: virions, viral particles."
+
+  - question: The Cassini probe was sent to study this planet and its storms are often called Great White Spots. Its moons include Enceladus, Iapetus, and one that has liquid on its surface and a nitrogen atmosphere. That moon named Titan orbits this second largest gas giant. Name this sixth planet from the sun that is surrounded by a large icy ring system.
+    options: [ Jupiter, Uranus, Saturn, Neptune ]
+    answer: Saturn
+
+  - question: 60 atoms of this element make up the soccer ball-shaped buckyballs. Because this element can make up to four bonds, it can form a variety of complex structures. When this element is subjected to high pressures it can form diamonds. Name this element with symbol C, the basis of life.
+    options: [ Nitrogen, Carbon, Oxygen, Hydrogen ]
+    answer: Carbon

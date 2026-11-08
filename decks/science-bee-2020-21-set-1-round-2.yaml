@@ -1,0 +1,158 @@
+# Science Bee 2020–21 · Set 1 · Round 2 — 31 tossups.
+# Source: docs/2020-2021-EMS-SB-2-Set-1.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2020–21 · Set 1 · Round 2
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: This non-human animal is used to prepare tetanus antitoxin in much of the developing world. Nikolai Przewalski names one species of this animal whose leg length is a common textbook example of directional selection. Tiny Eohippus was an early ancestor of this animal, whose modern breeds include the Clydesdale. A close relative of zebras, for the point, what is this domesticated animal which can be saddled for riding?
+    options: [ Horse, Camel, Cow, Llama ]
+    answer: Horse
+    explanation: "Also accepted: Equus, equine."
+
+  - question: Lyophilic types of these substances are more stable than lyophobic ones. Adding clarifying agents to these substances can cause flocculation. Solid foam and sols are examples of these substances, and the scattering of light by these substances is stronger for blue light than red light in the Tyndall effect. Name these mixtures in which one substance is dispersed in another, exemplified by aerosols and milk.
+    options: [ Solutions, Alloys, Compounds, Colloids ]
+    answer: Colloids
+
+  - question: This material is the primary component of the Lunar Maria on the surface of the moon. This material formed hexagonal columns in North Ireland, creating the Giant's Causeway. Massive deposits of this material are called "floods" and are created by large volcanic eruptions. Oceanic crust is primarily made out of this rock. Name this fine-grained extrusive igneous rock, formed from the rapid cooling of lava.
+    options: [ Granite, Obsidian, Basalt, Limestone ]
+    answer: Basalt
+
+  - question: Random types of these constructs are called Las Vegas or Monte Carlo depending on whether they can fail. Two of these constructs named for Kruskal and Prim are "greedy," meaning they always make the locally optimal choice. "Big O" notation describes the runtime of these methods, which can use a "divide-and-conquer" technique. Search and sort can be performed by, for the point, what step-by-step methods used by computers to solve problems?
+    options:
+      - Compilers
+      - Algorithms
+      - Programming languages
+      - Operating systems
+    answer: Algorithms
+
+  - question: This organization's YouTube channel produces the Eons series, which covers evolution and ancient life forms. This organization also distributes the Nova pop-science series. Chris and Martin Kratt have starred in two animal science programs for this organization, starting with Zoboombafoo. The television counterpart of NPR, for the point, what is this educational television non-profit, which airs shows such as Sesame Street and Arthur?
+    options: [ PBS, BBC, National Geographic, Discovery Channel ]
+    answer: PBS
+    explanation: Stands for Public Broadcasting Service.
+
+  - question: Because the model organism Chlamydomonas has a single, large one of these organelles, mutants lacking carotenoids are easy to spot. Mesophyll tissue is rich in this organelle whose stroma contains rubisco enzyme for the Calvin cycle, and whose thylakoid membranes are the location of light-dependent reactions. Oxygen gas is released from, for the point, which green organelles of plant cells, the sites of photosynthesis?
+    options: [ Mitochondria, Vacuoles, Ribosomes, Chloroplasts ]
+    answer: Chloroplasts
+
+  - question: This process is described by a set of laws named for Alfred Fick. This process can be modeled as a random walk or as Brownian motion. A type of this process exhibited by water is known as osmosis. This process is driven by concentration gradients and can be visualized with the spread of dye through water. Name this process by which matter moves from areas of high to low concentration.
+    options: [ Active transport, Convection, Diffusion, Endocytosis ]
+    answer: Diffusion
+
+  - question: One of these astronomical bodies has a satellite named Dactyl. A region with many of these bodies was visited by the Dawn spacecraft. These bodies make up the Jovian Trojans, and gaps where these bodies are not found are named after Daniel Kirkwood. One of the largest of these bodies is called Vesta which is found in a region between Mars and Jupiter. Name these astronomical bodies which make up a namesake "belt" in the solar system.
+    options: [ Comets, Asteroids, Moons, Exoplanets ]
+    answer: Asteroids
+
+  - question: These devices can emit pulses through Q-switching, and in order to operate, these devices require more particles to be in an excited state than a ground state, a condition known as population inversion. The first one of these devices was made by Theodore Maiman using a ruby crystal. These devices operate through stimulated emission of their gain medium. Name these devices which emit a coherent beam of light.
+    options: [ Lasers, LEDs, Incandescent bulbs, Fluorescent lamps ]
+    answer: Lasers
+    explanation: Laser stands for light amplification by stimulated emission of radiation.
+
+  - question: A preliminary step for making this product involves treating its ingredients with water, sodium hydroxide, and sodium sulfide in the Kraft process. The bleaching of this product with elemental chlorine produces toxic chlorine dioxin compounds. After being introduced to the Islamic world, this product began to replace parchment and papyrus. Name this product which is made from wood pulp and is commonly written on with pencils.
+    options: [ Parchment, Papyrus, Slate, Paper ]
+    answer: Paper
+
+  - question: This quantity appears squared in the denominator of Chebyshev's inequality. Calculating the Z-score requires dividing by this quantity, which is also divided by the square root of the sample size to find standard error. The 68-95-99.7 rule for a normal distribution is defined using multiples of this quantity, which is the square root of the variance. Name this quantity symbolized "sigma" which represents how spread out a set of data is from the mean.
+    options: [ Variance, Mean, Standard deviation, Range ]
+    answer: Standard deviation
+
+  - question: During mitosis, chromosomes condense within these organelles which are surrounded by a double membrane known as their "envelope." Pore complexes allow RNA to travel in and out of these organelles, and these organelles are sometimes called the "control center" of the cell. Name these organelles, which contain the cell's genetic information.
+    options: [ Mitochondria, Nuclei, Ribosomes, Lysosomes ]
+    answer: Nuclei
+    explanation: "Singular: nucleus."
+
+  - question: Like chromium, this element leaves its 4s subshell half full in violation of the Aufbau principle. This element gives crustaceans blue blood due to its presence in hemocyanin. When combined with tin, this element forms bronze and when combined with zinc it forms brass. As this element oxidizes, it turns blue-green. This is the most commonly used element in electrical wires. Name this transition metal element, symbolized Cu.
+    options: [ Copper, Silver, Iron, Nickel ]
+    answer: Copper
+
+  - question: This region's lower part contains the D-double-prime layer while peridotite and olivine are prevalent in its upper part. The boundary between the lithosphere and asthenosphere is in this region. P waves can pass through this region but not the layer beneath it. “Plumes” in this region may drive its convection which causes seafloor spreading. Name this layer of the earth above the outer core and below the crust.
+    options: [ Crust, Outer core, Inner core, Mantle ]
+    answer: Mantle
+
+  - question: The namesake "law of" these devices states that the torque applied to both sides of these devices must be equivalent. These devices are divided into Classes 1, 2, and 3 based on the location of the fulcrum. These devices derive more mechanical advantage from having longer arms, which reduce the amount of force needed to be applied over a longer distance. Name these simple machines exemplified by a seesaw.
+    options: [ Pulleys, Inclined planes, Levers, Screws ]
+    answer: Levers
+
+  - question: Setting a "characteristic" one of these objects to zero allows Eigenvalues for a matrix to be found. These objects of degree five or higher cannot be solved algebraically. These objects can be factored using difference of cubes or difference of squares, and can be multiplied out using FOIL. Name these objects with integer powers of variables, such as cubics and quadratics.
+    options:
+      - Logarithms
+      - Polynomials
+      - Exponential functions
+      - Trigonometric functions
+    answer: Polynomials
+
+  - question: During this process, Aurora B kinase localizes to a namesake "spindle." In monocentric organisms undergoing this process, the kinetochore is localized. In one step of this process, chromosomes line up on a “plate.” This part of the cell cycle occurs after the G2 phase and ends at cytokinesis, and steps in this process include metaphase and anaphase. Name this process by which cells divide, contrasted with meiosis.
+    options: [ Mitosis, Binary fission, Interphase, Apoptosis ]
+    answer: Mitosis
+
+  - question: An organic chemistry reaction that cleaves alkenes and alkynes uses “lysis” by this molecule. Elastomers such as rubber can be “cracked” by this molecule. The amount of this substance is measured from a vertical column using Dobson units. Chlorofluorocarbons deplete a “layer” containing this protective molecule which absorbs ultraviolet radiation. Name this triatomic molecule present in the atmosphere with chemical formula O3.
+    options: [ Carbon dioxide, Nitrous oxide, Sulfur dioxide, Ozone ]
+    answer: Ozone
+
+  - question: Types of this material that can be blown in the wind as dust are known as loess. This material can be stripped of salt and nutrients through leaching with water. A variety of this material generally high in humus is called loam. Strata of this material are known as horizons, and this material is classified by how much sand, silt, and clay it contains. Name this material in which seeds are typically planted.
+    options: [ Bedrock, Gravel, Soil, Limestone ]
+    answer: Soil
+    explanation: "Also accepted: dirt."
+
+  - question: Because of the existence of virtual particles, these objects can "evaporate." Reinhard Genzel, Andrea Ghez, and Roger Penrose won the 2020 Nobel Prize in Physics for a discovery regarding a supermassive one of these objects called Sagittarius A-star. For non- rotating examples of these objects, the Schwarzschild radius defines the event horizon. Name these objects from which not even light can escape.
+    options: [ Neutron stars, Black holes, White dwarfs, Quasars ]
+    answer: Black holes
+
+  - question: The earliest evidence for the controlled use of this phenomenon is at the Wonderwerk Cave in South Africa. Homo erectus was likely the first species to directly initiate use of this phenomenon. Early methods for manually inducing this phenomenon included bow drills and striking metal on flint. Name this phenomenon often used historically as a heat source to cook food.
+    options: [ Fire, Electricity, Lightning, Geothermal heat ]
+    answer: Fire
+    explanation: "Also accepted: burning, flames."
+
+  - question: Beta-blockers are now less preferable to lower this quantity than ACE inhibitors, which act by causing vasodilation. A sphygmomanometer is used to measure this quantity whose systolic and diastolic components can be determined manually using a stethoscope and an inflatable cuff which wraps around the arm. A normal value of 120 over 80 millimeters mercury characterizes, for the point, what cardiovascular quantity?
+    options:
+      - Blood glucose
+      - Cholesterol level
+      - Body temperature
+      - Blood pressure
+    answer: Blood pressure
+
+  - question: At fertilization, there is a spike in the concentration of this element in the cytosol, known as its namesake "bomb" or "wave." This element’s plus 2 cation is stored in the sarcoplasmic reticulum of muscle cells. Sunlight helps the body produce vitamin D, which helps absorb this element. Name this element which is found in bones and has symbol Ca.
+    options: [ Sodium, Potassium, Calcium, Iron ]
+    answer: Calcium
+
+  - question: One theory suggests that this phenomenon is mediated by a massless, spin two boson. Observations of a solar eclipse proved that this phenomenon is capable of bending light as part of its namesake "lensing." This force is conceptualized as curvature of space- time in relativity. On Earth, this force causes an acceleration of 9.8 meters per second squared. For the point. name this weakest of the fundamental forces, which causes objects to fall to the ground.
+    options:
+      - Electromagnetism
+      - Gravity
+      - Strong nuclear force
+      - Weak nuclear force
+    answer: Gravity
+
+  - question: This technology was part of the Kyocera VP-210, the first cell phone equipped with this technology. In addition to audio connection, Securus Technology provides this service to prison inmates. Along with instant messaging, this is the primary service provided by Google Hangout. Due to the Covid-19 pandemic, most schools have been forced to remotely operate over these services. Name this service provided by Skype, Facetime, and Zoom.
+    options: [ Video calls, Text messaging, Email, Cloud storage ]
+    answer: Video calls
+    explanation: Also called video chat or videoconferencing.
+
+  - question: In these structures, water is forced into the symplast by the suberin-containing Casparian strip. It’s not the shoot, but these structures grow at their “apical meristem” and are positively geotropic. Cytokinins regulate the growth of these structures, which are “aerial” in mangroves. Rutabagas and carrots are examples of these organs. Name these plant structures which draw up water and nutrients from the ground.
+    options: [ Stems, Leaves, Flowers, Roots ]
+    answer: Roots
+
+  - question: Rock formations common to these biomes include hamadas and ergs. CAM and C4 photosynthesis evolved among plants in these biomes, which are home to the majority of the world's xerophytes. These biomes commonly form in the "rain shadow" of mountain ranges. These biomes and beaches are home to most of the world's sand dunes. Name these extremely arid regions, exemplified by the Sahara.
+    options: [ Tundras, Savannas, Deserts, Taigas ]
+    answer: Deserts
+
+  - question: This quantity is minimized in binary mixtures at the eutectic point. For water compounds, this quantity can be found by multiplying the molality by 1.86 as part of a coligitive "depression" property. The addition of sodium chloride causes this point to lower for water, allowing it to be used to de-ice roads. Name this temperature at which a phase change causes liquids to turn into solids.
+    options: [ Boiling point, Freezing point, Dew point, Critical point ]
+    answer: Freezing point
+    explanation: "Also accepted: melting point."
+
+  - question: This order is subdivided into strepsirrhines and haplorhines, meaning "twisted nostril" and "simple noses" respectively. Unusually, most members of this order cannot synthesize vitamin C. The colugo is the closest relative of this order, whose members include galagos, tarsiers, and lorises. Name this taxonomic order which includes lemurs, monkeys, and apes and is defined by having opposable thumbs.
+    options: [ Primates, Rodents, Bats, Carnivores ]
+    answer: Primates
+
+  - question: Voyager discovered a cloud pattern at this planet's north pole called its "hexagon." Depressions on the surface of a moon of this planet have been nicknamed "tiger stripes." Another moon of this planet, Prometheus, is a shepherd moon, and the Cassini division is present in an important feature on this planet. Having the lowest density of any planet in the solar system, for the point, what is this sixth planet from the sun known for its extensive ring system?
+    options: [ Jupiter, Uranus, Neptune, Saturn ]
+    answer: Saturn
+
+  - question: The namesake "overturning" of these locations can result in the release of deadly Mazuku, fast-moving clouds of carbon dioxide. Two of these locations in Cameroon are the only ones known to have experienced limnic eruptions. These locations can become extremely saline when they are endorheic, or lack outflows. Name these non- flowing bodies of water which include examples named Superior, Michigan, and Huron.
+    options: [ Rivers, Oceans, Lakes, Swamps ]
+    answer: Lakes

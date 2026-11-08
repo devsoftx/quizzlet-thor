@@ -1,0 +1,170 @@
+# Science Bee 2019–20 · Regional 2 · Round 1 — 32 tossups.
+# Source: docs/2019-2020-MS-SBee-Round-1-Set-2.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2019–20 · Regional 2 · Round 1
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: These bodies are home to a habitat that comes in fringing, barrier, and atoll types. Species denser than these bodies that rest on their bottom live in the benthic zone. Nutrients in these bodies of water are provided by cold seeps, hydrothermal vents, marine snow, or whale falls. Name these bodies of water, which include the Arctic, Atlantic, and Pacific.
+    options: [ Oceans, Lakes, Rivers, Estuaries ]
+    answer: Oceans
+
+  - question: Definitions of these substances include electron pair acceptor and hydrogen donor. Depending on whether they lose all of their protons in water, these substances can be classified as either strong or weak. These substances name a type of rain often caused by pollution. These substances have a pH less than seven and are often sour tasting. Vinegar and lemon juice are, What substances that are often corrosive?
+    options: [ Bases, Salts, Alcohols, Acids ]
+    answer: Acids
+
+  - question: CalTech alumni and faculty help run this agency’s Jet Propulsion Laboratory. This agency has been responsible for exploring Gale crater with a machine whose name was proposed by sixth-grader Clara Ma. This agency’s Orion craft will launch the second Artemis mission in 2022. Name this American space agency that landed Buzz Aldrin and Neil Armstrong on the moon.
+    options: [ ESA, JAXA, NASA, Roscosmos ]
+    answer: NASA
+    explanation: NASA stands for the National Aeronautics and Space Administration.
+
+  - question: A scientist with this surname names a temperature above which ferromagnetism disappears. Two scientists with this surname discovered the element polonium. A woman with this surname studied at the Flying University, an underground educational institution in Poland. For her work, she won two Nobel prizes, and she coined the term radioactivity. Name this last name of physicists Pierre and Marie.
+    options: [ Becquerel, Curie, Rutherford, Meitner ]
+    answer: Curie
+
+  - question: An “Integrated” technique to designing these devices is based on silicon semiconductor substrates and handles billions of transistors. Kirchoff names a “loop” and “junction” law governing the behavior of these devices. “Voltage equals current times resistance” is a statement of Ohm’s law which governs these devices. Name these devices consisting of components that allow electricity to flow.
+    options:
+      - Electronic circuits
+      - Electrical insulators
+      - Capacitors
+      - Permanent magnets
+    answer: Electronic circuits
+    explanation: "Also accepted: integrated circuits."
+
+  - question: A characteristic named for this mathematician is determined by the number of vertices minus the number of edges plus the number of faces. This mathematician set the foundation for graph theory by observing the bridges of Seven Bridges of K ̈onigsberg. His namesake constant is approximately 2.718 and is represented with an e. Name this prolific Swiss mathematician and physicist.
+    options:
+      - Daniel Bernoulli
+      - Carl Friedrich Gauss
+      - Joseph-Louis Lagrange
+      - Leonhard Euler
+    answer: Leonhard Euler
+
+  - question: These three letters begin the last word in an astronomy term for high luminosity regions whose other two words are “active” and “galactic.” Scientific names beginning with these three letters typically derive from the latin word for a pit or seeds inside a fruit. Name these three letters that begin the name of a central organelle ending with “leus”
+    options: [ Mit, Rib, Nuc, Cyt ]
+    answer: Nuc
+    explanation: As in nucleus and active galactic nuclei.
+
+  - question: In these structures, fast flowing deposits of calcite is often affectionately referred to as these structures’ “bacon.” Troglobites dwell in these Karst topographical structures which are formed from dissolution of rocks. Stalactites hang from the ceiling of these structures. Name these structures underground networks with surface entrances that serve as a hibernation spot for bats and bears.
+    options: [ Canyons, Caves, Geysers, Natural arches ]
+    answer: Caves
+
+  - question: The probability of encountering these entities is encoded in the Drake equation. The Fermi paradox arises from the high probability of these entities existing though none have been discovered. For these entities to exist, it is thought they have to arise in a star system on a planet with water that sits within the goldilock zone. Name this theoretical type of life that exists on planets other than our own.
+    options:
+      - Extraterrestrial life
+      - Prehistoric life
+      - Deep-sea life
+      - Artificial life
+    answer: Extraterrestrial life
+    explanation: "Also accepted: aliens."
+
+  - question: Two charged particles undergoing this sort of event can cause a form of radiation called bremsstrahlung. Kinetic energy isn’t conserved in inelastic examples of this event between two carts. Momentum is conserved for the two cart system under both elastic and inelastic examples of this event. Name this event where two objects come in contact and exchange force.
+    options: [ Oscillations, Reflections, Rotations, Collisions ]
+    answer: Collisions
+
+  - question: Dmitry Belyayev ran an experiment that showed that these animals could be selected to show affection to humans; that experiment resulted in the first successful taming of the silver variety of these animals. It’s not dogs, but this genus of Canidae’s most common variety is referred to as red [this animal], due to the color of its fur. Name these animals whose true variety is classified as Vulpes.
+    options: [ Jackals, Coyotes, Foxes, Dingoes ]
+    answer: Foxes
+
+  - question: Mulliken’s scale of this property takes the average of the electron affinity and the first ionization energy. Differences in this property determine whether a bond is ionic, polar covalent, or nonpolar covalent. A common scale for measuring this property is named for Pauling. Fluorine has the highest value of, for the point, what property, the tendency of atoms to attract electrons?
+    options:
+      - Electron affinity
+      - Electronegativity
+      - Ionization energy
+      - Atomic radius
+    answer: Electronegativity
+
+  - question: Repeatedly undergoing this process results in the shortening of telomeres. A checkpoint in this process ensures kinetochores are attached to spindle fibers. Cytokinesis shortly follows this process, which occurs after the G2 phase and is abbreviated M. The phases of this process include prophase, anaphase, and telophase. Name this asexual division of a cell that produces two identical daughter cells.
+    options: [ Mitosis, Meiosis, Apoptosis, Interphase ]
+    answer: Mitosis
+
+  - question: The kernmantle type of this material has a core of high tensile strength surrounded by an abrasive-resistant outer layer. The “dynamic” type of this material is stretchable giving it use in mountaineering and rock climbing. Name this type of material made up of fibers like yarn or string twisted or weaved together to create tensile strength for pulling.
+    options: [ Chain, Canvas, Felt, Rope ]
+    answer: Rope
+
+  - question: Two drugs to treat this condition measured on the Hamilton-Norwood scale are Minoxidil and Finasteride. Alopecia is the scientific name for this condition treated with brands like Propecia and Rogaine, as well as follicular implants. This condition’s “male-patterned” form happens for around 50% of men. Name this irreversible hair shedding process.
+    options: [ Molting, Graying, Balding, Psoriasis ]
+    answer: Balding
+    explanation: "Also accepted: alopecia."
+
+  - question: A historical one of these events at lapilli-layered excavation site Regio V was where a skeleton was found crushed under a giant rock. The underrepresented dangers from these events are a Javanese-named destructive mudflow called lahar and fast moving hot gas and tephra known as pyroclastic flow. Name these catastrophic events where volcanoes spew up lava and fast flowing debris into the air.
+    options: [ Earthquakes, Volcanic eruptions, Tsunamis, Wildfires ]
+    answer: Volcanic eruptions
+    explanation: Regio V is a dig site at Pompeii, which was buried by Mount Vesuvius in 79 CE.
+
+  - question: The work done by a gas is proportional to the change in this quantity when pressure is held constant. This quantity is measured off a burette during titration. The number of moles divided by concentration equals this quantity. This quantity is reported in liters for liquids. Name this quantity measured in cubic meters, the amount of space occupied by an object.
+    options: [ Volume, Mass, Density, Pressure ]
+    answer: Volume
+
+  - question: Members of the Variola genus were the origin of this disease. British soldiers once used blankets infected with this disease as weapons. The first treatment for this disease involved inoculation with a similar disease affecting cows. Edward Jenner created the first vaccine for this disease. Name this deadly pox disease eradicated in 1980.
+    options: [ Chickenpox, Cowpox, Measles, Smallpox ]
+    answer: Smallpox
+
+  - question: Family types of these objects include clusters, clumps and tribes. The Canadian Space Agency launched the microsatellite NEOSSat to detect these objects. The Kirkwood Gaps are so named for gaps in the distribution of these objects. Large examples of these objects include ones named Pallas and Ceres. Name these planetoid objects that form a namesake belt between Mars and Jupiter.
+    options: [ Meteoroids, Kuiper belt objects, Asteroids, Oort cloud objects ]
+    answer: Asteroids
+
+  - question: The nitrate of this element was used to develop early photographs. This element has the highest thermal and electrical conductivity of any metal and is the lighter of the two elements in electrum. The adjective “sterling” denotes an alloy that is composed of 92.5% of this metal. Give this element with atomic number forty-seven and chemical symbol Ag.
+    options: [ Gold, Silver, Copper, Platinum ]
+    answer: Silver
+
+  - question: This molecule’s blood levels are regulated by Insulin and glucagon. This molecule is chemically identical to dextrose. The disaccharide sucrose is made up of fructose and this other sugar molecule. This six-carbon sugar is the most common metabolic start point for cellular respiration. Name this sugar broken down at the beginning of glycolysis.
+    options: [ Glucose, Fructose, Galactose, Sucrose ]
+    answer: Glucose
+
+  - question: Some scientists originally hypothesized this class of planets could only form outside the frost line, a position disproved with the discovery of “hot” ones named after a planet in our Solar System. This class of planets is named for its abundance of hydrogen and helium, unlike a similar “ice giant” which have heavier elements. Name this class of giants that includes Jupiter and Saturn named after their most abundant phase of matter.
+    options: [ Ice giants, Terrestrial planets, Super-Earths, Gas giants ]
+    answer: Gas giants
+
+  - question: They’re not integers, but an early example of Cantor’s pairing function was used to prove the countability of this set of numbers. Using a proof by contradiction, Hippasus proved that the square root of two was not a member of this set. This subset of the reals are represented by a capital Q. Name this set of numbers that can be expressed as the ratio of two integers, unlike irrationals.
+    options:
+      - Imaginary numbers
+      - Real numbers
+      - Rational numbers
+      - Irrational numbers
+    answer: Rational numbers
+
+  - question: Hodgkin and Huxley developed a model of these cells after experimenting with a Giant squid one. Santiago Ramon y Cajal determined the doctrine of these cells; that they communicate at synapses, which was later discovered to be done using neurotransmitters. These cells communicate through action potentials that they send down their axons and receive at their dendrites. Name this type of nervous tissue cell found in the brain.
+    options: [ Red blood cells, Neurons, Muscle cells, Osteocytes ]
+    answer: Neurons
+
+  - question: Events in this period are the subject of Stephen Jay Gould’s theory of contingency. Many important fossils from this period were discovered at the Burgess Shale by Charles Walcott. This period was preceded by the Ediacaran and succeeded by the Ordovician. Trilobites and mollusks first appeared during this period. Name this first geological period of the Paleozoic Era, which names an explosion in biodiversity.
+    options:
+      - Cambrian period
+      - Ediacaran period
+      - Ordovician period
+      - Devonian period
+    answer: Cambrian period
+
+  - question: Along with chromium, this is the only period four element to violate the Aufbau principle. This element sits to the right of the ferromagnetic elements. The sulfate salt of this element is usually attached to five water molecules and is a deep blue color. When combined with tin, this element forms the alloy bronze. Name this transition metal with atomic twenty-nine and chemical symbol Cu.
+    options: [ Zinc, Nickel, Iron, Copper ]
+    answer: Copper
+
+  - question: Paul Boyer developed the flip-flop mechanism of this molecule’s production via gamma subunit rotation This molecule is primarily produced by establishing a proton concentration gradient followed by oxidative phosphorylation in its namesake synthase. This molecule is invested at the beginning of glycolysis. Name this energy currency of the cell which has three phosphate groups.
+    options: [ ADP, NADH, ATP, NADPH ]
+    answer: ATP
+    explanation: ATP stands for adenosine triphosphate.
+
+  - question: The energy of one of these particles must surpass the work function to eject an electron. Albert Einstein won his Nobel Prize in physics for his use of this particle to explain an effect where electron emission occurred due to these particles hitting a metal. This particle mediates the electromagnetic force. Name this massless particle which carries the phenomenon of light.
+    options: [ Electrons, Photons, Gluons, Neutrinos ]
+    answer: Photons
+
+  - question: Lindlar names a compound of this type that is “poisoned.” A convertor named for this class of compounds reduces the toxicity exhaust gases in a vehicle. They are heterogenous in a different phase than the reaction. This class of compounds lower a reaction’s activation energy, but are not themselves consumed in the reaction. This class of compounds that accelerate the speed of a reaction.
+    options: [ Catalysts, Inhibitors, Oxidizing agents, Buffers ]
+    answer: Catalysts
+
+  - question: Being able to only use four of these without having two nodes have the same one names a planar graph theorem that was the first computer-assisted proof. The brain only uses three types of cone cells to perceive this phenomenon. A dispersive prism splits a monochromatic beam of light into these phenomena. Name this quality of a substance which is encoded by the wavelength of visible light, such as red or blue.
+    options: [ Shapes, Textures, Odors, Colors ]
+    answer: Colors
+    explanation: The four color theorem was proven with computer help in 1976.
+
+  - question: This device was made possible with the invention of cavity magnetrons and was first marketed as the Radarange. According to legend, Percy Spencer invented this device after realizing the magnetron had melted a candy bar in his pocket and was able to later use it to pop popcorn. Name this type of electric oven that uses the namesake form of radiation to heat up food.
+    options: [ Toaster oven, Convection oven, Microwave oven, Rotisserie oven ]
+    answer: Microwave oven
+
+  - question: Efforts to weaken these events include an attempt to do so with silver iodide in Project Stormfury. Major category 5 occurrences of these events as measured on the Saffir-Simpson scale include Kenna and Patricia. The division of the National Weather Service that monitors these events is located in Miami. Primarily hitting countries in the Caribbean Sea and states like Florida are, for the point, what tropical cyclones that occur in the Atlantic Ocean?
+    options: [ Tornadoes, Hurricanes, Monsoons, Nor'easters ]
+    answer: Hurricanes

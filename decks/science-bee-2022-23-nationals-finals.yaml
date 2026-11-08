@@ -1,0 +1,172 @@
+# Science Bee 2022–23 Nationals · Finals (MS) — 33 tossups.
+# Source: docs/Copy of MS Science Bee Finals.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2022–23 Nationals · Finals (MS)
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: On these diagrams, RR Lyrae variables are located between notches of the x-axis that are labeled "A" and "F." W Virginis variables are located in the instability strip on these diagrams, which, extending from the top left to the bottom right, contain a section labeled as the "main sequence." Named after two astronomers, these are, for the points, what scatterplots that chart the relationship between the luminosity and temperature of a star?
+    options:
+      - H-R diagrams
+      - Hubble diagrams
+      - Feynman diagrams
+      - Minkowski diagrams
+    answer: H-R diagrams
+    explanation: "Also accepted: Hertzsprung-Russell diagrams, HRDs."
+
+  - question: An example of this law concerns the fermentation of yeast during bread baking, which involves the expansion of carbon dioxide while the bread is placed in the oven. An experiment that demonstrates this law involves a balloon shriveling up when placed in a case of liquid nitrogen but automatically re-inflates when it is taken back out. Name this law which states that, at constant pressure, the volume of an ideal gas is proportional to its temperature.
+    options: [ Boyle's law, Avogadro's law, Dalton's law, Charles's law ]
+    answer: Charles's law
+
+  - question: An experiment that proved the existence of this value was the Stern-Gerlach experiment, which saw silver atoms being deflected in two directions. All electrons in singly filled orbital should have the same value for this quantity according to Hund's rule. This value is either positive one- half or negative one-half for fermions by the Pauli exclusion principle. Depicted with either an upward arrow or downward arrow, this is, for the points, what last quantum number, an electron's intrinsic angular momentum, denoted by ms?
+    options:
+      - Principal quantum number
+      - Magnetic quantum number
+      - Electron spin
+      - Azimuthal quantum number
+    answer: Electron spin
+    explanation: "Also accepted: electron spin quantum number."
+
+  - question: These diagrams use an arrow to mark an individual called the proband. On these diagrams, consanguineous unions are represented by a double line and successive generations are labeled with Roman numerals. A half-shaded shape on one of these diagrams indicates a heterozygote or carrier of a condition such as colorblindness or Huntington's disease. Name these diagrams used to visualize how genetic disorders are transmitted through a family's lineage.
+    options: [ Punnett squares, Pedigree charts, Karyotypes, Cladograms ]
+    answer: Pedigree charts
+    explanation: "Also accepted: family trees."
+
+  - question: This museum contains the Fels Planetarium, the second oldest planetarium in the United States. This museum contains a national memorial to its namesake that was designed by John Windrim and modeled after the Pantheon in Rome. This institution also displays multiple possessions from its namesake including a glass harmonica and a lightning rod. Name this science museum in Philadelphia, named after an American polymath.
+    options:
+      - Franklin Institute
+      - Mütter Museum
+      - Carnegie Science Center
+      - Academy of Natural Sciences
+    answer: Franklin Institute
+    explanation: It is named for Benjamin Franklin.
+
+  - question: Wounds to phloem and xylem tissues trigger release of these compounds to induce cell differentiation. The most common and basic form of these hormones is indole-3-acetic acid. The release of these hormones lowers the pH and breaks down the cellulose of the cell wall to induce tropisms. Name these plant hormones that promote cell elongation and regulate growth.
+    options: [ Cytokinins, Abscisic acid, Strigolactones, Auxins ]
+    answer: Auxins
+
+  - question: Aside from Venus, this is the only known object to contain 'racetrack'-like coronae, including three named Elsinore, Arden, and Inverness. This body contains a cliff called Verona Rupes, a 12- mile-high escarpment which is the tallest cliff in the Solar System. This body is named for the daughter of Prospero in Shakespeare’s The Tempest, which also lends its name to its neighboring moon Ariel. Name this smallest of Uranus' five major satellites, orbiting alongside Umbriel, Titania, and Oberon.
+    options: [ Ariel, Puck, Miranda, Caliban ]
+    answer: Miranda
+
+  - question: One layer of this body part, termed the "prickle cell layer," primarily hosts a tissue-resident macrophage called the Langerhans cell. That layer, the stratum spinosum, attaches via desmosomes to the deepest layer of this body part, the stratum basale. About 90% of this body part consists of keratinocytes, though it also contains touch receptors called Merkel cells and pigment- producing melanocytes. Name this outermost layer of the skin.
+    options: [ Dermis, Epidermis, Hypodermis, Endodermis ]
+    answer: Epidermis
+
+  - question: Two of these structures wrap around each other in the common DNA-binding leucine zipper motif. These structures occupy a rectangular stripe in the third quadrant of a Ramachandran plot because they have phi and psi angles at negative 60 and negative 45 degrees. Proline is known as a “breaker” of these structures, which contain hydrogen bonds between every four amino acids. Name these protein secondary structures contrasted with beta-sheets, which have a coiled appearance.
+    options: [ Alpha helices, Beta sheets, Beta turns, Omega loops ]
+    answer: Alpha helices
+
+  - question: When the size of the cells of these organisms diminishes after cell division, specialized zygote cells called auxospores restore them to their initial size. These organisms are called the "jewels of the sea" and "living opals" since their cell walls, or frustules, are composed of silica, which is the main constituent of glass. Name these single-celled algae that inhabit marine ecosystems.
+    options: [ Dinoflagellates, Coccolithophores, Euglenoids, Diatoms ]
+    answer: Diatoms
+    explanation: "Also accepted: Bacillariophyta."
+
+  - question: Harvey Fletcher was among the participants in this 1909 experiment that took place in the Ryerson Lab at the University of Chicago. This experiment incorrectly accounted for the viscosity of air when using Stokes’ Law to calculate drag. A pair of metal surfaces were placed parallel to one another in order to observe a set of droplets in this experiment. Name this experiment performed by Robert Millikan which measured the charge of an electron.
+    options:
+      - Rutherford gold foil experiment
+      - Thomson cathode ray experiment
+      - Millikan oil drop experiment
+      - Michelson-Morley experiment
+    answer: Millikan oil drop experiment
+
+  - question: Leif Størmer's dissertation examined the development of this organism, which he grouped as a member of Artiopoda. Spriggina may have been an ancestor to these organisms, which came to dominate sea environments. Paradoxides and Phacops are among the many genera of these organisms, whose roles included that of a filter feeder and a seabed predator. Name these now-extinct marine arthropods whose name mean "three lobes."
+    options: [ Eurypterids, Trilobites, Ammonites, Graptolites ]
+    answer: Trilobites
+
+  - question: In proving Vinograd's theorem, one can use a sum named for this mathematician represented as “c-sub-q of n.” This mathematician’s namesake primes are defined as the difference between pi of x and pi of (x - 2). This man, who calculated Euler’s constant to 15 decimal places, hailed from modern-day Tamil Nadu. Name this Indian mathematician who founded a formula for the infinite series of pi.
+    options: [ Srinivasa Ramanujan, Aryabhata, Brahmagupta, Harish-Chandra ]
+    answer: Srinivasa Ramanujan
+
+  - question: Jinyou Liang claims that water vapor's mixing ratio in this region ranges from "<0.01 percent to a few percent, depending on elevation." A 2023 study found that, in the equatorial region, the apex height of this region is approximately 18 kilometers. Deriving from a Greek word meaning "rotating," this region is home to most weather phenomena and contains roughly 3/4ths of the mass of the planetary atmosphere. With an average height of 11 miles, this is, for the points, what lowest atmospheric layer?
+    options: [ Stratosphere, Mesosphere, Thermosphere, Troposphere ]
+    answer: Troposphere
+
+  - question: The industrial production of phosgene often involves the passing of chlorine and a purified form of this compound through a catalyst of porous activated charcoal. The Fischer-Tropsch Process involves the creation of hydrocarbons from a mixture of hydrogen and this compound. Dizziness and "cherry red skin" are among the symptoms of a condition involving excess inhalation of this odorless compound, known as its namesake "poisoning." Name this compound with chemical symbol CO.
+    options: [ Carbon dioxide, Nitric oxide, Carbon monoxide, Methane ]
+    answer: Carbon monoxide
+
+  - question: The DEAD box type of these proteins function during RNA metabolism. Examples of these proteins such as Mcm2 are loaded onto AT-rich ori sites during a “licensing” step. Topoisomerases relieve the tension created by these enzymes, which initiate replication by breaking the hydrogen bonds between nucleobases. Name this class of enzymes that unwinds RNA and DNA.
+    options: [ Primases, Helicases, Ligases, Polymerases ]
+    answer: Helicases
+
+  - question: A location of known as this landform’s hurricane variety in Utah was listed as containing "faultless Shinarump conglomerate.” Escarpments characterized by steep inclines surround this landform’s central feature, whose summit regions are more extensive than those of buttes. A particular large one of these known as the Grand variety can be found in Colorado. With a name meaning "table" in Spanish, this are, for the points, what flat-topped elevated landforms?
+    options: [ Mesas, Buttes, Cuestas, Inselbergs ]
+    answer: Mesas
+    explanation: "Also accepted: table-top hills, tepuis."
+
+  - question: Finland’s Lake Pohjalampi was the site of an experiment manipulating density and this quantity for invertebrates. The total amount of organically bound carbon is sometimes used as a proxy for this ecological quantity. Primary production is a measure of the total increase in this quantity for a given area. Name this quantity equal to the total amount of living matter found in a specific ecosystem.
+    options: [ Biodiversity, Carrying capacity, Population density, Biomass ]
+    answer: Biomass
+
+  - question: This man's interest in anesthesia was evident in his 1847 essay On the Inhalation of the Vapor of Ether, which was published after he administered chloroform to Queen Victoria while she was in labor with Prince Leopold. This man wrote, "I suspected some contamination of the water of the much-frequented street-pump in Broad Street" in response to the 1854 cholera outbreak in Soho, London. Name this English physician considered to be the "Father of Epidemiology."
+    options: [ Joseph Lister, Edward Jenner, John Snow, William Harvey ]
+    answer: John Snow
+
+  - question: The discovery of these objects near Trachilos, Crete is evidence that early hominins may have lived in Europe as well as Africa. The oldest hominin produced examples of these objects are located at Laetoli, Tanzania and were formed in volcanic ash. Examining the spacing of these objects provides the best evidence for a dinosaur's speed, and they can be used to determine bipedalism. Name these types of fossils contrasted with body fossils that were made by indents rather than preserved bones.
+    options:
+      - Index fossils
+      - Fossil footprints
+      - Amber inclusions
+      - Microfossils
+    answer: Fossil footprints
+    explanation: "Also accepted: trace fossils, trackways, ichnofossils."
+
+  - question: The lower portion of this specific kind of structure is comprised primarily from ultramafic cumulations derived from melts from a deeper adjacent region. Gaps in this specific region are filled with crystal mush that later become sheeted dikes and pillow lava. This specific structure is made up of denser basalt, which causes it to subduct under its terrestrial continental counterpart. Name this portion of the lithosphere covered by water.
+    options: [ Oceanic crust, Continental crust, Asthenosphere, Upper mantle ]
+    answer: Oceanic crust
+    explanation: "Also accepted: oceanic plates."
+
+  - question: These organisms use their tail fibers to grasp their prey and initiate reversible and irreversible binding. The virulent type of these organisms reproduces through the lytic cycle, as opposed to the temperate variety. Some of these organisms integrate themselves into their hosts genomes through lysogeny, as seen in their lambda type. Name these viruses named for infecting prokaryotes.
+    options: [ Retroviruses, Coronaviruses, Tobamoviruses, Bacteriophages ]
+    answer: Bacteriophages
+    explanation: Often shortened to "phages."
+
+  - question: This scientist extended the notion of rigid bodies to special relativity using his namesake “rigidity.” This man is the alphabetically-first namesake of an approach that combines an element’s enthalpies of ionization and atomization using Hess’s Law. Along with J. Robert Oppenheimer, this man names an approximation that assumes the motion of atomic nuclei and electrons can be treated separately. Name this German physicist, who, with Fritz Haber, names a cycle used to calculate the lattice energy of a crystal.
+    options: [ Werner Heisenberg, Arnold Sommerfeld, Max Born, Max von Laue ]
+    answer: Max Born
+
+  - question: 1,4-cyclohexadienes are created from arenes in a type of this reaction named for Arthur Birch. This reaction lends its name to a form of elimination in organometallic chemistry. Hydrogenation is a class of this type of reaction, which happens at the cathode of an electrochemical cell. Oxidation is contrasted with, for the points, what type of reaction, in which a species gains electrons?
+    options: [ Oxidation, Reduction, Hydrolysis, Neutralization ]
+    answer: Reduction
+
+  - question: The Cayman Trough contains the deepest known site of these ecosystems called “Beebe,” which generally form on divergent plate boundaries. Animals such as the Pompeii worm and the scaly-foot gastropod thrive in these ecosystems because they receive energy and nutrients from bacteria undergoing chemosynthesis. Black and white smokers are the two divisions of, for the points, what structures that emit mineral-rich fluids on the deep ocean floor?
+    options: [ Hydrothermal vents, Seamounts, Ocean trenches, Abyssal plains ]
+    answer: Hydrothermal vents
+
+  - question: The original author of the Servo engine is this organization, and this company developed an email client known as Thunderbird. Jason Calacanis claimed gained over $70 million in 2006 due to the inclusion of a Google search feature in this company’s most well-known product. That open- source product launched by this company was a competitor of Internet Explorer. Name this company that developed the Firefox browser.
+    options: [ Opera Software, Apple, Microsoft, Mozilla ]
+    answer: Mozilla
+    explanation: "Also accepted: Mozilla Foundation."
+
+  - question: This constellation is home to a feature sometimes referred to as Charles's Wain and contains an asterism called the Three Leaps of the Gazelle. Merak is the beta star of this constellation which also includes a feature that includes four components of a bowl and three of a handle. A plough- shaped asterism in this constellation is popularly known as the Big Dipper. Name this constellation with a Latin name meaning "great bear. "
+    options: [ Ursa Minor, Draco, Ursa Major, Cassiopeia ]
+    answer: Ursa Major
+
+  - question: IR8 was a variety of this crop developed in the 1960s primarily developed for cultivation in the Philippines and India. This crop’s new genetically modified breeds have greatly increased yields in the second half of the 20th century, becoming a key part of the Green Revolution. O. glaberrima and O. sativa are two cultivars that serve as the basis for development of a New [this crop] for Africa. Name this white cereal grain grown in paddy fields.
+    options: [ Barley, Rice, Oats, Rye ]
+    answer: Rice
+
+  - question: A binary system of these objects called Luhman 16 is located 6.5 light years from the Sun. They’re not planets, the Kelvin–Helmholtz mechanism is exhibited by these objects, which are tested for in a technique that measures their spectral type and lithium content. Unlike main-sequence members, these bodies are unable to maintain the fusion of hydrogen into helium. Name these cool, low mass stars which are sometimes known as "failed stars. "
+    options: [ Brown dwarfs, Red dwarfs, Yellow dwarfs, Red giants ]
+    answer: Brown dwarfs
+
+  - question: Voigt notation can be used to express this law as a six-by-six compliance matrix, which was used by Cauchy in his generalization of this law to three dimensional bodies. The generalized form of this law can be written using both Poisson’s ratio and Young’s modulus. Materials for which this law is applicable are referred to as linear-elastic. Name this law that describes the compression of a spring, which is often written as F = kx.
+    options: [ Pascal's law, Coulomb's law, Newton's second law, Hooke's law ]
+    answer: Hooke's law
+
+  - question: Neso and Sao orbit this planet, which is home to a ring named for a man who predicted its position, John Couch Adams. In 1989, Voyager 2 flew by the Great Dark Spot of this planet. The largest moon of this planet notably has a retrograde orbit and is known as Triton. The radius of this gas giant is less than 1000 kilometers smaller than Uranus. Name this eighth planet from the Sun.
+    options: [ Uranus, Saturn, Neptune, Jupiter ]
+    answer: Neptune
+
+  - question: A postulate named for this man written as E = nhv claims that oscillators have quantized energy in certain collections of matter. A law regarding the density of radiation given off from a blackbody is named for this man, as is a value given as 6.63 times 10^-34 Joules per second. Identify this German physicist who names a constant symbolized lowercase h.
+    options: [ Max Born, Max Planck, Heinrich Hertz, Werner Heisenberg ]
+    answer: Max Planck
+
+  - question: A sphere undergoes this process in the Mie solution. Radiation that is subject to this process is said to undergo diffuse reflections. Increased transmission for longer wavelengths is characteristic of the Tyndall variety of this phenomenon. Propagation direction can be modified without collisions causing energy loss in the elastic type of this process. Name this process that describes light's deviation from a straight path.
+    options: [ Scattering, Absorption, Polarization, Interference ]
+    answer: Scattering

@@ -1,0 +1,165 @@
+# Science Bee 2019–20 · Regional 2 · Round 2 — 32 tossups.
+# Source: docs/2019-2020-MS-S-Bee-Round-2-Set-2.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2019–20 · Regional 2 · Round 2
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Fourier names an equation that models the conduction of this quantity. In addition to conduction, this quantity can also be transferred by radiation or convection. Temperature can be constant but this quantity’s flow can still be exchanged between two bodies in thermal equilibrium. Name this quantity, often symbolized Q, that flows from hot temperatures to cold temperatures.
+    options: [ Heat, Temperature, Work, Pressure ]
+    answer: Heat
+
+  - question: During this phase, the moon shares its ecliptic longitude with the Sun. A second instance of a moon of this phase in a month is referred to as a black moon. Solar eclipses can only happen during this moon phase. This phase of the moon is between the waxing and waning crescent phases. Name this phase of the moon where the lunar disk is not visible to the naked eye.
+    options: [ Full Moon, First Quarter Moon, Last Quarter Moon, New Moon ]
+    answer: New Moon
+    explanation: "Also accepted: Dark Moon."
+
+  - question: These structures classify humans as diphyodont since they cycle between deciduous and permanent. Insipid lesions in these structures can become caries if left untreated and not provided enough fluoride to recover. They’re not bone, but they’re made of hydroxyapatite and sit between the maxilla and mandible. Name these calcified structures that help with chewing food.
+    options: [ Bones, Fingernails, Teeth, Gums ]
+    answer: Teeth
+
+  - question: One type of this reaction requires a good leaving group and in the case of first order kinetics, creates a trigonal planar carbocation intermediate. Two reactions of this type that occur with nucleophilic attack are called SN1 and SN2 reactions. This type of reaction has double displacement and single displacement varieties. Name this type of chemical reaction where one substituent is swapped out for another.
+    options:
+      - Addition reaction
+      - Substitution reaction
+      - Combustion reaction
+      - Decomposition reaction
+    answer: Substitution reaction
+
+  - question: Forty-five percent purity is the cutoff between this substance’s sub-bituminous and bituminous types. One method of cleaning this substance is called molten-caustic leaching and removes harmful impurities like sulfur. Peat is a common precursor to this substance, types of which include lignite and anthracite. Name this carbon-containing black rock used as a fossil fuel.
+    options: [ Coal, Petroleum, Graphite, Obsidian ]
+    answer: Coal
+
+  - question: For a uniform distribution, this quantity is equal to a plus b over 2. The “harmonic” type of this value for two numbers x and y is given by “two over quantity one over x plus one over y.” The AM-GM inequality relates the standard form of this value to its “geometric” form. The “arithmetic” form of this quantity sums the values and divides by the number of them. Give this term meaning the average of a set of values.
+    options: [ Median, Mode, Range, Mean ]
+    answer: Mean
+
+  - question: Dominik Koll led a team that collected 500 kilograms of this substance to study interstellar dust. Uchiro Nakaya developed a crystal morphological diagram to classify “flakes” of this substance based on temperature. This substance doesn’t have time to accumulate during a flurry. Name this substance swept around at high speeds during blizzards.
+    options: [ Hail, Sleet, Snow, Frost ]
+    answer: Snow
+    explanation: Koll's team found interstellar iron-60 in Antarctic snow.
+
+  - question: A large phylum referred to as segmented [this term] are also known as annelids. Animals referred to as parasitic [this term] are referred to as helminths which includes one’s prefixed with hook and pin. Parasitic round ones feed off an animal’s intestines. Name this colloquial term for slimy legless crawlers that include the common “earth” one, which is pink and eats soil.
+    options: [ Snakes, Worms, Centipedes, Beetles ]
+    answer: Worms
+
+  - question: Because it fixes actin, the mushroom compound phalloidin also has this dangerous property. LD50 is a commonly reported measurement of this property. The Fugu pufferfish is known for a powerful tetrodo- compound with this property. Because Arsenic naturally has this property, it is used in pesticides and herbicides. Name this property of elements and compounds that are biologically hazardous to ingest.
+    options: [ Toxicity, Flammability, Radioactivity, Solubility ]
+    answer: Toxicity
+
+  - question: John Wheeler proposed the hypothesis that all instances of this particle were actually one universal entity. Positrons are equivalent to this particle travelling backwards in time. The Paul Exclusion principle is the reason only one spin up and one spin down instance of this Fermion can share all other quantum numbers as they fill atomic orbitals. Name this fundamental particle that circles the atomic nucleus.
+    options: [ Protons, Neutrons, Quarks, Electrons ]
+    answer: Electrons
+
+  - question: The Jazz Singer was the earliest feature to take advantage of this phenomenon which it did through the Vitaphone, giving rise to the genre of “Talkies.” Alexander Graham Bell is credited with a transmitter that allowed for sending and receiving this phenomenon. Name this phenomenon that is perceived as thunder when lightning strikes and picked up by a microphone.
+    options: [ Color, Radio waves, Sound, Heat ]
+    answer: Sound
+
+  - question: These proteins “restriction” variety are useful for cutting DNA along defined sequences. Biomedical researcher Maud Menten helped Leonor Michaelis develop an equation to mathematically model the kinetics of these proteins. These proteins typically end in “-ase” such as lipases. Name these proteins that serve as biological catalysts, speeding up reactions in the cell.
+    options: [ Hormones, Enzymes, Antibodies, Receptors ]
+    answer: Enzymes
+
+  - question: Ferrocene contains two ligands with this many atoms coordinated to the central iron. A cyclic molecule with this many carbon atoms has twist and envelope confirmations, one less than a cyclic molecule with chair and boat conformations. This number is one more than the number of bonds carbon can form. Name this atomic number of Boron and the number of carbons in pentane.
+    options: [ Five, Four, Six, Three ]
+    answer: Five
+
+  - question: For this sort of machine, Tsiolokovsky developed an equation modifying Newton’s second law that relates the mass flow rate and velocity of the exhaust and thrust. The multistage variants of this vehicle are capable of surpassing Earth’s escape velocity. Name this vehicle that can be used for fireworks, missiles, and launches into outer space.
+    options: [ Helicopters, Hot-air balloons, Gliders, Rockets ]
+    answer: Rockets
+
+  - question: Two important regions of the brain that light up in fMRIs that are studied in this science are Broca’s area and Wernicke’s area. The computational subfield of this science extracts morphemes and uses AI to analyze audio and text. MRIs can be used to visualize the articulation patterns of speakers in this science. Name this scientific study of language.
+    options: [ Sociology, Musicology, Linguistics, Archaeology ]
+    answer: Linguistics
+
+  - question: The Japanese vessel Chikyu seeks to reach this region bounded by the Mohorovicic and Gutenberg discontinuities. “Plumes” named for this region are a proposed explanation for the existence of hotspots. This layer contains the asthenosphere and the lower part of the lithosphere. Name this viscous layer of the Earth between the core and the crust.
+    options: [ Outer core, Mantle, Crust, Inner core ]
+    answer: Mantle
+
+  - question: Enlarged blood vessels in this organ characterize GAVE which gives this organ a watermelon appearance. Chief cells in this organ release a precursor to pepsin which helps break down proteins. This organ is divided into four specialized compartments in ruminants. Name this organ that secretes gastric juice to break down food received from the esophagus.
+    options: [ Stomach, Small intestine, Pancreas, Liver ]
+    answer: Stomach
+
+  - question: A supercooled element of this group was used to create the first Bose-Einstein condensate. The cation of one element of this group is found in the mineral halite. Hydrogen is usually not considered part of this group due to differing chemical properties. Rubidium and Francium are members of, for the point, what group on the far left of the periodic table?
+    options: [ Alkaline earth metals, Halogens, Noble gases, Alkali metals ]
+    answer: Alkali metals
+    explanation: "Also accepted: group 1."
+
+  - question: The Euler-Lagrange equations are central to one type of this field dealing with changes. The theorems of Stokes and Gauss are generalizations of a theorem in this field. One founder of this field formulated fluxions and dot notation, though those were replaced by an alternative formulation. Gottfried Leibniz and Isaac Newton independently discovered, for the point, what branch of mathematics dealing with integration and derivatives?
+    options: [ Algebra, Geometry, Calculus, Statistics ]
+    answer: Calculus
+
+  - question: The phenomenon is calmer at horse latitudes. An anemometer consists of a rotating cup to measure the speed of this phenomenon. The strength of this phenomenon is reported using the Beaufort scale. The “Trade” type of this phenomenon helps navigation. This phenomenon’s “chill” reduces apparent temperature. Name this movement of air from areas of high pressure to low pressure.
+    options: [ Ocean currents, Wind, Humidity, Rain ]
+    answer: Wind
+
+  - question: One quantity named for this property can be computed via the parallel axis theorem. Angular momentum is equal to that quantity times angular velocity. “Moments” named for this property are the rotational analog of mass. Newton’s first law is sometimes referred to as the “law of [this property].” Name this property, the tendency of objects to resist motion.
+    options: [ Inertia, Momentum, Gravity, Elasticity ]
+    answer: Inertia
+    explanation: "Also accepted: moment of inertia."
+
+  - question: One complication of this condition characterized by low platelet count and hemolytic anemia is HELLP syndrome. Postpartum depression is an unexpected emptiness after going through this condition, during which the placenta serves as a filter to the umbilical cord. Name this condition that lasts around 9 months in humans during which a baby develops from an embryo.
+    options: [ Menopause, Puberty, Menstruation, Pregnancy ]
+    answer: Pregnancy
+
+  - question: A fast spinning example of an object with this status is Haumea. Another object that was previously classified under this status was Vesta. Objects with this status have not cleared their orbit, but must be spherical in shape. Examples of objects with this classification include Eris and Ceres. Pluto was downgraded to, ftp what status, named for being smaller than being a planet?
+    options: [ Moons, Comets, Dwarf planets, Exoplanets ]
+    answer: Dwarf planets
+    explanation: Pluto was reclassified as a dwarf planet in 2006.
+
+  - question: This molecule was imaged in “Photo 51” using X-ray diffraction by Rosalind Franklin. Along with Maurice Wilkins, James Watson and Francis Crick received the Nobel Prize for discovering the structure of this molecule. This molecule is made up of phosphates, sugars, and the nitrogen bases, adenine, thymine, guanine, and cytosine. Name this double-helix molecule, the basis of all life.
+    options:
+      - Ribonucleic acid
+      - Deoxyribonucleic acid
+      - Adenosine triphosphate
+      - Hemoglobin
+    answer: Deoxyribonucleic acid
+    explanation: Commonly abbreviated DNA.
+
+  - question: Receptor neurons for this sense relay information to mitral cells and tufted cells. The part of the brain responsible for this sense, the rhinencephalon, is smaller in humans than other mammals. This sense is mediated by olfactory sensory neurons in the olfactory bulb. The gustatory response is primarily mediated by this sense, even more so than taste. Name this sensation mediated through the nose to detect odors.
+    options: [ Smell, Taste, Hearing, Touch ]
+    answer: Smell
+    explanation: "Also accepted: olfaction."
+
+  - question: An acidic type of soil in this biome is called podzol. Trees that grow diagonally or sideways in this biome are referred to as “drunken trees.” This biome meets the tundra at its northern boundary, the point at which permafrost prevents the growth of trees. This is the largest land biome on the planet. Name this cold biome which contains lots of evergreen trees.
+    options: [ Tundra, Temperate deciduous forest, Grassland, Taiga ]
+    answer: Taiga
+    explanation: The taiga is also known as the boreal forest.
+
+  - question: PMOS and NMOS transistors both are used in a MOS scheme prefixed with this letter in Very Large Integrated Circuit design. A Swedish scientist names a temperature scale abbreviated with this letter. This letter prefixes SI units at the power of 10 to the negative two. A computer language of this name has “plus plus” and “sharp” successors. Name this letter, the atomic symbol of carbon.
+    options: [ K, N, C, B ]
+    answer: C
+    explanation: The clues point to CMOS, Celsius, centi-, C++/C#, and carbon.
+
+  - question: The length of these molecules in the aliphatic chain is used to characterize them as short-chained, medium-chained, or long-chained. These macronutrients on average have nine calories per gram. Triglyceride is an example of this type of compound. Name this macronutrient, structurally similar to oils, but more specifically refers to lipids that are solid at room temperature.
+    options: [ Proteins, Fats, Carbohydrates, Sugars ]
+    answer: Fats
+
+  - question: This man gives his name to a conjecture for the maximum efficiency of packing spheres. One law named created by this scientist gives a relation between the square of the orbital period to the cube of the orbit’s semimajor axis. This astronomer developed the three laws of planetary motion further developing Copernicus’s model of heliocentrism. Name this German astronomer and mathematician.
+    options:
+      - Johannes Kepler
+      - Tycho Brahe
+      - Galileo Galilei
+      - Nicolaus Copernicus
+    answer: Johannes Kepler
+
+  - question: This process utilizes two “system complexes” that contain special pairs of molecules designated P700 and P680.This process uses what is widely considered the most inefficient abundant enzyme, RuBisCo. The Calvin cycle is part of the light dependent cycle of this larger process. Name this process used by plants to convert light into sugars.
+    options:
+      - Cellular respiration
+      - Chemosynthesis
+      - Transpiration
+      - Photosynthesis
+    answer: Photosynthesis
+    explanation: "Note: the Calvin cycle is actually the light-independent stage of photosynthesis."
+
+  - question: At temperatures near absolute zero, one form of this element obtains superfluidity. Three nuclei of this element fuse in triple alpha process, while the proton-proton chain in stars converts hydrogen into this element. This element has the highest first ionization energy and is the lightest noble gas. Name this element with chemical symbol He that is used to fill balloons.
+    options: [ Hydrogen, Neon, Helium, Argon ]
+    answer: Helium
+
+  - question: The direction of these objects can be changed by elevators, while the angle of attack is important property of the foils of these objects. The coordinates of these objects are specified by roll, pitch, and yaw. Lift, thrust, and drag are essential factors in this mode of transportation, commercial examples of which include Airbus and Boeing. Name these vehicles that travel through the air.
+    options: [ Submarines, Airplanes, Sailboats, Race cars ]
+    answer: Airplanes
+    explanation: "Also accepted: aircraft."

@@ -1,0 +1,174 @@
+# Science Bee 2023–24 Nationals · Finals — 33 tossups.
+# Source: docs/Copy of Science Bee Finals Fix.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2023–24 Nationals · Finals
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Fossils of these animals that were related to the similar-looking Chasmosaurs were once falsely identified as ancient bison. These animals were hypothesized to be juvenile examples of the Torosaurus. These animals' fossils are the state fossils of South Dakota, and two subspecies of them were the horridus and prorsus. The Tyrannosaurus rex was likely the primary predator of, for the point, what dinosaurs that may have defended themselves with their three horns?
+    options: [ Triceratops, Styracosaurus, Protoceratops, Centrosaurus ]
+    answer: Triceratops
+
+  - question: This facility's Neutral Buoyancy Laboratory is a large pool made to simulate EVA activites. This facility is situated on land donated by Humble Oil and Rice University. This facility contains an area named for Christopher C. Kraft Jr., where flights under the Skylab and Gemini programs were managed. The site of NASA's human spaceflight training and Mission Control Center is, for the points, what facility in Houston named after the 36th president?
+    options:
+      - Kennedy Space Center
+      - Marshall Space Flight Center
+      - Goddard Space Flight Center
+      - Johnson Space Center
+    answer: Johnson Space Center
+    explanation: Formerly called the Manned Spacecraft Center.
+
+  - question: If this object’s initial configuration is assigned randomly, there is only an 8% chance that this object is possible to complete. Ways of manipulating this object are denoted with the uppercase and lowercase letters F, B, U, D, L, and R. Variations of this object include the Pyraminx. Beginners usually approach this object layer-by-layer, and may first learn to solve a single face. A Hungarian architecture professor created what colorful physical puzzle that is the subject of speedcubing competitions?
+    options: [ Megaminx, Skewb, Rubik's Cube, Square-1 ]
+    answer: Rubik's Cube
+
+  - question: The study of these anatomical features is called desmology. Artificial versions of these anatomical features, such as the LARS are made from polymer materials and make use of intraosseous and intra-articular parts. These anatomical features, also called articular larua, have forms that include capsular and cruciate. Distinct from tendons, these are, for the points, what type of tissue that connect one bone to another and include the oft-injured ACL?
+    options: [ Tendons, Ligaments, Cartilage, Menisci ]
+    answer: Ligaments
+
+  - question: A chart from the United Kingdom that lists these phenomena is divided into three columns of thirteen rows that are marked by diamonds. These phenomena are strongest during syzygy, a condition in which three bodies are lined up.These phenomena can produce namesake “bores” that travel up narrow inlets, and they produce both “spring” and “neap” varieties. Name these phenomena that are caused by the moon’s gravitational pull on the Earth.
+    options: [ Tides, Ocean currents, Storm surges, Seiches ]
+    answer: Tides
+
+  - question: The enzyme DD-transpeptidase is inactivated by a class of these compounds that contain a four-membered amide ring. Resistance to these compounds can be conferred by gene cassettes that are transferred horizontally on plasmids. Beta-lactamases are often expressed by Gram- negative organisms to break down a class of these compounds that includes cephalosporin and penicillin. Name these compounds that fight bacterial infections.
+    options: [ Antivirals, Antifungals, Antihistamines, Antibiotics ]
+    answer: Antibiotics
+    explanation: "Also accepted: antibacterials."
+
+  - question: Types of this material that can be blown in the wind as dust are known as loess. This material can be stripped of salt and nutrients through leaching with water. A variety of this material generally high in humus is called loam. Strata of this material are known as horizons, and this material is classified by how much sand, silt, and clay it contains. Identify this substance in which seeds are planted.
+    options: [ Bedrock, Gravel, Soil, Limestone ]
+    answer: Soil
+
+  - question: While working on the Hubbard Brook Ecosystem Study, Gene Likens discovered this phenomenon for the first time in North America. Numerous studies have connected the increased prevalence of this phenomenon in certain ecosystems with the decline in sugar maple populations. Nitrogen oxide emissions can cause this form of precipitation that causes steel buildings to corrode. Containing increased quantities of hydrogen ions, this is, for the point, what form of precipitation characterized by a low pH?
+    options: [ Freezing rain, Acid rain, Sleet, Hail ]
+    answer: Acid rain
+
+  - question: This program was the first to make pivot tables commercially available. Data in this program is the most commonly used source for making macros with the language Visual Basic for Applications. Unlike a Google based competitor, this program utilizes the freeze pane function rather than freezing columns and rows. This program’s proprietary file type uses the.xls extension. Name this Microsoft program for managing spreadsheets.
+    options: [ Microsoft Excel, Microsoft Access, Microsoft Word, Lotus 1-2-3 ]
+    answer: Microsoft Excel
+
+  - question: This animal of family Culicidae has around 3,600 species, whose early life stages are mainly aquatic, with eggs mostly laid in stagnant water. The saliva of this animal is able to reduce hemostasis in those that it bites, and this animal prefers to bite people with high body temperature or Type O blood. Species of this animal include the Aedes aegypti species, which can spread dengue fever. Identify this insect, the primary vector of malaria.
+    options: [ Tsetse fly, Sand fly, Horse fly, Mosquito ]
+    answer: Mosquito
+
+  - question: Formerly used in infrared prisms, this compound which is used in the Castner-Keller process has been largely replaced in that role by zinc selenide. This compound forms soda ash in the Solvay process, and it is the starting material in the chloralkali process. Only very polar solvents dissolve this compound, which melts at 801 degrees Celsius. Name this ionic compound which comprises halite, another version of which is commonly used as food seasoning in every home.
+    options:
+      - Sodium hydroxide
+      - Sodium carbonate
+      - Sodium chloride
+      - Calcium chloride
+    answer: Sodium chloride
+    explanation: "Also accepted: table salt, NaCl."
+
+  - question: One of these ecosystems named Loki’s Castle provided the best evidence to date that eukaryotes are a subset of archaea. The last universal common ancestor, or LUCA, is assumed to have originated in these ecosystems, which are inhabited by chemosynthetic annelids such as the giant tube worm. Name these ocean floor ecosystems where animals feed from the namesake volcanic features.
+    options: [ Coral reefs, Hydrothermal vents, Abyssal plains, Kelp forests ]
+    answer: Hydrothermal vents
+    explanation: "Also accepted: deep-sea vents, black smokers, white smokers."
+
+  - question: The moon Dione is in one to two orbital resonance with this other moon, which is named for a giant from Greek myth. Plumes on this cryovolcanic moon are responsible for a certain planet's E ring. The Cassini spacecraft discovered four fractures on this moon called "tiger stripes." Name this moon of Saturn with the highest albedo in the Solar System, and contains an ocean of liquid water below its icy surface.
+    options: [ Enceladus, Tethys, Rhea, Iapetus ]
+    answer: Enceladus
+
+  - question: This is the most common condition caused by mutations to the DMD gene, the largest gene in the human genome. The Becker form of this condition is caused by X chromosome-linked non- frameshifted mutations, and a type of this condition, which primarily affects males and originates in the pelvis and thighs, is named for Duchenne. Name this genetic disorder, which causes progressive weakness of the skeletal muscles.
+    options:
+      - Hemophilia
+      - Cystic fibrosis
+      - Huntington's disease
+      - Muscular dystrophy
+    answer: Muscular dystrophy
+
+  - question: Otto Warburg discovered a process in which cancer cells obtain energy primarily through this process instead of phosphorylation. Fermentation consists of this process, followed by regeneration of NAD+ which allows more of this process to take place. This process produces four molecules of ATP and two molecules of NADH, as well as G3P, by splitting two molecules of G3P. Name this first stage of cellular respiration that produces two molecules of pyruvate from glucose.
+    options:
+      - Krebs cycle
+      - Electron transport chain
+      - Glycolysis
+      - Gluconeogenesis
+    answer: Glycolysis
+
+  - question: The absence of these objects has been referred to by researchers as the “immigration delay disease”. A detection of these objects produces a dye called “Ruhemann’s purple” when that dye's amino acids interact with a white organic compound called ninhydrin. The Henry Classification System is used to sort characteristics of these objects, common patterns of which include loops, whorls, and arches. Name these unique human identifiers that are found at the ends of a person’s digits.
+    options: [ Iris patterns, Fingerprints, DNA profiles, Dental records ]
+    answer: Fingerprints
+
+  - question: This second-century scientist distinguished between motor and sensory nerves, as well as arterial and venous blood. This scientist showed that the voice comes from the larynx, and this scientist performed early cataract surgeries, among other procedures. The treatise That the Best Physician Is Also a Philosopher was written by, for the points, what Greek physician and medical researcher from Pergamon, who improved upon the bodily humors theory of Hippocrates?
+    options: [ Galen, Hippocrates, Avicenna, Dioscorides ]
+    answer: Galen
+    explanation: "Also accepted: Claudius Galenus, Galen of Pergamon."
+
+  - question: In physics, the Deborah number represents the rate at which energy described by this adjective is stored or released. In cloud computing, this adjective describes the ease with which a service provider can scale resources up or down. In economics, the demand for a good described using this adjective will be sensitive to a change in price. Name this hat seven-letter word which describes a collision between two bodies where total kinetic energy is conserved, as well as a rubber band.
+    options: [ Plastic, Inelastic, Kinetic, Elastic ]
+    answer: Elastic
+    explanation: The official answer line gives the noun form, "elasticity."
+
+  - question: The Heart and Soul Nebulae are located near this constellation, which contains part of the Maffei One Group in the Virgo Supercluster. A galaxy in this constellation discovered by Lewis Swift is the closest known starburst galaxy, IC Ten. The brightest star in this constellation is Schedar, and this constellation was the site of Tycho Brahe's supernova. Identify this constellation, which is named for the mother of Andromeda and has a "W" shape.
+    options: [ Cepheus, Andromeda, Cassiopeia, Cygnus ]
+    answer: Cassiopeia
+
+  - question: Intensive care units that specialize in treating these injuries also treat Stevens-Johnson syndrome and TEN. Zones of ischemia surround the coagulation zone in these injuries, which is treated using split-thickness grafts and debridement. The Parkland formula calculates fluid requirements for treating these painful injuries. The severity of these injuries is represented by one of three degrees. Name these injuries caused by flames.
+    options: [ Lacerations, Burns, Abrasions, Contusions ]
+    answer: Burns
+
+  - question: This chemical reaction is used by enzymes like amylase found in saliva, which breaks down starch into dextrins. The cleavage happening during this reaction can occur through various mechanisms, such as nucleophilic substitution or elimination reactions, with a common fluid acting both as a solvent and as a reactant. Name this double decomposition reaction where a molecule of water breaks a chemical bond within another molecule.
+    options:
+      - Hydrolysis
+      - Dehydration synthesis
+      - Hydrogenation
+      - Esterification
+    answer: Hydrolysis
+
+  - question: Unloading in this tissue is the movement of the namesake sap constituents, principally nutrients, signaling molecules, and water, which can happen through the symplastic or the apoplastic pathway. This tissue consists of companion cells and sievs elements, whose perforated cells walls facilitate efficient sugar movement. Name this vascular tissue that specializes in transporting organic products, such as sucrose, throughout the plant, often paired with the Xylem.
+    options: [ Xylem, Vascular cambium, Sclerenchyma, Phloem ]
+    answer: Phloem
+
+  - question: Observing the ultra-high-energy variety of this phenomenon is the purpose of the Pierre Auger Observatory in Argentina. When this phenomenon interacts with the atmosphere, it produces large amounts of pions and muons, triggering its secondary type. This phenomenon was first discovered by observing ionizing radiation during balloon flights by Victor Hess. Name these extremely high-energy beams of particles such as atomic nuclei.
+    options: [ Solar wind, Cathode rays, Cosmic rays, Gamma-ray bursts ]
+    answer: Cosmic rays
+
+  - question: This element's 10 isotope is used in neutron capture therapy in experimental treatments of brain cancer. In September 2017, this chemical element was detected by the Curiosity rover in Mars' Gale Crater, supporting the idea that the red planet is able to sustain life. With a unique ability to accept three electrons due to its vacant p-orbital, this is, for the points, what metalloid with atomic number five and symbol B?
+    options: [ Beryllium, Boron, Silicon, Arsenic ]
+    answer: Boron
+
+  - question: The most recently discovered chemical element as of 2024 is a member of this group of the periodic table. Another element in this group with no stable isotopes is the rarest naturally occurring element in the Earth's crust. An element in this group with atomic number 35 is one of only two elements that is a liquid at room temperature. Astatine, bromine and chlorine are all examples of, for the points, what group of elements on the periodic table, notable for their very high reactivity?
+    options: [ Halogens, Noble gases, Alkali metals, Chalcogens ]
+    answer: Halogens
+    explanation: "Also accepted: Group 17."
+
+  - question: Escape sequences in this language are marked with the ampersand character. The WHATWG group focuses on this language, the fourth version of which was initially called Cougar. This language defines several different heading levels, and this language uses elements marked with tags like the paragraph tag, and those tags are written with angle brackets. Name this markup language paired with CSS and JavaScript, which lays out content for a web browser.
+    options: [ CSS, PHP, SQL, HTML ]
+    answer: HTML
+    explanation: HTML stands for HyperText Markup Language.
+
+  - question: Archimedes showed that the quadrature of this curve equals four-thirds of the area of a certain inscribed triangle. A piece of string and a pin can be used to draw this curve by using the definition of this curve's directrix and focus. This curve is one of the four conic sections that can be formed, alongside circles, ellipses, and hyperbolas. Identify this curve, which is formed by plotting functions that are quadratic polynomials, like y equals x squared.
+    options: [ Hyperbola, Cycloid, Parabola, Catenary ]
+    answer: Parabola
+
+  - question: Massive deposits of this substance were created in "coal forests" of the Permian, and this material can be the host of Sphagnum moss. Histosols can be formed of this substance, which can be found in Arctic ecosystems called muskegs. This substance also abundant in moorlands forms in areas saturated with water called mires. Common in bog wetlands, this is, for the points, what surface organic layer of a soil made from accumulated organic matter?
+    options: [ Lignite, Peat, Loam, Loess ]
+    answer: Peat
+
+  - question: This region’s energy and mass transfer is dominated by zonal flows over meridional flows. The Three Cell model describes the transmission of energy and general circulation within this region, which is broadly defined by possessing atmospheric inversion. The lower edge of this region is the planetary boundary layer, and this layer of the atmosphere is where virtually all weather phenomena occurs. Name this lowest layer of the Earth’s atmosphere.
+    options: [ Troposphere, Mesosphere, Thermosphere, Exosphere ]
+    answer: Troposphere
+
+  - question: This scientist presented the world's first demonstration of color photography when Thomas Sutton took an image of a tartan ribbon. Partial differential equations usually named for this author of "A Dynamical Theory of the Electromagnetic Field" include Gauss's law, Ampere's law, and Faraday's law of induction. Identify this Scottish physicist whose namesake equations relate electric and magnetic fields with moving charges and electrical currents.
+    options:
+      - Michael Faraday
+      - Lord Kelvin
+      - André-Marie Ampère
+      - James Clerk Maxwell
+    answer: James Clerk Maxwell
+
+  - question: River otters have been documented feeding at one of these non-river features by the Saanich Inlet called the McKenzie. Early explorers defined these features as a body of water from which they could depart on a single tack. Scientists have studied the growth of the Southern bluefin tuna population by one of these features called the "Great Australian," and the eastern part of the Gulf of Guinea is one of these features named Bonny. Name these bends in a river or coastline.
+    options: [ Fjords, Estuaries, Bights, Lagoons ]
+    answer: Bights
+
+  - question: These toxins block nicotinic acetylcholine receptors at the neuromuscular junction preventing muscle contraction. Historically serving as muscle relaxants during surgeries, these toxins have been traditionally used in blowdarts for hunting purposes by South American indigenous tribes such as the Kalinago or Yagua. Introduced in as a paralytic in anesthesia during the 1940s, this is, for the points, what extract harvested from the Strychnos toxifera plant?
+    options: [ Atropine, Curare, Tetrodotoxin, Ouabain ]
+    answer: Curare
+
+  - question: One way to define enthalpy is as the Legendre transform of this other state function. The absolute temperature of an ideal gas is directly correlated with this quantity, which is equal to the amount of heat added in a bomb calorimeter. The first law of thermodynamics states that the heat imparted to a system, plus the work done on it, is equal to the change in this quantity. Name this thermodynamic property symbolized with a capital U.
+    options: [ Internal energy, Enthalpy, Entropy, Heat capacity ]
+    answer: Internal energy

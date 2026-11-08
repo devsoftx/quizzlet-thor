@@ -1,0 +1,163 @@
+# Science Bee 2019–20 · Regional 2 · Finals — 32 tossups.
+# Source: docs/2019-2020-MS-S-Bee-Finals-Set-2.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2019–20 · Regional 2 · Finals
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: This organelle is the site of O-linked glycosylation. COP I and COP II assist in the transport between the endoplasmic reticulum and this organelle. This organelle has flattened membranes called cisternae. Name this organelle named after an Italian scientist responsible for packaging proteins and sending them to their destination.
+    options:
+      - Golgi apparatus
+      - Endoplasmic reticulum
+      - Lysosome
+      - Mitochondrion
+    answer: Golgi apparatus
+    explanation: "Also accepted: Golgi body."
+
+  - question: The first MASER was created by Charles H. Townes using this compound. This compound is converted to nitric acid in the Ostwald process. One process for synthesizing this compound typically uses an iron catalyst and is the Bosch-Haber process. This simple 4 element compound is used as a fertilizer. Name this compound with formula NH3.
+    options: [ Nitric acid, Methane, Nitrous oxide, Ammonia ]
+    answer: Ammonia
+
+  - question: A prehistoric large example of one of these bodies was Agassiz. Isle Royale on one of these bodies of water was used to study wolf populations. The kettle type of these bodies can be formed by retreating glaciers. Erosion can create U-shaped examples of these bodies called Oxbow. Name these large, closed bodies of water that include Michigan and Superior.
+    options: [ Oceans, Bays, Lakes, Straits ]
+    answer: Lakes
+
+  - question: In order to work around the existence of this type of matter, Mordehai Milgrom developed Modified Newtonian Dynamics. The Lambda CDM model formulates this type of matter as “cold.” The fact galaxies spin faster than expected given severe underestimates of their mass from calculations led to the formulation of this theorized state of matter. Name this form of matter named for being undetectable by light.
+    options: [ Dark energy, Dark matter, Antimatter, Degenerate matter ]
+    answer: Dark matter
+
+  - question: The rotational analog of this quantity is torque, while this quantity over a given area is called pressure. This quantity can be balanced and analyzed using Free-Body diagrams. The amount of this quantity caused by gravity is called weight, and the net amount of this quantity on a body is equal to its mass times its acceleration. Name this quantity measured in Newtons.
+    options: [ Force, Momentum, Energy, Acceleration ]
+    answer: Force
+
+  - question: The dynamics of a spherical one in an incompressible infinite fluid is encoded in the Rayleigh-Plesset equation. According to legend, Donald Glaser got the idea for a chamber of these things to detect particles from watching them foam at the top of a beer glass. They hold together due to surface tension balancing the pressure which can cause them to pop. Name these pockets of air trapped in a liquid.
+    options: [ Ripples, Whirlpools, Ice crystals, Bubbles ]
+    answer: Bubbles
+
+  - question: In order to provide ventilation for these structures, Cresson Kearny designed an efficient air pump. “Earthquake bombs” were designed as a “buster” to these structures. They’re not block houses, but World War II and the Cold War saw extensive building of these civilian structures, the latter for fear of nuclear fall out. Name these fortified shelters designed to protect people from bombs, nuclear weapons, and enemy attacks.
+    options: [ Trenches, Barracks, Bunkers, Missile silos ]
+    answer: Bunkers
+
+  - question: For a crystalline structure made up of these types of bonds, the enthalpy change can be calculated from the lattice energy using the Born-Haber cycle. This type of bond most readily occurs between weakly electronegative atoms and strongly electronegative atoms like alkali metals and halogens. Name this type of bond, typically stronger than a covalent bond, where one atom completely gives up an electron to the other.
+    options: [ Covalent bonds, Ionic bonds, Metallic bonds, Hydrogen bonds ]
+    answer: Ionic bonds
+
+  - question: Along with Jordan, this mathematician names a form of elimination to solve linear equations in matrix form. This mathematician showed a heptadecagon is constructible using a compass and straightedge. According to legend, as a child he summed the numbers one to one hundred much faster than his teacher had anticipated. Name this German mathematician and physicist who names the normal distribution.
+    options:
+      - Carl Friedrich Gauss
+      - Bernhard Riemann
+      - Gottfried Leibniz
+      - David Hilbert
+    answer: Carl Friedrich Gauss
+    explanation: The normal distribution is also called the Gaussian distribution.
+
+  - question: Two varieties of this type of cloud are calvus and capillatus. This is the larger of two clouds that can form a flanking line. This type of cloud is the progression from cumulus congestus clouds due to continued powerful upward air currents carrying water vapor with it. Name these “heaped rainstorm” clouds that are abbreviated Cb and are typically larger than cumulus clouds.
+    options: [ Cumulus, Nimbostratus, Stratocumulus, Cumulonimbus ]
+    answer: Cumulonimbus
+
+  - question: Placing several of this type of circuit on a single chip gives the chip “multiple-cores.” Assembly language instructions tell this type of circuit how to behave which it receives from the compilation of code written in a high-level programming language. Name these computer chips commonly abbreviated CPU, which carry out instructions on the computer.
+    options: [ RAM modules, Motherboards, Processors, Hard drives ]
+    answer: Processors
+    explanation: "Also accepted: microprocessors, central processing units (CPUs)."
+
+  - question: For this disease, Merck announced an EPOCH study to test the beta-secretase 1 inhibitor Verubecestat; the study proved ineffective at lowering neurofibrillary tangles due to hyperphosphorylated tau proteins or at lowering beta-amyloid plaque levels – both of which are features present in the brains of patients suffering from, for the point, what neurodegenerative disease which accounts for around 70% of dementia cases?
+    options:
+      - Parkinson's disease
+      - Alzheimer's disease
+      - Huntington's disease
+      - Multiple sclerosis
+    answer: Alzheimer's disease
+
+  - question: This most common source for this element is the ore sphalerite.This element and copper were stacked together to make the battery precursor, the Voltaic pile. This element names a transcription factor “finger” motif. In galvanization, this element coats a metal surface to prevent rusting. Name this element with atomic number thirty and chemical symbol Zn.
+    options: [ Zinc, Copper, Lead, Magnesium ]
+    answer: Zinc
+
+  - question: This motion is described by the third Euler angle. The pitch, yaw, and roll of an airplane give the three principle variants of this motion. While undergoing this kind of motion, an object can begin to exhibit nutation and precession. Angular acceleration describes how fast this motion speeds up or slows down. Name this kind of motion where an object goes about one of its axes, exemplified by toy tops.
+    options: [ Translation, Oscillation, Projectile motion, Rotation ]
+    answer: Rotation
+    explanation: "Also accepted: spinning."
+
+  - question: This organ’s Merkel cells are a type of oval-shaped mechanoreceptor. Keratinocytes are an important component of this organ. This largest organ of the body is the first line of defense of the immune system and is the main synthesis site of vitamin D due to a reaction with sunlight. Name this organ made up of the dermis, that covers the human body.
+    options: [ Liver, Lungs, Skin, Spleen ]
+    answer: Skin
+
+  - question: Predictions for the formula of this substance have included quicklime, because it ignites on contact with water. The Byzantines used this substance, often by launching it from ships, until its formula was lost in the 1200s. Name this ancient weapon that is said to be similar to modern napalm because it can burn while floating on water.
+    options: [ Gunpowder, Greek fire, Napalm, Thermite ]
+    answer: Greek fire
+
+  - question: This planet’s northern hemisphere exhibits storms called the Great White Spot. Gaps named for Maxwell and Huygens are present in a system nearby this planet. This planet’s moon Enceladus is known for its high albedo. The probe Cassini explored this planet, whose largest moon is Titan. Name his sixth planet from the sun, known for its large ring system.
+    options: [ Saturn, Jupiter, Uranus, Neptune ]
+    answer: Saturn
+
+  - question: In the Davisson-Germer experiment, electrons fired at this element displayed a diffraction pattern. This element is purified using synthetic gas in the Mond process. Raney names a catalyst of this metal that exists in the Earth’s core with iron. This metal sits between cobalt and copper on the periodic table. Name this metal with atomic number twenty-eight and chemical symbol Ni.
+    options: [ Cobalt, Copper, Iron, Nickel ]
+    answer: Nickel
+
+  - question: A close neighbor to this organism is teosinte. Barbara McClintock won the Nobel Prize in Physiology or Medicine for discovering transposons, or “jumping genes,” in this model organism. The primary production of renewable ethanol fuel comes from this plant. Name this crop whose fructose is extracted to make a “high fructose” syrup.
+    options: [ Wheat, Rice, Corn, Soybeans ]
+    answer: Corn
+    explanation: Also called maize (Zea mays).
+
+  - question: This substance is purified using zeolites in the process of cracking. One controversial method of extracting this substance involves the injection of high-pressure fluid to create cracks in rocks; that method is called hydraulic fracturing or fracking. This natural resource is used to make asphalt and plastics. Name this liquid fossil fuel that is used to make gasoline.
+    options: [ Coal, Petroleum, Peat, Ethanol ]
+    answer: Petroleum
+    explanation: "Also accepted: crude oil."
+
+  - question: Thermally dimorphic fungi can exist as both mold and this other member of the fungi kingdom, which instead grow pseudo-hyphae. Saccharomyces cerevisiae is a commonly studied model organism in this member of the fungus kingdom. This member of the fungi kingdom forms carbon dioxide bubbles which helps brew beer and causes dough to expand. Name this type of fungi whose baker’s variety helps bread rise.
+    options: [ Yeast, Mold, Mushroom, Lichen ]
+    answer: Yeast
+
+  - question: With Joule, this scientist names an effect where real gases expand adiabatically in a throttling process through a valve or porous plug. This scientist names an SI Unit that is the most commonly used absolute temperature scale since zero on that scale marks “absolute zero.” Name this Scottish physicist who names the SI unit for temperature.
+    options: [ James Clerk Maxwell, Anders Celsius, James Joule, Lord Kelvin ]
+    answer: Lord Kelvin
+    explanation: Born William Thomson, he became the 1st Baron Kelvin.
+
+  - question: The statement that every number has a unique prime factorization is the fundamental theorem of this field. The “modular” form of this type of mathematics deals with remainders from division. This type of mathematics names a type of sequence with constant difference. Name this foundational mathematics that deals with operations like addition and subtraction.
+    options: [ Algebra, Geometry, Arithmetic, Calculus ]
+    answer: Arithmetic
+
+  - question: After hydrogen, this is the most abundant compound in the universe. This compound reacts with water in a shift reaction. A mixture of this gas with hydrogen gas is called synthesis gas. It is formed alongside with water in an incomplete combustion reaction. This gas causes oxygen deprivation due to its strong affinity for hemoglobin. Name this poisonous gas with formula CO.
+    options: [ Carbon dioxide, Carbon monoxide, Methane, Sulfur dioxide ]
+    answer: Carbon monoxide
+
+  - question: This state of matter has on average the lowest thermal conductivities. The majority of the members of “HONClBrIF” are in this state of matter. The ideal form of this matter is modelled by the law V times P equals n times R times T. Name this state of matter where the element or compound is free to move around and are not loosely bound together like liquids.
+    options: [ Gases, Liquids, Solids, Bose-Einstein condensates ]
+    answer: Gases
+
+  - question: 109P/Swift Tuttle is the parent object for one of these events that occurs in August and takes its name from the constellation Perseus. The comet Temple-Tuttle is associated with some of these events that occur in the constellation Leo. The Perseids and Leonids are examples of, for the point, what events where meteors look like “shooting stars” radiating from a single source in space?
+    options: [ Auroras, Lunar eclipses, Supernovae, Meteor showers ]
+    answer: Meteor showers
+    explanation: "Also accepted: meteor storms, meteor outbursts."
+
+  - question: Fritz Haber helped develop the use of phosgene and mustard gas during this war giving him the moniker “the father of chemical warfare.” Armor plated vehicles with caterpillar tracks such as the Mark I tank first saw use during the Somme offensive of this war. Name this global war which saw the implementation of 20th century technology developed over the decade, fought between Allied and Central powers.
+    options: [ World War II, Crimean War, World War I, Korean War ]
+    answer: World War I
+    explanation: Also called the Great War.
+
+  - question: In 1900, the founding principles of this theory were established by Max Planck with his solution to the ultraviolet catastrophe. A critical idea to this theory is that wave functions will “collapse” upon measurement. Schrodinger’s cat is a thought experiment about this theory. Name this microscale theory which utilizes wave-particle duality and restricts systems to discrete quantized values.
+    options:
+      - Special relativity
+      - Quantum mechanics
+      - General relativity
+      - Classical mechanics
+    answer: Quantum mechanics
+
+  - question: Members of Hirundinidae use this substance to help build nests. This liquid sourced from Drosophila melanogaster was used to discover polytene. The parotid gland is one of three glands that helps produce this liquid. The enzyme amylase is first encountered by sugars in the digestive tract in this liquid. Name this biological liquid that helps prevent plaque, produced by namesake glands in the mouth.
+    options: [ Saliva, Mucus, Bile, Tears ]
+    answer: Saliva
+
+  - question: Because these structures aren’t always breeding related, the Humphrey-Parkes terminology was developed. The barbs of these structures extend out of a central rachis. Proto like versions of these structures were found on genus fossils like Archaeopteryx. Plumology is the study of the development and use of these structures. Name these epidermal bird structures which function similarly to hair in mammals.
+    options: [ Scales, Beaks, Claws, Feathers ]
+    answer: Feathers
+
+  - question: Developing a fluorophore of this color won Osamu Shimomura, Martin Chalfie, and Roger Y. Tsien the 2008 Nobel Prize in Chemistry. A porrin ring with a magnesium center is important to a molecule that gives off this pigmentation in sheet-like membranes embedded in stroma. A fluorescent protein from jellyfish A. Victoria shines this color as does chlorophyll. Name this color of plant leaves.
+    options: [ Blue, Red, Green, Yellow ]
+    answer: Green
+
+  - question: The structure and distribution of a ecosystem formed by these species titles Charles Darwin’s first monograph. Members of these so-called “stony flowers” are hermatypic and obtain their energy from zooxanthellae point, name these marine invertebrates that are principal to namesake ecosystems known as reefs.
+    options: [ Sea urchins, Corals, Sea stars, Barnacles ]
+    answer: Corals

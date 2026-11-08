@@ -1,0 +1,163 @@
+# Science Bee 2021–22 (MS) · Round 2 — 32 tossups.
+# Source: docs/Science-Bee-Round-2.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2021–22 (MS) · Round 2
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: The second part of this process begins with a carbon dioxide molecule combining with RuBP to make a high-energy intermediate. Deciduous trees such as birches and maples perform this process using an organelle known as the chloroplast. Chlorophyll molecules absorb light in, for the point, what process in which plants use light energy to produce sugars?
+    options:
+      - Photosynthesis
+      - Cellular respiration
+      - Transpiration
+      - Fermentation
+    answer: Photosynthesis
+
+  - question: These objects from from precursor stars that exceed the Tolman-Oppenheimer- Volkoff limit. The Reissner-Nordstrom variety of these objects are non-rotating, and one of these objects is predicted to vanish, as described by Hawking radiation. Name these regions of supermassive gravity from which light cannot escape.
+    options: [ Neutron stars, White dwarfs, Red giants, Black holes ]
+    answer: Black holes
+
+  - question: This man invented a mercury-fulminate-based blasting cap to reduce the need for fuses. This owner of the arms manufacturer Bofors developed the use of nitroglycerin as an active ingredient in explosives. Name this Swedish chemist and inventor of dynamite who lends his name to annual prizes awarded for literature, peace, and science.
+    options:
+      - Svante Arrhenius
+      - Jöns Jacob Berzelius
+      - Alfred Nobel
+      - Carl Wilhelm Scheele
+    answer: Alfred Nobel
+
+  - question: A volcano plot depicts how these substances bind according to the Sabatier principle. The number of active sites in the heterogenous type of these substances are lowered by "Poisoning," and these substances provide an alternate reaction pathway by stabilizing the transition state and lowering the activation energy. Name these substances that speed up chemical reactions.
+    options: [ Inhibitors, Catalysts, Reactants, Solvents ]
+    answer: Catalysts
+
+  - question: When cooled to the lambda point, this element forms a superfluid Rollin film that appears to creep out of its container. Alpha particles are the nuclei of this element, which is the second-most abundant in the universe. Two hydrogen atoms combine to form, for the point, what lightest noble gas that makes balloons float?
+    options: [ Helium, Hydrogen, Neon, Argon ]
+    answer: Helium
+
+  - question: This function appears three times in the formula for combinations, and it is estimated by Stirling’s approximation. This function applied to 3 is 6, and when applied to 4 yields 24. Defined as the product of all positive integers less than or equal to n, for the point, this is what function denoted by an exclamation point?
+    options: [ Logarithm, Square root, Absolute value, Factorial ]
+    answer: Factorial
+
+  - question: This organelle’s semi-permeable structure allows smaller molecules to pass through without assistance through either osmosis or diffusion. Both prokaryotic and eukaryotic cells contain this organelle in a phospholipid bilayer form. Name this organelle, the cellular boundary that protects the inner organelles.
+    options: [ Cell wall, Nuclear envelope, Cell membrane, Cytoskeleton ]
+    answer: Cell membrane
+    explanation: Also called the plasma membrane.
+
+  - question: A "tree" variant of this animal is native to New Guinea, and that variety is the only true arboreal macropod. Osphranter is a genus containing these animals, and that genus contains the red species of this large mammal. Name this Australian marsupial and relative of the smaller wallaby.
+    options: [ Koala, Kangaroo, Wombat, Tasmanian devil ]
+    answer: Kangaroo
+
+  - question: This planet's atmosphere is composed of extremely thick clouds primarily made of sulfuric acid. That thick atmosphere traps greenhouse gases, giving this planet the hottest surface temperature in the solar system. Identify this second planet from the sun, sometimes called "Earth's Twin."
+    options: [ Venus, Mercury, Mars, Jupiter ]
+    answer: Venus
+
+  - question: The newly discovered element Oganesson is considered to be part of this group. This group’s members are characterized by a full complement of valence electrons in their outer shell, leading to their lower likelihood of taking part in a chemical reaction. Name this group of elements that contains helium, neon and argon.
+    options: [ Halogens, Alkali metals, Alkaline earth metals, Noble gases ]
+    answer: Noble gases
+    explanation: "Also accepted: inert gases, aerogens."
+
+  - question: The Quechua used the Cinchona tree to fight this disease. An outbreak of this disease led to the founding of the CDC, and this disease was effectively ended in the U.S. by the introduction of DDT. American soldiers in the South Pacific contracted, for the point, what disease that is spread by mosquitoes and named for the Spanish for "Bad Air?"
+    options: [ Tuberculosis, Cholera, Malaria, Influenza ]
+    answer: Malaria
+
+  - question: Predecessors of these entities included Wingdings. A set of these entities would later be introduced and constantly added using the Unicode standard, and a face with tears of joy is the most popular one of these entities. Name these pictograms often used in text messages that include a host of facial expressions and objects.
+    options: [ GIFs, Emojis, Hashtags, Memes ]
+    answer: Emojis
+
+  - question: William Jenney constructed some of these things using the "Chicago skeleton" method, employing curtain walls over a steel frame. Early examples of these places include one named for Equitable Life in New York and Louis Sullivan's example named for Ellis Wainwright in St. Louis. The invention of the safety elevator enabled an 1890s boom in, for the point, what very tall office buildings?
+    options: [ Skyscrapers, Suspension bridges, Cathedrals, Warehouses ]
+    answer: Skyscrapers
+
+  - question: One inequality named for this figure is reversed in Minkowski space. The intersection of altitudes in this shape is known as its orthocenter, and its area can be computed using Heron’s formula. The angles in any example of this polygon sum to 180 degrees in Euclidean space. Name this polygon with three sides.
+    options: [ Square, Pentagon, Trapezoid, Triangle ]
+    answer: Triangle
+
+  - question: The deadliest instance of this phenomenon affected the cities of Daulatpua and Saturia in Bangladesh. These phenomena that can form from supercells are measured by their intensity on the Fujita scale. Waterspouts are aquatic versions of, for the point, what devastating natural disasters of revolving air columns?
+    options: [ Blizzards, Tsunamis, Tornadoes, Flash floods ]
+    answer: Tornadoes
+    explanation: "Also accepted: twisters."
+
+  - question: Pedology is the scientific field concerned with the formation of this material that is grouped into layers called horizons. Along with water and gases, this material is primarily composed of sand, silt, and clay. Identify this nutrient-rich mixture of organic material used to plant flowers and crops.
+    options: [ Bedrock, Soil, Gravel, Limestone ]
+    answer: Soil
+
+  - question: Algeria has constructed a dam named for this color to halt overgrazing, and engineers in several African countries are constructing a Great Wall of this color to contain the Sahara Desert. Along with red, this color names a type of colorblindness that is more prevalent in males. Name this color that identifies a type of beryl known as emerald.
+    options: [ Green, Blue, Yellow, Purple ]
+    answer: Green
+
+  - question: This technique’s first description in Ancient India was found in the Bower Manuscript, which also mentioned Sushruta, the “Father of [this procedure].” The Edwin Smith Papyrus describes procedures for this practice in Ancient Egypt, including the use of sutures. Name this invasive medical technique that uses instruments to treat a patient’s condition.
+    options: [ Vaccination, Herbal medicine, Physical therapy, Surgery ]
+    answer: Surgery
+
+  - question: This substance induces dysentery in its creators when produced from an aphid byproduct. This substance's low moisture content makes it inhospitable to microorganisms, which makes it the only known foodstuff to never spoil. Produced from stomach enzymes and stored in hexagonal wax combs, this is, for the point, what natural sweetener produced from nectar by bees?
+    options: [ Royal jelly, Maple syrup, Honey, Molasses ]
+    answer: Honey
+
+  - question: These biomes are the predominant environment in which the European chamois goat-antelope is found. The pika is a close relative of the rabbit that can be found in these biomes that also contain South American camelids such as guanacos and vicuñas. Plant-life typically stops above the snow line in, for the point, what high-altitude biomes that include the Himalayas?
+    options: [ Savannas, Mountains, Rainforests, Wetlands ]
+    answer: Mountains
+    explanation: "Also accepted: alpine regions, highlands."
+
+  - question: Plumes of this region are believed to cause volcanic hot spots. The highly ductile upper portion of this region is known as the asthenosphere, and conductions in the semi- liquid portions of this region cause the movement of tectonic plates. Name this region of the Earth located between the inner core and the crust.
+    options: [ Mantle, Crust, Inner core, Hydrosphere ]
+    answer: Mantle
+    explanation: The mantle lies between the outer core and the crust.
+
+  - question: Extant varieties of these animals include the screaming hairy and pink fairy types. In the southern United States, the nine-banded variety of these animals always give birth to identical quadruplets, and that species is the primary vector for leprosy. Name these armored mammals, some of which can roll into a ball when scared.
+    options: [ Anteaters, Sloths, Opossums, Armadillos ]
+    answer: Armadillos
+
+  - question: Half of this object was first directly seen by Jim Lovell and two other crewmembers. This site of the Sea of Tranquility was first visited when Michael Collins stayed in orbit while his two colleagues used a module known as The Eagle. In 1969, Buzz Aldrin and Neal Armstrong became the first two people to reach, for the point, what heavenly body?
+    options: [ Mars, Venus, The Moon, Mercury ]
+    answer: The Moon
+    explanation: "Also accepted: Luna."
+
+  - question: This compound can be artificially synthesized using dimethylurea and malonic acid. With theophylline, this compound is often used as a treatment for sleep apnea, and this stimulant is an alkaloid and adenosine antagonist commonly used to prevent drowsiness. Name this stimulant found in tea and coffee.
+    options: [ Nicotine, Caffeine, Ephedrine, Taurine ]
+    answer: Caffeine
+
+  - question: A possible test of this technology was known as the Vela Incident. Tests of this technology include Smiling Buddha and Castle Bravo, and the presence of these weapons in Cuba triggered a 1962 diplomatic crisis. Name this military weapon that uses a fission reaction to create an explosion.
+    options:
+      - Nuclear weapons
+      - Chemical weapons
+      - Biological weapons
+      - Incendiary bombs
+    answer: Nuclear weapons
+    explanation: "Also accepted: nukes, atomic bombs."
+
+  - question: Kepler’s conjecture concerns the packing of these figures in three-dimensional space, and the sum of angles of a triangle on this shape exceeds 180 degrees. The surface area of one of these objects is 4 pi r squared. Name this 3D shape with a volume of four thirds pi r cubed, exemplified by structures such as marbles and globes.
+    options: [ Cube, Cylinder, Cone, Sphere ]
+    answer: Sphere
+
+  - question: The largest unit of this measurement is a yotta, although a bronto has been proposed. This computer component is supported by secondary forms, including cards, external hard drives, and the Cloud. Identify this computer component that comes in Random Access and Read-Only types.
+    options: [ Processor, Graphics card, Memory, Motherboard ]
+    answer: Memory
+
+  - question: The largest unit of this measurement is a yotta, although a bronto has been proposed. This computer component is supported by secondary forms, including cards, external hard drives, and the Cloud. Identify this computer component that comes in Random Access and Read-Only types.
+    options: [ Processor, Memory, Power supply, Sound card ]
+    answer: Memory
+
+  - question: Lichens consist of a fungus and one of these organisms living in a symbiotic relationship. Ocean afforestation involves growing these organisms en masse, and rapid oxygen-depletion in the population of these organisms are known as their namesake “blooms.” Cyanobacteria and seaweed are types of, for the point, what often green marine protist organisms that float on water?
+    options: [ Algae, Fungi, Mosses, Amoebas ]
+    answer: Algae
+    explanation: "Also accepted: seaweed."
+
+  - question: The Vaccinia virus is used to inoculate against this disease that was once harvested from the hands of milkmaids. British and American forces used this disease as a bioweapon via contaminated blankets, and the world's first vaccines were produced by Edward Jenner to prevent this disease. Name this disease caused by Variola viruses, which was eradicated in the 1970s.
+    options: [ Chickenpox, Measles, Polio, Smallpox ]
+    answer: Smallpox
+
+  - question: This force can be found by taking the product of its direction with the dot product of the unit vector and the Cauchy stress tensor. For a ramp with an angle of inclination theta, the magnitude of this force is equal to mg cosine theta. This force prevents a book perched on a table from sinking through it. Name this force produced by a contact surface perpendicular to itself.
+    options: [ Friction, Tension, Normal force, Buoyant force ]
+    answer: Normal force
+
+  - question: This task commonly uses clay in the K-AR technique. Another technique for this task uses zircon to calculate a uranium-thorium-lead decay chain, and another method for this task uses the 12 and 14 isotopes of carbon. Name this process that uses radioactive decay to find the age of an object.
+    options:
+      - Dendrochronology
+      - Radiometric dating
+      - Stratigraphy
+      - Paleomagnetic dating
+    answer: Radiometric dating
+    explanation: "Also accepted: carbon dating, uranium-lead dating."

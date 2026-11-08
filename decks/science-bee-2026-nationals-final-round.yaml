@@ -1,0 +1,179 @@
+# Science Bee 2026 Nationals · Final Round (6th–8th) — 33 tossups.
+# Source: docs/2026-NATIONALS-SCI-8-6-ROUND-F.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2026 Nationals · Final Round (6th–8th)
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: A malignant neoplasm in this organ in young women is called a solid pseudopapillary tumor. Liquid released from this organ includes the digestive enzymes trypsinogen and amylase, and that liquid is released from this organ when chyme enters the duodenum. Gallstones blocking the common bile duct or alcoholism can cause inflammation of this organ, which releases endocrine cells in the islets of Langerhans. Name this organ that releases glucagon and insulin to control blood sugar levels.
+    options: [ Pancreas, Spleen, Stomach, Thyroid ]
+    answer: Pancreas
+
+  - question: This element is used in MAG3 scans of kidneys, and it is also used in bone scans to highlight fractures which cannot be seen from X-rays. This element naturally occurs when neutron capture happens in molybdenum ores, and this element’s name reflects the fact that it was the first artificial element to be widely produced. Name this lightest radioactive element, with atomic number 43.
+    options: [ Promethium, Rhenium, Ruthenium, Technetium ]
+    answer: Technetium
+
+  - question: This event caused the final advance of the Laurentide Ice Sheet after the Allerod Oscillation. A significant percentage of megafauna died during this event, which was likely caused by Meltwater Pulse 1A. This event caused the decline of the Clovis Culture, and pseudo-archaeologist Graham Hancock claims this event destroyed Atlantis. Known for a namesake “impact hypothesis,” this is, for the points, what return to Ice Age-like conditions before the Agricultural Revolution?
+    options:
+      - Older Dryas
+      - Little Ice Age
+      - Younger Dryas
+      - Last Glacial Maximum
+    answer: Younger Dryas
+
+  - question: These proteins are arranged as head-to-tail dimers in a handshake motif, and these proteins provide an electrostatic potential that holds together the 30-nanometer fiber. These proteins can promote transcriptional activity through the acetylation of lysine, and eight of these proteins form an octamer in the center of the nucleosome in Eukaryota. Name these proteins around which DNA wraps to form the complex chromatin.
+    options: [ Helicases, Histones, Cohesins, Polymerases ]
+    answer: Histones
+
+  - question: The value of this quantity corresponds to the strength of so-called “forbidden lines” in the H Two regions. Specific ranges of mass and this quantity are required for pair-instability supernovae to occur. Population One stars are contrasted with Population Two stars by having higher values of this quantity, while early forming Population Three stars have values of zero for this quantity. Give this quantity for the proportion of non-helium or hydrogen elements found in a star.
+    options: [ Metallicity, Luminosity, Surface temperature, Surface gravity ]
+    answer: Metallicity
+    explanation: Astronomers call every element heavier than helium a "metal."
+
+  - question: This company developed a cryogenic engine called the BE-Three that was tested at Van Horn. This company developed a two stage design for its New Glenn family of launch vehicles. This company launched a crewed mission with a New Shepard vehicle that crossed the Kármán line, thus entering space. Working with Sierra Space to develop the Orbital Reef space station, for the points, which space technology company was founded by Jeff Bezos?
+    options: [ SpaceX, Virgin Galactic, Rocket Lab, Blue Origin ]
+    answer: Blue Origin
+
+  - question: During this process, FtsZ polymerization and "Z-ring" formation trigger the formation of new cell wall material. S. pombe yeasts unusually exhibit this process, while, in other Eukaryotes, this process only occurs in the mitochondria and chloroplasts. Cells undergoing this process possess an elongation phase in which the two halves of the cell are divided by a septum. Name this reproductive process used by bacteria in which a mother cell splits into two identical daughter cells.
+    options: [ Budding, Conjugation, Binary fission, Sporulation ]
+    answer: Binary fission
+
+  - question: This man lends his name to a theorem that says for an integer a, when p is a prime, "a to the power of p minus a" will be a multiple of p. This man said that he could not fit a proof of a theorem in the margin of the Arithmetica when claiming there were no integral solutions for "a to the n plus b to the n equals c to the n" for n greater than two. Name this French mathematician who names a "Last Theorem."
+    options:
+      - René Descartes
+      - Pierre de Fermat
+      - Blaise Pascal
+      - Évariste Galois
+    answer: Pierre de Fermat
+
+  - question: The spectral radiance from these things is modeled to be dependent on the cube of frequency per Planck's law, and tends to the Rayleigh -Jeans law at low frequencies. For one of these objects, whose emissivity is taken to be one, the radiant exitance is equal to a constant times the fourth power of temperature, per the Stefan-Boltzmann law. Acting as ideal emitters and sometimes modeled as a cavity with a hole, for the points, name these physically ideal objects which absorb all light.
+    options: [ Black bodies, Gray bodies, White bodies, Transparent bodies ]
+    answer: Black bodies
+    explanation: Also written as "blackbodies."
+
+  - question: While working under the mentorship of Oystein Ore, this person wrote the thesis, "New Types of Irreducibility Criteria." The COBOL programming language was influenced by this person's data processing language, which was made for Remington Rand, and was called FLOW-MATIC. A tool designed by this person functioned like a linker and was the A-Zero system, which created machine code. Name this U.S. Navy rear admiral and pioneering computer scientist who created early compilers for programming languages.
+    options:
+      - Ada Lovelace
+      - Margaret Hamilton
+      - Katherine Johnson
+      - Grace Hopper
+    answer: Grace Hopper
+
+  - question: According to Michael Spivak, "the world's sneakiest substitution" is a half-angle substitution named for this function that sets "t equal to this function of x over two." This function has asymptotes every pi radians, including at negative and positive pi over two. Name this trigonometric function defined as the ratio of the opposite side length over the adjacent side length in a right triangle.
+    options: [ Sine, Cosine, Tangent, Cotangent ]
+    answer: Tangent
+
+  - question: Although known for achievements in another science, this person's father invented the achromatic lens. This person's most notable innovation was inspired by a paper on fermentation and putrefaction by a French scientist. After learning that a certain substance was used to treat sewage in Carlisle, this person began applying it to surgical wounds. Name this British surgeon who pioneered antiseptic surgery and for whom a brand of mouthwash is named.
+    options: [ John Snow, Joseph Lister, Edward Jenner, John Hunter ]
+    answer: Joseph Lister
+
+  - question: This quantity equals the integral of dQ over T according to the Clausius theorem, and this quantity remains constant for processes that are both adiabatic and reversible. This conjugate variable of temperature is equal to Boltzmann’s constant multiplied by the logarithm of the number of microstates. The second law of thermodynamics states that this quantity always increases over time in an isolated system. Name this quantity, symbolized S, which is a measure of a system's disorder.
+    options: [ Entropy, Enthalpy, Internal energy, Gibbs free energy ]
+    answer: Entropy
+
+  - question: Stable, mature forms of this molecule require its precursor form to be stabilized with a five- prime cap. In this molecule's synthesis, spliceosomes remove non-coding regions called introns. To trigger an immune response to spike proteins, this molecule is used in the Pfizer–BioNTech COVID-19 vaccine. Name this single-stranded molecule that is sent out from the nucleus to be translated to form proteins.
+    options:
+      - Transfer RNA
+      - Ribosomal RNA
+      - Complementary DNA
+      - Messenger RNA (mRNA)
+    answer: Messenger RNA (mRNA)
+
+  - question: In order to unify configurations across this software, users can employ a software suite called systemd. The core of this software can act as a hypervisor via the Kernel- based Virtual Machine module, which requires hardware virtualization extensions. Distributions of this software that can run a desktop environment called GNOME include Debian and Ubuntu. Linus Torvalds created, for the points, what family of operating systems featuring a penguin mascot?
+    options: [ Microsoft Windows, macOS, Linux, Unix ]
+    answer: Linux
+    explanation: "Also accepted: GNU/Linux."
+
+  - question: These diagrams estimate the probability density function and become relative frequency plots when the interval lengths are one. These diagrams can be constructed with Sturges's rule, which suggests the number of bins. Depicting quantitative data unlike bar charts, for the points, which statistical diagrams are created by bucketing data into bins, then plotting how many values are in each bin?
+    options: [ Bar graphs, Histograms, Box plots, Scatter plots ]
+    answer: Histograms
+
+  - question: This place is where the Fermi Gamma-ray Space Telescope discovered an excess of gamma- ray radiation, which might be due to self-annihilating dark matter. Fermi bubbles are located around this region, and it is orbited by the Circumnuclear Disk. This place contains a supermassive black hole discovered by Robert Brown and Bruce Balick, which is Sagittarius A*. Name this balance point for all the mass in the Milky Way.
+    options: [ Galactic Center, Orion Arm, Perseus Arm, Local Bubble ]
+    answer: Galactic Center
+    explanation: "Also accepted: Galactic Core."
+
+  - question: The last member of these metals is often included despite being part of the 6d transition series. The heaviest of these metals are named for Dmitri Mendeleev, Alfred Nobel, and Ernest Lawrence, and these metals include the heaviest elements to be produced in macroscopic qualities. Thorium, neptunium, and plutonium are a part of, for the points, what group of metals with atomic numbers from 89 to 102, displayed with lanthanides at the bottom of the periodic table?
+    options:
+      - Lanthanides
+      - Transition metals
+      - Alkaline earth metals
+      - Actinides
+    answer: Actinides
+    explanation: "Also accepted: actinoids."
+
+  - question: The mystic form of this mineral has had vapor deposition applied to it to create a rainbow- colored effect. By heating an instance of this mineral, David Brewster discovered a liquid that fills cavities called brewsterlinite. As the defining mineral with a Mohs scale hardness of eight, for the points, what is this mineral containing aluminum and fluorine, which is used as a gemstone and has an orange form that is the birthstone for November?
+    options: [ Corundum, Fluorite, Topaz, Orthoclase ]
+    answer: Topaz
+
+  - question: This scientist proved that diamonds are made of carbon by burning one inside a glass jar using a magnifying glass and producing carbon dioxide. This chemist built on the work of Henry Cavendish to prove that water is a solution instead of an element. This scientist, who named both oxygen and hydrogen, established the fact that matter is neither created nor destroyed in chemical reactions. Name this French chemist who formulated a law of the conservation of mass.
+    options:
+      - Joseph Proust
+      - Antoine Lavoisier
+      - Claude Louis Berthollet
+      - Joseph Priestley
+    answer: Antoine Lavoisier
+
+  - question: This phylum is organized into classes such as Scyphozoa and Cubozoa. Mesoglea are used by members of this phylum as a type of hydrostatic skeleton. One member of this phylum being called the Portuguese man o' war, and species in this phylum can be organized into having medusae or polyp body forms. Hydras, sea anemones, and corals are various members in, for the points, what phylum of animals, including jellyfish?
+    options: [ Cnidaria, Echinodermata, Mollusca, Annelida ]
+    answer: Cnidaria
+
+  - question: Sampling efforts in this region often use neuston nets to reveal that polyethylene and polypropylene dominate due to low density. This phenomenon is concentrated within a region of weak currents and convergence associated with a subtropical gyre located in the northern portion of a certain body of water. Efforts to remediate this region include passive collection systems that exploit convergent surface flows. Name this large region of marine pollution located in the world's largest ocean.
+    options:
+      - Indian Ocean garbage patch
+      - Gulf of Mexico dead zone
+      - Baltic Sea dead zone
+      - Great Pacific Garbage Patch
+    answer: Great Pacific Garbage Patch
+
+  - question: This scalar quantity can be measured in a unit called the erg, and though not torque, it can also be measured via the foot-pound. This quantity is the namesake of a principle which can be derived from Newton's second law of motion, and states that is is equivalent to the kinetic energy of a particle. The SI unit for this quantity is the joule. Name this quantity, which is the energy transferred to or from an object, calculated by multiplying force and displacement.
+    options: [ Power, Impulse, Work, Torque ]
+    answer: Work
+
+  - question: Following the discovery of this fossil, various fossils that attest its species' earlier presence in the area were discovered including Sangiran 2 and the Mojokerto child. This fossil was the oldest hominid fossil found until the discovery of the Taung child in 1924. Discovered by Eugène Dubois, for the points, what is this fossil found on an eponymous island, which helped in the classification of Homo erectus?
+    options: [ Lucy, Java Man, Piltdown Man, Cro-Magnon Man ]
+    answer: Java Man
+
+  - question: The performance of these items is measured by the L10 life rating, which estimates the number of revolutions at which 90 percent of them still work. These components may include a cage or retainer to maintain spacing between individual rolling elements. Variants of these things include deep-groove, angular contact, and thrust types, each optimized for different load directions and magnitudes. Name these spherical rolling elements used to reduce friction between moving parts.
+    options: [ Ball bearings, Bushings, Gears, Ball joints ]
+    answer: Ball bearings
+
+  - question: Frederick Vinton Hunt coined the name for this technology and developed the first modern variety of it, for which he was given a Medal for Merit. Profiles gathered by one variety of this technology enabled Marie Tharp to discover the Mid-Atlantic Ridge's central rift valley. Functioning by measuring the return echo of pinging sound waves, for the points, what is this technology used to map the seafloor and navigate underwater?
+    options: [ Radar, Lidar, GPS, Sonar ]
+    answer: Sonar
+    explanation: Sonar stands for sound navigation and ranging.
+
+  - question: Sauropsids and amniotes first appeared within the later part of this period, in which Euramerica and Siberia joined to create the supercontinent Pangaea. Due to the rise of temnospondyls in this period, it is sometimes known as the Age of Amphibians. Due to a rainforest collapse during this period, a certain type of forest may have been limited to islands. Occurring between the Permian and Devonian periods, this is, for the points, what geologic period named for its abundance of coal?
+    options: [ Devonian, Silurian, Carboniferous, Cretaceous ]
+    answer: Carboniferous
+
+  - question: This biome is the home of most of the world’s muskeg bogs. Drunken trees are most commonly found in these biomes and occur due to inconsistent permafrost. These biomes only occur in the northern hemisphere and frequently possess acidic soils known as podzol. These biomes, which are dominated by pine and spruce forests, have their northern boundary at the tree line. Name these cold biomes, located between the tundra and temperate forests.
+    options: [ Tundra, Taiga, Temperate deciduous forest, Temperate grassland ]
+    answer: Taiga
+    explanation: "Also accepted: boreal forest, snow forest."
+
+  - question: One of these stars accretes matter from a donor and causes changes in brightness, leading to the use of the term cataclysmic variable stars. These stars can undergo a runaway nuclear process called carbon detonation. The upper bound for the mass of these stars is reached when gravitational force cannot be resisted by electron degeneracy pressure, according to the Chandrasekhar limit. Name these dense stars that do not have enough mass to become neutron stars or black holes.
+    options: [ White dwarfs, Neutron stars, Red giants, Blue supergiants ]
+    answer: White dwarfs
+
+  - question: Before the twentieth century, this compound was commonly known as "oil of vitriol." When combined with hydrogen peroxide, this compound form a highly toxic and dangerous cleaner called piranha solution. This compound, known to medieval alchemists as Oil of Vitriol, is produced industrially in the contact process. Acidic drain openers typically contain high concentrations of, for the points, what compound, a strong acid with chemical formula H2SO4?
+    options: [ Nitric acid, Phosphoric acid, Sulfurous acid, Sulfuric acid ]
+    answer: Sulfuric acid
+
+  - question: This constellation's brightest star is Spica, which can be located via using the Big Dipper and the Boötes constellation. This constellation lends its name to a Supercluster including the Local Group of Galaxies. This constellation lies between Leo and Libra, as the largest constellation in zodiac, representing late August and most of September. Name this constellation representing a maiden.
+    options: [ Leo, Libra, Virgo, Scorpius ]
+    answer: Virgo
+
+  - question: Palmitate and sodium phosphate are two forms of this antioxidant used in cosmetics for bright and even skin tone. This vitamin is crucial for the synthesis of catecholamines, L-carnitine, and collagen. Deficiency of this compound leads to scurvy, a condition characterized by bleeding gums and impaired wound healing. Name this water-soluble vitamin that most animals can synthesize from glucose but humans cannot.
+    options: [ Vitamin D, Vitamin C, Vitamin K, Vitamin B12 ]
+    answer: Vitamin C
+    explanation: "Also accepted: L-ascorbic acid."
+
+  - question: The relationship between dry air and these events is stated by the Haines index. Flashover can occur in these events, which can generate updrafts to bring in cool air, and these things can spread to the canopy via dead limbs, which are called fuel ladders. The spread component, Keetch- Byram drought index, and ignition component are all outputs for a rating system to describe the danger of these events. Name these ecological events in which forests might burn.
+    options: [ Wildfires, Droughts, Heat waves, Dust storms ]
+    answer: Wildfires
+    explanation: "Also accepted: forest fires, bushfires."
