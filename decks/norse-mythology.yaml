@@ -1,6 +1,7 @@
-# Example deck. Every .yaml / .yml file in this folder shows up in the app.
+# Example deck. Every .yaml / .yml file in this folder with `enabled: true` shows up in the app.
 title: Norse Mythology
 description: Thor, his family, and the Nine Realms.
+enabled: false          # show this deck in the app (false = hidden)
 shuffle: true          # shuffle the card order each session (default: true)
 shuffleOptions: true   # shuffle the options on each card (default: true)
 

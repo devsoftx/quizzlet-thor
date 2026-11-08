@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildSession, parseDeck, titleFromFileName } from "./deck";
-import { loadBundledDecks } from "./library";
+import { isVisible, loadBundledDecks, type DeckEntry } from "./library";
 
 describe("parseDeck", () => {
   it("parses a full deck", () => {
@@ -8,6 +8,7 @@ describe("parseDeck", () => {
       `
 title: Test
 description: A deck
+enabled: true
 shuffle: false
 cards:
   - question: Q1?
@@ -22,6 +23,7 @@ cards:
       deck: {
         title: "Test",
         description: "A deck",
+        enabled: true,
         shuffle: false,
         shuffleOptions: true,
         cards: [{ question: "Q1?", options: ["A", "B", "C"], answer: "B", explanation: "Because." }],
@@ -29,11 +31,12 @@ cards:
     });
   });
 
-  it("accepts a bare list of cards and numeric options", () => {
+  it("accepts numeric options; a bare list of cards parses but is disabled", () => {
     const result = parseDeck("- question: 2+2?\n  options: [3, 4]\n  answer: 4\n", "Math");
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.deck.title).toBe("Math");
+    expect(result.deck.enabled).toBe(false);
     expect(result.deck.cards[0]).toEqual({ question: "2+2?", options: ["3", "4"], answer: "4" });
   });
 
@@ -70,9 +73,53 @@ cards:
   });
 });
 
+describe("enabled", () => {
+  const deck = (enabledLine: string) =>
+    parseDeck(`title: T\n${enabledLine}\ncards:\n  - question: Q\n    options: [A, B]\n    answer: A\n`, "x");
+  const enabledOf = (enabledLine: string) => {
+    const r = deck(enabledLine);
+    return r.ok ? r.deck.enabled : r.enabled;
+  };
+
+  it("is true only when the deck says so", () => {
+    expect(enabledOf("enabled: true")).toBe(true);
+    expect(enabledOf("enabled: false")).toBe(false);
+    expect(enabledOf("")).toBe(false); // missing = hidden
+    expect(enabledOf("enabled: enabled")).toBe(true);
+    expect(enabledOf("enabled: Disabled")).toBe(false);
+  });
+
+  it("reports a value that isn't true/false", () => {
+    const r = deck("enabled: maybe");
+    expect(r.ok).toBe(false);
+    if (r.ok) return;
+    expect(r.enabled).toBeNull();
+    expect(r.errors[0]).toContain('"enabled" must be true or false');
+  });
+
+  it("shows enabled decks, and broken decks unless they're disabled", () => {
+    const entry = (yaml: string): DeckEntry => ({
+      id: "x",
+      fileName: "x.yaml",
+      source: "bundled",
+      ...parseDeck(yaml, "x"),
+    });
+    const card = "cards:\n  - question: Q\n    options: [A, B]\n    answer: A\n";
+    const broken = "cards:\n  - question: Q\n    options: [A, B]\n    answer: C\n";
+    expect(isVisible(entry(`enabled: true\n${card}`))).toBe(true);
+    expect(isVisible(entry(`enabled: false\n${card}`))).toBe(false);
+    expect(isVisible(entry(card))).toBe(false);
+    expect(isVisible(entry(`enabled: true\n${broken}`))).toBe(true); // show the errors
+    expect(isVisible(entry(`enabled: false\n${broken}`))).toBe(false);
+    expect(isVisible(entry(`enabled: maybe\n${card}`))).toBe(true); // typo: show it
+    expect(isVisible(entry("cards: [unclosed"))).toBe(true); // broken YAML: show it
+  });
+});
+
 describe("buildSession", () => {
   const deck = {
     title: "T",
+    enabled: true,
     shuffle: true,
     shuffleOptions: true,
     cards: [

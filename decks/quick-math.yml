@@ -1,17 +1,21 @@
-# A deck can also be just a list of cards — the title comes from the file name.
-- question: What is 7 × 8?
-  options: [54, 56, 58, 64]
-  answer: 56
+# A small example deck.
+title: Quick math
+enabled: false
 
-- question: What is the square root of 144?
-  options: [10, 11, 12, 14]
-  answer: 12
+cards:
+  - question: What is 7 × 8?
+    options: [54, 56, 58, 64]
+    answer: 56
 
-- question: Which of these is a prime number?
-  options: [21, 27, 29, 33]
-  answer: 29
-  explanation: 21 = 3×7, 27 = 3×9, 33 = 3×11.
+  - question: What is the square root of 144?
+    options: [10, 11, 12, 14]
+    answer: 12
 
-- question: What is 15% of 200?
-  options: [15, 20, 30, 35]
-  answer: 30
+  - question: Which of these is a prime number?
+    options: [21, 27, 29, 33]
+    answer: 29
+    explanation: 21 = 3×7, 27 = 3×9, 33 = 3×11.
+
+  - question: What is 15% of 200?
+    options: [15, 20, 30, 35]
+    answer: 30

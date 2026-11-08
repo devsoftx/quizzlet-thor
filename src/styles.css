@@ -271,6 +271,44 @@ kbd {
   text-align: center;
 }
 
+.hidden-decks {
+  margin-top: 24px;
+  padding: 14px 20px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+}
+
+.hidden-decks summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hidden-decks p {
+  margin-top: 10px;
+}
+
+.hidden-decks ul {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hidden-decks li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text);
+}
+
+.hidden-decks .tag {
+  margin-left: 8px;
+}
+
 .format-help {
   margin-top: 32px;
   padding: 16px 20px;
