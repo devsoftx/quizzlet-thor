@@ -1,0 +1,209 @@
+# Science Bee 2025 Nationals · Finals (MS) — 33 tossups.
+# Source: docs/2025-EMS-NATIONALS-SCI-MS-ROUND-F.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2025 Nationals · Finals (MS)
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Charles Walcott documented this event through fossils in the Burgess Shale, including Anomalocaris and Pikaia. The "Small Shelly Fauna" preceded this event, which saw the first appearance of trilobites and chordates. Simon Conway Morris studied this period's rapid diversification of body plans, including the development of hard shells and exoskeletons. Name this evolutionary radiation that saw most modern phyla appear around 541 million years ago.
+    options:
+      - Cambrian explosion
+      - Ordovician radiation
+      - Avalon explosion
+      - Great Dying
+    answer: Cambrian explosion
+    explanation: "Also accepted: Cambrian radiation, Cambrian diversification."
+
+  - question: This diagram includes a portion called the "instability strip," and the European Space Agency's Gaia mission revealed this diagram contains a gap around M-dwarfs. This diagram included a prominent band cutting diagonally across it called the "main sequence," and within this diagram, white dwarfs appear towards the bottom, while supergiants appear towards the top. Identify this diagram named for Danish and American scientists, a scatter plot which maps the relationship between stars' luminosity and temperature.
+    options:
+      - Hubble diagram
+      - Feynman diagram
+      - Minkowski diagram
+      - Hertzsprung-Russell diagram
+    answer: Hertzsprung-Russell diagram
+    explanation: "Also accepted: HR diagram."
+
+  - question: A period of low sunspot observations between 1796 to 1820 is named for this man and is similar to the Maunder Minimum. Along with Proust's law, this man's pioneering statement of the law of multiple proportions led to the study of stoichiometry. This scientist published a law stating that the total pressure in a mixture of gases is equal to the pressures of the individual gases. Name this English scientist who pioneered modern atomic theory, arguing that elements were composed of atoms, which could form compounds.
+    options: [ Joseph Priestley, Humphry Davy, John Dalton, Henry Cavendish ]
+    answer: John Dalton
+
+  - question: This disease is caused by a genetic mutation of the HEXA gene on chromosome 15, which causes the buildup of GM2 ganglioside within cells. Infantile-onset examples of this disease are marked by the appearance of a cherry-red spot within the retina. This disease is unusually common in French-Canadian, Cajun, and Ashkenazi Jewish communities. Name this disease which causes the destruction of nerves in the brain and spinal chord, named for two British and American doctors.
+    options:
+      - Huntington's disease
+      - Tay-Sachs disease
+      - Cystic fibrosis
+      - Phenylketonuria
+    answer: Tay-Sachs disease
+
+  - question: High values on an index developed by Robert Carlson indicate this condition. Negative impacts of this condition can be partially relieved using an Olszewski tube, which cycles anoxic water. This condition often occurs when nitrates and phosphates from fertilizers are flushed into a body of water, causing its cultural form. Identify this term for the excessive accumulation of nutrients in a body of water, which are often associated with algal blooms.
+    options: [ Eutrophication, Acidification, Biomagnification, Salinization ]
+    answer: Eutrophication
+
+  - question: This astronomical object contains features such as the Messina Chasmata canyon and the Rousillon Rupes scarp, named for French and Italian cities. This astronomical object also includes a crater called Gertrude, and it was discovered by William Herschel alongside Oberon. This moon is the smallest in the outer Solar System to be its planet's largest moon. Named for a character in A Midsummer Night's Dream, this is, for the points, what largest moon of Uranus?
+    options: [ Titan, Ariel, Umbriel, Titania ]
+    answer: Titania
+    explanation: Not to be confused with Titan, Saturn's largest moon.
+
+  - question: Steiner's theorem relates this quantity to an axis parallel to another, and for a thin rod rotating about its end, this value is one-third the mass times the length squared. Its SI unit is kilogram-meter squared, and it describes an object's resistance to rotational acceleration. The perpendicular axis theorem allows calculating this property for planar objects by summing contributions around different axes. Name this rotational analog to mass that determines an object's rotational inertia.
+    options: [ Angular momentum, Torque, Moment of inertia, Angular velocity ]
+    answer: Moment of inertia
+
+  - question: One of these things in canonical form is transformed by Foata's transition lemma. Representing these things can be described using Cauchy's two-line notation or the more compact one-line word notation. Random ones of these things can be generated when a sequence is shuffled by the Fisher-Yates shuffle. For a set of n distinct elements, there are exactly "n factorial" ones of these things. Name these rearrangements of a set, in which the ordering of each element is potentially changed.
+    options: [ Combinations, Permutations, Partitions, Subsets ]
+    answer: Permutations
+
+  - question: Non-zero values for this property cause intramedium scattering, violating one of the assumptions of the Beer-Lambert law. High values for this property are related to low Secchi depths, which are determined by observing the point at which a black and white disk is no longer clearly visible. Downhill movements of water filled with sediment make up this property’s currents. Name this property describing the degree of cloudiness in a water sample.
+    options: [ Turbidity, Salinity, Viscosity, Alkalinity ]
+    answer: Turbidity
+
+  - question: This website's reputation system was built using Dapper, a micro-ORM that was developed by this website's co-creator. This website's markdown-based editor uses PageDown, a library forked from Markdown. Users with sufficient reputation can flag posts on this website as duplicates, or edit questions tagged with technologies such as "python" or "java." Name this question-and-answer website where programmers commonly debug code, a website named for a type of software error.
+    options: [ GitHub, Quora, Reddit, Stack Overflow ]
+    answer: Stack Overflow
+
+  - question: A gene aiding survival in low-oxygen environments, now found in Tibetans, likely came from these people. The remains of these people in Baishiya Karst Cave showed they utilized antler-based tools. These people are named for the Siberian cave they were first found in, and their DNA is most commonly found in the genomes of Melanesian people. Name this extinct species of human, a relative of Neanderthals and Homo sapiens.
+    options: [ Neanderthals, Homo floresiensis, Denisovans, Homo erectus ]
+    answer: Denisovans
+
+  - question: The Colgate-Petschek mechanism explains how these events' photons escape from high- density regions. These events, first detected by Vela satellites searching for nuclear tests, are divided into "long" and "short" categories lasting more or less than two seconds. The merger of neutron stars can trigger these events, which are the most energetic electromagnetic phenomena known. Name these brief but intense flashes of high-energy radiation from deep space.
+    options:
+      - Fast radio bursts
+      - Gamma-ray bursts
+      - Solar flares
+      - Coronal mass ejections
+    answer: Gamma-ray bursts
+    explanation: "Also accepted: GRBs."
+
+  - question: This method was invented by Kary Mullis and Michael Smith, who won the 1993 Nobel Prize in Chemistry for its creation. This method can be executed by a thermal cycler, and thermal denaturation of the thermostable Taq molecule is the first step of it. This method was used in conjunction with reverse transcription to test for COVID-19, and it is also used in forensics for genetic fingerprinting. Name this method which allows the rapid replication of DNA samples.
+    options:
+      - Polymerase chain reaction
+      - Gel electrophoresis
+      - Sanger sequencing
+      - Southern blotting
+    answer: Polymerase chain reaction
+    explanation: "Also accepted: PCR."
+
+  - question: This physician gained fame treating gladiators and described the recurrent laryngeal nerve in dissected pigs. His theory of the four humors dominated Western medicine for over a millennium, and he incorrectly claimed blood was produced in the liver. His work "On Anatomical Procedures" described the practice of vivisection, and he served as personal physician to Marcus Aurelius. Name this influential Greek physician whose theories persisted until Vesalius.
+    options: [ Avicenna, Dioscorides, Andreas Vesalius, Galen ]
+    answer: Galen
+    explanation: "Also accepted: Aelius Galenus."
+
+  - question: A unit called mil derived from 1/1000th of this unit is used for adjusting firearm sights. A pseudovector measuring the amount of these units travelled per second is signified by the lowercase Greek letter omega. One complete revolution measures as 2 pi of these units. One of these units is roughly equivalent to 57.3 degrees. Name this unit for measuring angles taken from the length of an arc equivalent to the length of half of the diameter of a circle, often used in trigonometry.
+    options: [ Degree, Gradian, Radian, Steradian ]
+    answer: Radian
+
+  - question: Several species of this genus were reclassified following genetic analysis of 165 r-RNA. These gram-positive bacteria produce bacteriocins and convert pyruvate to lactate via fermentation. Members of this genus are used to produce yogurt and kimchi, and they dominate the vaginal microbiome where they maintain acidic pH. These rod-shaped organisms are classified as "generally regarded as safe" by the FDA. Name these probiotic bacteria that produce lactic acid and aid in food preservation.
+    options: [ Escherichia, Lactobacillus, Salmonella, Streptomyces ]
+    answer: Lactobacillus
+
+  - question: Kepler predicted this phenomenon in 1639 using the Rudolphine Tables. This phenomenon was observed in 2004 and 2012 to refine techniques used for finding exoplanets, and it occurs in a pair eight years apart during December, followed by a gap of over a century. This phenomenon was observed in 1769 by James Cook from Tahiti to determine longitude. Name this phenomenon where the second planet of the solar system passes between the Earth and the sun, appearing on the latter.
+    options:
+      - Transit of Venus
+      - Transit of Mercury
+      - Annular solar eclipse
+      - Lunar occultation of Venus
+    answer: Transit of Venus
+
+  - question: This biologist drew on a quote from Charles Darwin to tile the essay collection A Devil’s Chaplain. This biologist used the analogy of flowing water to explain how genes proliferate through a population in the book River Out of Eden. This biologist coined the term “meme” to describe the ways that behaviors can replicate and propagate over generations. Name this British evolutionary biologist and pop science writer who wrote The Selfish Gene and The God Delusion.
+    options:
+      - Stephen Jay Gould
+      - E. O. Wilson
+      - J. B. S. Haldane
+      - Richard Dawkins
+    answer: Richard Dawkins
+
+  - question: Liquid produced within these glands is a complex mixture of lipids, including triglycerides, wax esters, squalene, and free fatty acids. Overactivity of these glands is a major factor in the development of acne vulgaris. These glands secrete a substance that lubricates the skin and hair, preventing dryness and protecting against environmental factors. Primarily found in the dermis and associated with hair follicles, these are, for the points, what holocrine glands that produce sebum?
+    options:
+      - Eccrine sweat glands
+      - Lacrimal glands
+      - Sebaceous glands
+      - Salivary glands
+    answer: Sebaceous glands
+    explanation: "Also accepted: oil glands."
+
+  - question: The Riemann zeta function and the polylogarithm appear in an ideal equation of state named for this man. This man developed a theory for particles that do not follow the Fermi-Dirac statistics, which in quantum statistics, explains how laser light is cohesive. Paul Dirac coined a term for subatomic particles with integer spin, which references the name of this man. Name this Indian physicist who, with Albert Einstein, shares his name with a state of matter occurring at low temperatures, which is called a condensate.
+    options:
+      - C. V. Raman
+      - Satyendra Nath Bose
+      - Meghnad Saha
+      - Subrahmanyan Chandrasekhar
+    answer: Satyendra Nath Bose
+    explanation: Particles called bosons are named after him.
+
+  - question: Cells that produce this substance in the central nervous system are called oligodendrocytes, while Schwann cells do it in the peripheral nervous system. In multiple sclerosis, the immune system attacks this substance, leading to inflammation and damage to nerve fibers. When multiple layers of membranes rich in this substance wrap around the axon, its called the namesake sheath. Name this fatty substance that insulates nerve fibers, increasing the speed and efficiency of electrical impulses.
+    options: [ Myelin, Keratin, Collagen, Melanin ]
+    answer: Myelin
+
+  - question: When ethylene gas is reacted with this element, it creates a compound that was used as an additive to gasoline that had lead anti-knocking agents. A pest control agent containing this element and a methyl group is also responsible for ozone depletion and has been limited in production by the Montreal Protocol. Used as a fire retardant and named for its pungent smell, for the points, name this reddish-brown element that is a halogen and is a liquid at standard temperature and pressure.
+    options: [ Iodine, Fluorine, Astatine, Bromine ]
+    answer: Bromine
+
+  - question: Roger Wolcott Sperry received the Nobel Prize in Medicine for his work on this procedure. This procedure is the most common cause of alien hand syndrome, in which a patient’s limbs move without conscious intent. This procedure is typically performed only for severe epilepsy cases to prevent seizures from spreading throughout the brain. Name this procedure in which the corpus callosum is severed, separating the left and right brain hemispheres.
+    options: [ Lobotomy, Trepanation, Split-brain surgery, Thalamotomy ]
+    answer: Split-brain surgery
+    explanation: Also called a corpus callosotomy.
+
+  - question: This quantity can deform certain liquids in the Moses effect. This vector quantity takes part in a cross product with the velocity of a particle in the Lorentz force law. This quantity is uniform in certain regions when created by a Helmholtz coil. An induced version of this quantity opposes the original version of this quantity per Lenz's law. An electric current generates this quantity, which can be calculated by the Biot -Savart law. What vector field can be measured in teslas?
+    options:
+      - Electric field
+      - Magnetic field
+      - Magnetic flux
+      - Gravitational field
+    answer: Magnetic field
+    explanation: "Also accepted: B-field, H-field."
+
+  - question: This quantity can be calculated in terms of two values of the radius for curved interfaces in the Kelvin equation. The saturation ratio, which is the ratio of two forms of this quantity for a solution droplet and for pure water with a flat surface, appear in the Kohler equation in meteorology. Examples of this quantity are multiplied by a mole fraction in Raoult's law. Name this quantity that measures the force exerted over area for a gas that is in equilibrium with a solid or liquid of the same substance.
+    options:
+      - Vapor pressure
+      - Partial pressure
+      - Osmotic pressure
+      - Hydrostatic pressure
+    answer: Vapor pressure
+
+  - question: This type of interaction consists of a large positively charged particle, a small negatively charged particle, and has low positive charge, per Fajans' rules. Compounds with this interaction will lose a crystal lattice structure when undergoing solvation in solvents like water. This interaction is exhibited in salts like sodium chloride, in which two atoms have large differences in electronegativities. Identify this type of chemical bond, which is contrasted with a covalent bond.
+    options: [ Covalent bond, Metallic bond, Hydrogen bond, Ionic bond ]
+    answer: Ionic bond
+
+  - question: Some of these organisms create long-chain alkenes which are proxies for the presence of sea ice and highly branched isoprenoids. A structure called the raphe releases mucilage, allowing these organisms to "glide." Two orders of these organisms include the Pennales and the Centrales. Silicic acid is used to create the cell wall of these organisms, which generally have two thecae, and is called a frustule. Name these unicellular organisms that are types of algae known as "jewels of the sea."
+    options: [ Dinoflagellates, Euglenoids, Diatoms, Foraminifera ]
+    answer: Diatoms
+
+  - question: The AuviQ type of these devices utilize a CO2-driven mechanism instead of a spring. In 2022, Mylan was forced to pay 250 million dollars to settle a price gouging lawsuit related to these devices. Prior to use, a typically-blue safety release must be removed before the orange tip on the other side of these devices can be unlocked. When self administered, patients swing these devices towards their thigh to ensure intramuscular delivery. Identify these medical devices used to inject epinephrine to treat anaphylaxis.
+    options: [ Insulin pens, EpiPens, Asthma inhalers, Nebulizers ]
+    answer: EpiPens
+    explanation: "Also accepted: epinephrine (adrenaline) autoinjectors."
+
+  - question: The Linz-Donawitz method replaced the use of this process, which featured a procedure called the "blow" and is often immediately preceded by puddling. This process was improved by adding spiegeleisen, an alloy containing manganese, which was a modification created by Robert Forester Mushet. When using a refractory lining, this process can be referred to as the Gilchrist-Thomas process. Able to use oxidation to remove impurities, for the points, name this process used to turn pig iron into steel.
+    options:
+      - Bessemer process
+      - Hall-Héroult process
+      - Haber process
+      - Solvay process
+    answer: Bessemer process
+
+  - question: This phenomenon is often funneled via mountain passes such as the Newhall and Cajon passes. This phenomenon is a type of katabatic wind which originates from a high-pressure area within the Great Basin, and this phenomenon can also serve to carry valley fever into more populated areas. These winds which typically occur in autumn are also known as Diablo winds when they occur near San Francisco Bay. Name these winds which often spread wildfires in Southern California.
+    options: [ Chinook winds, Mistral winds, Sirocco winds, Santa Ana winds ]
+    answer: Santa Ana winds
+
+  - question: Ununennium is a hypothetical member of this group, whose members are usually stored under oil to prevent reactions with air. This group includes rubidium, as well as the most reactive element in the periodic table, cesium. This group is known for having all of its members be able to to form a cation with +1 charge, and its heavier members include francium. Forming group one of the periodic table with hydrogen are, for the points, what highly reactive metals including lithium and potassium?
+    options:
+      - Alkaline earth metals
+      - Transition metals
+      - Alkali metals
+      - Lanthanides
+    answer: Alkali metals
+
+  - question: If the ratio between two real numbers a and b is one of these numbers, they are called incommensurable. These numbers include all of the transcendental numbers, and these numbers are contrasted with a set often notated as " capital Q." The square root of 2 is likely the first known member of this set of numbers. Name this subset of real numbers including Euler's number and pi, which can't be expressed as a ratio of integers and repeats infinitely without a repeating sequence.
+    options:
+      - Rational numbers
+      - Irrational numbers
+      - Imaginary numbers
+      - Integers
+    answer: Irrational numbers
+
+  - question: This researcher criticized the “localizationist” model in the book On Aphasia, in which he coined the term “agnosia” for difficulty processing sensory info. This researcher proposed using cocaine to treat morphine addiction and referred his patient Emma Eckstein for a disastrous nasal surgery to treat “hysteria.” This researcher proposed that the unconscious was composed of the ego, superego, and id. Name this Austrian neurologist and psychologist, the father of psychoanalysis.
+    options: [ Sigmund Freud, Carl Jung, Alfred Adler, Josef Breuer ]
+    answer: Sigmund Freud

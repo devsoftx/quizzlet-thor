@@ -1,0 +1,156 @@
+# Science Bee 2020–21 · Set 1 · Round 1 — 31 tossups.
+# Source: docs/Science-Bee-Round-1-Set-1.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2020–21 · Set 1 · Round 1
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: When these structures are "cultured," they can be in suspension or adherent. Matthias Schleiden and Theodor Schwann developed a theory of these structures which has three tenets. A “cycle” named for these structures includes steps like G2, S, and M. These structures possess an outer “wall” and membrane in plants but only a membrane in animals. Name these building blocks of life which contain organelles.
+    options: [ Cells, Tissues, Atoms, Proteins ]
+    answer: Cells
+
+  - question: This word describes a type of crystalline substance that exists in either smectic or nematic phases while in its thermotropic variety. The HPLC-type of chromatography uses a highly pressurized solvent in this state, which is also bypassed by substances that undergo deposition and sublimation. At negative 196 degrees Celsius, nitrogen exists in this state. Name this state of matter formed when substances melt.
+    options: [ Solid, Gas, Plasma, Liquid ]
+    answer: Liquid
+
+  - question: The transfer of these particles is the central mechanism of redox reactions. A Lewis acid is defined by its ability to form a covalent bond with one of these particles. The addition of these particles can lead to the formation of an anion. These particles form a namesake "cloud" composed of orbitals. Name these subatomic particles with a negative charge.
+    options: [ Protons, Neutrons, Electrons, Photons ]
+    answer: Electrons
+
+  - question: Replacing one atom in this compound with deuterium gives its "heavy" form. Microwave ovens primarily work by heating this compound in food due to its large dipole moment. The presence of a lone pair on this compound's oxygen atom gives it a bent geometry. This polar compound is known as the "universal solvent." Name this compound composed of one oxygen and two hydrogen atoms.
+    options: [ Ammonia, Water, Methane, Hydrogen peroxide ]
+    answer: Water
+
+  - question: This object can be "grazed" by Krachts and Marsdens. Prominences and spicules arise from this body. Objects on this body follow an 11-year cycle, experience the Dalton minimum, and have lower temperatures than the surrounding surface. The chromosphere lies outside the photosphere of this body. The corona is part of, for the point, what star around which the Earth revolves?
+    options: [ Sun, Sirius, Proxima Centauri, Polaris ]
+    answer: Sun
+    explanation: "Also accepted: Sol."
+
+  - question: Objects that exceed this quantity emit Cherenkov radiation. Velocity divided by this quantity equals relativistic beta, which is found in the denominator of the Lorentz factor. This value is constant in all inertial reference frames according to Einstein's theory of special relativity. Name this quantity symbolized "c" which is about 300 million meters per second and represents the maximum speed at which objects can travel.
+    options:
+      - Speed of sound
+      - Escape velocity
+      - Terminal velocity
+      - Speed of light
+    answer: Speed of light
+
+  - question: For humans, the longest wavelength cone primarily sees this color, and cells named after this color are called erythrocytes. Although they can vary greatly, algal blooms are sometimes called "tides" of this color. The first stage of a bruise is usually this color and inflammation can cause skin to turn this color. The iron atom in hemoglobin causes, for the point, mammalian blood cells to take on what namesake color?
+    options: [ Blue, Green, Red, Purple ]
+    answer: Red
+
+  - question: According to legend, this thinker built a robot copy of his daughter Francine after she died of scarlet fever. Along with Snell, this thinker lends his name to the law of refraction. This thinker founded analytic geometry by combining algebra with coordinate planes. This man lends his name to the most common two-dimensional coordinate system. Name this early modern French philosopher and mathematician, who stated "I think therefore I am."
+    options:
+      - Blaise Pascal
+      - René Descartes
+      - Gottfried Leibniz
+      - Francis Bacon
+    answer: René Descartes
+
+  - question: The rank-nullity theorem is used on these objects, and local curvature is described by the "Hessian" type of these objects. The equation A v equals lambda v describes the eigenvector and eigenvalue of these objects. Expansion by minors is used to find the determinant of these objects, which can be used to invert them. Name these mathematical objects which are arrays of numbers in rows and columns.
+    options: [ Matrices, Vectors, Polynomials, Graphs ]
+    answer: Matrices
+
+  - question: In a pathway in this organelle, cyanide can bind to complex IV and lead to asphyxia. They’re not chloroplasts, but it is believed that these organelles arose from the endosymbiosis of a prokaryotic cell and aerobic bacteria. People derive these organelles from egg cells, so DNA passed down through them is maternal. Name this organelle in which most of the body’s ATP is generated, leading to its nickname, the “powerhouse of the cell.”
+    options: [ Chloroplast, Ribosome, Nucleus, Mitochondrion ]
+    answer: Mitochondrion
+    explanation: "Plural: mitochondria."
+
+  - question: Because it lacks a differentiated core, this phenomenon on the moon is concentrated in the crust. Rocks that naturally exhibit this phenomenon are called lodestones. The geodynamo theory proposes that this phenomenon in the Earth is created by the liquid outer core, causing compasses to point north. Name this phenomenon which attracts metals like nickel and iron.
+    options: [ Gravity, Static electricity, Magnetism, Radioactivity ]
+    answer: Magnetism
+
+  - question: This planet's gravity induces tidal forces that cause volcanism on some of its moons. This planet is orbited by the largest moon in the Solar System, which is larger than the planet Mercury. This planet's moons include Callisto, Io, Ganymede, and Europa. This planet is home to a massive anti-cyclone storm called the Great Red Spot. Name this largest planet in the Solar System.
+    options: [ Saturn, Jupiter, Neptune, Uranus ]
+    answer: Jupiter
+
+  - question: Two scientists with this surname learned that compressing quartz leads to an electric potential, discovering piezoelectricity. Work from those studies was used by a physicist with this surname to study the properties of uranium in pitchblende. Henri Becquerel and two people with this surname shared the 1903 Nobel Prize in Physics. Give the last name of a physicist who won two Nobel Prizes for researching radioactivity and discovering Radium and Polonium.
+    options: [ Curie, Röntgen, Meitner, Planck ]
+    answer: Curie
+    explanation: Pierre and Jacques Curie discovered piezoelectricity; Marie and Pierre shared the 1903 Nobel.
+
+  - question: When these elements have their electron configuration written out, they are denoted with their name in brackets. These elements tend to have relatively small atomic radii due to having high effective nuclear charges. These elements are mostly non-reactive due to possessing full valence shells of electrons. Name this group of elements including neon and helium which is located at the rightmost portion of the periodic table.
+    options: [ Halogens, Alkali metals, Alkaline earth metals, Noble gases ]
+    answer: Noble gases
+    explanation: "Also accepted: group 18, group 8A."
+
+  - question: The centimorgan unit maps loci on these structures, consisting of p and q arms. Crossing over occurs between homologous pairs of these structures. A karyotype can show the diploid number of these, 46 in humans, as well as the presence of three of number 21 in a Down syndrome patient. Lining up along the equator during the metaphase of mitosis, for the point, what are these DNA structures?
+    options: [ Genes, Centrioles, Chromosomes, Plasmids ]
+    answer: Chromosomes
+
+  - question: This structure is above the Moho discontinuity, which separates it from the layer below. The outer part of the lithosphere is made up of this layer, which comes in oceanic and continental forms. This structure is generated at mid-ocean ridges and destroyed at subduction zones and is primarily composed of silica and oxygen. Resting atop the mantle, for the point, name this outermost layer of the Earth’s surface.
+    options: [ Mantle, Crust, Asthenosphere, Inner core ]
+    answer: Crust
+
+  - question: The earliest variety of this technology involved injecting mice or rabbits with the subject's bodily fluids. Another early example of this technology was based on observing whether Xenopus frogs ovulated after receiving an injection. This technology works by measuring human chorionic gonadotropin in a urine sample. Name these devices which indicate whether a woman is carrying a fetus.
+    options: [ Pregnancy tests, Ovulation tests, Glucose tests, Allergy tests ]
+    answer: Pregnancy tests
+
+  - question: When this element is present, a three-to-one ratio is displayed in mass spectrometry. Aqua regia includes nitric acid and an acid with this anion. Stomach acid contains the acid of this element, two atoms of which are found in mustard gas. The diatomic form of this element is a green gas while another form is used to disinfect swimming pools. Name this halogen with chemical symbol Cl.
+    options: [ Fluorine, Bromine, Iodine, Chlorine ]
+    answer: Chlorine
+
+  - question: A company that runs one of these software systems named Ecosia claims to be environmentally friendly and plants trees with its profits. Information will no longer be displayed by these programs following de-listing. These programs identify potential matches for queries using web crawling. Name these web programs used to find information on the internet, the most popular of which are Bing and Google.
+    options:
+      - Social networks
+      - Email clients
+      - Search engines
+      - Antivirus programs
+    answer: Search engines
+
+  - question: In polar coordinates, the equation "r equals the constant A" produces one of these shapes. The Cartesian product of two of these shapes gives a torus. This conic section defines an eccentricity of zero, and a square cannot be constructed with the same area as this shape with only a compass and straightedge. Pi times the radius squared gives the area of, for the point, what 2D shape consisting of all points equidistant from a fixed center?
+    options: [ Ellipse, Circle, Parabola, Hyperbola ]
+    answer: Circle
+
+  - question: The finding that this particle's constituents contribute almost no spin has led to its namesake "spin crisis." Some Grand Unified Theories hypothesize that this particle can decay into a positron and a neutral pion. Cosmic rays consist mostly of these particles, which are made of two up quarks and one down quark. Name this subatomic particle with a positive charge.
+    options: [ Proton, Neutron, Electron, Muon ]
+    answer: Proton
+
+  - question: Drugs that treat a disease caused by this virus include enfuvirtide and lamivudine. This virus of the Lentivirus genus may present with Kaposi's sarcoma. X4R5 is a subtype of this virus which can use both CXCR4 and CCR5 receptors to enter the cell. The drug zidovudine, or AZT, reduces activity of the reverse transcriptase of this virus which infects helper T-cells. Name this retrovirus which causes AIDS.
+    options: [ HPV, Hepatitis C virus, Influenza virus, HIV ]
+    answer: HIV
+    explanation: Stands for human immunodeficiency virus.
+
+  - question: A poem written after one of these events states "one thing at least is certain, light has weight." That poem was written by Arthur Eddington, who tested the theory of general relativity during one of these events. Jules Janssen and Norman Lockyer discovered helium in a spectral line during one of these events. For the point, “solar” and “lunar” are types of what celestial events in which light from the sun is blocked?
+    options: [ Equinoxes, Meteor showers, Eclipses, Auroras ]
+    answer: Eclipses
+
+  - question: This element is extracted from ores by coordination with cyanide. This element scattered alpha particles in an experiment sometimes named for Geiger and Marsden that discovered the atomic nucleus. This most malleable metal can be dissolved by aqua regia. Iron pyrite resembles this element, leading it to be nicknamed “fool’s [this element].” Name this precious metal with chemical symbol Au.
+    options: [ Silver, Gold, Copper, Lead ]
+    answer: Gold
+
+  - question: An assumption of this theory is that differential fitness is heritable, and the main proponent of this theory was influenced by Malthus. Analogous structures are created in the convergent form of this process, and genetic variation is a pre-requisite for this process to occur. Theorized to occur via natural selection, for the point, what is this theory about inherited changes in populations over time which was put forward by Charles Darwin?
+    options:
+      - Theory of evolution
+      - Germ theory
+      - Cell theory
+      - Spontaneous generation
+    answer: Theory of evolution
+
+  - question: Hyperhidrosis of this organ can be treated with the microwave MiraDry technique. An early symptom of leprosy is loss of pain sensation in this organ. The urticating hairs of some caterpillars irritate the eyes as well as this organ. Scabies mites attack the epidermal layers of this organ in which bacterial infection of sebaceous glands causes acne. The pigment melanin gives color to, for the point, what exterior human organ which produces sweat?
+    options: [ Liver, Kidney, Lung, Skin ]
+    answer: Skin
+
+  - question: When these objects form on top of each other, they are known as "pileus." The term "nimbus" refers to examples of these objects associated with storms. At high altitudes, these objects are composed of ice crystals and are called "cirrus." Lower level varieties of these objects include stratus and cumulus. Name these large masses of water vapor from which rain is released.
+    options: [ Air masses, Weather fronts, Clouds, Jet streams ]
+    answer: Clouds
+
+  - question: Types of this molecule called “si” and “mi” are used in “interference” experiments. A type of this molecule can be “charged” with the enzyme aaRS and has a “cloverleaf” shape. The secondary structure of this molecule can exhibit “wobble," and the “messenger” type of this molecule contains codons. This uracil-containing molecule is translated into protein by ribosomes. Name this single-stranded nucleic acid contrasted with DNA.
+    options: [ DNA, RNA, ATP, Protein ]
+    answer: RNA
+    explanation: Stands for ribonucleic acid.
+
+  - question: Extremely viscous types of this substance can form coulées. Common forms of this substance include ʻaʻā and pahoehoe. When released underwater, this substance can form its "pillow" variety. Extrusive igneous rocks such as pumice are formed by the cooling of this substance. Prior to being ejected, this substance is known as magma. Name this molten rock which is ejected by volcanoes.
+    options: [ Lava, Volcanic ash, Obsidian, Basalt ]
+    answer: Lava
+
+  - question: A semi-empirical formula for this quantity named for Bethe and Weizsäcker can also be used to calculate nuclear binding energy using its namesake "defect." The Higgs boson gives particles this property, which also equals energy divided by the speed of light squared according to a formula proposed by Albert Einstein. Name this quantity symbolized "m" and measured in kilograms.
+    options: [ Weight, Momentum, Density, Mass ]
+    answer: Mass
+
+  - question: When mixed with asphalt, this material can be made into "blacktop." In large buildings, this material can be reinforced with steel rebar, and unlike mortar, this material is primarily used as a building material itself and not as a binding agent. Name this material composed primarily of rock pieces bound together by cement, which is used to build roads and sidewalks.
+    options: [ Mortar, Brick, Concrete, Gravel ]
+    answer: Concrete

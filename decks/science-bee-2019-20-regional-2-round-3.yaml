@@ -1,0 +1,166 @@
+# Science Bee 2019–20 · Regional 2 · Round 3 — 32 tossups.
+# Source: docs/2019-2020-MS-S-Bee-Round-3-Set-2.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2019–20 · Regional 2 · Round 3
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: For a spring this quantity is given by one half the spring constant times displacement squared. This quantity for an object can be calculated as the momentum of the object squared over twice its mass, but is more regularly calculated using one-half mass times the velocity of the object squared. The total energy is equal to potential energy plus this form of energy. Name this energy of motion.
+    options:
+      - Kinetic energy
+      - Thermal energy
+      - Chemical energy
+      - Nuclear energy
+    answer: Kinetic energy
+    explanation: "Note: ½kx² is actually a spring's potential energy, not its kinetic energy."
+
+  - question: This process is indirectly measured for photons by calculating attenuation and assuming processes like reflection, emission and scattering do not occur when using Beer’s Law. An atom can perform this process with a photon by raising an electron’s energy level. Name this chemically defined ability to suck up another substance such as sponges taking up water, which should not be confused with adsoprtion.
+    options: [ Adsorption, Emission, Diffusion, Absorption ]
+    answer: Absorption
+    explanation: Absorption takes a substance in; adsorption holds it on a surface.
+
+  - question: These cells can give rise to transient amplifying cells. Less potent varieties of this class of cells includes those identified as hematopoietic and pluripotent. This biological cell type is sometimes confused for more specific progenitor cells. Name these cells capable of differentiating into other cells and dividing seemingly without limit, whose embryonic variety have come under ethical scrutiny.
+    options: [ Gametes, Neurons, Stem cells, Muscle cells ]
+    answer: Stem cells
+
+  - question: The constant named for this state is calculated with the law of mass action and is denoted with a capital K. Le Chatelier’s principle describes how this state can shift due to addition of product or reactant. This state describes a reaction whose forward and reverse rates are equal. Name this general term describing a system that is balanced.
+    options:
+      - Transition state
+      - Chemical equilibrium
+      - Supersaturation
+      - Critical point
+    answer: Chemical equilibrium
+
+  - question: 496 and 8,128 are two examples of these numbers, of which there are 51 total known examples corresponding to the 51 known Mersenne prime numbers. “Deficient” and “abundant” are adjectives for numbers that are not this kind of number. Because 1, 2, 4, 7, and 14 are factors of 28 and they add to 28, 28 is this type of number. Six is the smallest example of, for the point, what type of number equal to the sum of its proper divisors?
+    options:
+      - Perfect numbers
+      - Prime numbers
+      - Abundant numbers
+      - Fibonacci numbers
+    answer: Perfect numbers
+
+  - question: One of the oldest examples of these structures is the Arkadiko one in Mycenae. C.T. Loscher designed one of the first Cable-stayed variants of these structures while their arch and beam varieties have been around since B.C.E.. Akashi Kaikyo is the longest of these structures that utilize a suspension design. Name these structures that connect two points to span obstacles like rivers, valleys, and roads.
+    options: [ Dams, Towers, Levees, Bridges ]
+    answer: Bridges
+
+  - question: Examples of these objects include Juan de Fuca and Nazca. Vine, Matthews, and Morley predicted these objects contributed to seafloor spreading. Transform, divergent, and convergent are three types of boundaries between these objects which can form mountains and cause earthquakes. Continental drift is caused by, for the point, what large sections of the Earth’s crust?
+    options: [ Mantle plumes, Ocean trenches, Tectonic plates, Volcanic arcs ]
+    answer: Tectonic plates
+
+  - question: The Crannell Creek Giant was considered the largest example of this classification which are named for General Sherman and can be found in Tulare County, California. A classic gymnosperm example that falls under this broad classification is the conifer. Name this broad classification of plants that are being threatened by deforestation.
+    options: [ Ferns, Trees, Mosses, Grasses ]
+    answer: Trees
+    explanation: General Sherman is a giant sequoia, the largest tree by volume.
+
+  - question: Maxwell’s demon is a thought experiment where this value decreases. This quantity is equal to Boltzmann’s constant times the natural logarithm of the number of microstates for a system. The third law of thermodynamics states that this value is zero for a perfect crystal at absolute zero, while the second law states that this value for a closed system must always increase. Name this measure of disorder for a system.
+    options: [ Entropy, Enthalpy, Gibbs free energy, Internal energy ]
+    answer: Entropy
+
+  - question: Excess synovial fluid in this structure is colloquially termed “water on” this joint. The medical collateral and anterior cruciate ligaments of this joint are difficult to heal if torn. This largest joint in the human body has its surface protected by the patella. This joint connects the tibia and fibula to the femur bone. Name this joint that bends the leg.
+    options: [ Elbow, Hip, Ankle, Knee ]
+    answer: Knee
+
+  - question: COBE and WMAP are two satellite examples of this device which use microwaves. A Cassegrain reflector and Schmidt corrector plate make a powerful type of this device. March 30th, 2021 is the launch date for one of these devices named for James Webb which is designed to replace the one named for Edwin Hubble. Name this type of device used to observe the stars.
+    options:
+      - Space probes
+      - Space stations
+      - Space telescopes
+      - Planetary rovers
+    answer: Space telescopes
+    explanation: The James Webb Space Telescope actually launched on December 25, 2021.
+
+  - question: One form of this interaction can be detected using the bromine test. This interaction contains one sigma and one pi bond. Alkenes are characterized by having this type of interaction, while saturated compounds do not have this interaction. The carbon atom in carbon dioxide has two bonds of this type with both oxygen atoms. Name this covalent bond in which four electrons are shared, contrasted with single and triple.
+    options: [ Single bond, Double bond, Triple bond, Hydrogen bond ]
+    answer: Double bond
+
+  - question: The scientific name for this classification of birds is Trochilidae smallest bird species falls under this classification of birds of American-origin, who are the only birds capable of hovering and flying backwards. Name these birds who use their beaks to drink nectar of flowers and whose fast flapping of 79 kilometers per hours lends them their name.
+    options: [ Hummingbirds, Swifts, Finches, Woodpeckers ]
+    answer: Hummingbirds
+
+  - question: One possible alternative to a widely held hypothesis of this event is supported by giant lava flows from the Deccan Traps. The iridium metal coating at the K-Pg layer gives evidence to the Alvarez hypothesis of how this event occurred, which is further supported by the giant Chicxulub crater. Name this event that happened around 66 million years ago that wiped out a class of giant reptiles.
+    options:
+      - Permian–Triassic extinction
+      - Triassic–Jurassic extinction
+      - Late Devonian extinction
+      - Cretaceous–Paleogene extinction
+    answer: Cretaceous–Paleogene extinction
+    explanation: Also called the K–Pg or K–T extinction; it wiped out the non-avian dinosaurs.
+
+  - question: This scientist discovered racemization in tartaric acid experiments. This scientist developed the use of a swan bottle neck to disprove the spontaneous generation of germs in fermentation processes. This creator of the rabies and anthrax vaccine invented a process where mild heat is used to remove pathogens. Name this scientist who names a process used to keep milk sanitary.
+    options: [ Robert Koch, Edward Jenner, Louis Pasteur, Joseph Lister ]
+    answer: Louis Pasteur
+
+  - question: This is the largest element that forms a natural dimer. Potassium and this other element are found in the common disinfectant, Lugol’s solution. Ions of this element react with H+ and hydrogen peroxide in a namesake clock reaction. Deficiencies of this element cause an enlargement of the thyroid gland known as a goiter. Name this element with atomic number fifty-three and chemical symbol I.
+    options: [ Bromine, Iodine, Chlorine, Fluorine ]
+    answer: Iodine
+
+  - question: This object contains a large feature called the Tharsis bulge. The first spacecrafts to land on this object were Viking 1 and Viking 2. The tallest mountain in the Solar System, Olympus Mons, is located on this planet. This planet, explored by Curiosity, is circled by the two moons Phobos and Deimos. Name this iron red planet, the fourth furthest from the sun.
+    options: [ Mars, Venus, Mercury, Jupiter ]
+    answer: Mars
+
+  - question: Inversions in projective geometry map a generalized type of these objects to another general type. The equation “r equals cosine theta” describes this shape in polar coordinates while their general equation in Cartesian coordinates is x minus h squared plus y minus k squared equals r squared. Name this two-dimensional shape consisting of the points equidistant from a given point.
+    options: [ Ellipse, Parabola, Hyperbola, Circle ]
+    answer: Circle
+
+  - question: Martin Beijerinck gave the name to these entities calling them a “contagious living fluid.” A disease originating from Wuhan started spreading in 2020 due to the “corona” type of this class of pathogens. Ones that take their RNA genome and transcribe it into DNA for insertion into a host are part of the “retro-” class of these pathogens. Name these debatably unalive pathogens which include influenza and HIV.
+    options: [ Bacteria, Prions, Viruses, Protozoa ]
+    answer: Viruses
+
+  - question: This adjective describes a rule about the transition states of a quantum system to a continuum named for Fermi. The Fibonacci numbers approach a ratio described by this adjective that can be expressed as the quantity one plus the square root of five all over 2. Name this six letter adjective that describes objects that have been plated with an element with chemical symbol Au.
+    options: [ Silver, Golden, Bronze, Copper ]
+    answer: Golden
+
+  - question: The ratio of this quantity to charge is used in a namesake form of spectrometry. The non-zero values of this quantity for the W and Z bosons is due to symmetry breaking in the Higgs field. Particles that are thought to have a value of zero for this quantity include gluons and photons. Einstein related energy to this quantity times the speed of light squared. Name this quantity measured in kilograms.
+    options: [ Mass, Weight, Charge, Spin ]
+    answer: Mass
+
+  - question: This symbol is used to make comments in Matlab. This symbol represents modular arithmetic in languages like python. The difference between measured value and the expected value over the expected value times one hundred yields an error named for this symbol and can also be used in chemistry to determine yield with 100 being perfect yield. Name this symbol, a diagonal line with two circles on either side.
+    options: [ Hash sign, Ampersand, Division sign, Percent sign ]
+    answer: Percent sign
+
+  - question: Ronald Ross’s work identified the vector for this disease which Nobel laureate Tu Youyou discovered can be treated with artemisinin. This disease is caused by members of the plasmodium family. Those heterozygous for sickle cell anemia are resistance to this disease. Name this mosquito-borne disease whose name comes from Italian for “bad air.”
+    options: [ Dengue fever, Yellow fever, Malaria, West Nile fever ]
+    answer: Malaria
+
+  - question: In the Vickers Hardness test, this mineral is used to make indents. A gum-like material used to coat this mineral is called nyf to give this mineral ridge-like appearance. On the Mohs hardness scale, this mineral is just above corundum. Graphite can be converted to this mineral under high pressure. Name this hardest mineral on the Mohs scale, a valuable carbon-based gemstone.
+    options: [ Corundum, Diamond, Topaz, Quartz ]
+    answer: Diamond
+
+  - question: Two substances ability to form one of these systems is characterized by their miscibility. Unlike colloids, these systems are formed from two substances in the same phase. Examples of these systems that involve water are referred to as “aqueous.” Name these homogeneous mixtures of a solute dissolved in a solvent.
+    options: [ Solutions, Colloids, Suspensions, Compounds ]
+    answer: Solutions
+
+  - question: Denial of this condition, despite evidence for it, is termed Anton-Babinski Syndrome. This condition partially names a disorder experienced by those who fail Ishihara’s test. This condition can be onset by age-related macular degeneration. Damage to the optic chiasm can cause this condition. Name this condition of near or complete vision loss.
+    options: [ Deafness, Nearsightedness, Paralysis, Blindness ]
+    answer: Blindness
+    explanation: "Also accepted: color blindness."
+
+  - question: Norman Borlaug helped developed security in this good for several nations with his developments in agronomy. The Green Revolution helped increase the global production of this general good. Thomas Malthus thought population would exceed the production of this good, leading to a population trap. Name this good that can be characterized by macro- and micronutrients and are necessary for preventing hunger.
+    options: [ Clean water, Fuel, Food, Medicine ]
+    answer: Food
+
+  - question: This phenomenon in rotating fluids is the planetary or Rossby type. Solitons are a mathematically modelled type of this phenomenon that maintain their shape as they propagate. The longitudinal variety of this phenomenon can propagate through a spring. Name these phenomenon whose ocean variety can propagate themselves to beaches.
+    options: [ Currents, Waves, Turbulence, Whirlpools ]
+    answer: Waves
+
+  - question: The most common source of this element is cassiterite, which contains its oxide. The alloy pewter is around 90% this element and 5 to 10% antimony. Lead and this element make up the fusible metal alloy solder. Aluminum cans are often erroneously referred to as containing this element. Name this element with atomic number fifty and chemical symbol Sn.
+    options: [ Tin, Lead, Zinc, Aluminum ]
+    answer: Tin
+
+  - question: The principal tree used to extract this material is the South American Hevea brasiliensis species. Vulcanization is a technique to strengthen the cross links between this material. This material is extracted in the form of latex by “tapping” its namesake trees. Name this sticky elastic material extracted from a namesake tree and used to produces like erasers.
+    options: [ Resin, Cork, Amber, Natural rubber ]
+    answer: Natural rubber
+    explanation: "Also accepted: India rubber."
+
+  - question: Nuclear pasta refers to a type of degenerate matter thought to be found within the crust of these stars. These stars sit above the Chandrasekhar limit and below the Tolman-Oppenheimer-Volkoff limit, making them larger than white dwarfs. Name this super dense type of star named for the neutral charged atomic nuclei component that make them up.
+    options: [ White dwarfs, Black holes, Neutron stars, Red giants ]
+    answer: Neutron stars
+
+  - question: For pioneering cryogenic techniques with this device, three scientist won the 2017 Nobel Prize in Chemistry. This device can use scanning and transmission techniques when taking advantage of the wave nature of an electron. Robert Hooke and Antonie van Leeuwenhoek were pioneers of using glass lenses to create magnification in this device. Name this scientific instrument used to magnify tiny specimen.
+    options: [ Telescopes, Microscopes, Spectrometers, Centrifuges ]
+    answer: Microscopes
+    explanation: The 2017 prize honored cryo-electron microscopy.

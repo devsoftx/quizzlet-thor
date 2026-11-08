@@ -1,0 +1,165 @@
+# Science Bee 2018–19 · Regional 1 · Round 2 — 32 tossups.
+# Source: docs/2018-2019-EMS-SB-2-Set-1.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2018–19 · Regional 1 · Round 2
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: When this phenomenon is present at different frequencies, the difference is detected as a beat. Because this phenomenon cannot travel in a vacuum, it is absent in outer space. Mach 1 is the speed of this phenomenon, a longitudinal wave whose strength is measured in decibels. Name this phenomenon that causes sonic booms.
+    options: [ Sound, Light, Heat, Electricity ]
+    answer: Sound
+
+  - question: This planet was the focus of the Viking program which revealed the existence of “Chaos terrain.” A volcano over two times as high as Mount Everest, the Olympus Mons, is located on this planet. In 2011, NASA landed the Curiosity rover on this planet to search for traces of ancient water. Name this 4th planet from the sun, whose iron-rich soil gives its surface a red color.
+    options: [ Venus, Mercury, Jupiter, Mars ]
+    answer: Mars
+    explanation: Curiosity launched in November 2011 and landed on Mars in August 2012.
+
+  - question: Argillaceous minerals are defined as containing this material whose minerals include chlorite and smectite. This material is on the bottom of the Wentworth scale as it is finer than all material including silt. Terracotta is made from refining this material. Name this natural material that is often glazed and fired in a kiln in pottery making.
+    options: [ Silt, Sand, Clay, Gravel ]
+    answer: Clay
+
+  - question: Alfred Nobel’s blasting caps used a fulminate of this element. Amalgams are alloys containing this metal, whose height fluctuations inside a tube were used to measure air pressure in the first barometer. The FDA recommends that young children and pregnant women avoid eating swordfish due to high levels of this toxic metal. Name this liquid metal with symbol Hg.
+    options: [ Lead, Mercury, Cadmium, Chromium ]
+    answer: Mercury
+
+  - question: The speed of these substances can be measured by their turnover number, and they are “homogeneous” if they are in the same phase as the reactants. Iron serves as one of these substances in the Haber-Bosch process. Enzymes are biological examples of these compounds that lower activation energy of a reaction. Name these compounds that speed up a reaction without being consumed.
+    options: [ Catalysts, Inhibitors, Buffers, Oxidizing agents ]
+    answer: Catalysts
+
+  - question: If these structures have no petiole, they are called sessile. The C4 pathway isolates carbon fixation to bundle sheath cells in these structures, though most other plants utilize the palisade and spongy mesophyll in them. A waxy cuticle coats these structures, which exchange gas through pores called stomata. These primary sites of photosynthesis change color and fall due to seasonal changes. Name these flat plant structures.
+    options: [ Roots, Tubers, Rhizomes, Leaves ]
+    answer: Leaves
+
+  - question: Wires with non-zero values for this quantity produce a magnetic field. The same amount of this quantity must enter and leave a junction according to Kirchhoff’s law for this quantity. By Ohm’s Law, voltage over resistance is equal to this quantity. This quantity is symbolized I and is measured in Amperes. Name this quantity that measures the flow of electric charge per second, and can either be alternating or direct.
+    options: [ Voltage, Electrical resistance, Electric current, Capacitance ]
+    answer: Electric current
+
+  - question: For two substances, the mixture with the lowest value for this temperature is called eutectic. Certain substances undergo crystallization after reaching this temperature. One property of this temperature for a substance is that it is lowered when another substance is added. For water, this temperature, at which it transitions to ice, is 0 degrees Celsius. Name this temperature at which a substance changes from a solid to a liquid.
+    options: [ Boiling point, Melting point, Dew point, Critical point ]
+    answer: Melting point
+    explanation: "Also accepted: freezing point."
+
+  - question: This scientist names a conjecture about packing spheres into the most space possible. He’s not Newton, but this scientist’s second law states that an object sweeps out equal area in equal time. This astronomer worked under Tycho Brahe and proposed the planets move in ellipses in his book the Epitome of Copernican Astronomy. Name this 17th century German astronomer who names three laws of planetary motion.
+    options:
+      - Johannes Kepler
+      - Tycho Brahe
+      - Galileo Galilei
+      - Nicolaus Copernicus
+    answer: Johannes Kepler
+
+  - question: Lactic acid is transported from muscles to this organ to produce glucose in the Cori cycle. The falciform ligament divides this organ into left and right lobes. This largest internal organ in the body produces a digestive fluid that is stored in the gallbladder. Excessive alcohol consumption can cause cirrhosis, or scarring, of this organ. Name this organ that produces bile, detoxifies blood, and becomes inflamed in hepatitis.
+    options: [ Pancreas, Spleen, Gallbladder, Liver ]
+    answer: Liver
+
+  - question: A gas equal to one of this unit at standard temperature and pressure will fill up 22.4 liters of volume. This SI unit is equivalent to the number of atoms in 12 grams of carbon 12. Avagadro’s number relates one of this unit to 6.022 times 10 to the 23rd molecules or atoms. Name this unit in chemistry which shares its name with a small burrowing mammal.
+    options: [ Gram, Liter, Mole, Kelvin ]
+    answer: Mole
+
+  - question: The Smithsonian’s National Museum of American History displayed a giant one of these devices until 1998 that was named for Jean Foucault – who first used this device to demonstrate the rotation of the earth. The double variety of this device displays chaotic motion. In 1656, Christiaan Huygens invented a clock that kept time with this device. Name this device, a suspended mass that’s used in Grandfather clocks.
+    options: [ Sundial, Pendulum, Hourglass, Tuning fork ]
+    answer: Pendulum
+
+  - question: This organ has sebaceous glands that secrete fluid, and vitiligo affects this organ. Vitamin D is synthesized when UV light hits this organ. One type of cancer of this structure is known as melanoma. The outer layer of this structure is the epidermis, and this is the largest organ in the body. Name this protective layer that covers the body and is harmed in sunburns.
+    options: [ Skin, Liver, Muscle, Bone ]
+    answer: Skin
+
+  - question: Robert Mulliken devised a scheme for calculating this quantity that takes the arithmetic mean of the first ionization energy and electron affinity. Polar bonds occur when the difference in this quantity between bonded elements is greater than 0.8. Linus Pauling developed the idea of this quantity, and gave fluorine the highest value for it. Name this quantity that represents an atom’s tendency to attract electrons.
+    options:
+      - Ionization energy
+      - Atomic radius
+      - Metallic character
+      - Electronegativity
+    answer: Electronegativity
+
+  - question: Synthesis of this molecule by HMG-CoA reductase is blocked by drugs called statins. This molecule’s four-ring structure helps it regulate membrane fluidity. This molecule is transported through the body by HDL and LDL, often called its “good” and “bad” types. High levels of it can cause atherosclerosis, or hardening of the arteries. Cardiovascular disease has been linked to high levels of, for the point, what waxy, fat-like substance?
+    options: [ Glycogen, Hemoglobin, Cholesterol, Keratin ]
+    answer: Cholesterol
+
+  - question: This location is home to manganese nodules, collections of iron and rock often found on abyssal plains. Alternately charged layers of polarized rock in this location serve as evidence for the reversal of Earth’s magnetic poles. This region expands due to its namesake spreading which explains continental drift. Name this location, the bottom of Earth’s oceans.
+    options: [ Continental crust, Seafloor, Mantle, Outer core ]
+    answer: Seafloor
+    explanation: "Also accepted: seabed, ocean floor."
+
+  - question: These structures can contain alternating light and dark areas called ogives which are formed as part of their seasonal movement. Fjords are created by these objects when they cut through bedrock. Icebergs break off of these larger masses in a process called calving. Name these large, moving bodies of ice.
+    options: [ Glaciers, Permafrost, Snowfields, Frozen lakes ]
+    answer: Glaciers
+
+  - question: In an effect named for this device, gravity causes the bending of light. A formula describing these objects simplifies when these devices are very thick or thin. That formula contains terms for two radii, thickness, and focal length. These objects produce real and virtual images depending on whether they are concave or convex. Name these optical devices that focus light to a single point.
+    options: [ Prisms, Diffraction gratings, Polarizing filters, Lenses ]
+    answer: Lenses
+
+  - question: Problem 48 of the Rhind papyrus computes the area of a field in this shape, while Book 3 of Euclid’s Elements and Plato’s Seventh Letter explain the properties of this shape. The Lindemann- Weierstrass theorem made the task of squaring this shape impossible.The sagitta is a line segment drawn between the midpoint of a chord and arc of this shape. Name this shape whose area is pi multiplied by its radius squared.
+    options: [ Triangles, Hexagons, Circles, Squares ]
+    answer: Circles
+
+  - question: The energy of this reaction can be measured by a Bomb calorimeter. Types of this reaction include smoldering and spontaneous. This exothermic reaction produces carbon dioxide and water from oxygen and a hydrocarbon fuel source, and they occur commonly in diesel engines. Name this reaction of blowing stuff up that commonly results in flames.
+    options: [ Neutralization, Combustion, Fermentation, Electrolysis ]
+    answer: Combustion
+
+  - question: Excess protein in the urine of a person with this condition may indicate pre-eclampsia. Chorionic villus sampling and amniocentesis are used to detect genetic disorders during this condition. People with this condition are prescribed folic acid to prevent neural tube defects, and may also visit an obstetrician to receive an ultrasound. Name this condition that lasts around 9 months and concludes with childbirth.
+    options: [ Pregnancy, Menopause, Puberty, Infancy ]
+    answer: Pregnancy
+    explanation: "Also accepted: gestation."
+
+  - question: These structures can form out of demineralized pockets known as incipient lesions. It’s not trauma-related, but gutta percha and a crown are used in a surgery to fill a deep one of these structures. An untreated one of these structures can require root canal surgery. Build up of plaque can cause the formation of these structures in the enamel. Name these holes that form from tooth decay that dentists fill.
+    options: [ Canker sores, Cold sores, Tartar deposits, Cavities ]
+    answer: Cavities
+    explanation: "Also accepted: dental caries."
+
+  - question: The energy from these objects can hypothetically be captured using a Dyson sphere. Limits on the formation of these objects include the Tolman-Oppenheimer-Volkoff limit and the Chandrasekhar limit. Extremely dense ones are made up of neutrons, and these objects are plotted on a Hertzsprung- Russel diagram. Some of them explode into highly luminous supernovas when they die. Name these astral balls of burning gas that include the Sun.
+    options: [ Planets, Nebulae, Stars, Galaxies ]
+    answer: Stars
+
+  - question: Pedalogy is the study of this substance whose profile is made up by the O, A, B, C, and R horizons. Along with dust and rocks, regolith is made up of this substance. Desertification results in the loss of nutrition in this material. Clay, silt and sand make up this substance which is formed from bedrock. Dirt is the common name of, for the point, what substance which plants grow in?
+    options: [ Bedrock, Soil, Granite, Magma ]
+    answer: Soil
+
+  - question: Duchenne and Becker name a dystrophy of this tissue which operates by sliding myosin and actin filaments. One form of this tissue has a structural unit known as sarcomeres. This tissue has smooth and cardiac types, while its skeletal type is connected to bone through tendons. Lactic acid is secreted in this tissue during a workout. Name this tissue that makes up the deltoids, trapezius, and biceps.
+    options:
+      - Muscle tissue
+      - Nervous tissue
+      - Connective tissue
+      - Epithelial tissue
+    answer: Muscle tissue
+
+  - question: The North American population of ferns spiked more than 70% following this event. The eruption of the Deccan Traps may have contributed to this event. A global layer of iridium and the Chicxulub crater in the Yucatan are both linked to this event, which the ancestors of birds survived. Name this event from 65 million years ago that saw the end of species like Triceratops and Tyrannosaurus.
+    options:
+      - Permian-Triassic extinction
+      - Ordovician-Silurian extinction
+      - Late Devonian extinction
+      - Cretaceous-Paleogene extinction
+    answer: Cretaceous-Paleogene extinction
+    explanation: "Also called the K-Pg or K-T extinction: the extinction of the (non-bird) dinosaurs."
+
+  - question: This element is consumed in the CNO cycle of nuclear fusion in stars. Interactions named for this element hold together DNA strands. Isotopes of this element include tritium and deuterium. Interactions between this element and elements like nitrogen and oxygen cause this element’s namesake “bonds.” pH stands for the “power of this element”. Name this lightest element with atomic number 1 and symbol H.
+    options: [ Helium, Lithium, Hydrogen, Sodium ]
+    answer: Hydrogen
+
+  - question: The behavior of these substances are governed by a set of relations called the Navier-Stokes equations. In these substances a change in speed is caused by an opposite change in pressure according to Bernoulli’s law. When one of these substances has a high viscosity, it tends to resist motion. Oobleck and and shampoo are two examples of the non-Newtonian form of this type of substance. Name this type of substance with no fixed shape, exemplified by oil and water.
+    options: [ Solids, Fluids, Crystals, Rigid bodies ]
+    answer: Fluids
+
+  - question: An enlarged sesamoid bone gives this animal a pseudo-thumb which may help it feed. This animal’s scientific name, Ailuropoda melanoleuca incorrectly identifies this animal as a black-and-white cat. This animal is a member of the order carnivora, but its diet is almost exclusively bamboo. Identify this endangered animal, today considered a distant relative of bears which is native to the mountains of central China.
+    options: [ Giant panda, Sun bear, Koala, Snow leopard ]
+    answer: Giant panda
+
+  - question: This process can occur chronically in Klein-Levin syndrome. Cataplexy is a common symptom associated with a disease in which this process occurs suddenly. Release of melatonin causes the onset of this process, and apnea occurs when breathing is disrupted during this process. This process can happen without warning in people suffering from narcolepsy. Name this process during which dreams occur.
+    options: [ Digestion, Hypnosis, Meditation, Sleep ]
+    answer: Sleep
+
+  - question: In 1979, Jimmy Carter installed 32 of these devices for the White House that were uninstalled in 1986 by Ronald Reagan. Recent dust storms on Mars have covered these devices on the Opportunity rover. These devices create electricity through the photovoltaic effect and account for 1.3% of global power. Name these devices that convert light from the sun into usable energy.
+    options:
+      - Wind turbines
+      - Fuel cells
+      - Solar panels
+      - Thermoelectric generators
+    answer: Solar panels
+    explanation: "Also accepted: solar cells, photovoltaic cells."
+
+  - question: Urbain Le Verrier hypothesized that irregularities in the orbit of this planet were due to a yet undiscovered planet he called Vulcan. The MESSANGER probe orbited this planet for 4 years before entering the final phase of its mission and crashing to the surface. This planet completes an orbit around the sun every 88 days, less than half the time it takes Venus to do the same. Name this closest planet to the sun.
+    options: [ Venus, Mercury, Mars, Earth ]
+    answer: Mercury

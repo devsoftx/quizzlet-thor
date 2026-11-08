@@ -1,0 +1,154 @@
+# Science Bee 2019–20 · Regional 1 · Round 2 — 31 tossups.
+# Source: docs/2019-2020-MS-SB-2-Set-1.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2019–20 · Regional 1 · Round 2
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: This molecule’s metabolism was the focus of Jacques Monod and Francois Jacob’s study of its namesake operon. This sugar molecule has a beta 1,4 glycosidic bond between glucose and a similarly named sugar, which is broken down by a namesake enzyme maintained by many people of Scandinavian descent. Name this sugar molecule, found in milk, that a majority of people are “intolerant” to.
+    options: [ Lactose, Sucrose, Maltose, Fructose ]
+    answer: Lactose
+
+  - question: Neutral theory symbolizes the rate of these events with the Greek letter mu terms “frameshift” and “point” are two variants of these events. These events are deleterious if the result decreases an organism’s fitness. These events introduce new alleles to a population. They can happen to DNA exposed to UV light or nuclear radiation. Name these events that cause alteration in an organism’s DNA.
+    options: [ Adaptations, Speciation events, Extinctions, Mutations ]
+    answer: Mutations
+
+  - question: Isaac Newton’s calculation for this phenomenon’s speed was too low due to treating its travel as an isothermal process instead of an adiabatic process. Interference between two waves of this phenomenon is responsible for beats. This phenomenon travels at 343 meters per second and cannot be perceived above 20 kilohertz. Name this phenomenon measured in decibels and created by thunder.
+    options: [ Light, Heat, Sound, Electricity ]
+    answer: Sound
+
+  - question: While studying these events, H.F. Reid of Johns Hopkins coined the term “elastic rebound” to describe the weaker events that follow. The S and P waves from these events propagate from a hypocenter. The magnitude of these events is measured on the Richter scale. Name these seismic events which occur when tectonic plates rapidly slip past each other along faults, which causes the ground to shake.
+    options: [ Tsunamis, Earthquakes, Hurricanes, Tornadoes ]
+    answer: Earthquakes
+
+  - question: The kinetic isotope effect is studied by replacing this element with deuterium. The donation of the charged form of this element characterize Bronsted-Lowry acids. The proton-proton chain converts this element to helium. The gas form of this element is used in zeppelins. Name this most abundant and lightest element in the universe.
+    options: [ Hydrogen, Lithium, Oxygen, Nitrogen ]
+    answer: Hydrogen
+
+  - question: "Part of this organ is underdeveloped in microtia. In another part of this organ, the organ of Corti sits on top of the basilar membrane, picking up stimulus from hair cells. This organ’s outer portion is the pinna, while across the typanum, it has three of the smallest bones in the human body: the males, the incus and the stapes. Name this organ that controls hearing."
+    options: [ Eye, Nose, Tongue, Ear ]
+    answer: Ear
+
+  - question: The heavy form of this compound is used in nuclear power plant cooling towers. This compound’s density is maximized at 4 degrees celsius. This compound is known as the universal solvent due to its high polarity. Aqueous solutions are made using this solvent. Along with acetone, the distilled form of this compound is used to clean glassware in labs. Name this compound composed of two hydrogen atoms and one oxygen atom.
+    options: [ Ethanol, Hydrogen peroxide, Water, Ammonia ]
+    answer: Water
+    explanation: Heavy water (D2O) is used as a neutron moderator and coolant in some nuclear reactors.
+
+  - question: First order systems in this mathematical discipline are also known as “predicate” [this word]. Boolean algebra is used to represent truth values in this discipline’s propositional form. It’s not philosophy, but Aristotle established syllogisms as an early way to derive conclusions from a valid inference in this discipline. Name this 5-letter word for the study of reasoning which gets its name from the Greek word logos.
+    options: [ Geometry, Logic, Calculus, Statistics ]
+    answer: Logic
+
+  - question: A cart and pole serves as an “inverted” one of these devices in control theory. Foucault used one of these devices to demonstrate the rotation of the Earth. The balls in Newton’s cradle are the bobs of these devices. Christopher Huygens was one of the first to use this device as a clock. Name this device consisting of a weight suspended from a pivot which swings back and forth.
+    options: [ Pendulums, Springs, Levers, Pulleys ]
+    answer: Pendulums
+
+  - question: Frontal wedging describes how a less dense, warmer pocket of this substance is forced over a more dense, cooler pocket. Thermals are rising parcels of this substance. This substance is forced from low to high altitude in orographic lifting. This substance is approximately made up of 21% oxygen, and 1% argon. Name this substance whose bulk movement causes winds.
+    options: [ Seawater, Magma, Carbon dioxide, Air ]
+    answer: Air
+    explanation: "Also accepted: air mass."
+
+  - question: This quantity is minimized at a mixture’s eutectic point. Ethylene glycol lowers this quantity by disrupting hydrogen bonds. Applying salt to roads during winter is one way to lower this quantity for ice. When water reaches this point, it exists in equilibrium as a solid and liquid. This quantity is equal to 0 degrees Celsius for water. Name this temperature where a phase transition from solid to liquid occurs.
+    options: [ Boiling point, Dew point, Melting point, Critical point ]
+    answer: Melting point
+    explanation: "Also accepted: freezing point."
+
+  - question: One of these statements refers to “the set of all sets that do not contain themselves” and was formulated by Bertrand Russell. Enrico Fermi names one of these statements regarding the lack of contact with extraterrestrial life. The Liar’s one proposes that “This statement is false.” Name this seven-letter word for confusing statements that often contain self-contradictions.
+    options: [ Axioms, Paradoxes, Theorems, Conjectures ]
+    answer: Paradoxes
+
+  - question: A disulfide compound containing this element is known as pyrite or “fool’s gold.” Porphyrins that contain this element are sometimes called hemes. This element names the type of permanent magnetism in the standard bar magnet. This element and carbon alloy to form steel. Name this metal that lends its name to ferromagnetism and has atomic symbol Fe.
+    options: [ Iron, Zinc, Aluminum, Lead ]
+    answer: Iron
+
+  - question: Holes in this structure are referred to as fenestrae in anatomy. Trepanning is a method of relieving internal pressure by putting a “burr hole” into this structure. The bones of this structure are joined together by fibrous sutures. This structure includes the frontal bones, occipital bones, and temporal bones. Name this bone structure made up of eight cranial bones and fourteen facial bones.
+    options: [ Pelvis, Rib cage, Spinal column, Skull ]
+    answer: Skull
+
+  - question: The mass, charge, and angular momentum of these objects completely describes them, according to the no-hair theorem. One of these objects in M87 was the first to be pictured in 2019. These objects can be thought of as singularities in space-time. Hawking radiation occurs at these object’s event horizons. Name these objects which not even light can escape.
+    options: [ Neutron stars, White dwarfs, Black holes, Red giants ]
+    answer: Black holes
+
+  - question: This phenomena is related to a field denoted with an uppercase B. The change in the magnitude of this phenomenon can be used to create potential by Faraday’s law. Ampere’s Law describes how current can produce a non-zero value for this phenomenon. This phenomena is typically measured in Teslas. Name this phenomena present in objects with a north and south pole.
+    options: [ Electricity, Magnetism, Gravity, Radioactivity ]
+    answer: Magnetism
+    explanation: "Also accepted: magnetic field."
+
+  - question: This planet’s two wide gossamer rings are mainly composed of debris from Amalthea and Thebe. Some scientists have proposed this planet acts like an “asteroid sponge” after observations of Shoemaker-Levy 9’s collision with this planet. Galileo names the four largest moons of this planet, including Ganymede and Io. Name this gas giant with a Great Red Spot, the fifth planet from the Sun.
+    options: [ Jupiter, Saturn, Uranus, Neptune ]
+    answer: Jupiter
+
+  - question: Euler proved that the reciprocals of an infinite amount of these numbers sum to pi squared over six. Numbers with this property are the only positive integers with an odd number of unique factors. Two triangular numbers sum to a number with this property. The first few examples of these numbers are one, four, nine, and sixteen. Name these numbers that are equal to an integer multiplied by itself.
+    options:
+      - Prime numbers
+      - Triangular numbers
+      - Cube numbers
+      - Square numbers
+    answer: Square numbers
+    explanation: Also called perfect squares.
+
+  - question: Theridiidae create the tangle variant of this structure. Other variants of this structure include the funnel and tubular variants, and the substance used to make this structure has the same tensile strength as steel. The large spiral variants of this structure is associated with orb-weavers. This structure is not used by tarantulas to capture prey. Name this structure created with sticky silk, used by spiders to capture unlucky insects.
+    options: [ Cocoons, Beehives, Spider webs, Bird nests ]
+    answer: Spider webs
+    explanation: "Also accepted: cobwebs."
+
+  - question: This element is found with sulfur in cinnabar. Alloys containing this element are referred to as amalgams. Bromine and this element are the only liquids at room temperature. This element was used in the first thermometers and its use in hat factories led to poisoning from it being called “mad hatter disease.” Name this element with atomic number 80 and symbol Hg.
+    options: [ Lead, Mercury, Gold, Cadmium ]
+    answer: Mercury
+
+  - question: This man’s military innovations include designs of a heat ray for concentrating the sun’s energy. This man created a screw used for moving water up a hill. According to legend, this man discovered a method for weighing a gold crown after which he jumped out of his bathtub shouting “Eureka!” while running naked through the streets. Name this Greek mathematician of Syracuse who discovered the principle of buoyancy.
+    options: [ Archimedes, Euclid, Pythagoras, Eratosthenes ]
+    answer: Archimedes
+
+  - question: Pairs of these particles are opposed to these particles similarly named holes. These leptons are less massive than muons and tauons.The positron is the antiparticle of these particles. These particles actually make up a probability distribution and do not cleanly orbit around the atomic nucleus. Name these elementary particles that carry negative charge.
+    options: [ Protons, Neutrons, Photons, Electrons ]
+    answer: Electrons
+
+  - question: The cycle of growth of this structure is separated into anagen, telogen and catagen phases. This biological structure is rich in alpha-keratin, whose disulfide bonds explain why it smells bad when burned. This protein structure separates into the bulb and follicle. Sebum supplies oil to this structure that can be stripped with shampoos. Name this feature of mammals that grows on the skin and scalp of humans.
+    options: [ Teeth, Sweat glands, Hair, Freckles ]
+    answer: Hair
+    explanation: "Also accepted: hair follicle."
+
+  - question: The theoretical maximum efficiency of an object using this type of energy is given by the Shockley-Queisser limit. Semiconductors can be used to create a p-n junction that harnesses the power of this type of energy from the photovoltaic effect. This non-biological source of energy has a lower percentage of consumption than wind or hydropower. Name this form of energy from the sun.
+    options:
+      - Nuclear energy
+      - Solar energy
+      - Chemical energy
+      - Electrical energy
+    answer: Solar energy
+
+  - question: Wladimir [“Vladimir”] K ̈oppen developed a classification scheme for these systems that splits them into five groups. Rising CO2 levels have caused a greenhouse effect which cause a namesake change in these systems, a phenomenon synonymous with “global warming.” Name this seven-letter word that defines the general weather patterns of a particular region.
+    options: [ Climate, Biome, Ecosystem, Atmosphere ]
+    answer: Climate
+
+  - question: Modern variants of these devices made in the U.S. followed the Teller-Ulam design. These devices work either by chaining collisions of sub-critical material in the “gun method” or using chemically doped explosive lenses. These devices use fissile material such as enriched uranium or plutonium. Name these weapons of mass destruction that can create giant mushroom clouds and radioactive contamination.
+    options:
+      - Chemical weapons
+      - Biological weapons
+      - Cluster bombs
+      - Nuclear weapons
+    answer: Nuclear weapons
+    explanation: "Also accepted: atomic bombs, hydrogen bombs, nukes."
+
+  - question: This radiation range is governed by Bragg’s law in its namesake crystallography. Chandrasekhar names a telescope that uses this radiation range. This radiation range was used by Rosalind Franklin to take Photo 51, which Watson & Crick used to determine the double helix structure. Wilhelm R ̈ontgen discovered this radiation between UV and gamma rays. Name this radiation range that is most commonly known for being used to image bones.
+    options: [ Gamma rays, Ultraviolet rays, X-rays, Microwaves ]
+    answer: X-rays
+
+  - question: Only 10% of nutrients are retained in this biome’s soil, leading farmers to use slash-and-burn techniques. The upper canopy in this biome is home to birds of paradise and toucans. On the floor of this biome, you can find red-eyed tree frogs. This biome is home to the most biodiversity. The Amazon is an example of, for the point, what biome, characterized by tall trees and high precipitation?
+    options: [ Savanna, Rainforest, Desert, Tundra ]
+    answer: Rainforest
+
+  - question: Raising i to the fourth power gives this number. This is the only natural number with exactly one divisor. X raised to negative this number gives x’s reciprocal. Raising a number to this power gives back the same number. Raising a number to zero yields this number. The multiplicative identity states that a real number times this number equals that number. Name this smallest positive integer.
+    options: [ One, Zero, Two, Negative one ]
+    answer: One
+
+  - question: It’s not basalt, but this felsic rock names a composition of igneous rocks that have a lower melting point than rocks with andesitic composition. This intrusive rock is coarse-grained, unlike its extrusive equivalent rhyolite. This rock is the major component in the domes it names at Yosemite National Park. Name this rock whose name comes from its grain-like texture.
+    options: [ Basalt, Gabbro, Diorite, Granite ]
+    answer: Granite
+
+  - question: The premise of these things as a fundamental unit was first proposed by Matthias Schleiden and Theodor Schwann. The theory of miasma prevailed until the discovery of this fundamental unit. Spontaneous generation proposed these fundamental units could form from dead matter. Robert Hooke observed these units in cork and named these things after the rooms monks live in. Name these fundamental building blocks of life.
+    options: [ Atoms, Tissues, Cells, Organs ]
+    answer: Cells

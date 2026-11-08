@@ -1,0 +1,155 @@
+# Science Bee 2019–20 · Regional 1 · Round 1 — 31 tossups.
+# Source: docs/2019-2020-MS--1-Set-1.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2019–20 · Regional 1 · Round 1
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Complications with this organ are typically seen in patients presenting Levine’s sign. Bachman’s bundles and Purkinje fibers depolarize this organ. This organ produces the signal for the QRS complex on an EKG. This organ is divided into four chambers known as atria and ventricles. Name this cardiovascular organ that pumps blood through the body.
+    options: [ Heart, Lungs, Liver, Kidneys ]
+    answer: Heart
+
+  - question: For a wire, this quantity varies inversely with cross-sectional area and directly with length. The inverse of this quantity is measured in siemens and is called conductance. The ideal circuit component related to this quantity is represented by a zigzag on a circuit diagram. This quantity is measured in ohms. Name this quantity that describes how much a device opposes electric flow.
+    options: [ Capacitance, Voltage, Electric power, Electrical resistance ]
+    answer: Electrical resistance
+
+  - question: One collection of these features gives its name to the Jurassic period. The process of folding in the crust can create these features. Varieties of these landforms include fold, block, and volcanic. Orogeny refers to the creation of a new range of these geographical landmasses due to uplift of tectonic plates. Name this type of landmass, examples of which include Kilimanjaro and Everest.
+    options: [ Canyons, Deltas, Mountains, Peninsulas ]
+    answer: Mountains
+
+  - question: This function is generalized by the gamma function. Stirling’s formula is an approximation of this function. This function applied to a positive integer n is given by n times quantity n minus one all the way down to one. This function gives the number of ways to arrange n distinct objects in a row. Name this function symbolized by an exclamation point next to a number.
+    options: [ Logarithm, Factorial, Exponential, Absolute value ]
+    answer: Factorial
+
+  - question: This man invented the phonograph and an early projector known as the kinetoscope. This man controversially organized the killing of the elephant Topsy. This rival of George Westinghouse once employed Nikola Tesla at his Machine Works company. This “Wizard of Menlo Park” found a practical use for carbon filament that would later be replaced with tungsten. Name this American inventor of the lightbulb.
+    options:
+      - Thomas Edison
+      - Nikola Tesla
+      - George Westinghouse
+      - Alexander Graham Bell
+    answer: Thomas Edison
+
+  - question: By chemical mass, this is the heaviest element in the only diprotic strong acid. When bonded to six fluorine atoms, this element forms a potent greenhouse gas. Two atoms of this element form a covalent “bridge” in proteins. This element sits below oxygen on the periodic table. Name this element, associated with brimstone and bad smells, with chemical symbol S.
+    options: [ Phosphorus, Chlorine, Nitrogen, Sulfur ]
+    answer: Sulfur
+
+  - question: The fixed action patterns of aggression in some of these animals were studied by Niko Tinbergen. One of these vertebrates was first cloned by George Streisinger. These non-mammals include the stickleback and one named for its zebra pattern along its scales. Name these water- breathing animals that include trout and salmon.
+    options: [ Reptiles, Insects, Fish, Rodents ]
+    answer: Fish
+
+  - question: This theory can help explain adaptive radiation as the filling of various niches. This theory was formulated in part from observations of finches on the Galapagos Islands. The formulator of this theory referred to it as “descent with modification” and outlined his discoveries in On the Origin of Species. Natural selection is an important mechanism in this theory. Name this theory formulated by Charles Darwin.
+    options: [ Cell theory, Evolution, Germ theory, Plate tectonics ]
+    answer: Evolution
+
+  - question: This property’s indentation form is measured on the Rockwell scale and the Vickers scale, which presses into a material with a diamond indenter. Apatite has a value of 5 for this property while Talc has a value of 1. This property is defined as a mineral’s resistance to scratching. Diamond has the highest natural value of, for the point, what property measured by the Mohs scale?
+    options: [ Hardness, Luster, Cleavage, Specific gravity ]
+    answer: Hardness
+
+  - question: An equation described by this law is modified with a and b constants to create the van der Waals equation. This law only applies under the assumptions of kinetic molecular theory. The equation described by this law can be derived through a combination of Boyle’s law, Charles’ law, and Gay-Lussac’s law. Name this law which relates the product of pressure and volume of an ideal substance to its temperature.
+    options: [ Henry's law, Raoult's law, Hess's law, Ideal gas law ]
+    answer: Ideal gas law
+    explanation: "Also accepted: PV = nRT."
+
+  - question: According to the first law of thermodynamics, heat minus work equals the change in the “internal” form of this quantity. One form of this quantity is equal to one-half m v squared where m is mass and v is velocity. This quantity is typically defined as a measure of “the ability to do work” and can be divided into kinetic and potential components. Name this quantity whose SI unit is the Joule.
+    options: [ Momentum, Power, Energy, Force ]
+    answer: Energy
+
+  - question: These objects can be placed into three principal categories based on work by Luke Howard, who developed the common Latin nomenclature used to describe them. Types of these objects include lenticular, nacreous, and contrails. Common classifications include cirrus, stratus, or cumulus. Name these puffs of air and water vapor which form in the sky
+    options: [ Auroras, Clouds, Rainbows, Snowflakes ]
+    answer: Clouds
+
+  - question: An experiment using this organism compared the ratio of nitrogen 14 and nitrogen 15 in DNA. This organism was used by Meselson and Stahl to show that DNA replication was semi-conservative. This organism is infected by lambda phage. Outbreaks of this bacteria are usually caused by the O157:H7 strain. Name this rod-shaped gut-residing bacteria from the Escherichia genus.
+    options:
+      - E. coli
+      - Staphylococcus aureus
+      - Streptococcus pyogenes
+      - Mycobacterium tuberculosis
+    answer: E. coli
+    explanation: "Also accepted: Escherichia coli."
+
+  - question: The area of the sky obscured by this object is dubbed the “zone of avoidance.” Harlow Shapley believed this object was the only one of its kind to exist, a theory overturned in debates with Heber Doust Curtis using Hubble’s evidence of this galaxy’s neighbor, Andromeda. This galaxy is home to a black hole at its center called Sagittarius A*. Name this galaxy which contains our solar system.
+    options:
+      - Andromeda Galaxy
+      - Triangulum Galaxy
+      - Large Magellanic Cloud
+      - Milky Way
+    answer: Milky Way
+
+  - question: The wurtzite form of this element’s nitride is harder than diamond. Oxygen, silicon, and this element are the three most common in Pyrex glass. This element commonly only makes three valence bonds, violating the octet rule. This element is the lightest metalloid on the periodic table, found just to the left of carbon. Name this element with atomic number five and elemental symbol B.
+    options: [ Carbon, Silicon, Boron, Beryllium ]
+    answer: Boron
+
+  - question: One of these things named for Poisson can model events that occur with a fixed rate. The central limit theorem details how independent random variables can tend to one of these things that is described by the 68-95-99.7 rule. That example of these statistical things is sometimes named for Gauss and has a bell curve shape. Name this statistical device which can be uniform or normal and describes the spread of data.
+    options:
+      - Confidence interval
+      - Probability distribution
+      - Regression line
+      - Correlation coefficient
+    answer: Probability distribution
+
+  - question: After obtaining the product of this task, concentrating is done to remove gangue. This task has open pit, strip, and underground varieties. An effective method of cracking rock for this task was fire-setting, which was Alfred Nobel’s reason for inventing dynamite. Name this task of extracting valuable material from the Earth, such as coal, diamonds, and various ores.
+    options: [ Mining, Smelting, Refining, Logging ]
+    answer: Mining
+
+  - question: A reaction for creating soap uses this class of molecules along with esters. Sodium hydride is a “super” example of this class of molecules. Lewis variants are ones that donate electron pairs. Common examples include the weak one, ammonia, and sodium hydroxide. Name this class of molecules with pH greater than seven which can be neutralized with acids.
+    options: [ Acids, Alkanes, Oxidizing agents, Bases ]
+    answer: Bases
+
+  - question: This organelle is the site of the Q cycle named for Coenzyme Q10. When cytochrome c is released from this organelle, apoptosis is initiated in the cell. This organelle’s matrix is separated from the intermembrane space by folds called cristae, which increase surface area for the electron transport chain. Name this primary factory of ATP synthesis that is affectionately known as the “powerhouse of the cell.”
+    options: [ Nucleus, Golgi apparatus, Mitochondrion, Lysosome ]
+    answer: Mitochondrion
+
+  - question: This object’s Reiner Gamma exemplifies its namesake swirls. Studies of this object by George Darwin led him to propose the Giant-impact hypothesis of its formation. Hot lava regions that cooled into flat dark spots created the mares on this object, such as the Sea of Tranquility. This object has waxing and waning gibbous phases. Name this object which orbits the Earth in approximately 27 days.
+    options: [ Europa, Moon, Titan, Ganymede ]
+    answer: Moon
+
+  - question: The name for this sort of process is thought to be from an Anglicization of an Arab mathematician who invented a form of algebra. These processes typically have their asymptotic performance expressed using “big O” notation. Djikstra names one of these instructions that finds the shortest path between two vertices of a graph. Quicksort is an example of one for sorting. Name this set of cookie-cutter instructions given to a computer to solve a problem.
+    options: [ Algorithms, Variables, Spreadsheets, Pixels ]
+    answer: Algorithms
+    explanation: The word comes from the name of the mathematician al-Khwarizmi.
+
+  - question: Erta Ale in Ethiopia is home to a lake filled with this substance. Domes named for this substance occur when it piles up near the vent due to slow movement through the conduit. This substance comes in pahoehoe and aa varieties. This substance cools to form extrusive rocks like pumice and is emitted along with tephra. If this substance cools fast enough, it forms the glassy rock obsidian. Name this hot fluid ejected from a volcano.
+    options: [ Magma, Volcanic ash, Steam, Lava ]
+    answer: Lava
+    explanation: Molten rock is called magma underground and lava once it erupts.
+
+  - question: ECMA can add functional groups to one member of this class of compounds. Wallace Carothers names an equation that describes the degree to which the formation of this class of compounds occurs. Cross-links can form between chains of this class of compounds which include plastics like Teflon. Nylon is a synthetic member of, for the point, what class of compounds made up of repeating monomers?
+    options: [ Monomers, Alloys, Polymers, Ceramics ]
+    answer: Polymers
+
+  - question: Just below the upper surface of this structure is the palisade layer, which typically lies above the spongy layer. A waxy cuticle minimizes water loss from this structure. This structure contains tiny holes for gas exchange called stomata. This plant organ is specialized for photosynthesis and contains chlorophyll, which makes it green. Name this plant structure that changes color and falls off trees in autumn.
+    options: [ Root, Leaf, Tuber, Rhizome ]
+    answer: Leaf
+
+  - question: Two linear partial differential equations named for this device describe the change in voltage and current during transmission. Charles Wheatstone and W.F. Cooke created an early version of the needle system for this device. The single-wire version of this device was invented by Samuel Morse. Name this early form of long-distance transmission of messages whose name is Greek for “far off writing.”
+    options: [ Electric telegraph, Telephone, Radio, Fax machine ]
+    answer: Electric telegraph
+
+  - question: According to Goldbach’s conjecture, all integers with this property can be written as the sum of two primes. Functions described by this term are symmetric about the y-axis. Performing an exponential on a negative real number with a natural number that has this property is always positive. The smallest prime number is the only prime with this property. Name this property present in numbers divisible by two.
+    options: [ Odd, Prime, Composite, Even ]
+    answer: Even
+
+  - question: James Challis blundered the chance to find this object using John Couch Adams’s calculations. Johann Gottfried Galle discovered this planet based on calculations done by Urbain Le Verrier. This planet is orbited by the largest retrograde moon in the Solar System, Triton. Methane in this planet’s atmosphere gives it its namesake blue color. Name this farthest planet in our Solar System, the eighth from the Sun.
+    options: [ Saturn, Jupiter, Neptune, Mars ]
+    answer: Neptune
+
+  - question: This material’s hachimoji variant has enhanced storage capability. This material can be cut using cas9. Topoisomerase corrects for supercoiling in this material. Its namesake polymerase attaches after helicase unzips it. This material is wrapped around histones in chromosomes. It is made up of four bases – adenine, thymine, cytosine and guanine. Name this genetic material which is transcribed into RNA.
+    options: [ ATP, DNA, Hemoglobin, Collagen ]
+    answer: DNA
+    explanation: "Also accepted: deoxyribonucleic acid."
+
+  - question: This unit was recently redefined through measurements of Planck’s constant, until then this was the only SI unit defined by a physical device. The standard units for moment of inertia are derived by multiplying this unit by meters squared. Balances measure this SI unit, typically by one thousandths of it. Name this SI unit for mass approximately equal to 2.2 pounds.
+    options: [ Kilogram, Gram, Newton, Mole ]
+    answer: Kilogram
+
+  - question: Hennig Brand discovered this element while attempting to turn his urine into gold. Match factory workers developed jaw deformation due to prolonged exposure to this element’s white allotrope. This element names a form of radiation that is not immediately re-emitted, contrasted with fluorescence. Name this element with atomic number 15 and atomic symbol P.
+    options: [ Sulfur, Nitrogen, Arsenic, Phosphorus ]
+    answer: Phosphorus
+
+  - question: In languages like C++, this sort of data structure is similar to an array but has dynamic size. In linear algebra, this word describes mathematical objects that can be manipulated with dot and cross products. In biology, this term refers to organisms which carry and transmit disease. Velocity can be described by this term, unlike speed, which is scalar. Name this term which can describe mathematical objects with magnitude and direction.
+    options: [ Scalars, Matrices, Vectors, Tuples ]
+    answer: Vectors

@@ -1,0 +1,165 @@
+# Science Bee 2021–22 (MS) · Round 1 — 32 tossups.
+# Source: docs/2021-2022-MS-Science-Bee-Round-1.pdf
+# Question text is from the document; the wrong answer options were added for multiple choice.
+
+title: Science Bee 2021–22 (MS) · Round 1
+description: "A past Science Bee round. Read-aloud tossups: the giveaway clue comes last."
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: It's not Aquarius, but a meteor shower named for this constellation is produced by Halley’s comet. A feature in this constellation is formed by the stars Alnitak, Alnilam, and Mintaka, and this constellation’s brightest stars are Rigel and Betelgeuse. A mythological hunter names, for the point, what constellation with a famous belt?
+    options: [ Orion, Perseus, Taurus, Gemini ]
+    answer: Orion
+
+  - question: This molecule is rapidly copied in the lab technique PCR, and the enzyme helicase splits this molecule before it is replicated by a polymerase. This molecule contains adenine, cytosine, guanine, and thymine. Name this double-helix structure that contains genetic information.
+    options: [ RNA, ATP, Protein, DNA ]
+    answer: DNA
+    explanation: Stands for deoxyribonucleic acid.
+
+  - question: The warming effect of this natural phenomenon has increased the biodiversity of areas like Nantucket. The Antilles Current connects with this phenomenon at the intersection of the Florida Strait. Name this warm ocean current that originates in the southern US and makes its way along the eastern coastline through the North Atlantic.
+    options:
+      - Labrador Current
+      - California Current
+      - Gulf Stream
+      - Kuroshio Current
+    answer: Gulf Stream
+
+  - question: These animals were hypothesized to be juvenile examples of the Torosaurus. These animals' two species were the horridus and prorsus, and these animals were first thought to be an extinct type of bison. The Tyrannosaurus rex was likely the primary predator of, for the point, what dinosaurs that may have defended themselves with their three horns?
+    options: [ Stegosaurus, Triceratops, Ankylosaurus, Parasaurolophus ]
+    answer: Triceratops
+
+  - question: Two of these particles behave as a boson in a Cooper pair, and these particles name the most stable flavor of neutrino. These particles and stable leptons possess antiparticles called positrons, and these particles are the quanta and force carrier of the electromagnetic force. Name these negatively charged particles that orbit the nucleus of an atom.
+    options: [ Electrons, Protons, Neutrons, Quarks ]
+    answer: Electrons
+
+  - question: This quantity is proportional to temperature, but inversely proportional to pressure from the combined gas law. This quantity has a value of 22.4 for one mole of an ideal gas. Name this quantity describing the space occupied by a substance, usually expressed in liters.
+    options: [ Pressure, Density, Mass, Volume ]
+    answer: Volume
+
+  - question: Elevated levels of free fatty acids are a risk factor for resistance to this hormone. The effect of this hormone is opposed by glucagon, and this hormone is released by beta cells in the islets of Langerhans of the pancreas. Name this hormone involved in blood sugar modulation, which is often taken by people with type 1 diabetes.
+    options: [ Glucagon, Cortisol, Insulin, Adrenaline ]
+    answer: Insulin
+
+  - question: AFFF and CAFS are compounds used for this task that are usually manifested as foam. Portable devices used for this task most commonly contain compressed CO2 and dry ABC powder. Extinguishers and water are used in, for the point, what task commonly performed by first responders using a hose?
+    options: [ Search and rescue, Firefighting, Flood control, First aid ]
+    answer: Firefighting
+    explanation: "Also accepted: putting out or extinguishing fires."
+
+  - question: These devices can include a light-blocking component called a coronagraph, and protesters on Mauna Kea are trying to prevent a Thirty-Meter one of these devices from being built. NASA administrator James Webb is a namesake of, for the point, what type of devices, the most famous of which is named for Edwin Hubble?
+    options: [ Telescopes, Microscopes, Space probes, Seismographs ]
+    answer: Telescopes
+
+  - question: This desert is the alleged home of a "Death Worm," which may be the Tartar sand boa. This desert was formed by the rain shadow of the Tibetan Plateau, and it is the native habitat of the Bactrian camel. China constructed a "Green Wall" to contain, for the point, what large Asian desert that covers southern Mongolia?
+    options: [ Sahara Desert, Thar Desert, Arabian Desert, Gobi Desert ]
+    answer: Gobi Desert
+
+  - question: A procedure known as CABG is used to remove blockages in these structures. Most of these structures carry oxygenated blood, and the largest one of these structures is the aorta. A person's pulse can be detected by feeling, for the point, what blood vessels that carry blood away from the heart?
+    options: [ Veins, Capillaries, Arteries, Lymphatic vessels ]
+    answer: Arteries
+
+  - question: A specific class of these compounds is named for Gilbert Lewis. The Bronsted-Lowry definition of these compounds involves the donation of hydrogen ions in solution. The acetic form of these compounds is found in vinegar. Name these compounds which exhibit a pH below 7, contrasted with bases.
+    options: [ Salts, Acids, Alkalis, Alcohols ]
+    answer: Acids
+
+  - question: The Bessemer process removes impurities from this element's "Pig" form. With cobalt and nickel, this element is naturally ferromagnetic, and this element oxidizes to form a red compound called rust. Name this transition metal with symbol Fe that alloys with carbon to make steel.
+    options: [ Iron, Copper, Nickel, Aluminum ]
+    answer: Iron
+
+  - question: The genome of this organism was completely sequenced in 2000, and the white-eyed mutation of this organism is often studied in introductory biology classes. This organism was used by Thomas Hunt Morgan to study heredity and sex-linked traits. Name this common insect and model organism.
+    options: [ House fly, Honeybee, Mosquito, Fruit fly ]
+    answer: Fruit fly
+    explanation: "Scientific name: Drosophila melanogaster."
+
+  - question: The strong form of this concept is refuted in the Chinese room argument. A test for this concept evaluating indistinguishability from human conversation is named for Alan Turing. Name this concept that refers to a computer's ability to think like a human brain.
+    options:
+      - Virtual reality
+      - Quantum computing
+      - Artificial intelligence
+      - Cloud computing
+    answer: Artificial intelligence
+
+  - question: Use of this material must be halved by 2030 to meet the criteria of the Paris Agreement. Satellites like Sentinel-5P monitor this material's sulfur dioxide output, and varieties of this material include lignite and anthracite. Name this fuel source composed mostly of solid carbon.
+    options: [ Petroleum, Coal, Natural gas, Uranium ]
+    answer: Coal
+
+  - question: Eye movement desensitization and reprocessing is a therapy developed for this condition that was formerly known as shell shock. Flashbacks and recurring nightmares are characteristic symptoms of this condition. Name this psychological condition caused by experiencing horrible events, commonly associated with soldiers.
+    options: [ PTSD, OCD, ADHD, Bipolar disorder ]
+    answer: PTSD
+    explanation: Stands for post-traumatic stress disorder.
+
+  - question: Primary examples of these compounds are oxidized to aldehydes and carboxylic acids, while secondary types are oxidized to ketones. These compounds are characterized by the presence of a hydroxyl group. Methanol and ethanol are the simplest members of, for the point, what class of compounds found in beer and liquor.
+    options: [ Aldehydes, Ketones, Ethers, Alcohols ]
+    answer: Alcohols
+
+  - question: These cells are coated with a myelin sheath, which allows them to quickly transmit action potentials. These cells are split into "sensory" and "motor" types and separated from each other by synapses. Name these signal-transmitting nerve cells, the basic units of the nervous system.
+    options: [ Glial cells, Muscle cells, Neurons, Epithelial cells ]
+    answer: Neurons
+    explanation: "Also accepted: nerve cells."
+
+  - question: The core collapse type of these events occurs when stars accumulate extremely massive iron cores. Thermal runaways can be seen in the type 1a form of these events that occur when a white dwarf surpasses the Chandrasekhar limit. Name these extraordinary large stellar explosions.
+    options:
+      - Solar flares
+      - Supernovae
+      - Coronal mass ejections
+      - Planetary nebulae
+    answer: Supernovae
+
+  - question: These expressions are classified as analytic because they are a finite power series. The Fundamental Theorem of Algebra states that every one of these expressions with degree n and complex coefficients has n complex roots. Name these expressions that contain coefficients and variables, like x squared minus one.
+    options:
+      - Polynomials
+      - Logarithms
+      - Exponential functions
+      - Trigonometric functions
+    answer: Polynomials
+
+  - question: This entity “floats” on top of a lower layer when subject to isostasy. This layer's most abundant elements by weight are oxygen and silicon. The boundary between this layer of the Earth and the mantle is known as the Moho discontinuity. Name this outermost layer of the Earth.
+    options: [ Mantle, Outer core, Inner core, Crust ]
+    answer: Crust
+
+  - question: A paper by this scientist proposed a new calculation for mean squared displacement of particles. That paper on Brownian motion and another on mass-energy equivalence were half of this man's 1905 "Annus Mirabilis." Name this scientist who, in that same year, published explanations of the photoelectric effect and special relativity.
+    options: [ Max Planck, Niels Bohr, Albert Einstein, Ernest Rutherford ]
+    answer: Albert Einstein
+
+  - question: Unlike addition, this operation is not commutative for matrices in general. The use of numerous instances of this operation upon one number is called exponentiation. Often thought of as a form of repeated addition, this is, for the point, what operation that when applied to 2 and 3 yields 6?
+    options: [ Addition, Multiplication, Division, Exponentiation ]
+    answer: Multiplication
+
+  - question: Fat is stored in the subcutaneous layer of this organ that makes up the integumentary system. Exocrine glands secrete an oily substance called sebum to lubricate this organ, which is the largest in the human body. Th dermis and epidermis are layers of, for the point, what organ affected by eczema and acne?
+    options: [ Skin, Liver, Lung, Kidney ]
+    answer: Skin
+
+  - question: The rotary form of this process is used to purify substances. This process explains why sweating cools the body, and salt deposits are created when it occurs in saline water. When this process occurs at low pressures or high temperatures, it is called boiling. Name this process in which a liquid turns into a gas.
+    options: [ Condensation, Sublimation, Melting, Evaporation ]
+    answer: Evaporation
+    explanation: "Also accepted: vaporization."
+
+  - question: One of these devices was codenamed D1, and was deployed at Flers-Courcelette in France. The Soviet T-34 type of these devices was first deployed against the invading Germans in World War Two. The Battle of El Alamein debuted of one of these devices with a fully rotating gun turret. The M4 Sherman was one type of, for the point, what heavily armored military vehicles?
+    options: [ Jeeps, Half-tracks, Tanks, Submarines ]
+    answer: Tanks
+
+  - question: One form of this element is named after Buckminster Fuller, while another form of this element ranks at the top of the Mohs hardness scale. Graphite is a form of this element, which together with oxygen and hydrogen forms molecules of glucose. Name this element, the fundamental basis of organic molecules and life.
+    options: [ Silicon, Carbon, Nitrogen, Sulfur ]
+    answer: Carbon
+
+  - question: Mary Anning collected these objects in Lyme Regis. Types of these objects include coprolites, and an arrangement of these objects comprise "Sue" at Chicago’s Field Museum. Iguanodon and Diplodocus were identified after discovering, for the point, what objects dug up by paleontologists?
+    options: [ Fossils, Artifacts, Minerals, Meteorites ]
+    answer: Fossils
+
+  - question: An unnamed ring of this planet parallels the orbit of its moon Galatea. Objects in a 1:2 resonance with this planet are known as “twotinos,” and a spinning storm on this planet is known as the Great Dark Spot. Triton is a moon of, for the point, what planet in the solar system, located farthest from the Sun?
+    options: [ Uranus, Saturn, Jupiter, Neptune ]
+    answer: Neptune
+
+  - question: The earliest estimate of this quantity depended on indirect estimates of the number of particles of latex. Jean Perrin defined this constant, denoted capital N, as the number of atoms in 16 grams of oxygen. Name this constant, approximately 6 times 10 to the 23rd power, that equals the number of particles in a mole.
+    options:
+      - Planck's constant
+      - Boltzmann's constant
+      - Avogadro's constant
+      - Faraday's constant
+    answer: Avogadro's constant
+    explanation: "Also accepted: Avogadro's number."
+
+  - question: The product of the linear dimension and flow speed is divided by this quantity to give the Reynolds number. This quantity's kinematic form is equal to its dynamic form divided by the density of the fluid. Name this quantity, a measure of a fluid's internal resistance to flow.
+    options: [ Density, Viscosity, Surface tension, Buoyancy ]
+    answer: Viscosity
