@@ -1,11 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Card, Deck } from "../deck";
+import { pointsForAnswer } from "../points";
 import { FlipCard } from "./FlipCard";
 
 export interface AnswerRecord {
   card: Card;
   picked: string;
   correct: boolean;
+  /** Points this answer earned (shown live; the server re-scores the round). */
+  points: number;
+  /** Correct answers in a row, including this one. */
+  streak: number;
+  bonus: boolean;
 }
 
 interface Props {
@@ -32,11 +38,16 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit }: Props) {
   const picked = current?.picked ?? null;
   const isLast = index === cards.length - 1;
   const score = results.filter((r) => r.correct).length;
+  const points = results.reduce((sum, r) => sum + r.points, 0);
 
   const pick = useCallback(
     (option: string) => {
       if (results.length > index) return; // already answered
-      setResults((prev) => [...prev, { card, picked: option, correct: option === card.answer }]);
+      setResults((prev) => {
+        const correct = option === card.answer;
+        const earned = pointsForAnswer(correct, prev.at(-1)?.streak ?? 0);
+        return [...prev, { card, picked: option, correct, ...earned }];
+      });
     },
     [card, index, results.length],
   );
@@ -92,6 +103,9 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit }: Props) {
             {index + 1} / {cards.length}
           </span>
           <span className="quiz__score">✓ {score}</span>
+          <span className="quiz__points" aria-label={`${points} points this round`}>
+            ⭐ {points}
+          </span>
         </div>
       </header>
 
@@ -111,6 +125,7 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit }: Props) {
         key={index}
         card={card}
         picked={picked}
+        earned={current ? { points: current.points, streak: current.streak, bonus: current.bonus } : null}
         isLast={isLast}
         onPick={pick}
         onNext={next}

@@ -1,10 +1,13 @@
 import { useEffect, useRef } from "react";
 import type { Card } from "../deck";
+import type { AnswerPoints } from "../points";
 
 interface Props {
   card: Card;
   /** The option the user picked, or null while the question is open. */
   picked: string | null;
+  /** Points for this answer, once answered. */
+  earned: AnswerPoints | null;
   isLast: boolean;
   onPick: (option: string) => void;
   onNext: () => void;
@@ -12,7 +15,7 @@ interface Props {
 
 const LETTERS = "ABCDEFGHIJ";
 
-export function FlipCard({ card, picked, isLast, onPick, onNext }: Props) {
+export function FlipCard({ card, picked, earned, isLast, onPick, onNext }: Props) {
   const flipped = picked !== null;
   const correct = picked === card.answer;
   const nextRef = useRef<HTMLButtonElement>(null);
@@ -59,9 +62,17 @@ export function FlipCard({ card, picked, isLast, onPick, onNext }: Props) {
           inert={!flipped}
           aria-hidden={!flipped}
         >
-          <p className="verdict" aria-live="polite">
-            {flipped ? (correct ? "✓ Correct!" : "✗ Not quite") : ""}
-          </p>
+          <div className="verdict-row">
+            <p className="verdict" aria-live="polite">
+              {flipped ? (correct ? "✓ Correct!" : "✗ Not quite") : ""}
+            </p>
+            {flipped && earned && earned.points > 0 && (
+              <p className="points-badge">
+                +{earned.points} pts
+                {earned.bonus && <span className="points-badge__streak"> 🔥 {earned.streak} in a row</span>}
+              </p>
+            )}
+          </div>
           <p className="back-question">{card.question}</p>
           <p className="eyebrow">Answer</p>
           <p className="answer">{card.answer}</p>

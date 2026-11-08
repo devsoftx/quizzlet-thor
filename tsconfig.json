@@ -1,18 +1,31 @@
+// Server side: Vercel Functions (api/), shared server code and the Vite config.
+// The browser app has its own config in src/tsconfig.json.
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "target": "ES2023",
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "types": ["vite/client"],
+    "types": [
+      "node"
+    ],
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
-  "include": ["src", "vite.config.ts"]
+  "include": [
+    "api",
+    "server",
+    "vite.config.ts"
+  ]
 }
