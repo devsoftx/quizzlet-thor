@@ -212,7 +212,7 @@ describe("sign-in configuration", () => {
 describe("route guard", () => {
   // Every Vercel Function must be listed here, so a new route can't skip the sign-in check by accident.
   const PUBLIC = ["leaderboard.ts", "score.ts", "session.ts"]; // session.ts requires sign-in for profile sessions
-  const SIGNED_IN = ["me.ts", "profiles.ts"];
+  const SIGNED_IN = ["decks.ts", "files.ts", "me.ts", "profiles.ts"];
 
   it("classifies every api/ route", () => {
     const files = readdirSync(new URL("../api/", import.meta.url)).filter((f) => f.endsWith(".ts")).sort();

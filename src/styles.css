@@ -1050,7 +1050,12 @@ a.btn {
 
 .parent-home__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
+}
+
+.parent-home__actions .btn {
+  white-space: nowrap;
 }
 
 .parent-home__title {
@@ -1269,6 +1274,68 @@ a.btn {
   border-color: color-mix(in srgb, var(--bad) 40%, var(--border));
 }
 
+/* ---------- Private decks and files ---------- */
+
+.manage__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.manage__count {
+  margin-left: auto;
+  font-size: 0.9rem;
+}
+
+.library-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  border-style: dashed;
+}
+
+.kid-checks {
+  display: grid;
+  gap: 8px;
+  padding-left: 30px;
+}
+
+.kid-checks .check {
+  font-weight: 400;
+}
+
+.file-icon {
+  flex: none;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.file-name {
+  overflow-wrap: anywhere;
+}
+
+.upload-problems {
+  display: grid;
+  gap: 8px;
+}
+
+.upload-problems .errors {
+  margin: 4px 0 0;
+}
+
+.tag--private {
+  background: color-mix(in srgb, var(--good) 16%, transparent);
+  color: var(--good);
+}
+
+.import-note {
+  color: var(--good);
+  font-weight: 600;
+}
+
 /* ---------- Small screens & motion ---------- */
 
 @media (max-width: 560px) {
@@ -1295,6 +1362,22 @@ a.btn {
 
   .quiz__header .btn--ghost {
     padding-inline: 10px;
+  }
+
+  .parent-home__actions .btn {
+    padding-inline: 10px;
+  }
+
+  .manage__row--wrap {
+    flex-wrap: wrap;
+  }
+
+  .manage__row--wrap .manage__info {
+    flex-basis: calc(100% - 48px);
+  }
+
+  .manage__count {
+    margin-left: 0;
   }
 }
 

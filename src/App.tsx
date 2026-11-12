@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
-import type { KidProfile } from "./account-shared";
+import type { AccountDeck, KidProfile } from "./account-shared";
 import { api, ApiError, type AccountInfo, type ScoreResult, type SessionInfo } from "./api";
 import { AUTH_MODE, useAccountAuth } from "./auth";
 import { buildSession, type Card, type Deck } from "./deck";
 import {
+  accountDecksFor,
   loadBestScores,
   loadBundledDecks,
   loadImportedDecks,
+  loadImportedTexts,
   recordScore,
   removeImportedDeck,
   saveImportedDeck,
   type DeckEntry,
 } from "./library";
 import { DeckList } from "./components/DeckList";
+import { MyDecks } from "./components/MyDecks";
+import { MyFiles } from "./components/MyFiles";
 import { ParentHome } from "./components/ParentHome";
 import { ProfilesManager } from "./components/ProfilesManager";
 import { Quiz, type AnswerRecord } from "./components/Quiz";
@@ -37,13 +41,15 @@ export type SaveState =
 type AccountState =
   | { status: "none" }
   | { status: "loading" }
-  | { status: "ready"; account: AccountInfo; profiles: KidProfile[] }
+  | { status: "ready"; account: AccountInfo; profiles: KidProfile[]; decks: AccountDeck[] }
   | { status: "error"; message: string };
 
 type Screen =
   | { name: "decks" }
   | { name: "profiles" }
   | { name: "settings" }
+  | { name: "my-decks" }
+  | { name: "my-files" }
   | { name: "quiz"; deckId: string; deck: Deck; cards: Card[]; isRetry: boolean; run: number }
   | {
       name: "results";
@@ -58,6 +64,9 @@ type Screen =
 
 const bundledDecks = loadBundledDecks();
 
+/** Screens that belong to a signed-in parent (not a kid's study session). */
+const PARENT_SCREENS = new Set<Screen["name"]>(["profiles", "settings", "my-decks", "my-files"]);
+
 export function App() {
   const [imported, setImported] = useState<DeckEntry[]>(loadImportedDecks);
   const [bestScores, setBestScores] = useState(loadBestScores);
@@ -66,10 +75,14 @@ export function App() {
 
   const auth = useAccountAuth();
   const [accountState, setAccountState] = useState<AccountState>({ status: "none" });
+  const [importNote, setImportNote] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
 
-  const decks = [...bundledDecks, ...imported];
   const session = sessionState.status === "active" ? sessionState.session : null;
   const ready = accountState.status === "ready" ? accountState : null;
+  // A kid studying under a parent's account sees the shared decks plus the
+  // parent's decks meant for them; guests see the shared and browser-imported decks.
+  const kidId = session?.profileId && ready ? session.profileId : null;
+  const decks = kidId ? [...bundledDecks, ...accountDecksFor(ready!.decks, kidId)] : [...bundledDecks, ...imported];
 
   // Load the parent's account and kid profiles once signed in.
   useEffect(() => {
@@ -79,9 +92,8 @@ export function App() {
       return;
     }
     setAccountState({ status: "loading" });
-    api
-      .getMe()
-      .then(({ account, profiles }) => setAccountState({ status: "ready", account, profiles }))
+    Promise.all([api.getMe(), api.listDecks().catch(() => [] as AccountDeck[])])
+      .then(([{ account, profiles }, decks]) => setAccountState({ status: "ready", account, profiles, decks }))
       .catch((err: Error) => setAccountState({ status: "error", message: err.message }));
   }, [auth.isLoaded, auth.isSignedIn]);
 
@@ -211,6 +223,27 @@ export function App() {
   }
 
   async function importFiles(files: File[]) {
+    setImportNote(null);
+    if (kidId && ready) {
+      // Signed in: decks go into the parent's account (for all their kids).
+      let saved = ready.decks;
+      const failed: string[] = [];
+      for (const file of files) {
+        try {
+          saved = [...saved, await api.createDeck(file.name, await file.text())];
+        } catch (err) {
+          failed.push(`${file.name}: ${err instanceof ApiError && err.details[0] ? err.details[0] : (err as Error).message}`);
+        }
+      }
+      setAccountState({ ...ready, decks: saved });
+      const added = saved.length - ready.decks.length;
+      setImportNote(
+        failed.length
+          ? { kind: "error", text: `${added ? `Added ${added}. ` : ""}Couldn't add ${failed.join("; ")}` }
+          : { kind: "ok", text: `Added ${added} deck${added === 1 ? "" : "s"} to your family's private decks.` },
+      );
+      return;
+    }
     const entries = await Promise.all(
       files.map(async (file) => saveImportedDeck(file.name, await file.text())),
     );
@@ -234,7 +267,27 @@ export function App() {
 
   const notice = sessionState.status === "none" ? sessionState.notice : undefined;
 
-  // Parent pages: manage kid profiles, settings.
+  // Parent pages: kid profiles, private decks and files, settings.
+  if (ready && screen.name === "my-decks") {
+    return (
+      <main className="app">
+        <MyDecks
+          decks={ready.decks}
+          profiles={ready.profiles}
+          browserDecks={loadImportedTexts()}
+          onChange={(decks) => setAccountState((s) => (s.status === "ready" ? { ...s, decks } : s))}
+          onBack={() => setScreen({ name: "decks" })}
+        />
+      </main>
+    );
+  }
+  if (ready && screen.name === "my-files") {
+    return (
+      <main className="app">
+        <MyFiles onBack={() => setScreen({ name: "decks" })} />
+      </main>
+    );
+  }
   if (ready && screen.name === "profiles") {
     return (
       <main className="app">
@@ -261,7 +314,7 @@ export function App() {
 
   // No session: a signed-in parent picks a kid profile; everyone else gets the
   // guest welcome. (A round still being finished keeps going either way.)
-  if (!session && (screen.name === "decks" || screen.name === "profiles" || screen.name === "settings")) {
+  if (!session && (screen.name === "decks" || PARENT_SCREENS.has(screen.name))) {
     if (auth.isSignedIn) {
       if (accountState.status === "loading" || accountState.status === "none") return loading;
       if (accountState.status === "error") {
@@ -286,6 +339,8 @@ export function App() {
             notice={notice}
             onPick={startProfileSession}
             onManage={() => setScreen({ name: "profiles" })}
+            onDecks={() => setScreen({ name: "my-decks" })}
+            onFiles={() => setScreen({ name: "my-files" })}
             onSettings={() => setScreen({ name: "settings" })}
             onSignOut={signOut}
           />
@@ -321,6 +376,7 @@ export function App() {
           onStart={(entry) => entry.ok && startQuiz(entry.id, entry.deck)}
           onImport={importFiles}
           onRemove={removeDeck}
+          importNote={importNote}
         />
       )}
 

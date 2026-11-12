@@ -7,6 +7,8 @@ interface Props {
   notice?: string;
   onPick: (profileId: string) => Promise<void>;
   onManage: () => void;
+  onDecks: () => void;
+  onFiles: () => void;
   onSettings: () => void;
   onSignOut: () => void;
 }
@@ -24,7 +26,7 @@ export function ProfileAvatar({ profile, size = 64 }: { profile: Pick<KidProfile
 }
 
 /** A signed-in parent's home: pick which kid is studying. */
-export function ParentHome({ displayName, profiles, notice, onPick, onManage, onSettings, onSignOut }: Props) {
+export function ParentHome({ displayName, profiles, notice, onPick, onManage, onDecks, onFiles, onSettings, onSignOut }: Props) {
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,6 +46,12 @@ export function ParentHome({ displayName, profiles, notice, onPick, onManage, on
       <header className="parent-home__bar">
         <span className="muted">Signed in as {displayName}</span>
         <span className="parent-home__actions">
+          <button type="button" className="btn btn--ghost" onClick={onDecks}>
+            My decks
+          </button>
+          <button type="button" className="btn btn--ghost" onClick={onFiles}>
+            My files
+          </button>
           <button type="button" className="btn btn--ghost" onClick={onSettings}>
             Settings
           </button>

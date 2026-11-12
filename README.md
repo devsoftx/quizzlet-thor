@@ -96,8 +96,14 @@ A signed-in parent can:
 - pick a profile on the "Who's studying?" screen to start that kid's 60-minute session;
 - choose per profile whether the nickname appears on the public leaderboard
   (off by default; points still count privately);
+- keep **private decks** (My decks): upload YAML decks into the account, switch
+  each one on or off, and pick which kids see it. Kids see them next to the
+  shared decks;
+- keep **private files** (My files): PDFs, Word (.docx), PNG, JPEG and WebP
+  study material, up to 15 MB each (20 files, 50 MB per account), stored in a
+  private Vercel Blob store and opened only through the parent's sign-in;
 - change settings (name, theme, card order) or delete the account, which also
-  removes every profile and its leaderboard entry.
+  removes every profile, deck and file, and the profiles' leaderboard entries.
 
 ### Setup
 
@@ -112,20 +118,30 @@ A signed-in parent can:
 
    (Setting `VITE_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` yourself works too.)
 2. **Database:** add Neon Postgres from the Vercel Marketplace (`DATABASE_URL`,
-   production only), then create the tables:
+   production only), then create or update the tables (safe to re-run):
 
    ```bash
    vercel integration add neon --billing-plan free_v3 --meta region=iad1 -e production --no-env-pull
    vercel env run -e production -- npm run db:migrate
    ```
 
-Without these, the site simply runs in guest-only mode.
+3. **Files:** create a private Blob store connected to production:
+
+   ```bash
+   vercel blob create-store quizzlet-files --access private --environment production --yes
+   ```
+
+   This also rewrites `.env.local` with the Development variables; remove the
+   Clerk keys from it if you want to keep the local sign-in stand-in.
+
+Without these, the site simply runs in guest-only mode (and My files says
+storage isn't set up).
 
 ### Local development
 
 `npm run dev` works without any keys. A **Sign in (local dev)** button signs
 you in as a made-up parent id; use two different ids to try two separate
-parents. Data is kept in memory.
+parents. Accounts, decks and uploaded files are kept in memory.
 
 Don't put production database URLs in `.env.local`: the dev server loads it.
 
@@ -133,11 +149,11 @@ Don't put production database URLs in `.env.local`: the dev server loads it.
 
 ```
 decks/                 your YAML decks
-api/                   Vercel Functions (session, score, leaderboard, me, profiles)
-server/                API handlers, sign-in (auth.ts), accounts database, Redis store
+api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files)
+server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store
 db/migrations/         SQL migrations (npm run db:migrate)
 src/deck.ts            YAML parsing, validation and shuffling
 src/library.ts         loads decks from decks/ and local storage, best scores
-src/components/        DeckList, Quiz, FlipCard, Results
+src/components/        DeckList, Quiz, FlipCard, Results, parent screens (profiles, My decks, My files, settings)
 src/styles.css         all styling (light and dark mode)
 ```

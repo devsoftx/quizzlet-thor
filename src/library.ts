@@ -1,6 +1,8 @@
+import type { AccountDeck } from "./account-shared";
 import { parseDeck, titleFromFileName, type Deck } from "./deck";
 
-export type DeckSource = "bundled" | "imported";
+/** bundled: decks/ folder · imported: this browser only · account: a parent's private deck */
+export type DeckSource = "bundled" | "imported" | "account";
 
 export type DeckEntry = {
   id: string;
@@ -16,7 +18,7 @@ export function isVisible(entry: DeckEntry): boolean {
   return entry.ok ? entry.deck.enabled : entry.enabled !== false;
 }
 
-interface StoredDeck {
+export interface StoredDeck {
   fileName: string;
   text: string;
 }
@@ -54,6 +56,30 @@ export function loadBundledDecks(): DeckEntry[] {
     .sort((a, b) => sortName(a).localeCompare(sortName(b)));
 }
 
+// --- A parent's private decks ---
+
+/** Can this kid profile see the deck? (Switched on, and meant for all kids or this one.) */
+export function deckIsFor(deck: AccountDeck, profileId: string): boolean {
+  return deck.enabled && (deck.profileIds === null || deck.profileIds.includes(profileId));
+}
+
+/** An account deck as a deck-list entry. Its title and on/off come from the account, not the file. */
+export function accountDeckEntry(deck: AccountDeck): DeckEntry {
+  const result = parseDeck(deck.yaml, deck.title);
+  const base = { id: `account:${deck.id}`, fileName: deck.title, source: "account" as const };
+  return result.ok
+    ? { ...base, ok: true, deck: { ...result.deck, title: deck.title, enabled: deck.enabled } }
+    : { ...base, ...result, enabled: deck.enabled };
+}
+
+/** The account decks a kid profile can study, by title. */
+export function accountDecksFor(decks: AccountDeck[], profileId: string): DeckEntry[] {
+  return decks
+    .filter((d) => deckIsFor(d, profileId))
+    .map(accountDeckEntry)
+    .sort((a, b) => sortName(a).localeCompare(sortName(b)));
+}
+
 // --- localStorage helpers (storage can be missing or blocked; never throw) ---
 
 function readJson<T>(key: string, fallback: T): T {
@@ -83,6 +109,11 @@ function readImported(): StoredDeck[] {
           typeof d?.fileName === "string" && typeof d?.text === "string",
       )
     : [];
+}
+
+/** The raw text of decks imported into this browser (to copy them into an account). */
+export function loadImportedTexts(): StoredDeck[] {
+  return readImported();
 }
 
 export function loadImportedDecks(): DeckEntry[] {
