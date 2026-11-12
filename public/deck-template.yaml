@@ -1,0 +1,43 @@
+# Quizzlet deck template
+# ----------------------
+# Copy this file, rename it (e.g. my-deck.yaml), replace the sample cards with
+# your own, then import it in Quizzlet ("Import YAML…") or put it in decks/.
+#
+# Lines starting with # are comments and are ignored.
+# Wrap text in quotes if it contains ": " (colon + space) or starts with a
+# special character such as * & ! [ { or a quote.
+
+title: My first deck                # shown in the deck list
+description: A short description    # optional, shown under the title
+enabled: true                       # required to show the deck (false = hidden)
+shuffle: true                       # shuffle the card order each round (default: true)
+shuffleOptions: true                # shuffle each card's answer options (default: true)
+
+cards:
+  # A card needs a question, at least 2 options, and an answer.
+  # The answer must be exactly one of the options.
+  - question: Which planet is known as the Red Planet?
+    options:
+      - Mars
+      - Venus
+      - Jupiter
+      - Mercury
+    answer: Mars
+    explanation: Iron oxide (rust) on its surface makes Mars look red.  # optional
+
+  # Short list syntax works too:
+  - question: What is the chemical symbol for gold?
+    options: [Au, Ag, Gd, Go]
+    answer: Au
+
+  # Numbers are fine as options. shuffleOptions on a card overrides the deck
+  # setting (handy for numbers in order or "All of the above").
+  - question: How many bones are in the adult human body?
+    options: [106, 206, 306]
+    answer: 206
+    shuffleOptions: false
+
+  # Use quotes when the text contains ": " or starts with a special character.
+  - question: "Fill in the blank: water boils at ___ °C at sea level."
+    options: ["90", "100", "110", "120"]
+    answer: "100"
