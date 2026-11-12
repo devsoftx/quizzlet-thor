@@ -32,9 +32,9 @@ async function scenario(db: AccountsDb, prefix: string) {
   const a = db.forAccount(`${prefix}-a`);
   const b = db.forAccount(`${prefix}-b`);
   const seen: Record<string, unknown> = {};
-  const strip = <T extends { createdAt?: string }>(x: T | null) => {
+  const strip = <T extends { createdAt?: string; updatedAt?: string }>(x: T | null) => {
     if (!x) return x;
-    const { createdAt: _createdAt, ...rest } = x;
+    const { createdAt: _createdAt, updatedAt: _updatedAt, ...rest } = x;
     return rest;
   };
 
@@ -60,9 +60,40 @@ async function scenario(db: AccountsDb, prefix: string) {
   seen.bDelete = await b.deleteProfile(`${prefix}-p1`);
   seen.aStill = strip(await a.getProfile(`${prefix}-p1`));
 
+  // Decks and their kid assignments.
+  const deck = { title: "Planets", description: null, cardCount: 2, yaml: "cards: []", enabled: true };
+  seen.deckAll = strip(await a.createDeck(`${prefix}-d1`, { ...deck, profileIds: null }));
+  seen.deckSome = strip(
+    await a.createDeck(`${prefix}-d2`, { ...deck, title: "Moons", description: "Small", profileIds: [`${prefix}-p1`, `${prefix}-p1`, "ghost"] }),
+  );
+  seen.deckPatch = strip(await a.updateDeck(`${prefix}-d1`, { title: "Planets 2", enabled: false, profileIds: [`${prefix}-p2`, `${prefix}-p1`] }));
+  seen.deckNarrow = strip(await a.updateDeck(`${prefix}-d1`, { profileIds: [`${prefix}-p2`] }));
+  seen.deckKeep = strip(await a.updateDeck(`${prefix}-d2`, { title: "Moons 2" })); // assignments untouched
+  seen.deckMissing = await a.updateDeck(`${prefix}-nope`, { title: "x" });
+  seen.decks = (await a.listDecks()).map(strip);
+  seen.bDecks = await b.listDecks();
+  seen.bDeck = await b.getDeck(`${prefix}-d1`);
+  seen.bDeckUpdate = await b.updateDeck(`${prefix}-d1`, { title: "Hacked" });
+  seen.bDeckDelete = await b.deleteDeck(`${prefix}-d2`);
+  seen.bDeckForAKid = strip(await b.createDeck(`${prefix}-bd`, { ...deck, profileIds: [`${prefix}-p1`] }));
+
+  // Files.
+  const file = { pathname: `users/${prefix}-a/uploads/f1/a.pdf`, name: "a.pdf", contentType: "application/pdf", size: 1234 };
+  seen.file = strip(await a.createFile(`${prefix}-f1`, file));
+  seen.samePath = await b.createFile(`${prefix}-f2`, file).then(() => "saved", () => "rejected");
+  seen.files = (await a.listFiles()).map(strip);
+  seen.bFiles = await b.listFiles();
+  seen.bFile = await b.getFile(`${prefix}-f1`);
+  seen.bFileDelete = await b.deleteFile(`${prefix}-f1`);
+
   seen.deleted = await a.deleteProfile(`${prefix}-p2`);
+  seen.decksAfterKidDeleted = (await a.listDecks()).map((d) => d.profileIds);
+  seen.deckBackToAll = strip(await a.updateDeck(`${prefix}-d1`, { profileIds: null }));
+  seen.fileDeleted = strip(await a.deleteFile(`${prefix}-f1`));
+  seen.fileGone = await a.getFile(`${prefix}-f1`);
+  await a.createFile(`${prefix}-f3`, { ...file, pathname: `${file.pathname}3` });
   seen.removedIds = await a.remove();
-  seen.afterRemove = { account: await a.get(), profiles: await a.listProfiles() };
+  seen.afterRemove = { account: await a.get(), profiles: await a.listProfiles(), decks: await a.listDecks(), files: await a.listFiles() };
   seen.bAfter = strip(await b.get());
   return JSON.parse(JSON.stringify(seen).replaceAll(prefix, "X"));
 }
@@ -81,6 +112,34 @@ describe("Postgres accounts (PGlite)", () => {
     expect(postgres.keepGrade).toMatchObject({ nickname: "StarCat2", gradeBand: null });
     expect(postgres.nameOnly).toMatchObject({ displayName: "Ana", settings: { theme: "dark", shuffle: "off" } });
     expect(postgres.removedIds).toEqual(["X-p1"]);
+    expect(postgres.deckSome).toMatchObject({ profileIds: ["X-p1"] });
+    expect(postgres.deckNarrow).toMatchObject({ title: "Planets 2", enabled: false, profileIds: ["X-p2"] });
+    expect(postgres.deckKeep).toMatchObject({ title: "Moons 2", profileIds: ["X-p1"] });
+    expect(postgres.bDecks).toEqual([]);
+    expect(postgres.bDeckUpdate).toBeNull();
+    expect(postgres.bDeckDelete).toBe(false);
+    expect(postgres.bDeckForAKid).toMatchObject({ profileIds: [] });
+    expect(postgres.samePath).toBe("rejected");
+    expect(postgres.bFile).toBeNull();
+    expect(postgres.bFileDelete).toBeNull();
+    expect(postgres.decksAfterKidDeleted).toEqual([[], ["X-p1"]]);
+    expect(postgres.afterRemove).toEqual({ account: null, profiles: [], decks: [], files: [] });
+  });
+
+  it("refuses to assign a deck to another account's kid at the database too", async () => {
+    const db = new PostgresAccounts(sqlFor(pg));
+    const a = db.forAccount("fk-a");
+    const b = db.forAccount("fk-b");
+    await a.ensure({ displayName: "A" });
+    await b.ensure({ displayName: "B" });
+    await a.createDeck("fk-deck", { title: "T", description: null, cardCount: 1, yaml: "y", enabled: true, profileIds: null });
+    await b.createProfile("fk-kid", { nickname: "K", gradeBand: null, color: "#4255ff", emoji: "🦊", showOnLeaderboard: false });
+    await expect(
+      pg.query("insert into deck_assignments (account_id, deck_id, profile_id) values ('fk-a', 'fk-deck', 'fk-kid')"),
+    ).rejects.toThrow();
+    await expect(
+      pg.query("insert into deck_assignments (account_id, deck_id, profile_id) values ('fk-b', 'fk-deck', 'fk-kid')"),
+    ).rejects.toThrow();
   });
 
   it("rejects an unknown grade band at the database too", async () => {

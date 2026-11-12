@@ -14,6 +14,7 @@ import {
   type ProfileInput,
 } from "./accounts.js";
 import { defaultDeps, type Deps } from "./deps.js";
+import { accountFolder } from "./files.js";
 import { cleanName, error, json, NAME_MAX, readJson } from "./http.js";
 
 export interface AccountContext {
@@ -37,7 +38,7 @@ export async function requireAccount(request: Request, deps: Deps): Promise<Acco
 }
 
 /** The account row, created on first use with a name from the sign-in provider. */
-async function ensureAccount(ctx: AccountContext, deps: Deps) {
+export async function ensureAccount(ctx: AccountContext, deps: Deps) {
   const existing = await ctx.scope.get();
   if (existing) return existing;
   let displayName = "Parent";
@@ -85,13 +86,19 @@ export async function updateMe(request: Request, deps: Deps = defaultDeps()): Pr
   return json({ account: { displayName: account.displayName, plan: account.plan, settings: account.settings } });
 }
 
-/** DELETE {confirm: true}: delete the account, its profiles and their leaderboard entries, then the sign-in. */
+/**
+ * DELETE {confirm: true}: delete the account's stored files, then the account
+ * with its profiles, decks and file records, their leaderboard entries, and
+ * finally the sign-in.
+ */
 export async function deleteMe(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
   const body = await readJson(request);
   if (body?.confirm !== true) return error(400, "Confirm the deletion to continue.");
 
+  // Files first: if this fails, nothing else is gone yet and the parent can retry.
+  await deps.files?.deletePrefix(accountFolder(ctx.userId));
   const profileIds = await ctx.scope.remove();
   if (deps.store) {
     for (const id of profileIds) await deps.store.removePlayer(playerKeyForProfile(id));

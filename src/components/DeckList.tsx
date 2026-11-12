@@ -7,6 +7,8 @@ interface Props {
   onStart: (entry: DeckEntry) => void;
   onImport: (files: File[]) => void;
   onRemove: (entry: DeckEntry) => void;
+  /** Result of the last import (shown under the header), e.g. when decks go to a parent's account. */
+  importNote?: { kind: "ok" | "error"; text: string } | null;
 }
 
 const TEMPLATE_FILE_NAME = "quizzlet-deck-template.yaml";
@@ -27,7 +29,7 @@ cards:
     answer: Odin
     explanation: Odin, the All-Father, rules Asgard.  # optional`;
 
-export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRemove }: Props) {
+export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRemove, importNote }: Props) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const decks = allDecks.filter(isVisible);
@@ -85,6 +87,12 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
         </div>
       </header>
 
+      {importNote && (
+        <p className={importNote.kind === "ok" ? "import-note" : "welcome__error"} role={importNote.kind === "ok" ? "status" : "alert"}>
+          {importNote.text}
+        </p>
+      )}
+
       {decks.length === 0 ? (
         <div className="empty">
           {hidden.length > 0 ? (
@@ -119,6 +127,7 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
                     </span>
                     {bestScores[entry.id] !== undefined && <span>Best {bestScores[entry.id]}%</span>}
                     {entry.source === "imported" && <span className="tag">Imported</span>}
+                    {entry.source === "account" && <span className="tag tag--private">Private</span>}
                   </div>
                   <div className="deck__actions">
                     <button type="button" className="btn btn--primary" onClick={() => onStart(entry)}>

@@ -94,7 +94,7 @@ export function Settings({ account, onSaved, onDeleted, onBack }: Props) {
       <section className="manage__item danger-zone">
         <h2 className="section-title">Delete my account</h2>
         <p className="muted">
-          Permanently deletes your account, all kid profiles and their leaderboard points. This can't be undone.
+          Permanently deletes your account, all kid profiles and their leaderboard points, your private decks and your files. This can't be undone.
         </p>
         <label className="field">
           <span>
