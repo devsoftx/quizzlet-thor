@@ -118,7 +118,7 @@ export async function startSession(request: Request, deps: Deps = defaultDeps())
   const body = await readJson(request);
   const name = cleanName(body?.name);
   if (!name) {
-    return error(400, `Please enter a name (up to ${NAME_MAX} letters, numbers or spaces).`);
+    return error(400, `Please enter a nickname (up to ${NAME_MAX} letters, numbers or spaces).`);
   }
 
   // Replace any session this browser already had.

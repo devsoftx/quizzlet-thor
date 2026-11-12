@@ -21,6 +21,9 @@ interface StoredDeck {
   text: string;
 }
 
+/** The downloadable deck template, served from public/deck-template.yaml. */
+export const TEMPLATE_URL = "/deck-template.yaml";
+
 const IMPORTED_KEY = "quizzlet:imported-decks";
 const BEST_KEY = "quizzlet:best-scores";
 

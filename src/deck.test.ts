@@ -1,6 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { buildSession, parseDeck, titleFromFileName } from "./deck";
 import { isVisible, loadBundledDecks, type DeckEntry } from "./library";
+import template from "../public/deck-template.yaml?raw";
+
+describe("deck template", () => {
+  it("is a valid, enabled deck that shows every card feature", () => {
+    const result = parseDeck(template, "template");
+    expect(result.ok ? [] : result.errors).toEqual([]);
+    if (!result.ok) return;
+    expect(result.deck.enabled).toBe(true);
+    expect(result.deck.cards.some((c) => c.explanation)).toBe(true);
+    expect(result.deck.cards.some((c) => c.shuffleOptions === false)).toBe(true);
+  });
+});
 
 describe("parseDeck", () => {
   it("parses a full deck", () => {

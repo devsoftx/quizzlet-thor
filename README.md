@@ -23,7 +23,11 @@ Then open http://localhost:5173.
 
 ## Adding decks
 
-There are two ways:
+Start from the template: use **Download template** in the app, or copy
+[`public/deck-template.yaml`](public/deck-template.yaml). It's a small,
+commented deck that shows every option.
+
+There are two ways to add a deck:
 
 1. **Drop a `.yaml` / `.yml` file into the [`decks/`](decks) folder.** It shows
    up in the app right away while `npm run dev` is running.

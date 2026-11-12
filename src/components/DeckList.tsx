@@ -1,5 +1,5 @@
 import { useRef, useState, type DragEvent } from "react";
-import { isVisible, type DeckEntry } from "../library";
+import { isVisible, TEMPLATE_URL, type DeckEntry } from "../library";
 
 interface Props {
   decks: DeckEntry[];
@@ -8,6 +8,8 @@ interface Props {
   onImport: (files: File[]) => void;
   onRemove: (entry: DeckEntry) => void;
 }
+
+const TEMPLATE_FILE_NAME = "quizzlet-deck-template.yaml";
 
 const EXAMPLE = `title: Norse Mythology
 description: Gods, realms and legends
@@ -61,7 +63,10 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
           </h1>
           <p className="muted">Pick a deck. Answer each card. Watch it flip.</p>
         </div>
-        <div>
+        <div className="app-header__actions">
+          <a className="btn btn--ghost" href={TEMPLATE_URL} download={TEMPLATE_FILE_NAME}>
+            Download template
+          </a>
           <button type="button" className="btn btn--secondary" onClick={() => fileInput.current?.click()}>
             Import YAML…
           </button>
@@ -185,6 +190,12 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
           Put files in the project's <code>decks/</code> folder (they show up automatically), or import
           one here. Only decks with <code>enabled: true</code> are shown, and <code>answer</code> must
           match one of the <code>options</code> exactly.
+        </p>
+        <p>
+          <a href={TEMPLATE_URL} download={TEMPLATE_FILE_NAME}>
+            Download the deck template
+          </a>{" "}
+          <span className="muted">— a commented example to copy and fill in.</span>
         </p>
         <pre>
           <code>{EXAMPLE}</code>

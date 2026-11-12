@@ -39,7 +39,7 @@ export function Welcome({ notice, onStart }: Props) {
 
       <form className="welcome__card" onSubmit={submit}>
         <label htmlFor="student-name" className="welcome__label">
-          Welcome! What's your name?
+          Welcome! What's your nickname?
         </label>
         <div className="welcome__row">
           <input
@@ -48,9 +48,10 @@ export function Welcome({ notice, onStart }: Props) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             maxLength={24}
-            autoComplete="given-name"
+            autoComplete="off"
+            spellCheck={false}
             autoFocus
-            placeholder="Your first name or a nickname"
+            placeholder="A nickname, like StarCat or Nova7"
             aria-describedby="welcome-help"
             aria-invalid={error ? true : undefined}
           />
@@ -64,8 +65,8 @@ export function Welcome({ notice, onStart }: Props) {
           </p>
         )}
         <p id="welcome-help" className="muted welcome__help">
-          Your session lasts 60 minutes. Your name shows on the leaderboard, so a first name or nickname
-          is perfect.
+          Your session lasts 60 minutes. Your nickname shows on the leaderboard, so please don't use
+          your real name.
         </p>
       </form>
 
