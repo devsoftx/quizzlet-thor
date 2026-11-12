@@ -33,7 +33,7 @@ export function SessionBar({ session, onEnd }: Props) {
         ⏱ {timeLeft(session.deadline, now)}
       </span>
       <button type="button" className="btn btn--ghost session-bar__end" onClick={onEnd}>
-        End session
+        {session.profileId ? "Switch profile" : "End session"}
       </button>
     </div>
   );

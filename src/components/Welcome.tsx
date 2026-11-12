@@ -5,9 +5,11 @@ interface Props {
   /** Shown above the form, e.g. when a session just ended. */
   notice?: string;
   onStart: (name: string) => Promise<void>;
+  /** Parent/teacher sign-in, when accounts are available. */
+  parentSignIn?: { label: string; onClick: () => void };
 }
 
-export function Welcome({ notice, onStart }: Props) {
+export function Welcome({ notice, onStart, parentSignIn }: Props) {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -69,6 +71,21 @@ export function Welcome({ notice, onStart }: Props) {
           your real name.
         </p>
       </form>
+
+      {parentSignIn && (
+        <section className="welcome__parents" aria-label="Parents and teachers">
+          <div>
+            <h2 className="section-title">Parents &amp; teachers</h2>
+            <p className="muted">
+              Sign in to create nickname-only profiles for your kids, keep their points, and choose who appears on
+              the leaderboard.
+            </p>
+          </div>
+          <button type="button" className="btn btn--secondary" onClick={parentSignIn.onClick}>
+            {parentSignIn.label}
+          </button>
+        </section>
+      )}
 
       <section className="welcome__rules" aria-label="How points work">
         <h2 className="section-title">How to earn points</h2>

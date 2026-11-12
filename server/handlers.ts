@@ -1,34 +1,16 @@
 import { MAX_ROUND_LENGTH, scoreRound } from "../src/points.js";
-import { getStore, SESSION_TTL_SECONDS, type Session, type Store } from "./store.js";
+import { requireAccount } from "./account-handlers.js";
+import { defaultDeps, type Deps } from "./deps.js";
+import { cleanName, error, json, NAME_MAX, readJson } from "./http.js";
+import { SESSION_TTL_SECONDS, type Session } from "./store.js";
+
+export type { Deps } from "./deps.js";
+export { cleanName } from "./http.js";
 
 export const SESSION_COOKIE = "qz_session";
 const LEADERBOARD_SIZE = 10;
-const NAME_MAX = 24;
-
-export interface Deps {
-  store: Store | null;
-  now: () => number;
-  newId: () => string;
-}
-
-function defaultDeps(): Deps {
-  return {
-    store: getStore(),
-    now: () => Date.now(),
-    newId: () => crypto.randomUUID(),
-  };
-}
 
 // ------------------------------------------------------------- Helpers
-
-function json(body: unknown, status = 200, headers: HeadersInit = {}): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json", "cache-control": "no-store", ...headers },
-  });
-}
-
-const error = (status: number, message: string) => json({ error: message }, status);
 
 const storageMissing = () =>
   error(503, "The leaderboard database isn't connected yet. Ask the site owner to set up storage.");
@@ -64,15 +46,6 @@ function sessionCookie(request: Request, value: string, maxAgeSeconds: number): 
 
 const clearCookie = (request: Request) => sessionCookie(request, "", 0);
 
-/** Trim and collapse spaces; letters, numbers, spaces, - ' . only. */
-export function cleanName(raw: unknown): string | null {
-  if (typeof raw !== "string") return null;
-  const name = raw.normalize("NFC").replace(/\s+/g, " ").trim();
-  if (name.length < 1 || name.length > NAME_MAX) return null;
-  if (!/^[\p{L}\p{N}][\p{L}\p{N} '.-]*$/u.test(name)) return null;
-  return name;
-}
-
 export const playerKeyFor = (name: string) => name.toLocaleLowerCase("en");
 
 function publicSession(session: Session, now: number) {
@@ -81,6 +54,7 @@ function publicSession(session: Session, now: number) {
     points: session.points,
     expiresAt: session.expiresAt,
     secondsLeft: Math.max(0, Math.round((session.expiresAt - now) / 1000)),
+    profileId: session.profileId ?? null,
   };
 }
 
@@ -88,15 +62,6 @@ async function currentSession(request: Request, deps: Deps): Promise<Session | n
   const id = readCookie(request, SESSION_COOKIE);
   if (!id || !deps.store) return null;
   return deps.store.getSession(id, deps.now());
-}
-
-async function readJson(request: Request): Promise<Record<string, unknown> | null> {
-  try {
-    const body = await request.json();
-    return body && typeof body === "object" ? (body as Record<string, unknown>) : null;
-  } catch {
-    return null;
-  }
 }
 
 // ------------------------------------------------------------ /api/session
@@ -112,13 +77,32 @@ export async function getSession(request: Request, deps: Deps = defaultDeps()): 
   return json(publicSession(session, deps.now()));
 }
 
-/** POST {name}: start a new 60-minute session. */
+/**
+ * POST {name}: start a 60-minute guest session.
+ * POST {profileId}: a signed-in parent starts a session for one of their kid profiles.
+ */
 export async function startSession(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   if (!deps.store) return storageMissing();
   const body = await readJson(request);
-  const name = cleanName(body?.name);
-  if (!name) {
-    return error(400, `Please enter a nickname (up to ${NAME_MAX} letters, numbers or spaces).`);
+
+  let player: Pick<Session, "name" | "playerKey" | "profileId" | "listed">;
+  if (typeof body?.profileId === "string") {
+    const account = await requireAccount(request, deps);
+    if (account instanceof Response) return account;
+    const profile = await account.scope.getProfile(body.profileId);
+    if (!profile) return error(404, "Profile not found.");
+    player = {
+      name: profile.nickname,
+      playerKey: `p:${profile.id}`, // guest names can't contain ":", so no collisions
+      profileId: profile.id,
+      listed: profile.showOnLeaderboard,
+    };
+  } else {
+    const name = cleanName(body?.name);
+    if (!name) {
+      return error(400, `Please enter a nickname (up to ${NAME_MAX} letters, numbers or spaces).`);
+    }
+    player = { name, playerKey: playerKeyFor(name), listed: true };
   }
 
   // Replace any session this browser already had.
@@ -128,8 +112,7 @@ export async function startSession(request: Request, deps: Deps = defaultDeps())
   const now = deps.now();
   const session: Session = {
     id: deps.newId(),
-    name,
-    playerKey: playerKeyFor(name),
+    ...player,
     expiresAt: now + SESSION_TTL_SECONDS * 1000,
     points: 0,
   };
