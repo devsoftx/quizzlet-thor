@@ -84,5 +84,8 @@ function vercelFunctionsDev(): Plugin {
 
 export default defineConfig({
   plugins: [react(), vercelFunctionsDev()],
+  // Clerk's Vercel integration names the (public) key NEXT_PUBLIC_…; expose
+  // just that one to the browser alongside the usual VITE_ variables.
+  envPrefix: ["VITE_", "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY"],
   server: { port: 5173 },
 });

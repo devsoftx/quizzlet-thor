@@ -101,16 +101,22 @@ A signed-in parent can:
 
 ### Setup
 
-1. **Clerk:** create an app at clerk.com (a development instance works on
-   `*.vercel.app`) and enable Google. Add the keys to Vercel for every
-   environment:
-   - `VITE_CLERK_PUBLISHABLE_KEY`
-   - `CLERK_SECRET_KEY`
-2. **Database:** add Neon Postgres from the Vercel Marketplace (`DATABASE_URL`),
-   then create the tables:
+1. **Clerk:** add it from the Vercel Marketplace, which sets
+   `CLERK_SECRET_KEY` and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` for you (a
+   development instance works on `*.vercel.app`), then turn on Google in the
+   Clerk dashboard:
 
    ```bash
-   DATABASE_URL=... npm run db:migrate
+   vercel integration add clerk --billing-plan hobby_2025_08 --no-env-pull
+   ```
+
+   (Setting `VITE_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` yourself works too.)
+2. **Database:** add Neon Postgres from the Vercel Marketplace (`DATABASE_URL`,
+   production only), then create the tables:
+
+   ```bash
+   vercel integration add neon --billing-plan free_v3 --meta region=iad1 -e production --no-env-pull
+   vercel env run -e production -- npm run db:migrate
    ```
 
 Without these, the site simply runs in guest-only mode.

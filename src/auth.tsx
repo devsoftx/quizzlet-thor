@@ -1,5 +1,5 @@
 // Parent/teacher sign-in for the browser. One interface, three modes:
-//  - "clerk": Clerk (Google sign-in) when VITE_CLERK_PUBLISHABLE_KEY is set
+//  - "clerk": Clerk (Google sign-in) when a Clerk publishable key is set
 //  - "dev":   a local stand-in during `npm run dev` without Clerk keys
 //  - "off":   accounts aren't available; guest mode only
 
@@ -17,7 +17,9 @@ export interface AccountAuth {
   signOut: () => Promise<void>;
 }
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
+// VITE_… if you set it yourself; NEXT_PUBLIC_… when it comes from Clerk's Vercel integration.
+const PUBLISHABLE_KEY = (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ??
+  import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) as string | undefined;
 export const AUTH_MODE: AuthMode = PUBLISHABLE_KEY ? "clerk" : import.meta.env.DEV ? "dev" : "off";
 
 const OFF: AccountAuth = {
