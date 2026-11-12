@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { defineConfig, type Plugin, type ViteDevServer } from "vite";
+import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
 import react from "@vitejs/plugin-react";
 
 /**
@@ -60,6 +60,13 @@ function vercelFunctionsDev(): Plugin {
   return {
     name: "vercel-functions-dev",
     configureServer(server) {
+      // Server code reads process.env, which Vite doesn't fill from .env files.
+      // Copy them in (without overriding real env vars), and turn on the local
+      // sign-in stand-in when no Clerk keys are present.
+      const env = loadEnv(server.config.mode, server.config.root, "");
+      for (const [key, value] of Object.entries(env)) process.env[key] ??= value;
+      if (!process.env.CLERK_SECRET_KEY) process.env.QUIZZLET_DEV_AUTH ??= "1";
+
       server.middlewares.use((req, res, next) => {
         if (!req.url?.startsWith("/api/")) return next();
         handle(server, req, res)

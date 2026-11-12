@@ -5,10 +5,14 @@ export const SESSION_TTL_SECONDS = 60 * 60;
 export interface Session {
   id: string;
   name: string;
-  /** Normalized name used as the leaderboard identity. */
+  /** Leaderboard identity: a guest's lowercased name, or "p:<profileId>" for a kid profile. */
   playerKey: string;
   expiresAt: number; // epoch ms
   points: number; // earned during this session
+  /** Set when a signed-in parent started the session for one of their kid profiles. */
+  profileId?: string;
+  /** False when the parent keeps this profile off the public leaderboard. Guests are always listed. */
+  listed?: boolean;
 }
 
 export interface LeaderboardEntry {
@@ -27,9 +31,13 @@ export interface Store {
   createSession(session: Session): Promise<void>;
   getSession(id: string, now: number): Promise<Session | null>;
   deleteSession(id: string): Promise<void>;
-  /** Adds points to the session and the student's leaderboard total. */
+  /** Adds points to the session and the student's total (shown on the leaderboard if listed). */
   addPoints(session: Session, points: number): Promise<{ sessionPoints: number; totalPoints: number }>;
   leaderboard(limit: number, playerKey?: string): Promise<Leaderboard>;
+  /** Updates a player's display name and whether they appear on the leaderboard. */
+  syncPlayer(playerKey: string, name: string, listed: boolean): Promise<void>;
+  /** Removes a player's name, total and leaderboard entry (profile or account deleted). */
+  removePlayer(playerKey: string): Promise<void>;
 }
 
 // ---------------------------------------------------------------- Memory
@@ -40,14 +48,31 @@ interface MemoryState {
   sessions: Map<string, Session>;
   totals: Map<string, number>;
   names: Map<string, string>;
+  /** Players kept off the leaderboard (their totals still count). */
+  hidden: Set<string>;
 }
 
 export class MemoryStore implements Store {
-  constructor(private state: MemoryState = { sessions: new Map(), totals: new Map(), names: new Map() }) {}
+  constructor(
+    private state: MemoryState = { sessions: new Map(), totals: new Map(), names: new Map(), hidden: new Set() },
+  ) {}
+
+  async syncPlayer(playerKey: string, name: string, listed: boolean) {
+    this.state.names.set(playerKey, name);
+    if (listed) this.state.hidden.delete(playerKey);
+    else this.state.hidden.add(playerKey);
+  }
+
+  async removePlayer(playerKey: string) {
+    this.state.totals.delete(playerKey);
+    this.state.names.delete(playerKey);
+    this.state.hidden.delete(playerKey);
+  }
 
   async createSession(session: Session) {
     this.state.sessions.set(session.id, { ...session });
-    this.state.names.set(session.playerKey, session.name);
+    if (session.profileId) await this.syncPlayer(session.playerKey, session.name, session.listed !== false);
+    else this.state.names.set(session.playerKey, session.name);
   }
 
   async getSession(id: string, now: number) {
@@ -70,13 +95,14 @@ export class MemoryStore implements Store {
     if (stored) stored.points = sessionPoints;
     const totalPoints = (this.state.totals.get(session.playerKey) ?? 0) + points;
     this.state.totals.set(session.playerKey, totalPoints);
-    this.state.names.set(session.playerKey, session.name);
+    if (session.profileId) this.state.names.set(session.playerKey, session.name); // visibility stays as the parent set it
+    else await this.syncPlayer(session.playerKey, session.name, true);
     return { sessionPoints, totalPoints };
   }
 
   async leaderboard(limit: number, playerKey?: string) {
     const ranked = [...this.state.totals.entries()]
-      .filter(([, points]) => points > 0)
+      .filter(([key, points]) => points > 0 && !this.state.hidden.has(key))
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
       .map(([key, points], i) => ({ key, rank: i + 1, name: this.state.names.get(key) ?? key, points }));
     const strip = ({ rank, name, points }: (typeof ranked)[number]) => ({ rank, name, points });
@@ -87,9 +113,12 @@ export class MemoryStore implements Store {
 
 // ----------------------------------------------------------------- Redis
 // Keys:
-//   session:<id>     hash {name, playerKey, expiresAt, points}, expires after 60 min
-//   leaderboard      sorted set: playerKey -> total points
+//   session:<id>     hash {name, playerKey, expiresAt, points, profileId?, listed}, expires after 60 min
+//   leaderboard      sorted set: playerKey -> total points (listed players only)
 //   player-names     hash: playerKey -> display name
+//   leaderboard-hidden  set of "p:<profileId>" the parent keeps off the leaderboard
+//   player-totals    hash: "p:<profileId>" -> total points, kept even while a profile is unlisted
+//                    (guests' totals live only in the leaderboard, as before)
 
 export class RedisStore implements Store {
   constructor(private redis: Redis) {}
@@ -103,9 +132,33 @@ export class RedisStore implements Store {
         playerKey: session.playerKey,
         expiresAt: session.expiresAt,
         points: session.points,
+        profileId: session.profileId ?? "",
+        listed: session.listed === false ? 0 : 1,
       })
       .pexpireat(key, session.expiresAt)
       .hset("player-names", { [session.playerKey]: session.name })
+      .exec();
+    if (session.profileId) await this.syncPlayer(session.playerKey, session.name, session.listed !== false);
+  }
+
+  async syncPlayer(playerKey: string, name: string, listed: boolean) {
+    await this.redis.hset("player-names", { [playerKey]: name });
+    if (!listed) {
+      await this.redis.multi().sadd("leaderboard-hidden", playerKey).zrem("leaderboard", playerKey).exec();
+      return;
+    }
+    await this.redis.srem("leaderboard-hidden", playerKey);
+    const total = Number((await this.redis.hget("player-totals", playerKey)) ?? 0);
+    if (total > 0) await this.redis.zadd("leaderboard", { score: total, member: playerKey });
+  }
+
+  async removePlayer(playerKey: string) {
+    await this.redis
+      .multi()
+      .zrem("leaderboard", playerKey)
+      .hdel("player-names", playerKey)
+      .hdel("player-totals", playerKey)
+      .srem("leaderboard-hidden", playerKey)
       .exec();
   }
 
@@ -114,12 +167,15 @@ export class RedisStore implements Store {
     if (!data || !data.playerKey) return null;
     const expiresAt = Number(data.expiresAt);
     if (expiresAt <= now) return null;
+    const profileId = data.profileId ? String(data.profileId) : undefined;
     return {
       id,
       name: String(data.name),
       playerKey: String(data.playerKey),
       expiresAt,
       points: Number(data.points) || 0,
+      ...(profileId ? { profileId } : {}),
+      listed: String(data.listed ?? "1") !== "0",
     };
   }
 
@@ -128,7 +184,23 @@ export class RedisStore implements Store {
   }
 
   async addPoints(session: Session, points: number) {
-    // HINCRBY keeps the session's original expiry.
+    if (session.profileId) {
+      // Kid profiles keep a private total; the leaderboard mirrors it only when listed.
+      const [sessionPoints, total] = await this.redis
+        .multi()
+        .hincrby(`session:${session.id}`, "points", points)
+        .hincrby("player-totals", session.playerKey, points)
+        .hset("player-names", { [session.playerKey]: session.name })
+        .exec<[number, number, number]>();
+      const totalPoints = Number(total);
+      const hidden = await this.redis.sismember("leaderboard-hidden", session.playerKey);
+      if (!hidden) {
+        await this.redis.zadd("leaderboard", { score: totalPoints, member: session.playerKey });
+      }
+      return { sessionPoints: Number(sessionPoints), totalPoints };
+    }
+
+    // Guests: HINCRBY keeps the session's original expiry.
     const [sessionPoints, totalPoints] = await this.redis
       .multi()
       .hincrby(`session:${session.id}`, "points", points)

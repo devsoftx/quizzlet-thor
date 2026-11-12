@@ -8,15 +8,20 @@
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc -p src && tsc -p ."
+    "typecheck": "tsc -p src && tsc -p .",
+    "db:migrate": "node scripts/migrate.mjs"
   },
   "dependencies": {
+    "@clerk/backend": "^3.27.0",
+    "@clerk/react": "^6.18.6",
+    "@neondatabase/serverless": "^1.2.0",
     "@upstash/redis": "^1.41.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "yaml": "^2.9.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.16",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
