@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { KidCard } from "../account-shared";
 import { api, type KidHomeInfo } from "../api";
+import { LeaderboardPanel } from "./LeaderboardPanel";
 import { ProfileAvatar } from "./ParentHome";
 
 /** Opening an invitation link: confirm, then link this device to the kid's profile. */
@@ -129,6 +130,7 @@ export function KidHome({
       <button type="button" className="btn btn--primary kid-screen__start" onClick={() => run(onStart)} disabled={busy}>
         Start studying →
       </button>
+      <LeaderboardPanel />
       <button
         type="button"
         className="btn btn--ghost kid-screen__unlink"

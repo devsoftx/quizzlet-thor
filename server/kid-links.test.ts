@@ -175,6 +175,10 @@ describe("a kid's linked device", () => {
     await updateProfile(req(`/api/profiles?id=${nova.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: true } }), deps);
     expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toEqual([{ rank: 1, name: "Nova7", points: 10 }]);
 
+    // The public leaderboard needs no sign-in; the linked device sees its own rank even between sessions.
+    expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).you).toBeNull();
+    expect((await (await getLeaderboard(req("/api/leaderboard", { cookie: device }), deps)).json()).you).toEqual({ rank: 1, name: "Nova7", points: 10 });
+
     expect((await startSession(req("/api/session", { method: "POST", body: { kid: true } }), deps)).status).toBe(401);
   });
 

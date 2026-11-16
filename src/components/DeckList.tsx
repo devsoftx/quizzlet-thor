@@ -1,5 +1,6 @@
 import { useRef, useState, type DragEvent } from "react";
 import { isVisible, TEMPLATE_URL, type DeckEntry } from "../library";
+import { LeaderboardPanel } from "./LeaderboardPanel";
 
 interface Props {
   decks: DeckEntry[];
@@ -86,6 +87,8 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
           />
         </div>
       </header>
+
+      <LeaderboardPanel collapsible />
 
       {importNote && (
         <p className={importNote.kind === "ok" ? "import-note" : "welcome__error"} role={importNote.kind === "ok" ? "status" : "alert"}>
