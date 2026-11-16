@@ -94,6 +94,36 @@ export interface AccountFile {
   createdAt: string;
 }
 
+/** Can this kid profile see the deck? (Switched on, and meant for all kids or this one.) */
+export function deckIsFor(deck: AccountDeck, profileId: string): boolean {
+  return deck.enabled && (deck.profileIds === null || deck.profileIds.includes(profileId));
+}
+
+// ------------------------------------------------------ Kid device links
+
+/** An invitation link works once, for this many days. */
+export const INVITE_DAYS = 7;
+export const MAX_DEVICES_PER_PROFILE = 10;
+
+/** A kid's open invitation (the link itself is only shown once, when it's made). */
+export interface KidInvite {
+  profileId: string;
+  expiresAt: string;
+}
+
+/** A kid's own tablet or computer, linked to their profile through an invitation. */
+export interface KidDevice {
+  id: string;
+  profileId: string;
+  /** e.g. "iPad · Safari" */
+  label: string;
+  createdAt: string;
+  lastSeenAt: string;
+}
+
+/** What a linked kid device may know about its profile. */
+export type KidCard = Pick<KidProfile, "id" | "nickname" | "emoji" | "color">;
+
 export function normalizeSettings(raw: unknown): AccountSettings {
   const s = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
   return {

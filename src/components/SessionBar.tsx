@@ -4,6 +4,8 @@ import type { SessionInfo } from "../api";
 interface Props {
   session: SessionInfo;
   onEnd: () => void;
+  /** Defaults to "Switch profile" for kid profiles and "End session" for guests. */
+  endLabel?: string;
 }
 
 function timeLeft(deadline: number, now: number): string {
@@ -13,7 +15,7 @@ function timeLeft(deadline: number, now: number): string {
   return `${minutes} min left`;
 }
 
-export function SessionBar({ session, onEnd }: Props) {
+export function SessionBar({ session, onEnd, endLabel }: Props) {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export function SessionBar({ session, onEnd }: Props) {
         ⏱ {timeLeft(session.deadline, now)}
       </span>
       <button type="button" className="btn btn--ghost session-bar__end" onClick={onEnd}>
-        {session.profileId ? "Switch profile" : "End session"}
+        {endLabel ?? (session.profileId ? "Switch profile" : "End session")}
       </button>
     </div>
   );

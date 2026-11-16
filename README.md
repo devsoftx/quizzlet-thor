@@ -94,6 +94,10 @@ A signed-in parent can:
 
 - create up to 20 **kid profiles**: a nickname, grade, color and emoji only — no real names;
 - pick a profile on the "Who's studying?" screen to start that kid's 60-minute session;
+- **link a kid's own device**: each new profile gets an invitation link (one use,
+  7 days). The kid opens it on their tablet or computer and that device studies
+  as them, still with no email, password or account. The parent sees each linked
+  device under Kid profiles → Devices and can remove it or make a new link;
 - choose per profile whether the nickname appears on the public leaderboard
   (off by default; points still count privately);
 - keep **private decks** (My decks): upload YAML decks into the account, switch
@@ -149,7 +153,7 @@ Don't put production database URLs in `.env.local`: the dev server loads it.
 
 ```
 decks/                 your YAML decks
-api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files)
+api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files, invites, kid)
 server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store
 db/migrations/         SQL migrations (npm run db:migrate)
 src/deck.ts            YAML parsing, validation and shuffling
