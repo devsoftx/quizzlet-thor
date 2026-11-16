@@ -1,5 +1,6 @@
-import { useState, type FormEvent } from "react";
-import { api } from "../api";
+import { useEffect, useState, type FormEvent } from "react";
+import { api, type KidLinks } from "../api";
+import { KidLinkPanel } from "./KidLinks";
 import {
   GRADE_BANDS,
   GRADE_LABELS,
@@ -155,6 +156,26 @@ function ProfileForm({
 
 export function ProfilesManager({ profiles, onChange, onBack }: Props) {
   const [editing, setEditing] = useState<string | "new" | null>(profiles.length === 0 ? "new" : null);
+  const [links, setLinks] = useState<KidLinks>({ invites: [], devices: [] });
+  const [linksError, setLinksError] = useState<string | null>(null);
+  /** Which kid's devices panel is open. */
+  const [open, setOpen] = useState<string | null>(null);
+  /** A link just made (shown once; only its fingerprint is kept on the server). */
+  const [fresh, setFresh] = useState<{ profileId: string; url: string } | null>(null);
+
+  useEffect(() => {
+    api
+      .listLinks()
+      .then(setLinks)
+      .catch((err: Error) => setLinksError(err.message));
+  }, []);
+
+  async function newLink(profileId: string) {
+    const { url, invite } = await api.createInvite(profileId);
+    setLinks((l) => ({ ...l, invites: [...l.invites.filter((i) => i.profileId !== profileId), invite] }));
+    setFresh({ profileId, url });
+    setOpen(profileId);
+  }
 
   return (
     <div className="manage">
@@ -166,8 +187,13 @@ export function ProfilesManager({ profiles, onChange, onBack }: Props) {
       </header>
       <p className="muted manage__intro">
         Each profile is just a nickname and a picture — no real names, emails or birthdays. Kids pick their profile on
-        this device to study and earn points.
+        this device, or open their invitation link on their own tablet or computer, to study and earn points.
       </p>
+      {linksError && (
+        <p className="welcome__error" role="alert">
+          Couldn't load linked devices: {linksError}
+        </p>
+      )}
 
       <ul className="manage__list">
         {profiles.map((p) => (
@@ -185,23 +211,56 @@ export function ProfilesManager({ profiles, onChange, onBack }: Props) {
                 onDelete={async () => {
                   await api.deleteProfile(p.id);
                   onChange(profiles.filter((x) => x.id !== p.id));
+                  // Deleting a profile also unlinks its devices and cancels its link.
+                  setLinks((l) => ({
+                    invites: l.invites.filter((i) => i.profileId !== p.id),
+                    devices: l.devices.filter((d) => d.profileId !== p.id),
+                  }));
                   setEditing(null);
                 }}
               />
             ) : (
-              <div className="manage__row">
-                <ProfileAvatar profile={p} size={44} />
-                <div className="manage__info">
-                  <strong>{p.nickname}</strong>
-                  <span className="muted">
-                    {p.gradeBand ? GRADE_LABELS[p.gradeBand] : "Grade not set"} ·{" "}
-                    {p.showOnLeaderboard ? "On the leaderboard" : "Private"}
-                  </span>
+              <>
+                <div className="manage__row manage__row--wrap">
+                  <ProfileAvatar profile={p} size={44} />
+                  <div className="manage__info">
+                    <strong>{p.nickname}</strong>
+                    <span className="muted">
+                      {p.gradeBand ? GRADE_LABELS[p.gradeBand] : "Grade not set"} ·{" "}
+                      {p.showOnLeaderboard ? "On the leaderboard" : "Private"} · {devicesLabel(links, p.id)}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn--secondary"
+                    aria-expanded={open === p.id}
+                    onClick={() => setOpen(open === p.id ? null : p.id)}
+                  >
+                    Devices
+                  </button>
+                  <button type="button" className="btn btn--secondary" onClick={() => setEditing(p.id)} aria-label={`Edit ${p.nickname}`}>
+                    Edit
+                  </button>
                 </div>
-                <button type="button" className="btn btn--secondary" onClick={() => setEditing(p.id)}>
-                  Edit
-                </button>
-              </div>
+                {open === p.id && (
+                  <KidLinkPanel
+                    profile={p}
+                    invite={links.invites.find((i) => i.profileId === p.id) ?? null}
+                    devices={links.devices.filter((d) => d.profileId === p.id)}
+                    freshUrl={fresh?.profileId === p.id ? fresh.url : null}
+                    onNewLink={() => newLink(p.id)}
+                    onCancelLink={async () => {
+                      await api.cancelInvite(p.id);
+                      setLinks((l) => ({ ...l, invites: l.invites.filter((i) => i.profileId !== p.id) }));
+                      setFresh((f) => (f?.profileId === p.id ? null : f));
+                    }}
+                    onRemoveDevice={async (device) => {
+                      await api.removeDevice(device.id);
+                      setLinks((l) => ({ ...l, devices: l.devices.filter((d) => d.id !== device.id) }));
+                    }}
+                  />
+                )}
+              </>
             )}
           </li>
         ))}
@@ -222,6 +281,8 @@ export function ProfilesManager({ profiles, onChange, onBack }: Props) {
               const created = await api.createProfile(input);
               onChange([...profiles, created]);
               setEditing(null);
+              // Every new kid gets an invitation link right away, to open on their own device.
+              await newLink(created.id).catch(() => setOpen(created.id));
             }}
           />
         </div>
@@ -234,4 +295,9 @@ export function ProfilesManager({ profiles, onChange, onBack }: Props) {
       )}
     </div>
   );
+}
+
+function devicesLabel(links: KidLinks, profileId: string): string {
+  const n = links.devices.filter((d) => d.profileId === profileId).length;
+  return n === 0 ? "No devices linked" : `${n} device${n === 1 ? "" : "s"} linked`;
 }

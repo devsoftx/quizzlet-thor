@@ -1,5 +1,15 @@
 // Browser client for the Vercel Functions in /api.
-import type { AccountDeck, AccountFile, AccountSettings, DeckPatch, KidProfile, ProfileInput } from "./account-shared";
+import type {
+  AccountDeck,
+  AccountFile,
+  AccountSettings,
+  DeckPatch,
+  KidCard,
+  KidDevice,
+  KidInvite,
+  KidProfile,
+  ProfileInput,
+} from "./account-shared";
 
 export interface SessionInfo {
   name: string;
@@ -97,6 +107,32 @@ export interface FilesInfo {
   uploadMode: "blob" | "local";
 }
 
+/** A parent's kid links: open invitations and linked devices. */
+export interface KidLinks {
+  invites: KidInvite[];
+  devices: KidDevice[];
+}
+
+/** What a linked kid device sees: its profile and the parent's decks meant for it. */
+export interface KidHomeInfo {
+  profile: KidCard;
+  decks: AccountDeck[];
+}
+
+const JOIN_PREFIX = "#join=";
+
+/** The link a kid opens on their own device. The secret sits after "#", so browsers never send it to a server. */
+export const inviteUrl = (token: string) => `${window.location.origin}/${JOIN_PREFIX}${token}`;
+
+/** Reads an invitation token from the address bar and removes it from there (and from history). */
+export function takeInviteToken(): string | null {
+  const { hash, pathname, search } = window.location;
+  if (!hash.startsWith(JOIN_PREFIX)) return null;
+  window.history.replaceState(null, "", pathname + search);
+  const token = hash.slice(JOIN_PREFIX.length);
+  return /^[A-Za-z0-9_-]{43}$/.test(token) ? token : "";
+}
+
 const profileUrl = (id: string) => `/api/profiles?id=${encodeURIComponent(id)}`;
 const deckUrl = (id: string) => `/api/decks?id=${encodeURIComponent(id)}`;
 const fileUrl = (id: string) => `/api/files?id=${encodeURIComponent(id)}`;
@@ -154,6 +190,54 @@ export const api = {
   /** A signed-in parent starts a 60-minute session for one of their kid profiles. */
   async startProfileSession(profileId: string): Promise<SessionInfo> {
     return toSession(await call<SessionResponse>("/api/session", { method: "POST", body: { profileId } }));
+  },
+
+  // ---- Kid device links (parent side) ----
+
+  listLinks(): Promise<KidLinks> {
+    return call("/api/invites");
+  },
+
+  /** A new one-time invitation link for a kid (any earlier link stops working). */
+  async createInvite(profileId: string): Promise<{ url: string; invite: KidInvite }> {
+    const { token, invite } = await call<{ token: string; invite: KidInvite }>("/api/invites", {
+      method: "POST",
+      body: { profileId },
+    });
+    return { url: inviteUrl(token), invite };
+  },
+
+  async cancelInvite(profileId: string): Promise<void> {
+    await call(`/api/invites?profileId=${encodeURIComponent(profileId)}`, { method: "DELETE" });
+  },
+
+  async removeDevice(deviceId: string): Promise<void> {
+    await call(`/api/invites?deviceId=${encodeURIComponent(deviceId)}`, { method: "DELETE" });
+  },
+
+  // ---- A kid's own linked device (no account) ----
+
+  /** The kid profile this device is linked to, or null. */
+  async kidHome(): Promise<KidHomeInfo | null> {
+    return (await call<{ kid: KidHomeInfo | null }>("/api/kid")).kid;
+  },
+
+  /** Whose invitation this is, before joining. */
+  peekInvite(token: string): Promise<{ profile: KidCard; expiresAt: string }> {
+    return call("/api/kid", { method: "POST", body: { action: "peek", token } });
+  },
+
+  /** Uses up the invitation and links this device to the kid's profile. */
+  async joinInvite(token: string): Promise<KidCard> {
+    return (await call<{ profile: KidCard }>("/api/kid", { method: "POST", body: { action: "join", token } })).profile;
+  },
+
+  async unlinkThisDevice(): Promise<void> {
+    await call("/api/kid", { method: "DELETE" });
+  },
+
+  async startKidSession(): Promise<SessionInfo> {
+    return toSession(await call<SessionResponse>("/api/session", { method: "POST", body: { kid: true } }));
   },
 
   // ---- Private decks ----

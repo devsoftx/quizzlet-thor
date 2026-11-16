@@ -1,11 +1,12 @@
 import { MAX_ROUND_LENGTH, scoreRound } from "../src/points.js";
 import { requireAccount } from "./account-handlers.js";
 import { defaultDeps, type Deps } from "./deps.js";
-import { cleanName, error, json, NAME_MAX, readJson } from "./http.js";
+import { kidProfile } from "./kid-handlers.js";
+import { cleanName, cookie, error, json, NAME_MAX, readCookie, readJson } from "./http.js";
 import { SESSION_TTL_SECONDS, type Session } from "./store.js";
 
 export type { Deps } from "./deps.js";
-export { cleanName } from "./http.js";
+export { cleanName, readCookie } from "./http.js";
 
 export const SESSION_COOKIE = "qz_session";
 const LEADERBOARD_SIZE = 10;
@@ -15,34 +16,8 @@ const LEADERBOARD_SIZE = 10;
 const storageMissing = () =>
   error(503, "The leaderboard database isn't connected yet. Ask the site owner to set up storage.");
 
-export function readCookie(request: Request, name: string): string | null {
-  const header = request.headers.get("cookie");
-  if (!header) return null;
-  for (const part of header.split(";")) {
-    const [key, ...rest] = part.trim().split("=");
-    if (key === name) return decodeURIComponent(rest.join("="));
-  }
-  return null;
-}
-
-function isHttps(request: Request): boolean {
-  return (
-    new URL(request.url).protocol === "https:" ||
-    request.headers.get("x-forwarded-proto") === "https"
-  );
-}
-
-function sessionCookie(request: Request, value: string, maxAgeSeconds: number): string {
-  const parts = [
-    `${SESSION_COOKIE}=${encodeURIComponent(value)}`,
-    "Path=/",
-    `Max-Age=${maxAgeSeconds}`,
-    "HttpOnly",
-    "SameSite=Lax",
-  ];
-  if (isHttps(request)) parts.push("Secure");
-  return parts.join("; ");
-}
+const sessionCookie = (request: Request, value: string, maxAgeSeconds: number) =>
+  cookie(request, SESSION_COOKIE, value, maxAgeSeconds);
 
 const clearCookie = (request: Request) => sessionCookie(request, "", 0);
 
@@ -80,17 +55,24 @@ export async function getSession(request: Request, deps: Deps = defaultDeps()): 
 /**
  * POST {name}: start a 60-minute guest session.
  * POST {profileId}: a signed-in parent starts a session for one of their kid profiles.
+ * POST {kid: true}: a kid's linked device starts a session for its own profile.
  */
 export async function startSession(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   if (!deps.store) return storageMissing();
   const body = await readJson(request);
 
   let player: Pick<Session, "name" | "playerKey" | "profileId" | "listed">;
-  if (typeof body?.profileId === "string") {
-    const account = await requireAccount(request, deps);
-    if (account instanceof Response) return account;
-    const profile = await account.scope.getProfile(body.profileId);
-    if (!profile) return error(404, "Profile not found.");
+  if (body?.kid === true || typeof body?.profileId === "string") {
+    let profile;
+    if (body?.kid === true) {
+      profile = await kidProfile(request, deps);
+      if (!profile) return error(401, "This device isn't linked to a profile anymore. Ask your parent for a new link.");
+    } else {
+      const account = await requireAccount(request, deps);
+      if (account instanceof Response) return account;
+      profile = await account.scope.getProfile(body!.profileId as string);
+      if (!profile) return error(404, "Profile not found.");
+    }
     player = {
       name: profile.nickname,
       playerKey: `p:${profile.id}`, // guest names can't contain ":", so no collisions

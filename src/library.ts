@@ -1,4 +1,6 @@
-import type { AccountDeck } from "./account-shared";
+import { deckIsFor, type AccountDeck } from "./account-shared";
+
+export { deckIsFor };
 import { parseDeck, titleFromFileName, type Deck } from "./deck";
 
 /** bundled: decks/ folder · imported: this browser only · account: a parent's private deck */
@@ -57,11 +59,6 @@ export function loadBundledDecks(): DeckEntry[] {
 }
 
 // --- A parent's private decks ---
-
-/** Can this kid profile see the deck? (Switched on, and meant for all kids or this one.) */
-export function deckIsFor(deck: AccountDeck, profileId: string): boolean {
-  return deck.enabled && (deck.profileIds === null || deck.profileIds.includes(profileId));
-}
 
 /** An account deck as a deck-list entry. Its title and on/off come from the account, not the file. */
 export function accountDeckEntry(deck: AccountDeck): DeckEntry {

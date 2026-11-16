@@ -86,7 +86,35 @@ async function scenario(db: AccountsDb, prefix: string) {
   seen.bFile = await b.getFile(`${prefix}-f1`);
   seen.bFileDelete = await b.deleteFile(`${prefix}-f1`);
 
+  // Kid device links (looked up by secret fingerprints, outside any account).
+  const T0 = "2026-11-15T12:00:00.000Z";
+  const T1 = "2026-11-22T12:00:00.000Z";
+  const T2 = "2026-11-15T13:30:00.000Z";
+  seen.invite = await a.createInvite(`${prefix}-p1`, `${prefix}-h1`, T0, T1);
+  seen.inviteAgain = await a.createInvite(`${prefix}-p1`, `${prefix}-h2`, T0, T1);
+  seen.replacedGone = await db.findInvite(`${prefix}-h1`, T0);
+  seen.open = await db.findInvite(`${prefix}-h2`, T0);
+  seen.expired = await db.findInvite(`${prefix}-h2`, T1);
+  seen.invitesA = await a.listInvites(T0);
+  seen.invitesB = await b.listInvites(T0);
+  seen.bInviteForA = await b.createInvite(`${prefix}-p1`, `${prefix}-hb`, T0, T1).then(() => "saved", () => "rejected");
+  seen.redeemed = await db.redeemInvite(`${prefix}-h2`, T0, { id: `${prefix}-dev1`, tokenHash: `${prefix}-dh1`, label: "iPad · Safari" });
+  seen.redeemTwice = await db.redeemInvite(`${prefix}-h2`, T0, { id: `${prefix}-dev2`, tokenHash: `${prefix}-dh2`, label: "x" });
+  seen.invitesAfterUse = await a.listInvites(T0);
+  seen.device = await db.findDevice(`${prefix}-dh1`, T2);
+  seen.devices = await a.listDevices(); // last seen refreshed to T2
+  seen.bDevices = await b.listDevices();
+  seen.bDeleteDevice = await b.deleteDevice(`${prefix}-dev1`);
+  await a.createInvite(`${prefix}-p2`, `${prefix}-h3`, T0, T1);
+  await db.redeemInvite(`${prefix}-h3`, T0, { id: `${prefix}-dev3`, tokenHash: `${prefix}-dh3`, label: "Mac · Chrome" });
+  seen.kidUnlinks = await db.removeDevice(`${prefix}-dh3`);
+  await a.createInvite(`${prefix}-p2`, `${prefix}-h4`, T0, T1);
+  await db.redeemInvite(`${prefix}-h4`, T0, { id: `${prefix}-dev4`, tokenHash: `${prefix}-dh4`, label: "Mac · Chrome" });
+  seen.cancel = await a.cancelInvites(`${prefix}-p1`);
+  seen.cancelNone = await a.cancelInvites(`${prefix}-p1`);
+
   seen.deleted = await a.deleteProfile(`${prefix}-p2`);
+  seen.p2DeviceAfterProfileDeleted = await db.findDevice(`${prefix}-dh4`, T2);
   seen.decksAfterKidDeleted = (await a.listDecks()).map((d) => d.profileIds);
   seen.deckBackToAll = strip(await a.updateDeck(`${prefix}-d1`, { profileIds: null }));
   seen.fileDeleted = strip(await a.deleteFile(`${prefix}-f1`));
@@ -94,6 +122,7 @@ async function scenario(db: AccountsDb, prefix: string) {
   await a.createFile(`${prefix}-f3`, { ...file, pathname: `${file.pathname}3` });
   seen.removedIds = await a.remove();
   seen.afterRemove = { account: await a.get(), profiles: await a.listProfiles(), decks: await a.listDecks(), files: await a.listFiles() };
+  seen.deviceAfterRemove = await db.findDevice(`${prefix}-dh1`, T2);
   seen.bAfter = strip(await b.get());
   return JSON.parse(JSON.stringify(seen).replaceAll(prefix, "X"));
 }
@@ -124,6 +153,22 @@ describe("Postgres accounts (PGlite)", () => {
     expect(postgres.bFileDelete).toBeNull();
     expect(postgres.decksAfterKidDeleted).toEqual([[], ["X-p1"]]);
     expect(postgres.afterRemove).toEqual({ account: null, profiles: [], decks: [], files: [] });
+    expect(postgres.replacedGone).toBeNull();
+    expect(postgres.open).toEqual({ accountId: "X-a", profileId: "X-p1", expiresAt: "2026-11-22T12:00:00.000Z" });
+    expect(postgres.expired).toBeNull();
+    expect(postgres.invitesB).toEqual([]);
+    expect(postgres.bInviteForA).toBe("rejected");
+    expect(postgres.redeemed).toEqual({ accountId: "X-a", profileId: "X-p1" });
+    expect(postgres.redeemTwice).toBeNull();
+    expect(postgres.invitesAfterUse).toEqual([]);
+    expect(postgres.devices).toMatchObject([{ id: "X-dev1", profileId: "X-p1", label: "iPad · Safari", lastSeenAt: "2026-11-15T13:30:00.000Z" }]);
+    expect(postgres.bDevices).toEqual([]);
+    expect(postgres.bDeleteDevice).toBe(false);
+    expect(postgres.kidUnlinks).toBe(true);
+    expect(postgres.cancel).toBe(true);
+    expect(postgres.cancelNone).toBe(false);
+    expect(postgres.p2DeviceAfterProfileDeleted).toBeNull();
+    expect(postgres.deviceAfterRemove).toBeNull();
   });
 
   it("refuses to assign a deck to another account's kid at the database too", async () => {

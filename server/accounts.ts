@@ -8,6 +8,8 @@ import {
   type AccountSettings,
   type DeckInput,
   type DeckPatch,
+  type KidDevice,
+  type KidInvite,
   type KidProfile,
   type ProfileInput,
 } from "../src/account-shared.js";
@@ -58,10 +60,48 @@ export interface AccountScope {
   createFile(id: string, input: FileInput): Promise<StoredFile>;
   /** Returns the deleted record, so its stored bytes can be removed too. */
   deleteFile(id: string): Promise<StoredFile | null>;
+
+  /** Replaces the profile's invitations with a new one (only its fingerprint is stored). */
+  createInvite(profileId: string, tokenHash: string, createdAt: string, expiresAt: string): Promise<KidInvite>;
+  /** Cancels the profile's invitations; false if there were none. */
+  cancelInvites(profileId: string): Promise<boolean>;
+  /** Invitations that are still unused and unexpired at `now`. */
+  listInvites(now: string): Promise<KidInvite[]>;
+  /** Oldest first. */
+  listDevices(): Promise<KidDevice[]>;
+  deleteDevice(id: string): Promise<boolean>;
 }
+
+/** Where a kid link points: one profile in one account. */
+export interface LinkTarget {
+  accountId: string;
+  profileId: string;
+}
+
+export interface NewDevice {
+  id: string;
+  tokenHash: string;
+  label: string;
+}
+
+/** Last-seen times are refreshed at most this often. */
+const SEEN_EVERY_MS = 60 * 60 * 1000;
 
 export interface AccountsDb {
   forAccount(accountId: string): AccountScope;
+
+  // Kid devices aren't signed in as an account, so these look links up by
+  // the fingerprint of their secret; everything else then goes through
+  // forAccount(<the account the link belongs to>).
+
+  /** An unused, unexpired invitation. */
+  findInvite(tokenHash: string, now: string): Promise<(LinkTarget & { expiresAt: string }) | null>;
+  /** Uses up an open invitation and links a device, in one step; null if it's no longer open. */
+  redeemInvite(tokenHash: string, now: string, device: NewDevice): Promise<LinkTarget | null>;
+  /** A linked device by its secret's fingerprint (refreshing when it was last seen). */
+  findDevice(tokenHash: string, now: string): Promise<(LinkTarget & { id: string }) | null>;
+  /** A kid's device unlinking itself. */
+  removeDevice(tokenHash: string): Promise<boolean>;
 }
 
 const nowIso = () => new Date().toISOString();
@@ -74,6 +114,10 @@ interface MemoryState {
   profiles: Map<string, Map<string, KidProfile>>;
   decks: Map<string, Map<string, AccountDeck>>;
   files: Map<string, Map<string, StoredFile>>;
+  /** tokenHash -> invitation */
+  invites: Map<string, LinkTarget & { createdAt: string; expiresAt: string; usedAt: string | null }>;
+  /** device id -> device */
+  devices: Map<string, KidDevice & LinkTarget & { tokenHash: string }>;
 }
 
 /** Oldest first, ties by id (the Postgres version orders the same way). */
@@ -82,12 +126,54 @@ const byCreated = (a: { createdAt: string; id: string }, b: { createdAt: string;
 
 export class MemoryAccounts implements AccountsDb {
   constructor(
-    private state: MemoryState = { accounts: new Map(), profiles: new Map(), decks: new Map(), files: new Map() },
+    private state: MemoryState = {
+      accounts: new Map(),
+      profiles: new Map(),
+      decks: new Map(),
+      files: new Map(),
+      invites: new Map(),
+      devices: new Map(),
+    },
   ) {}
+
+  /** Drops invitations and devices that match, like the database's cascades. */
+  private dropLinks(match: (l: LinkTarget) => boolean) {
+    for (const [hash, inv] of this.state.invites) if (match(inv)) this.state.invites.delete(hash);
+    for (const [id, dev] of this.state.devices) if (match(dev)) this.state.devices.delete(id);
+  }
+
+  async findInvite(tokenHash: string, now: string) {
+    const inv = this.state.invites.get(tokenHash);
+    if (!inv || inv.usedAt || inv.expiresAt <= now) return null;
+    return { accountId: inv.accountId, profileId: inv.profileId, expiresAt: inv.expiresAt };
+  }
+
+  async redeemInvite(tokenHash: string, now: string, device: NewDevice) {
+    const open = await this.findInvite(tokenHash, now);
+    if (!open) return null;
+    this.state.invites.get(tokenHash)!.usedAt = now;
+    const target = { accountId: open.accountId, profileId: open.profileId };
+    this.state.devices.set(device.id, { ...device, ...target, createdAt: now, lastSeenAt: now });
+    return target;
+  }
+
+  async findDevice(tokenHash: string, now: string) {
+    const dev = [...this.state.devices.values()].find((d) => d.tokenHash === tokenHash);
+    if (!dev) return null;
+    if (Date.parse(now) - Date.parse(dev.lastSeenAt) >= SEEN_EVERY_MS) dev.lastSeenAt = now;
+    return { id: dev.id, accountId: dev.accountId, profileId: dev.profileId };
+  }
+
+  async removeDevice(tokenHash: string) {
+    const dev = [...this.state.devices.values()].find((d) => d.tokenHash === tokenHash);
+    return dev ? this.state.devices.delete(dev.id) : false;
+  }
 
   forAccount(accountId: string): AccountScope {
     const state = this.state;
     const { accounts, profiles } = state;
+    const dropLinks = (match: (l: LinkTarget) => boolean) => this.dropLinks(match);
+    const mine = (l: LinkTarget) => l.accountId === accountId;
     const mapFor = <T>(all: Map<string, Map<string, T>>) => {
       if (!all.has(accountId)) all.set(accountId, new Map());
       return all.get(accountId)!;
@@ -129,6 +215,7 @@ export class MemoryAccounts implements AccountsDb {
         profiles.delete(accountId);
         state.decks.delete(accountId);
         state.files.delete(accountId);
+        dropLinks(mine);
         return ids;
       },
       async listProfiles() {
@@ -154,7 +241,40 @@ export class MemoryAccounts implements AccountsDb {
         for (const d of decks().values()) {
           if (d.profileIds) d.profileIds = d.profileIds.filter((p) => p !== id);
         }
+        dropLinks((l) => mine(l) && l.profileId === id);
         return true;
+      },
+
+      async createInvite(profileId, tokenHash, createdAt, expiresAt) {
+        if (!own().has(profileId)) throw new Error("Profile not found.");
+        for (const [hash, inv] of state.invites) {
+          if (mine(inv) && inv.profileId === profileId) state.invites.delete(hash);
+        }
+        state.invites.set(tokenHash, { accountId, profileId, createdAt, expiresAt, usedAt: null });
+        return { profileId, expiresAt };
+      },
+      async cancelInvites(profileId) {
+        let any = false;
+        for (const [hash, inv] of state.invites) {
+          if (mine(inv) && inv.profileId === profileId) any = state.invites.delete(hash);
+        }
+        return any;
+      },
+      async listInvites(now) {
+        return [...state.invites.values()]
+          .filter((inv) => mine(inv) && !inv.usedAt && inv.expiresAt > now)
+          .map((inv) => ({ profileId: inv.profileId, expiresAt: inv.expiresAt }))
+          .sort((a, b) => a.profileId.localeCompare(b.profileId));
+      },
+      async listDevices() {
+        return [...state.devices.values()]
+          .filter(mine)
+          .map(({ id, profileId, label, createdAt, lastSeenAt }) => ({ id, profileId, label, createdAt, lastSeenAt }))
+          .sort(byCreated);
+      },
+      async deleteDevice(id) {
+        const dev = state.devices.get(id);
+        return dev && mine(dev) ? state.devices.delete(id) : false;
       },
 
       async listDecks() {
@@ -253,8 +373,56 @@ const toFile = (r: Row): StoredFile => ({
   createdAt: iso(r.created_at),
 });
 
+const toDevice = (r: Row): KidDevice => ({
+  id: String(r.id),
+  profileId: String(r.profile_id),
+  label: String(r.label),
+  createdAt: iso(r.created_at),
+  lastSeenAt: iso(r.last_seen_at),
+});
+
 export class PostgresAccounts implements AccountsDb {
   constructor(private sql: NeonQueryFunction<false, false>) {}
+
+  async findInvite(tokenHash: string, now: string) {
+    const rows = await this.sql`
+      select account_id, profile_id, expires_at from kid_invites
+      where token_hash = ${tokenHash} and used_at is null and expires_at > ${now}::timestamptz`;
+    const r = rows[0];
+    return r ? { accountId: String(r.account_id), profileId: String(r.profile_id), expiresAt: iso(r.expires_at) } : null;
+  }
+
+  async redeemInvite(tokenHash: string, now: string, device: NewDevice) {
+    // One statement: the invitation is used up only if the device is linked.
+    const rows = await this.sql`
+      with used as (
+        update kid_invites set used_at = ${now}::timestamptz
+        where token_hash = ${tokenHash} and used_at is null and expires_at > ${now}::timestamptz
+        returning account_id, profile_id
+      )
+      insert into kid_devices (id, token_hash, account_id, profile_id, label, created_at, last_seen_at)
+      select ${device.id}, ${device.tokenHash}, account_id, profile_id, ${device.label}, ${now}::timestamptz, ${now}::timestamptz
+      from used
+      returning account_id, profile_id`;
+    const r = rows[0];
+    return r ? { accountId: String(r.account_id), profileId: String(r.profile_id) } : null;
+  }
+
+  async findDevice(tokenHash: string, now: string) {
+    const rows = await this.sql`
+      select id, account_id, profile_id, last_seen_at from kid_devices where token_hash = ${tokenHash}`;
+    const r = rows[0];
+    if (!r) return null;
+    if (Date.parse(now) - Date.parse(iso(r.last_seen_at)) >= SEEN_EVERY_MS) {
+      await this.sql`update kid_devices set last_seen_at = ${now}::timestamptz where id = ${String(r.id)}`;
+    }
+    return { id: String(r.id), accountId: String(r.account_id), profileId: String(r.profile_id) };
+  }
+
+  async removeDevice(tokenHash: string) {
+    const rows = await this.sql`delete from kid_devices where token_hash = ${tokenHash} returning id`;
+    return rows.length > 0;
+  }
 
   forAccount(accountId: string): AccountScope {
     const sql = this.sql;
@@ -397,6 +565,35 @@ export class PostgresAccounts implements AccountsDb {
       async deleteFile(id) {
         const rows = await sql`delete from files where account_id = ${accountId} and id = ${id} returning *`;
         return rows[0] ? toFile(rows[0]) : null;
+      },
+
+      async createInvite(profileId, tokenHash, createdAt, expiresAt) {
+        // The foreign key refuses a profile from another account.
+        await sql`
+          with gone as (delete from kid_invites where account_id = ${accountId} and profile_id = ${profileId})
+          insert into kid_invites (token_hash, account_id, profile_id, created_at, expires_at)
+          values (${tokenHash}, ${accountId}, ${profileId}, ${createdAt}::timestamptz, ${expiresAt}::timestamptz)`;
+        return { profileId, expiresAt };
+      },
+      async cancelInvites(profileId) {
+        const rows = await sql`
+          delete from kid_invites where account_id = ${accountId} and profile_id = ${profileId} returning token_hash`;
+        return rows.length > 0;
+      },
+      async listInvites(now) {
+        const rows = await sql`
+          select profile_id, expires_at from kid_invites
+          where account_id = ${accountId} and used_at is null and expires_at > ${now}::timestamptz
+          order by profile_id`;
+        return rows.map((r) => ({ profileId: String(r.profile_id), expiresAt: iso(r.expires_at) }));
+      },
+      async listDevices() {
+        const rows = await sql`select * from kid_devices where account_id = ${accountId} order by created_at, id`;
+        return rows.map(toDevice);
+      },
+      async deleteDevice(id) {
+        const rows = await sql`delete from kid_devices where account_id = ${accountId} and id = ${id} returning id`;
+        return rows.length > 0;
       },
     };
   }

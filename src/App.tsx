@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { AccountDeck, KidProfile } from "./account-shared";
-import { api, ApiError, type AccountInfo, type ScoreResult, type SessionInfo } from "./api";
+import { api, ApiError, takeInviteToken, type AccountInfo, type KidHomeInfo, type ScoreResult, type SessionInfo } from "./api";
 import { AUTH_MODE, useAccountAuth } from "./auth";
 import { buildSession, type Card, type Deck } from "./deck";
 import {
@@ -15,6 +15,7 @@ import {
   type DeckEntry,
 } from "./library";
 import { DeckList } from "./components/DeckList";
+import { JoinInvite, KidHome } from "./components/KidScreens";
 import { MyDecks } from "./components/MyDecks";
 import { MyFiles } from "./components/MyFiles";
 import { ParentHome } from "./components/ParentHome";
@@ -64,6 +65,12 @@ type Screen =
 
 const bundledDecks = loadBundledDecks();
 
+/** An invitation link opened in this tab (#join=…), read once and removed from the address bar. */
+const initialJoinToken = takeInviteToken();
+
+/** A kid's own device, linked to their profile through an invitation (no account). */
+type KidState = { status: "loading" } | { status: "none" } | { status: "linked"; kid: KidHomeInfo };
+
 /** Screens that belong to a signed-in parent (not a kid's study session). */
 const PARENT_SCREENS = new Set<Screen["name"]>(["profiles", "settings", "my-decks", "my-files"]);
 
@@ -76,13 +83,40 @@ export function App() {
   const auth = useAccountAuth();
   const [accountState, setAccountState] = useState<AccountState>({ status: "none" });
   const [importNote, setImportNote] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
+  const [joinToken, setJoinToken] = useState<string | null>(initialJoinToken);
+  const [kidState, setKidState] = useState<KidState>({ status: "loading" });
 
   const session = sessionState.status === "active" ? sessionState.session : null;
   const ready = accountState.status === "ready" ? accountState : null;
+  const kid = kidState.status === "linked" && !auth.isSignedIn ? kidState.kid : null;
   // A kid studying under a parent's account sees the shared decks plus the
-  // parent's decks meant for them; guests see the shared and browser-imported decks.
+  // parent's decks meant for them (on the parent's device, or their own linked
+  // one); guests see the shared and browser-imported decks.
   const kidId = session?.profileId && ready ? session.profileId : null;
-  const decks = kidId ? [...bundledDecks, ...accountDecksFor(ready!.decks, kidId)] : [...bundledDecks, ...imported];
+  const onKidDevice = Boolean(kid && session?.profileId === kid.profile.id);
+  const decks = kidId
+    ? [...bundledDecks, ...accountDecksFor(ready!.decks, kidId)]
+    : onKidDevice
+      ? [...bundledDecks, ...accountDecksFor(kid!.decks, kid!.profile.id), ...imported]
+      : [...bundledDecks, ...imported];
+
+  // Is this a kid's linked device? (The link lives in an HttpOnly cookie, so ask the server.)
+  useEffect(() => {
+    api
+      .kidHome()
+      .then((k) => setKidState(k ? { status: "linked", kid: k } : { status: "none" }))
+      .catch(() => setKidState({ status: "none" }));
+  }, []);
+
+  // An invitation link opened while the app is already open.
+  useEffect(() => {
+    const onHash = () => {
+      const token = takeInviteToken();
+      if (token !== null) setJoinToken(token);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
 
   // Load the parent's account and kid profiles once signed in.
   useEffect(() => {
@@ -103,6 +137,31 @@ export function App() {
     if (theme === "system") delete document.documentElement.dataset.theme;
     else document.documentElement.dataset.theme = theme;
   }, [theme]);
+
+  async function startKidSession() {
+    try {
+      const [s, fresh] = await Promise.all([api.startKidSession(), api.kidHome()]);
+      if (fresh) setKidState({ status: "linked", kid: fresh }); // pick up the parent's latest decks
+      setSessionState({ status: "active", session: s });
+      setScreen({ name: "decks" });
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        // The parent removed this device (or deleted the profile).
+        setKidState({ status: "none" });
+        setSessionState({ status: "none", notice: err.message });
+        return;
+      }
+      throw err;
+    }
+  }
+
+  async function unlinkThisDevice() {
+    await api.endSession().catch(() => undefined);
+    await api.unlinkThisDevice();
+    setKidState({ status: "none" });
+    setSessionState({ status: "none", notice: "This device was removed. Ask your parent for a new link to study as yourself again." });
+    setScreen({ name: "decks" });
+  }
 
   async function startProfileSession(profileId: string) {
     const s = await api.startProfileSession(profileId);
@@ -139,9 +198,10 @@ export function App() {
     if (!session) return;
     const timer = window.setTimeout(
       () => {
+        const next = session.profileId ? "" : " Enter your name to start a new session.";
         setSessionState({
           status: "none",
-          notice: `Time's up, ${session.name}! Your 60-minute session is over — you earned ${session.points} points. Enter your name to start a new session.`,
+          notice: `Time's up, ${session.name}! Your 60-minute session is over — you earned ${session.points} points.${next}`,
         });
       },
       Math.max(0, session.deadline - Date.now()),
@@ -164,7 +224,10 @@ export function App() {
   function sessionExpired() {
     setSessionState((s) =>
       s.status === "active"
-        ? { status: "none", notice: "Your session has ended. Enter your name to start a new one." }
+        ? {
+            status: "none",
+            notice: s.session.profileId ? "Your session has ended." : "Your session has ended. Enter your name to start a new one.",
+          }
         : s,
     );
   }
@@ -263,7 +326,26 @@ export function App() {
       <p className="muted loading">Loading…</p>
     </main>
   );
-  if (sessionState.status === "loading" || !auth.isLoaded) return loading;
+  if (sessionState.status === "loading" || !auth.isLoaded || kidState.status === "loading") return loading;
+
+  // An invitation link: link this device to a kid's profile (after they confirm).
+  if (joinToken !== null) {
+    return (
+      <main className="app">
+        <JoinInvite
+          token={joinToken}
+          onJoined={async (k) => {
+            await api.endSession().catch(() => undefined); // any guest session on this device
+            setKidState({ status: "linked", kid: k });
+            setSessionState({ status: "none" });
+            setScreen({ name: "decks" });
+            setJoinToken(null);
+          }}
+          onClose={() => setJoinToken(null)}
+        />
+      </main>
+    );
+  }
 
   const notice = sessionState.status === "none" ? sessionState.notice : undefined;
 
@@ -347,6 +429,13 @@ export function App() {
         </main>
       );
     }
+    if (kid) {
+      return (
+        <main className="app">
+          <KidHome profile={kid.profile} notice={notice} onStart={startKidSession} onUnlink={unlinkThisDevice} />
+        </main>
+      );
+    }
     return (
       <main className="app">
         <Welcome
@@ -367,7 +456,7 @@ export function App() {
 
   return (
     <main className="app">
-      {session && <SessionBar session={session} onEnd={endSession} />}
+      {session && <SessionBar session={session} onEnd={endSession} endLabel={onKidDevice ? "Finish" : undefined} />}
 
       {screen.name === "decks" && (
         <DeckList
