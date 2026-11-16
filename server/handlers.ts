@@ -149,8 +149,14 @@ export async function submitScore(request: Request, deps: Deps = defaultDeps()):
 
 // --------------------------------------------------------- /api/leaderboard
 
+/**
+ * GET: the top players. Public (no sign-in); "you" is the current session's
+ * player, or, between sessions, the kid profile this device is linked to.
+ */
 export async function getLeaderboard(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   if (!deps.store) return storageMissing();
   const session = await currentSession(request, deps);
-  return json(await deps.store.leaderboard(LEADERBOARD_SIZE, session?.playerKey));
+  const kid = session ? null : await kidProfile(request, deps);
+  const playerKey = session?.playerKey ?? (kid ? `p:${kid.id}` : undefined);
+  return json(await deps.store.leaderboard(LEADERBOARD_SIZE, playerKey));
 }

@@ -167,6 +167,11 @@ export const api = {
   },
 
   /** Saves points for answers; `streakBefore` carries the streak over from the previous save. */
+  /** The public leaderboard (no sign-in needed). */
+  getLeaderboard(): Promise<Leaderboard> {
+    return call<Leaderboard>("/api/leaderboard");
+  },
+
   submitScore(
     answers: boolean[],
     options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean },

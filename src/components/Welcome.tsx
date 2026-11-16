@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { POINTS_PER_CORRECT, STREAK_BONUS, STREAK_THRESHOLD } from "../points";
+import { LeaderboardPanel } from "./LeaderboardPanel";
 
 interface Props {
   /** Shown above the form, e.g. when a session just ended. */
@@ -71,6 +72,8 @@ export function Welcome({ notice, onStart, parentSignIn }: Props) {
           your real name.
         </p>
       </form>
+
+      <LeaderboardPanel />
 
       {parentSignIn && (
         <section className="welcome__parents" aria-label="Parents and teachers">
