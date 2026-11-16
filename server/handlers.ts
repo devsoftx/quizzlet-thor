@@ -113,7 +113,13 @@ export async function endSession(request: Request, deps: Deps = defaultDeps()): 
 
 // -------------------------------------------------------------- /api/score
 
-/** POST {answers: boolean[]}: score a finished round and return the leaderboard. */
+/**
+ * POST {answers: boolean[], streakBefore?, leaderboard?}: save points for answers.
+ * The app saves answers as they're given, so a round arrives in pieces:
+ * `streakBefore` carries the streak over from the previous piece, and
+ * `leaderboard: false` skips the leaderboard until the round's last piece.
+ * An empty list is allowed only to ask for the totals and leaderboard.
+ */
 export async function submitScore(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   if (!deps.store) return storageMissing();
   const session = await currentSession(request, deps);
@@ -121,18 +127,23 @@ export async function submitScore(request: Request, deps: Deps = defaultDeps()):
 
   const body = await readJson(request);
   const answers = body?.answers;
+  const wantsBoard = body?.leaderboard !== false;
+  const streakBefore = body?.streakBefore ?? 0;
   if (
     !Array.isArray(answers) ||
-    answers.length === 0 ||
+    (answers.length === 0 && body?.leaderboard !== true) ||
     answers.length > MAX_ROUND_LENGTH ||
     !answers.every((a) => typeof a === "boolean")
   ) {
     return error(400, "answers must be a list of true/false values.");
   }
+  if (!Number.isInteger(streakBefore) || (streakBefore as number) < 0 || (streakBefore as number) > MAX_ROUND_LENGTH) {
+    return error(400, "streakBefore must be a whole number.");
+  }
 
-  const round = scoreRound(answers);
+  const round = scoreRound(answers, streakBefore as number);
   const { sessionPoints, totalPoints } = await deps.store.addPoints(session, round.points);
-  const leaderboard = await deps.store.leaderboard(LEADERBOARD_SIZE, session.playerKey);
+  const leaderboard = wantsBoard ? await deps.store.leaderboard(LEADERBOARD_SIZE, session.playerKey) : null;
   return json({ pointsEarned: round.points, sessionPoints, totalPoints, leaderboard });
 }
 

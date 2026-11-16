@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createProfile, deleteMe, deleteProfile, updateProfile } from "./account-handlers.js";
+import { createProfile, deleteMe, deleteProfile, getMe, updateProfile } from "./account-handlers.js";
 import { MAX_DEVICES_PER_PROFILE, MemoryAccounts } from "./accounts.js";
 import { DevAuthenticator } from "./auth.js";
 import type { Deps } from "./deps.js";
@@ -166,6 +166,11 @@ describe("a kid's linked device", () => {
     const session = cookieFrom(start);
     const scored = await (await submitScore(req("/api/score", { method: "POST", cookie: session, body: { answers: [true] } }), deps)).json();
     expect(scored).toMatchObject({ pointsEarned: 10, leaderboard: { top: [] } }); // private by default
+
+    // The points belong to the kid's profile even while it's off the leaderboard.
+    expect((await whoAmI(deps, device)).totalPoints).toBe(10);
+    const me = await (await getMe(req("/api/me", { user: "ana" }), deps)).json();
+    expect(me.points).toEqual({ [nova.id]: 10 });
 
     await updateProfile(req(`/api/profiles?id=${nova.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: true } }), deps);
     expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toEqual([{ rank: 1, name: "Nova7", points: 10 }]);

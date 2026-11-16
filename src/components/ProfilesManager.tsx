@@ -14,6 +14,8 @@ import { ProfileAvatar } from "./ParentHome";
 
 interface Props {
   profiles: KidProfile[];
+  /** Each kid's all-time points, by profile id. */
+  points: Record<string, number>;
   onChange: (profiles: KidProfile[]) => void;
   onBack: () => void;
 }
@@ -154,7 +156,7 @@ function ProfileForm({
   );
 }
 
-export function ProfilesManager({ profiles, onChange, onBack }: Props) {
+export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
   const [editing, setEditing] = useState<string | "new" | null>(profiles.length === 0 ? "new" : null);
   const [links, setLinks] = useState<KidLinks>({ invites: [], devices: [] });
   const [linksError, setLinksError] = useState<string | null>(null);
@@ -227,7 +229,8 @@ export function ProfilesManager({ profiles, onChange, onBack }: Props) {
                     <strong>{p.nickname}</strong>
                     <span className="muted">
                       {p.gradeBand ? GRADE_LABELS[p.gradeBand] : "Grade not set"} ·{" "}
-                      {p.showOnLeaderboard ? "On the leaderboard" : "Private"} · {devicesLabel(links, p.id)}
+                      ⭐ {(points[p.id] ?? 0).toLocaleString()} pts · {p.showOnLeaderboard ? "On the leaderboard" : "Private"} ·{" "}
+                      {devicesLabel(links, p.id)}
                     </span>
                   </div>
                   <button

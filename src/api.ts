@@ -39,6 +39,9 @@ export interface ScoreResult {
   leaderboard: Leaderboard;
 }
 
+/** One save while answering: the leaderboard comes only with a round's last save. */
+export type ScoreSave = Omit<ScoreResult, "leaderboard"> & { leaderboard: Leaderboard | null };
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -56,7 +59,10 @@ export function setAuthHeaders(provider: () => Promise<Record<string, string>>) 
   authHeaders = provider;
 }
 
-async function call<T>(path: string, init: { method?: string; body?: unknown; raw?: BodyInit } = {}): Promise<T> {
+async function call<T>(
+  path: string,
+  init: { method?: string; body?: unknown; raw?: BodyInit; keepalive?: boolean } = {},
+): Promise<T> {
   let res: Response;
   try {
     const headers: Record<string, string> = await authHeaders().catch(() => ({}));
@@ -66,6 +72,8 @@ async function call<T>(path: string, init: { method?: string; body?: unknown; ra
       credentials: "same-origin",
       headers,
       body: init.raw ?? (init.body === undefined ? undefined : JSON.stringify(init.body)),
+      // Lets a save finish even if the page is closing.
+      keepalive: init.keepalive,
     });
   } catch {
     throw new ApiError("Can't reach the server. Check your internet connection.", 0);
@@ -117,6 +125,8 @@ export interface KidLinks {
 export interface KidHomeInfo {
   profile: KidCard;
   decks: AccountDeck[];
+  /** The kid's all-time points. */
+  totalPoints: number;
 }
 
 const JOIN_PREFIX = "#join=";
@@ -156,14 +166,22 @@ export const api = {
     await call("/api/session", { method: "DELETE" });
   },
 
-  submitScore(answers: boolean[]): Promise<ScoreResult> {
-    return call<ScoreResult>("/api/score", { method: "POST", body: { answers } });
+  /** Saves points for answers; `streakBefore` carries the streak over from the previous save. */
+  submitScore(
+    answers: boolean[],
+    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean },
+  ): Promise<ScoreSave> {
+    return call<ScoreSave>("/api/score", {
+      method: "POST",
+      body: { answers, streakBefore: options.streakBefore, leaderboard: options.leaderboard },
+      keepalive: options.keepalive,
+    });
   },
 
   // ---- Parent/teacher accounts (need a sign-in) ----
 
-  /** The account (created on first sign-in) and its kid profiles. */
-  getMe(): Promise<{ account: AccountInfo; profiles: KidProfile[] }> {
+  /** The account (created on first sign-in), its kid profiles and each kid's all-time points. */
+  getMe(): Promise<{ account: AccountInfo; profiles: KidProfile[]; points: Record<string, number> }> {
     return call("/api/me");
   },
 

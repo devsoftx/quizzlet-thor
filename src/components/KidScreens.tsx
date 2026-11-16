@@ -83,11 +83,13 @@ export function JoinInvite({
 /** A kid's own linked device, between sessions. */
 export function KidHome({
   profile,
+  totalPoints,
   notice,
   onStart,
   onUnlink,
 }: {
   profile: KidCard;
+  totalPoints: number;
   notice?: string;
   onStart: () => Promise<void>;
   onUnlink: () => Promise<void>;
@@ -110,6 +112,9 @@ export function KidHome({
     <div className="kid-screen">
       <ProfileAvatar profile={profile} size={96} />
       <h1 className="kid-screen__title">Hi, {profile.nickname}!</h1>
+      <p className="kid-screen__points" aria-label={`${totalPoints} points so far`}>
+        ⭐ {totalPoints.toLocaleString()} points so far
+      </p>
       {notice && (
         <p className="welcome__notice" role="status">
           {notice}

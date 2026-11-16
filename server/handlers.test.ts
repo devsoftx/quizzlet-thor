@@ -46,7 +46,8 @@ describe("points", () => {
     expect(pointsForAnswer(true, 2)).toEqual({ points: 15, streak: 3, bonus: true });
     expect(pointsForAnswer(false, 5)).toEqual({ points: 0, streak: 0, bonus: false });
     // ✓✓✓✓ ✗ ✓ = 10+10+15+15 + 0 + 10
-    expect(scoreRound([true, true, true, true, false, true])).toEqual({ points: 60, correct: 5, bestStreak: 4 });
+    expect(scoreRound([true, true, true, true, false, true])).toEqual({ points: 60, correct: 5, bestStreak: 4, streak: 1 });
+    expect(scoreRound([true], 2)).toMatchObject({ points: 15, streak: 3 }); // a streak carried over from earlier answers
   });
 });
 
@@ -131,6 +132,35 @@ describe("scores and leaderboard", () => {
     const cookie = await login(deps, "Ana");
     for (const answers of [[], ["yes"], "true", new Array(201).fill(true)]) {
       const res = await submitScore(req("/api/score", { method: "POST", body: { answers }, cookie }), deps);
+      expect(res.status).toBe(400);
+    }
+  });
+
+  it("saves a round in pieces with the same points as all at once", async () => {
+    const { deps } = setup();
+    const cookie = await login(deps, "Ana");
+    const piece = async (body: Record<string, unknown>) =>
+      (await submitScore(req("/api/score", { method: "POST", body, cookie }), deps)).json();
+
+    // true, true (20) then true with the streak carried over (10 + 5 bonus): 35, like [true, true, true].
+    expect(await piece({ answers: [true, true], streakBefore: 0, leaderboard: false })).toMatchObject({
+      pointsEarned: 20,
+      sessionPoints: 20,
+      leaderboard: null,
+    });
+    expect(await piece({ answers: [true], streakBefore: 2, leaderboard: false })).toMatchObject({ pointsEarned: 15, sessionPoints: 35 });
+    expect(scoreRound([true, true, true]).points).toBe(35);
+
+    // Nothing left to send: an empty list may ask for the totals and leaderboard.
+    expect(await piece({ answers: [], leaderboard: true })).toMatchObject({
+      pointsEarned: 0,
+      sessionPoints: 35,
+      totalPoints: 35,
+      leaderboard: { top: [{ name: "Ana", points: 35 }] },
+    });
+
+    for (const streakBefore of [-1, 1.5, "2", 201]) {
+      const res = await submitScore(req("/api/score", { method: "POST", body: { answers: [true], streakBefore }, cookie }), deps);
       expect(res.status).toBe(400);
     }
   });

@@ -28,10 +28,14 @@ export interface RoundScore {
   bestStreak: number;
 }
 
-export function scoreRound(answers: readonly boolean[]): RoundScore {
+/**
+ * Points for a run of answers. `streakBefore` carries a streak over from the
+ * answers already saved, so saving a round in pieces scores the same as all at once.
+ */
+export function scoreRound(answers: readonly boolean[], streakBefore = 0): RoundScore & { streak: number } {
   let points = 0;
   let correct = 0;
-  let streak = 0;
+  let streak = streakBefore;
   let bestStreak = 0;
   for (const answer of answers) {
     const result = pointsForAnswer(answer, streak);
@@ -40,5 +44,5 @@ export function scoreRound(answers: readonly boolean[]): RoundScore {
     if (answer) correct++;
     bestStreak = Math.max(bestStreak, streak);
   }
-  return { points, correct, bestStreak };
+  return { points, correct, bestStreak, streak };
 }

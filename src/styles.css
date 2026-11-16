@@ -1103,6 +1103,19 @@ a.btn {
   outline-offset: 2px;
 }
 
+.profile-tile__points {
+  color: var(--gold);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.kid-screen__points {
+  margin: 0;
+  color: var(--gold);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
 .profile-tile__name {
   font-weight: 700;
   overflow-wrap: anywhere;

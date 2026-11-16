@@ -52,6 +52,13 @@ export async function ensureAccount(ctx: AccountContext, deps: Deps) {
 
 const playerKeyForProfile = (id: string) => `p:${id}`;
 
+/** Each kid profile's all-time points (0 when there's no leaderboard store). */
+export async function profilePoints(deps: Deps, profileIds: string[]): Promise<Record<string, number>> {
+  if (!deps.store || profileIds.length === 0) return Object.fromEntries(profileIds.map((id) => [id, 0]));
+  const totals = await deps.store.totalsFor(profileIds.map(playerKeyForProfile));
+  return Object.fromEntries(profileIds.map((id) => [id, totals[playerKeyForProfile(id)] ?? 0]));
+}
+
 const idParam = (request: Request) => new URL(request.url).searchParams.get("id") ?? "";
 
 // ----------------------------------------------------------------- /api/me
@@ -62,7 +69,11 @@ export async function getMe(request: Request, deps: Deps = defaultDeps()): Promi
   if (ctx instanceof Response) return ctx;
   const account = await ensureAccount(ctx, deps);
   const profiles = await ctx.scope.listProfiles();
-  return json({ account: { displayName: account.displayName, plan: account.plan, settings: account.settings }, profiles });
+  return json({
+    account: { displayName: account.displayName, plan: account.plan, settings: account.settings },
+    profiles,
+    points: await profilePoints(deps, profiles.map((p) => p.id)),
+  });
 }
 
 /** PATCH {displayName?, settings?}: update the account. */
