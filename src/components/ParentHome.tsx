@@ -4,6 +4,8 @@ import type { KidProfile } from "../account-shared";
 interface Props {
   displayName: string;
   profiles: KidProfile[];
+  /** Each kid's all-time points, by profile id. */
+  points: Record<string, number>;
   notice?: string;
   onPick: (profileId: string) => Promise<void>;
   onManage: () => void;
@@ -26,7 +28,18 @@ export function ProfileAvatar({ profile, size = 64 }: { profile: Pick<KidProfile
 }
 
 /** A signed-in parent's home: pick which kid is studying. */
-export function ParentHome({ displayName, profiles, notice, onPick, onManage, onDecks, onFiles, onSettings, onSignOut }: Props) {
+export function ParentHome({
+  displayName,
+  profiles,
+  points,
+  notice,
+  onPick,
+  onManage,
+  onDecks,
+  onFiles,
+  onSettings,
+  onSignOut,
+}: Props) {
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -94,10 +107,11 @@ export function ParentHome({ displayName, profiles, notice, onPick, onManage, on
                   className="profile-tile"
                   onClick={() => pick(p.id)}
                   disabled={busy !== null}
-                  aria-label={`Study as ${p.nickname}`}
+                  aria-label={`Study as ${p.nickname}, ${points[p.id] ?? 0} points`}
                 >
                   <ProfileAvatar profile={p} />
                   <span className="profile-tile__name">{busy === p.id ? "Starting…" : p.nickname}</span>
+                  <span className="profile-tile__points">⭐ {(points[p.id] ?? 0).toLocaleString()} pts</span>
                 </button>
               </li>
             ))}

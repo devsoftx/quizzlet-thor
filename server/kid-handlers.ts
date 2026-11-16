@@ -16,7 +16,7 @@ import {
   type KidProfile,
   type LinkTarget,
 } from "./accounts.js";
-import { requireAccount } from "./account-handlers.js";
+import { profilePoints, requireAccount } from "./account-handlers.js";
 import { defaultDeps, type Deps } from "./deps.js";
 import { cookie, error, json, readCookie, readJson } from "./http.js";
 
@@ -140,7 +140,8 @@ export async function getKid(request: Request, deps: Deps = defaultDeps()): Prom
     return json({ kid: null }, 200, hadCookie ? { "set-cookie": cookie(request, KID_COOKIE, "", 0) } : {});
   }
   const decks = (await deps.accounts!.forAccount(device.accountId).listDecks()).filter((d) => deckIsFor(d, profile.id));
-  return json({ kid: { profile: card(profile), decks } });
+  const totalPoints = (await profilePoints(deps, [profile.id]))[profile.id];
+  return json({ kid: { profile: card(profile), decks, totalPoints } });
 }
 
 /**

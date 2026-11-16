@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Card, Deck } from "../deck";
 import { pointsForAnswer } from "../points";
 import { FlipCard } from "./FlipCard";
@@ -20,6 +20,8 @@ interface Props {
   isRetry: boolean;
   onFinish: (results: AnswerRecord[]) => void;
   onExit: () => void;
+  /** Called once per answered card, so its points can be saved right away. */
+  onAnswer?: (correct: boolean) => void;
 }
 
 function isTypingTarget(target: EventTarget | null): boolean {
@@ -29,9 +31,11 @@ function isTypingTarget(target: EventTarget | null): boolean {
   );
 }
 
-export function Quiz({ deck, cards, isRetry, onFinish, onExit }: Props) {
+export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props) {
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState<AnswerRecord[]>([]);
+  /** The last card answered, so a fast double tap can't answer (or score) a card twice. */
+  const answered = useRef(-1);
 
   const card = cards[index];
   const current = results[index];
@@ -42,20 +46,32 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit }: Props) {
 
   const pick = useCallback(
     (option: string) => {
-      if (results.length > index) return; // already answered
+      if (results.length > index || answered.current >= index) return; // already answered
+      answered.current = index;
+      const correct = option === card.answer;
+      onAnswer?.(correct);
       setResults((prev) => {
-        const correct = option === card.answer;
         const earned = pointsForAnswer(correct, prev.at(-1)?.streak ?? 0);
         return [...prev, { card, picked: option, correct, ...earned }];
       });
     },
-    [card, index, results.length],
+    [card, index, results.length, onAnswer],
   );
+
+  /** Set once the round is handed over, so a double tap on the last card can't finish it twice. */
+  const finished = useRef(false);
 
   const next = useCallback(() => {
     if (results.length <= index) return; // not answered yet
-    if (isLast) onFinish(results);
-    else setIndex((i) => i + 1);
+    if (isLast) {
+      if (finished.current) return;
+      finished.current = true;
+      onFinish(results);
+      return;
+    }
+    // Only move on from *this* card: a second tap before the screen updates
+    // must not skip the next card (which would leave the quiz stuck).
+    setIndex((i) => (i === index ? i + 1 : i));
   }, [index, isLast, onFinish, results]);
 
   // Keyboard: 1–9 (or A–J) picks an option; → / Enter / Space continues.

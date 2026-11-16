@@ -93,7 +93,8 @@ data for users under 16 without verifiable parental consent.
 A signed-in parent can:
 
 - create up to 20 **kid profiles**: a nickname, grade, color and emoji only — no real names;
-- pick a profile on the "Who's studying?" screen to start that kid's 60-minute session;
+- pick a profile on the "Who's studying?" screen to start that kid's 60-minute session,
+  and see each kid's all-time points there (kids see theirs on their own home screen);
 - **link a kid's own device**: each new profile gets an invitation link (one use,
   7 days). The kid opens it on their tablet or computer and that device studies
   as them, still with no email, password or account. The parent sees each linked

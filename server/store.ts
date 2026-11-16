@@ -38,6 +38,8 @@ export interface Store {
   syncPlayer(playerKey: string, name: string, listed: boolean): Promise<void>;
   /** Removes a player's name, total and leaderboard entry (profile or account deleted). */
   removePlayer(playerKey: string): Promise<void>;
+  /** All-time totals for kid profiles ("p:<id>" keys), whether or not they're on the leaderboard. */
+  totalsFor(playerKeys: string[]): Promise<Record<string, number>>;
 }
 
 // ---------------------------------------------------------------- Memory
@@ -67,6 +69,10 @@ export class MemoryStore implements Store {
     this.state.totals.delete(playerKey);
     this.state.names.delete(playerKey);
     this.state.hidden.delete(playerKey);
+  }
+
+  async totalsFor(playerKeys: string[]) {
+    return Object.fromEntries(playerKeys.map((k) => [k, this.state.totals.get(k) ?? 0]));
   }
 
   async createSession(session: Session) {
@@ -160,6 +166,12 @@ export class RedisStore implements Store {
       .hdel("player-totals", playerKey)
       .srem("leaderboard-hidden", playerKey)
       .exec();
+  }
+
+  async totalsFor(playerKeys: string[]) {
+    if (playerKeys.length === 0) return {};
+    const values = await this.redis.hmget<Record<string, number | string | null>>("player-totals", ...playerKeys);
+    return Object.fromEntries(playerKeys.map((k) => [k, Number(values?.[k] ?? 0) || 0]));
   }
 
   async getSession(id: string, now: number) {

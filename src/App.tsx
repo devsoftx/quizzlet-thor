@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { AccountDeck, KidProfile } from "./account-shared";
 import { api, ApiError, takeInviteToken, type AccountInfo, type KidHomeInfo, type ScoreResult, type SessionInfo } from "./api";
 import { AUTH_MODE, useAccountAuth } from "./auth";
@@ -16,6 +16,7 @@ import {
 } from "./library";
 import { DeckList } from "./components/DeckList";
 import { JoinInvite, KidHome } from "./components/KidScreens";
+import { ScoreSaver } from "./scoreSaver";
 import { MyDecks } from "./components/MyDecks";
 import { MyFiles } from "./components/MyFiles";
 import { ParentHome } from "./components/ParentHome";
@@ -42,7 +43,7 @@ export type SaveState =
 type AccountState =
   | { status: "none" }
   | { status: "loading" }
-  | { status: "ready"; account: AccountInfo; profiles: KidProfile[]; decks: AccountDeck[] }
+  | { status: "ready"; account: AccountInfo; profiles: KidProfile[]; decks: AccountDeck[]; points: Record<string, number> }
   | { status: "error"; message: string };
 
 type Screen =
@@ -86,7 +87,45 @@ export function App() {
   const [joinToken, setJoinToken] = useState<string | null>(initialJoinToken);
   const [kidState, setKidState] = useState<KidState>({ status: "loading" });
 
+  // Points are saved answer by answer, so nothing earned is lost by leaving a
+  // deck early, ending the session or closing the page.
+  const profileIdRef = useRef<string | null>(null);
+  const saverRef = useRef<ScoreSaver | null>(null);
+  saverRef.current ??= new ScoreSaver((answers, options) => api.submitScore(answers, options), {
+    onSaved: (r) => {
+      setSessionState((s) => (s.status === "active" ? { ...s, session: { ...s.session, points: r.sessionPoints } } : s));
+      const profileId = profileIdRef.current;
+      if (!profileId) return;
+      // Show the kid's new total on their profile (parent's view and the kid's own device).
+      setAccountState((a) => (a.status === "ready" ? { ...a, points: { ...a.points, [profileId]: r.totalPoints } } : a));
+      setKidState((k) =>
+        k.status === "linked" && k.kid.profile.id === profileId ? { ...k, kid: { ...k.kid, totalPoints: r.totalPoints } } : k,
+      );
+    },
+    isExpired: (err) => err instanceof ApiError && err.status === 401,
+    onExpired: () => sessionExpired(),
+  });
+  const saver = saverRef.current;
+
+  /** Sends any answers not saved yet (before a session ends, or the page closes). */
+  const savePending = () => saver.flush().catch(() => null);
+
+  // Closing the tab or switching away: send what's left, even as the page goes.
+  useEffect(() => {
+    const save = () => {
+      if (saver.pending > 0 && !saver.busy) saver.flush({ keepalive: true }).catch(() => undefined);
+    };
+    const onVisibility = () => document.visibilityState === "hidden" && save();
+    window.addEventListener("pagehide", save);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", save);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [saver]);
+
   const session = sessionState.status === "active" ? sessionState.session : null;
+  profileIdRef.current = session?.profileId ?? null;
   const ready = accountState.status === "ready" ? accountState : null;
   const kid = kidState.status === "linked" && !auth.isSignedIn ? kidState.kid : null;
   // A kid studying under a parent's account sees the shared decks plus the
@@ -127,7 +166,9 @@ export function App() {
     }
     setAccountState({ status: "loading" });
     Promise.all([api.getMe(), api.listDecks().catch(() => [] as AccountDeck[])])
-      .then(([{ account, profiles }, decks]) => setAccountState({ status: "ready", account, profiles, decks }))
+      .then(([{ account, profiles, points }, decks]) =>
+        setAccountState({ status: "ready", account, profiles, decks, points: points ?? {} }),
+      )
       .catch((err: Error) => setAccountState({ status: "error", message: err.message }));
   }, [auth.isLoaded, auth.isSignedIn]);
 
@@ -156,6 +197,7 @@ export function App() {
   }
 
   async function unlinkThisDevice() {
+    await savePending();
     await api.endSession().catch(() => undefined);
     await api.unlinkThisDevice();
     setKidState({ status: "none" });
@@ -170,6 +212,7 @@ export function App() {
   }
 
   async function signOut() {
+    await savePending();
     await api.endSession().catch(() => undefined);
     await auth.signOut();
     setSessionState({ status: "none" });
@@ -216,6 +259,8 @@ export function App() {
   }
 
   async function endSession() {
+    await savePending();
+    saver.clear();
     await api.endSession().catch(() => undefined);
     setSessionState({ status: "none" });
     setScreen({ name: "decks" });
@@ -236,6 +281,7 @@ export function App() {
     // A signed-in parent's "card order" setting overrides each deck's choice.
     const shuffle = ready?.account.settings.shuffle ?? "deck";
     const forRun = shuffle === "deck" ? deck : { ...deck, shuffle: shuffle === "on" };
+    saver.newRound(); // each round's streak starts from zero
     setScreen({
       name: "quiz",
       deckId,
@@ -247,26 +293,22 @@ export function App() {
     window.scrollTo({ top: 0 });
   }
 
-  function saveRound(answers: boolean[], run: number) {
+  /** A finished round: send what's left and show the round's points, totals and leaderboard. */
+  function saveRound(results: AnswerRecord[], run: number) {
     const update = (save: SaveState) =>
       setScreen((sc) => (sc.name === "results" && sc.run === run ? { ...sc, save } : sc));
+    const roundPoints = results.reduce((sum, r) => sum + r.points, 0);
 
     update({ status: "saving" });
-    api
-      .submitScore(answers)
-      .then((result) => {
-        setSessionState((s) =>
-          s.status === "active" ? { ...s, session: { ...s.session, points: result.sessionPoints } } : s,
-        );
-        update({ status: "saved", result });
+    saver
+      .flush({ final: true })
+      .then((saved) => {
+        if (!saved?.leaderboard) throw new Error("Couldn't load the leaderboard.");
+        update({ status: "saved", result: { ...saved, leaderboard: saved.leaderboard, pointsEarned: roundPoints } });
       })
       .catch((err: Error) => {
-        if (err instanceof ApiError && err.status === 401) {
-          sessionExpired();
-          update({ status: "expired" });
-        } else {
-          update({ status: "error", message: err.message });
-        }
+        if (err instanceof ApiError && err.status === 401) update({ status: "expired" });
+        else update({ status: "error", message: err.message });
       });
   }
 
@@ -278,10 +320,7 @@ export function App() {
       setBestScores(loadBestScores());
     }
     setScreen({ name: "results", deckId, deck, results, isRetry, newBest, run, save: { status: "saving" } });
-    saveRound(
-      results.map((r) => r.correct),
-      run,
-    );
+    saveRound(results, run);
     window.scrollTo({ top: 0 });
   }
 
@@ -375,6 +414,7 @@ export function App() {
       <main className="app">
         <ProfilesManager
           profiles={ready.profiles}
+          points={ready.points}
           onChange={(profiles) => setAccountState({ ...ready, profiles })}
           onBack={() => setScreen({ name: "decks" })}
         />
@@ -418,6 +458,7 @@ export function App() {
           <ParentHome
             displayName={accountState.account.displayName}
             profiles={accountState.profiles}
+            points={accountState.points}
             notice={notice}
             onPick={startProfileSession}
             onManage={() => setScreen({ name: "profiles" })}
@@ -432,7 +473,13 @@ export function App() {
     if (kid) {
       return (
         <main className="app">
-          <KidHome profile={kid.profile} notice={notice} onStart={startKidSession} onUnlink={unlinkThisDevice} />
+          <KidHome
+            profile={kid.profile}
+            totalPoints={kid.totalPoints}
+            notice={notice}
+            onStart={startKidSession}
+            onUnlink={unlinkThisDevice}
+          />
         </main>
       );
     }
@@ -478,7 +525,11 @@ export function App() {
           onFinish={(results) =>
             finishQuiz(screen.deckId, screen.deck, screen.isRetry, screen.run, results)
           }
-          onExit={() => setScreen({ name: "decks" })}
+          onAnswer={(correct) => saver.add(correct)}
+          onExit={() => {
+            void savePending(); // answers are already on their way; make sure none wait
+            setScreen({ name: "decks" });
+          }}
         />
       )}
 
@@ -489,12 +540,7 @@ export function App() {
           isRetry={screen.isRetry}
           newBest={screen.newBest}
           save={screen.save}
-          onRetrySave={() =>
-            saveRound(
-              screen.results.map((r) => r.correct),
-              screen.run,
-            )
-          }
+          onRetrySave={() => saveRound(screen.results, screen.run)}
           onNewSession={() => setScreen({ name: "decks" })}
           onRetryMissed={() =>
             startQuiz(
