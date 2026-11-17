@@ -100,16 +100,18 @@ export function ParentHome({
           <ul className="profile-grid">
             {profiles.map((p) => (
               <li key={p.id}>
-                <button
-                  type="button"
-                  className="profile-tile"
-                  onClick={() => pick(p.id)}
-                  disabled={busy !== null}
-                  aria-label={`Study as ${p.nickname}, ${points[p.id] ?? 0} points`}
-                >
+                {/* The visible text is the button's name (plus "Study as" for screen readers),
+                    so voice control users can say what they see. */}
+                <button type="button" className="profile-tile" onClick={() => pick(p.id)} disabled={busy !== null}>
                   <ProfileAvatar profile={p} />
-                  <span className="profile-tile__name">{busy === p.id ? "Starting…" : p.nickname}</span>
-                  <span className="profile-tile__points">⭐ {(points[p.id] ?? 0).toLocaleString()} pts</span>
+                  <span className="profile-tile__name">
+                    <span className="visually-hidden">Study as </span>
+                    {busy === p.id ? "Starting…" : p.nickname}
+                  </span>
+                  <span className="profile-tile__points">
+                    <span aria-hidden="true">⭐ </span>
+                    {(points[p.id] ?? 0).toLocaleString()} pts
+                  </span>
                 </button>
               </li>
             ))}
