@@ -1,7 +1,7 @@
-import type { CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import type { SaveState } from "../App";
 import type { Deck } from "../deck";
-import { LeaderboardTable } from "./LeaderboardTable";
+import { LeaderboardPanel } from "./LeaderboardPanel";
 import type { AnswerRecord } from "./Quiz";
 
 interface Props {
@@ -18,10 +18,10 @@ interface Props {
 }
 
 function message(percent: number): string {
-  if (percent === 100) return "Flawless. Worthy of Mjölnir.";
-  if (percent >= 80) return "Great work!";
-  if (percent >= 50) return "Getting there — keep practicing.";
-  return "Tough round. Try the missed cards again.";
+  if (percent === 100) return "Every question answered. Wonderful work!";
+  if (percent >= 80) return "Nice exploring. See what you discovered below.";
+  if (percent >= 50) return "Every question is a chance to learn something new.";
+  return "Curiosity starts with trying. Take another look below.";
 }
 
 function PointsAndLeaderboard({
@@ -45,7 +45,7 @@ function PointsAndLeaderboard({
     case "expired":
       return (
         <div className="save-problem" role="alert">
-          <p>Your 60-minute session ended before this round finished, so these points weren't saved.</p>
+          <p>Your session ended. {save.confirmedPoints.toLocaleString()} points were confirmed in this session. Recent points may not have been confirmed, and answers after the session ended were not saved.</p>
           <button type="button" className="btn btn--primary" onClick={onNewSession}>
             Start a new session
           </button>
@@ -54,10 +54,8 @@ function PointsAndLeaderboard({
     case "error":
       return (
         <div className="save-problem" role="alert">
-          <p>Couldn't save your points: {save.message}</p>
-          <button type="button" className="btn btn--secondary" onClick={onRetrySave}>
-            Try again
-          </button>
+          <p>{save.kind === "failed" ? "Your latest points were rejected." : "We couldn't confirm whether your latest points were saved."} {save.message}</p>
+          {save.kind === "unknown" && <button type="button" className="btn btn--secondary" onClick={onRetrySave}>Try again</button>}
         </div>
       );
     case "saved": {
@@ -78,8 +76,7 @@ function PointsAndLeaderboard({
               </span>
             </div>
           </div>
-          <h2 className="section-title">🏆 Leaderboard</h2>
-          <LeaderboardTable board={result.leaderboard} />
+          <LeaderboardPanel collapsible />
         </>
       );
     }
@@ -90,7 +87,6 @@ export function Results({
   deck,
   results,
   isRetry,
-  newBest,
   save,
   onRetrySave,
   onNewSession,
@@ -98,6 +94,8 @@ export function Results({
   onRestart,
   onExit,
 }: Props) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => { headingRef.current?.focus({ preventScroll: true }); }, []);
   const correct = results.filter((r) => r.correct).length;
   const missed = results.length - correct;
   const percent = Math.round((correct / results.length) * 100);
@@ -106,7 +104,7 @@ export function Results({
   return (
     <div className="results">
       <header className="results__summary">
-        <p className="eyebrow">{isRetry ? `${deck.title} · missed cards` : deck.title}</p>
+        <p className="eyebrow">{isRetry ? `${deck.title} · missed questions` : deck.title}</p>
         <div
           className="score-ring"
           style={{ "--pct": `${percent}` } as CSSProperties}
@@ -115,17 +113,16 @@ export function Results({
         >
           <span>{percent}%</span>
         </div>
-        <h1>
+        <h1 ref={headingRef} tabIndex={-1}>
           {correct} of {results.length} correct
         </h1>
         <p className="muted">
           {message(percent)}
-          {newBest && <span className="tag tag--best">New best!</span>}
         </p>
         <div className="results__actions">
           {missed > 0 && (
             <button type="button" className="btn btn--primary" onClick={onRetryMissed}>
-              Retry missed ({missed})
+              Practice missed questions ({missed})
             </button>
           )}
           <button
@@ -136,7 +133,7 @@ export function Results({
             Restart deck
           </button>
           <button type="button" className="btn btn--ghost" onClick={onExit}>
-            All decks
+            Explore more decks
           </button>
         </div>
       </header>

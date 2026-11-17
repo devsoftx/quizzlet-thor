@@ -57,7 +57,7 @@ export function ParentHome({
   return (
     <div className="parent-home">
       <header className="parent-home__bar">
-        <span className="muted">Signed in as {displayName}</span>
+        <span><strong className="field-mark">Quizzlet</strong><br /><span className="muted">Parent &amp; teacher workspace · {displayName}</span></span>
         <span className="parent-home__actions">
           <button type="button" className="btn btn--ghost" onClick={onDecks}>
             My decks
@@ -74,9 +74,7 @@ export function ParentHome({
         </span>
       </header>
 
-      <h1 className="brand parent-home__title">
-        <span aria-hidden="true">⚡</span> Who's studying?
-      </h1>
+      <div className="parent-home__intro"><h1 className="parent-home__title">Who's exploring today?</h1><p className="muted">Choose a learner to begin, or manage your family's study space.</p></div>
 
       {notice && (
         <p className="welcome__notice" role="status">

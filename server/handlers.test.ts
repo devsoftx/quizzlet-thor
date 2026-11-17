@@ -204,3 +204,80 @@ describe("storage", () => {
     expect(res.status).toBe(503);
   });
 });
+
+describe("idempotent score batches", () => {
+  it("credits an identical concurrent replay once and rejects conflicting payloads", async () => {
+    const { deps } = setup();
+    const cookie = await login(deps, "Explorer");
+    const send = (answers: boolean[]) => submitScore(req("/api/score", {
+      method: "POST", cookie, body: { batchId: "batch-one", answers, streakBefore: 0, leaderboard: false },
+    }), deps);
+    const [first, replay] = await Promise.all([send([true]), send([true])]);
+    expect(first.status).toBe(200);
+    expect(replay.status).toBe(200);
+    expect(await first.json()).toEqual(await replay.json());
+    expect((await send([false])).status).toBe(409);
+    expect(await (await getSession(req("/api/session", { cookie }), deps)).json()).toMatchObject({ points: 10 });
+  });
+});
+
+describe("score batch outcomes", () => {
+  it("keeps an acknowledged score when the optional leaderboard is unavailable", async () => {
+    const { deps } = setup();
+    const cookie = await login(deps, "Explorer");
+    deps.store!.leaderboard = async () => { throw new Error("board unavailable"); };
+    const res = await submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: "b1", answers: [true], leaderboard: true } }), deps);
+    expect(res.status).toBe(200);
+    expect(await res.json()).toMatchObject({ pointsEarned: 10, sessionPoints: 10, leaderboard: null });
+  });
+  it("returns an identical receipt even when the public board changes", async () => {
+    const { deps } = setup();
+    const cookie = await login(deps, "Explorer");
+    const body = { batchId: "with-board", answers: [true], leaderboard: true };
+    const first = await (await submitScore(req("/api/score", { method: "POST", cookie, body }), deps)).json();
+    const other = await login(deps, "Other");
+    await submitScore(req("/api/score", { method: "POST", cookie: other, body: { answers: [true] } }), deps);
+    const replay = await (await submitScore(req("/api/score", { method: "POST", cookie, body }), deps)).json();
+    expect(first).toEqual(replay);
+    expect(first.leaderboard).toBeNull();
+  });
+  it("rejects a new batch after session expiry without scoring", async () => {
+    const { deps, advance } = setup();
+    const cookie = await login(deps, "Explorer");
+    advance(3600 * 1000);
+    expect((await submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: "late", answers: [true], leaderboard: false } }), deps)).status).toBe(401);
+    expect((await deps.store!.leaderboard(10)).top).toEqual([]);
+  });
+});
+
+describe("score session binding", () => {
+  it("rejects an old session batch sent with a different session cookie", async () => {
+    const { deps } = setup();
+    const first = await startSession(req("/api/session", { method: "POST", body: { name: "Alpha" } }), deps);
+    const firstInfo = await first.json();
+    const second = await startSession(req("/api/session", { method: "POST", body: { name: "Beta" } }), deps);
+    const secondCookie = cookieFrom(second);
+    const response = await submitScore(req("/api/score", { method: "POST", cookie: secondCookie, body: { batchId: "old-batch", sessionTag: firstInfo.sessionTag, answers: [true], leaderboard: false } }), deps);
+    expect(response.status).toBe(409);
+    expect(await (await getSession(req("/api/session", { cookie: secondCookie }), deps)).json()).toMatchObject({ points: 0 });
+  });
+});
+
+describe("post-commit failure recovery", () => {
+  it("returns the original receipt after the response is lost following a commit", async () => {
+    const { deps } = setup();
+    const cookie = await login(deps, "Explorer");
+    const store = deps.store!;
+    const save = store.addScoreBatch.bind(store);
+    let lost = true;
+    store.addScoreBatch = async (...args) => {
+      const receipt = await save(...args);
+      if (lost) { lost = false; throw new Error("connection lost after commit"); }
+      return receipt;
+    };
+    const send = () => submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: "lost-response", answers: [true], leaderboard: false } }), deps);
+    await expect(send()).rejects.toThrow("connection lost after commit");
+    expect(await (await send()).json()).toMatchObject({ pointsEarned: 10, sessionPoints: 10, totalPoints: 10 });
+    expect(await (await getSession(req("/api/session", { cookie }), deps)).json()).toMatchObject({ points: 10 });
+  });
+});

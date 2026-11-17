@@ -37,3 +37,18 @@ describe("a parent's decks for a kid", () => {
     expect(entry).toMatchObject({ id: "account:d1", source: "account", ok: true, deck: { title: "Family maths", enabled: true } });
   });
 });
+
+describe("deck search", () => {
+  it("searches title and description and filters only real subject metadata", async () => {
+    const { filterDecks } = await import("./library");
+    const entries = accountDecksFor([
+      deck({ id: "a", title: "Solar system", yaml: YAML.replace("title: From the file", "title: From the file\nsubject: Space") }),
+      deck({ id: "b", title: "Math facts" }),
+    ], "kid-a");
+    expect(filterDecks(entries, "SOLAR", "").map((e) => e.id)).toEqual(["account:a"]);
+    expect(filterDecks(entries, "", "Space").map((e) => e.id)).toEqual(["account:a"]);
+    expect(filterDecks(entries, "", "__uncategorized__").map((e) => e.id)).toEqual(["account:b"]);
+    expect(filterDecks(entries, "no such deck", "")).toEqual([]);
+    expect(filterDecks([...entries, { id: "bad", fileName: "bad.yaml", source: "imported", ok: false, errors: ["invalid"], enabled: true }], "", "").some((e) => e.id === "bad")).toBe(false);
+  });
+});

@@ -3,7 +3,7 @@ import { createProfile, deleteMe, deleteProfile, getMe, updateProfile } from "./
 import { MAX_DEVICES_PER_PROFILE, MemoryAccounts } from "./accounts.js";
 import { DevAuthenticator } from "./auth.js";
 import type { Deps } from "./deps.js";
-import { getLeaderboard, startSession, submitScore } from "./handlers.js";
+import { getLeaderboard, getSession, startSession, submitScore } from "./handlers.js";
 import { createInvite, deleteKid, deleteLink, deviceLabel, getKid, KID_COOKIE, listLinks, postKid } from "./kid-handlers.js";
 import { createDeck, updateDeck } from "./library-handlers.js";
 import { MemoryFileStore } from "./files.js";
@@ -164,7 +164,7 @@ describe("a kid's linked device", () => {
     expect(start.status).toBe(201);
     expect(await start.json()).toMatchObject({ name: "Nova7", profileId: nova.id });
     const session = cookieFrom(start);
-    const scored = await (await submitScore(req("/api/score", { method: "POST", cookie: session, body: { answers: [true] } }), deps)).json();
+    const scored = await (await submitScore(req("/api/score", { method: "POST", cookie: `${session}; ${device}`, body: { answers: [true] } }), deps)).json();
     expect(scored).toMatchObject({ pointsEarned: 10, leaderboard: { top: [] } }); // private by default
 
     // The points belong to the kid's profile even while it's off the leaderboard.
@@ -267,5 +267,56 @@ describe("device labels", () => {
     expect(deviceLabel("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36 Edg/140.0")).toBe("Windows · Edge");
     expect(deviceLabel("Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Mobile Safari/537.36")).toBe("Android phone · Chrome");
     expect(deviceLabel(null)).toBe("Device");
+  });
+});
+
+describe("active linked session revocation", () => {
+  it("rejects scoring when the linked device is removed after session start", async () => {
+    const { deps } = setup();
+    const profile = await kid(deps, "ana", "Nova7");
+    const deviceCookie = await linkDevice(deps, "ana", profile.id);
+    const started = await startSession(req("/api/session", { method: "POST", cookie: deviceCookie, body: { kid: true } }), deps);
+    expect(started.status).toBe(201);
+    const sessionCookie = cookieFrom(started);
+    await deleteKid(req("/api/kid", { method: "DELETE", cookie: deviceCookie }), deps);
+    const response = await submitScore(req("/api/score", { method: "POST", cookie: `${deviceCookie}; ${sessionCookie}`, body: { answers: [true], leaderboard: false } }), deps);
+    expect(response.status).toBe(403);
+  });
+});
+
+describe("private deck access during a session", () => {
+  it("checks ownership, assignment and enabled state before scoring", async () => {
+    const { deps } = setup();
+    const nova = await kid(deps, "ana", "Nova7");
+    const device = await linkDevice(deps, "ana", nova.id);
+    const yaml = "title: Stars\nenabled: true\ncards:\n  - question: Q\n    options: [A, B]\n    answer: A\n";
+    const made = await createDeck(req("/api/decks", { method: "POST", user: "ana", body: { yaml } }), deps);
+    const deck = (await made.json()).deck as { id: string };
+    const started = await startSession(req("/api/session", { method: "POST", cookie: device, body: { kid: true } }), deps);
+    const cookies = `${device}; ${cookieFrom(started)}`;
+    const score = (deckId: string) => submitScore(req("/api/score", { method: "POST", cookie: cookies, body: { deckId, answers: [true], leaderboard: false } }), deps);
+    expect((await score(deck.id)).status).toBe(200);
+    const otherDeck = (await (await createDeck(req("/api/decks", { method: "POST", user: "other", body: { yaml } }), deps)).json()).deck as { id: string };
+    expect((await score(otherDeck.id)).status).toBe(403);
+    expect((await getSession(req(`/api/session?deckId=${deck.id}`, { cookie: cookies }), deps)).status).toBe(200);
+    await updateDeck(req(`/api/decks?id=${deck.id}`, { method: "PATCH", user: "ana", body: { profileIds: [] } }), deps);
+    expect((await score(deck.id)).status).toBe(403);
+    const final = await submitScore(req("/api/score", { method: "POST", cookie: cookies, body: { deckId: deck.id, answers: [], leaderboard: true, batchId: "final-check" } }), deps);
+    expect(final.status).toBe(403);
+    expect((await getSession(req(`/api/session?deckId=${deck.id}`, { cookie: cookies }), deps)).status).toBe(403);
+    await updateDeck(req(`/api/decks?id=${deck.id}`, { method: "PATCH", user: "ana", body: { enabled: false } }), deps);
+    expect((await score(deck.id)).status).toBe(403);
+  });
+});
+
+describe("profile deletion during a session", () => {
+  it("rejects the linked session once its learner profile has been deleted", async () => {
+    const { deps } = setup();
+    const profile = await kid(deps, "ana", "Nova7");
+    const device = await linkDevice(deps, "ana", profile.id);
+    const started = await startSession(req("/api/session", { method: "POST", cookie: device, body: { kid: true } }), deps);
+    const cookies = `${device}; ${cookieFrom(started)}`;
+    await deleteProfile(req(`/api/profiles?id=${profile.id}`, { method: "DELETE", user: "ana" }), deps);
+    expect((await submitScore(req("/api/score", { method: "POST", cookie: cookies, body: { answers: [true], leaderboard: false } }), deps)).status).toBe(403);
   });
 });
