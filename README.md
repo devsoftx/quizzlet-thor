@@ -29,8 +29,45 @@ Then open http://localhost:5173.
 | ------------------- | ------------------------------------------ |
 | `npm run dev`       | Start the app with live reload             |
 | `npm test`          | Run the unit tests (also validates `decks/`) |
+| `npm run test:e2e`  | Run the end-to-end tests in a real browser |
 | `npm run typecheck` | TypeScript check                           |
 | `npm run build`     | Build a static site into `dist/`           |
+
+### End-to-end tests
+
+The tests in `e2e/` use [Playwright](https://playwright.dev) to drive the
+real app in Chromium (desktop, plus a phone-sized run of the core journey).
+The first time, install the browser:
+
+```bash
+npx playwright install chromium
+```
+
+```bash
+npm run test:e2e
+```
+
+They start their own dev server on port 5181 with **every real service key
+blanked** (database, Redis, Blob, Clerk), so they always run on in-memory data
+with the local sign-in, never against production, whatever is in `.env.local`.
+Each test makes its own guest names and parent ids, so tests run in parallel
+and in any order.
+
+| File                    | Covers                                                                 |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `guest.e2e.ts`          | Welcome screen, starting, resuming and ending a guest session          |
+| `quiz.e2e.ts`           | Studying: feedback, points and streak bonus, results, retry, keyboard   |
+| `library.e2e.ts`        | Importing, searching and filtering decks; broken or hidden decks; template |
+| `parent.e2e.ts`         | Sign-in, kid profiles and links, settings, deleting the account, privacy |
+| `kid-device.e2e.ts`     | Invitation links, studying on a kid's own device, removing a device    |
+| `decks-and-files.e2e.ts`| Private decks (who sees them), study files and their limits            |
+| `errors.e2e.ts`         | No connection, server errors, refused saves, sessions ending          |
+| `api.e2e.ts`            | The API's rules: who may call what, input checks, counting a save once |
+| `a11y.e2e.ts`           | Automated accessibility checks (axe-core, WCAG 2.2 AA) on every screen  |
+
+Bugs that were fixed have a test named after them (for example, a fast double
+tap skipping a card), so they can't quietly come back. On failure, Playwright
+keeps a trace and screenshot: `npm run test:e2e:report` opens them.
 
 ## Adding decks
 
@@ -169,6 +206,7 @@ decks/                 your YAML decks
 api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files, invites, kid)
 server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store
 db/migrations/         SQL migrations (npm run db:migrate)
+e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts
 src/deck.ts            YAML parsing, validation and shuffling
 src/library.ts         loads decks from decks/ and local storage, best scores
 src/components/        DeckList, Quiz, FlipCard, Results, parent screens (profiles, My decks, My files, settings)

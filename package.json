@@ -8,8 +8,11 @@
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc -p src && tsc -p .",
-    "db:migrate": "node scripts/migrate.mjs"
+    "typecheck": "tsc -p src && tsc -p . && tsc -p e2e",
+    "db:migrate": "node scripts/migrate.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@clerk/backend": "^3.27.0",
@@ -23,6 +26,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.16",
+    "@playwright/test": "1.64.1",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",

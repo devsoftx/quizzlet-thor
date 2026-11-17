@@ -10,3 +10,8 @@ docs/
 
 build/
 *.log
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/

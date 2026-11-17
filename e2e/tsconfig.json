@@ -1,0 +1,18 @@
+// End-to-end tests (Playwright) and their config.
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["node"],
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "typeRoots": ["../node_modules/@types"]
+  },
+  "include": [".", "../playwright.config.ts"]
+}
