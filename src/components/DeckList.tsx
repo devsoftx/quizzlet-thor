@@ -1,5 +1,5 @@
-import { useRef, useState, type DragEvent } from "react";
-import { isVisible, TEMPLATE_URL, type DeckEntry } from "../library";
+import { useEffect, useRef, useState, type DragEvent } from "react";
+import { filterDecks, isVisible, TEMPLATE_URL, type DeckEntry } from "../library";
 import { LeaderboardPanel } from "./LeaderboardPanel";
 
 interface Props {
@@ -30,10 +30,16 @@ cards:
     answer: Odin
     explanation: Odin, the All-Father, rules Asgard.  # optional`;
 
-export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRemove, importNote }: Props) {
+export function DeckList({ decks: allDecks, onStart, onImport, onRemove, importNote }: Props) {
   const fileInput = useRef<HTMLInputElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => { headingRef.current?.focus({ preventScroll: true }); }, []);
   const [dragging, setDragging] = useState(false);
-  const decks = allDecks.filter(isVisible);
+  const [query, setQuery] = useState("");
+  const [subject, setSubject] = useState("");
+  const visible = allDecks.filter(isVisible);
+  const subjects = [...new Set(visible.flatMap((entry) => entry.ok && entry.deck.subject ? [entry.deck.subject] : []))].sort();
+  const decks = [...filterDecks(visible, query, subject), ...(!query && !subject ? visible.filter((entry) => !entry.ok) : [])];
   const hidden = allDecks.filter((d) => !isVisible(d));
 
   function yamlFiles(list: FileList | null): File[] {
@@ -61,10 +67,9 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
     >
       <header className="app-header">
         <div>
-          <h1 className="brand">
-            <span aria-hidden="true">⚡</span> Quizzlet
-          </h1>
-          <p className="muted">Pick a deck. Answer each card. Watch it flip.</p>
+          <p className="field-mark"><span aria-hidden="true">✳</span> Quizzlet</p>
+          <h1 ref={headingRef} tabIndex={-1} className="field-page-title">Explore decks</h1>
+          <p className="muted">Find something interesting. See what you know.</p>
         </div>
         <div className="app-header__actions">
           <a className="btn btn--ghost" href={TEMPLATE_URL} download={TEMPLATE_FILE_NAME}>
@@ -88,6 +93,12 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
         </div>
       </header>
 
+      <div className="deck-search">
+        <label htmlFor="deck-search">Search decks</label>
+        <input id="deck-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by title or description" />
+        {subjects.length > 0 && <label>Subject <select value={subject} onChange={(e) => setSubject(e.target.value)}><option value="">All subjects</option>{subjects.map((s) => <option key={s} value={s}>{s}</option>)}<option value="__uncategorized__">Uncategorized</option></select></label>}
+      </div>
+
       <LeaderboardPanel collapsible />
 
       {importNote && (
@@ -98,18 +109,20 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
 
       {decks.length === 0 ? (
         <div className="empty">
-          {hidden.length > 0 ? (
+          {query || subject ? (
+            <><p>No decks match that search.</p><p className="muted">Try another word or subject.</p></>
+          ) : hidden.length > 0 ? (
             <>
               <p>No enabled decks.</p>
               <p className="muted">
-                Set <code>enabled: true</code> in a deck's YAML file to show it here.
+                Ask an adult to make a deck available.
               </p>
             </>
           ) : (
             <>
               <p>No decks yet.</p>
               <p className="muted">
-                Add <code>.yaml</code> files to the <code>decks/</code> folder, or drop one here.
+                Ask an adult to add a deck, or import one here.
               </p>
             </>
           )}
@@ -126,14 +139,14 @@ export function DeckList({ decks: allDecks, bestScores, onStart, onImport, onRem
                   </div>
                   <div className="deck__meta">
                     <span>
-                      {entry.deck.cards.length} card{entry.deck.cards.length === 1 ? "" : "s"}
+                      {entry.deck.cards.length} question{entry.deck.cards.length === 1 ? "" : "s"}
                     </span>
-                    {bestScores[entry.id] !== undefined && <span>Best {bestScores[entry.id]}%</span>}
+                    <span>{entry.deck.subject ?? "Uncategorized"}</span>
                     {entry.source === "imported" && <span className="tag">Imported</span>}
                     {entry.source === "account" && <span className="tag tag--private">Private</span>}
                   </div>
                   <div className="deck__actions">
-                    <button type="button" className="btn btn--primary" onClick={() => onStart(entry)}>
+                    <button type="button" className="btn btn--primary" aria-label={`Study ${entry.deck.title}`} onClick={() => onStart(entry)}>
                       Study
                     </button>
                     {entry.source === "imported" && (

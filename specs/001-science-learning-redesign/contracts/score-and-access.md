@@ -1,0 +1,19 @@
+# Score and access contracts
+
+This describes proposed changes, not current behavior. Existing endpoints and callers must be inventory-tested during implementation.
+
+## Score batches: `POST /api/score`
+
+Current body: `answers: boolean[]`, `streakBefore: number`, `leaderboard: boolean`; current response contains `pointsEarned`, `sessionPoints`, `totalPoints`, and optional `leaderboard`. Add `batchId` as an opaque session-scoped unique ID; reuse it only with an identical immutable scoring payload. When a session studies an account-private deck, send its account deck identifier so the server can revalidate assignment. Requests are authenticated by the existing session context; do not accept a caller-selected profile as authority.
+
+**Atomic behavior:** validate session/device and deck authorization before scoring. For an unseen `(session, batchId)`, atomically apply points and create a receipt containing the payload fingerprint and response. Same ID and payload returns the original receipt without changing points; same ID with different payload returns 409 without changes. This must hold under concurrent requests and process failure; use a single atomic transaction/script for Redis mutations and an equivalent indivisible operation in the memory store. Receipts expire no sooner than the session plus a bounded retry window; after expiry, never silently apply an old ambiguous batch as new. Define and test server handling of stale IDs and result expiry during implementation. A client retries the exact same ID after a transport failure; it presents “checking save” or “save status unknown” until resolved.
+
+**Result:** successful scoring does not depend on requesting or receiving leaderboard data; retrieve rankings separately on explicit display or treat that fetch as independently fallible. A 401/403 due to expiry, revoked device or unassigned deck rejects new writes. Earlier confirmed batches remain confirmed; an ambiguous in-flight operation must be reconciled where possible and never automatically described as definitely unsaved. No promise that tab-close/keepalive completes.
+
+**Compatibility and rollout:** introduce the idempotent path before deploying the new client; existing callers lacking `batchId` temporarily retain legacy response semantics, are not represented as safe to retry, and must be measured/inventoried. Deployment supports old tabs during the transition; remove legacy acceptance only with an explicit migration window and version policy. Add regression coverage for old callers, replay, payload collision, concurrent duplicate, response lost after commit, store failure between mutations, session expiration and no-board result. A successful final empty batch must not add points twice.
+
+## Linked-session / private deck authorization
+
+For `POST /api/session {kid:true}`, resolve the linked device server-side and bind its stable device/account/profile identity into the session. On each session-sensitive read or score write, verify the device remains linked to that profile; reject when revoked. Guest and parent-started profile sessions do not acquire a fake device binding. Revalidate an account-private deck against account ownership, enabled state and profile assignment at preview/start and for each score batch; reject unassigned/disabled access. This may require an authenticated access-check endpoint for preview/start and a deck identifier in score submissions. Never trust a deck id or profile id alone; keep account scope on the server. Explain offline and already-downloaded-content limitations.
+
+**Tests:** revoke during an active linked session, delete profile, remove assignment or disable deck, revoke before start, cross-account deck id, offline/reconnect, parent-created and guest regressions, and assignment refresh. No private content in error messages. Define state transition and next-check behavior in [data-model.md](../data-model.md).

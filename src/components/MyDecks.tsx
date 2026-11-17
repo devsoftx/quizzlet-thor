@@ -192,11 +192,11 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
         <button type="button" className="btn btn--ghost" onClick={onBack}>
           ← Back
         </button>
-        <h1>My decks</h1>
+        <h1>Private decks</h1>
       </header>
       <p className="muted manage__intro">
-        Decks you add here are private to your account. Your kids see them next to the shared decks. Switch a deck
-        off to hide it, or pick which kids see it.
+        Your private collection stays in your account. Choose which learners can see each deck, or switch it off
+        to hide it from everyone.
       </p>
 
       <div className="manage__toolbar">

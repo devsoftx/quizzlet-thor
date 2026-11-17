@@ -1,7 +1,9 @@
 import { MAX_ROUND_LENGTH, scoreRound } from "../src/points.js";
+import { createHash } from "node:crypto";
+import { deckIsFor } from "../src/account-shared.js";
 import { requireAccount } from "./account-handlers.js";
 import { defaultDeps, type Deps } from "./deps.js";
-import { kidProfile } from "./kid-handlers.js";
+import { kidDevice, kidProfile } from "./kid-handlers.js";
 import { cleanName, cookie, error, json, NAME_MAX, readCookie, readJson } from "./http.js";
 import { SESSION_TTL_SECONDS, type Session } from "./store.js";
 
@@ -23,6 +25,9 @@ const clearCookie = (request: Request) => sessionCookie(request, "", 0);
 
 export const playerKeyFor = (name: string) => name.toLocaleLowerCase("en");
 
+// A non-cookie identifier lets a delayed score request detect session replacement.
+const scoreSessionTag = (session: Session) => createHash("sha256").update(`score-session:${session.id}`).digest("hex");
+
 function publicSession(session: Session, now: number) {
   return {
     name: session.name,
@@ -30,13 +35,26 @@ function publicSession(session: Session, now: number) {
     expiresAt: session.expiresAt,
     secondsLeft: Math.max(0, Math.round((session.expiresAt - now) / 1000)),
     profileId: session.profileId ?? null,
+    sessionTag: scoreSessionTag(session),
   };
 }
 
 async function currentSession(request: Request, deps: Deps): Promise<Session | null> {
   const id = readCookie(request, SESSION_COOKIE);
   if (!id || !deps.store) return null;
-  return deps.store.getSession(id, deps.now());
+  const session = await deps.store.getSession(id, deps.now());
+  if (!session?.linkedDeviceId) return session;
+  const device = await kidDevice(request, deps);
+  if (!device || device.id !== session.linkedDeviceId || device.accountId !== session.linkedAccountId || device.profileId !== session.profileId) return null;
+  if (!deps.accounts || !(await deps.accounts.forAccount(device.accountId).getProfile(device.profileId))) return null;
+  return session;
+}
+
+/** Distinguish a still-live session whose linked-device access was removed. */
+async function linkedSessionWasRevoked(request: Request, deps: Deps): Promise<boolean> {
+  const id = readCookie(request, SESSION_COOKIE);
+  const session = id && deps.store ? await deps.store.getSession(id, deps.now()) : null;
+  return !!session?.linkedDeviceId;
 }
 
 // ------------------------------------------------------------ /api/session
@@ -47,9 +65,19 @@ export async function getSession(request: Request, deps: Deps = defaultDeps()): 
   const session = await currentSession(request, deps);
   if (!session) {
     const hadCookie = readCookie(request, SESSION_COOKIE) !== null;
+    if (await linkedSessionWasRevoked(request, deps)) return json({ error: "This device is no longer linked. Ask an adult for a new link." }, 403, { "set-cookie": clearCookie(request) });
     return json({ error: "No active session." }, 401, hadCookie ? { "set-cookie": clearCookie(request) } : {});
   }
+  const deckId = new URL(request.url).searchParams.get("deckId");
+  if (deckId && !(await canAccessPrivateDeck(session, deckId, deps))) return error(403, "This deck is no longer available.");
   return json(publicSession(session, deps.now()));
+}
+
+async function canAccessPrivateDeck(session: Session, deckId: string, deps: Deps): Promise<boolean> {
+  const accountId = session.accountId ?? session.linkedAccountId;
+  if (!accountId || !session.profileId || !deps.accounts) return false;
+  const deck = await deps.accounts.forAccount(accountId).getDeck(deckId);
+  return !!deck && deckIsFor(deck, session.profileId);
 }
 
 /**
@@ -61,15 +89,19 @@ export async function startSession(request: Request, deps: Deps = defaultDeps())
   if (!deps.store) return storageMissing();
   const body = await readJson(request);
 
-  let player: Pick<Session, "name" | "playerKey" | "profileId" | "listed">;
+  let player: Pick<Session, "name" | "playerKey" | "profileId" | "listed" | "linkedDeviceId" | "linkedAccountId" | "accountId">;
   if (body?.kid === true || typeof body?.profileId === "string") {
     let profile;
+    let device: Awaited<ReturnType<typeof kidDevice>> = null;
+    let accountId: string | undefined;
     if (body?.kid === true) {
-      profile = await kidProfile(request, deps);
+      device = await kidDevice(request, deps);
+      profile = device ? await deps.accounts!.forAccount(device.accountId).getProfile(device.profileId) : null;
       if (!profile) return error(401, "This device isn't linked to a profile anymore. Ask your parent for a new link.");
     } else {
       const account = await requireAccount(request, deps);
       if (account instanceof Response) return account;
+      accountId = account.userId;
       profile = await account.scope.getProfile(body!.profileId as string);
       if (!profile) return error(404, "Profile not found.");
     }
@@ -78,6 +110,8 @@ export async function startSession(request: Request, deps: Deps = defaultDeps())
       playerKey: `p:${profile.id}`, // guest names can't contain ":", so no collisions
       profileId: profile.id,
       listed: profile.showOnLeaderboard,
+      ...(device ? { linkedDeviceId: device.id, linkedAccountId: device.accountId } : {}),
+      ...(accountId ? { accountId } : {}),
     };
   } else {
     const name = cleanName(body?.name);
@@ -123,9 +157,15 @@ export async function endSession(request: Request, deps: Deps = defaultDeps()): 
 export async function submitScore(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   if (!deps.store) return storageMissing();
   const session = await currentSession(request, deps);
-  if (!session) return error(401, "Your session has ended. Start a new one to save points.");
+  if (!session) return (await linkedSessionWasRevoked(request, deps))
+    ? error(403, "This device is no longer linked. Ask an adult for a new link.")
+    : error(401, "Your session has ended. Start a new one to save points.");
 
   const body = await readJson(request);
+  if (body?.sessionTag !== undefined && body.sessionTag !== scoreSessionTag(session)) return error(409, "This score belongs to a different session.");
+  if (body?.deckId !== undefined) {
+    if (typeof body.deckId !== "string" || !(await canAccessPrivateDeck(session, body.deckId, deps))) return error(403, "This deck is no longer available.");
+  }
   const answers = body?.answers;
   const wantsBoard = body?.leaderboard !== false;
   const streakBefore = body?.streakBefore ?? 0;
@@ -142,8 +182,20 @@ export async function submitScore(request: Request, deps: Deps = defaultDeps()):
   }
 
   const round = scoreRound(answers, streakBefore as number);
-  const { sessionPoints, totalPoints } = await deps.store.addPoints(session, round.points);
-  const leaderboard = wantsBoard ? await deps.store.leaderboard(LEADERBOARD_SIZE, session.playerKey) : null;
+  const batchId = body?.batchId;
+  if (batchId !== undefined && (typeof batchId !== "string" || !/^[A-Za-z0-9_-]{1,128}$/.test(batchId))) {
+    return error(400, "Invalid score batch ID.");
+  }
+  const fingerprint = createHash("sha256").update(JSON.stringify({ answers, streakBefore, leaderboard: wantsBoard, deckId: body?.deckId ?? null })).digest("hex");
+  const saved = batchId === undefined
+    ? await deps.store.addPoints(session, round.points)
+    : await deps.store.addScoreBatch(session, batchId as string, fingerprint, round.points, deps.now());
+  if (saved === "conflict") return error(409, "This score batch was already used for different answers.");
+  if (saved === "expired") return error(401, "Your session has ended. Start a new one to save points.");
+  const { sessionPoints, totalPoints } = saved;
+  // New idempotent batches return a stable score receipt; the board is loaded separately.
+  // Legacy clients still receive the board they requested where available.
+  const leaderboard = batchId === undefined && wantsBoard ? await deps.store.leaderboard(LEADERBOARD_SIZE, session.playerKey).catch(() => null) : null;
   return json({ pointsEarned: round.points, sessionPoints, totalPoints, leaderboard });
 }
 

@@ -111,6 +111,7 @@ function ProfileForm({
             <label key={em} className="emoji-choice">
               <input type="radio" name="emoji" checked={form.emoji === em} onChange={() => set({ emoji: em })} />
               <span aria-hidden="true">{em}</span>
+              <span className="visually-hidden">{em}</span>
             </label>
           ))}
         </div>
@@ -122,7 +123,7 @@ function ProfileForm({
           onChange={(e) => set({ showOnLeaderboard: e.target.checked })}
         />
         <span>
-          Show on the public leaderboard <span className="muted">(nickname only)</span>
+          Show this nickname on the public leaderboard <span className="muted">(off keeps this profile's score off the public board)</span>
         </span>
       </label>
       {error && (
@@ -185,7 +186,7 @@ export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
         <button type="button" className="btn btn--ghost" onClick={onBack}>
           ← Back
         </button>
-        <h1>Kid profiles</h1>
+        <h1>Learner profiles</h1>
       </header>
       <p className="muted manage__intro">
         Each profile is just a nickname and a picture — no real names, emails or birthdays. Kids pick their profile on

@@ -78,6 +78,8 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.metaKey || e.ctrlKey || e.altKey || isTypingTarget(e.target)) return;
+      // Character shortcuts are active only while the question itself has focus.
+      if (!(e.target instanceof HTMLElement) || !e.target.closest(".question-sheet")) return;
 
       if (picked === null) {
         const key = e.key.toLowerCase();
@@ -128,6 +130,7 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
       <div
         className="progress"
         role="progressbar"
+        aria-label="Questions answered"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(progress)}

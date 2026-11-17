@@ -7,3 +7,6 @@ dist
 docs/
 .vercel
 .env*
+
+build/
+*.log

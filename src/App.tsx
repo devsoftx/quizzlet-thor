@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { AccountDeck, KidProfile } from "./account-shared";
-import { api, ApiError, takeInviteToken, type AccountInfo, type KidHomeInfo, type ScoreResult, type SessionInfo } from "./api";
+import { api, ApiError, takeInviteToken, type AccountInfo, type KidHomeInfo, type ScoreSave, type SessionInfo } from "./api";
 import { AUTH_MODE, useAccountAuth } from "./auth";
 import { buildSession, type Card, type Deck } from "./deck";
 import {
@@ -15,8 +15,10 @@ import {
   type DeckEntry,
 } from "./library";
 import { DeckList } from "./components/DeckList";
+import { DeckPreview } from "./components/DeckPreview";
 import { JoinInvite, KidHome } from "./components/KidScreens";
 import { ScoreSaver } from "./scoreSaver";
+import { checkSessionAccess } from "./sessionAccess";
 import { MyDecks } from "./components/MyDecks";
 import { MyFiles } from "./components/MyFiles";
 import { ParentHome } from "./components/ParentHome";
@@ -35,9 +37,9 @@ type SessionState =
 /** Saving a finished round's points to the server. */
 export type SaveState =
   | { status: "saving" }
-  | { status: "saved"; result: ScoreResult }
-  | { status: "expired" }
-  | { status: "error"; message: string };
+  | { status: "saved"; result: ScoreSave }
+  | { status: "expired"; confirmedPoints: number }
+  | { status: "error"; kind: "failed" | "unknown"; message: string };
 
 /** The signed-in parent's account (loaded after sign-in). */
 type AccountState =
@@ -48,6 +50,7 @@ type AccountState =
 
 type Screen =
   | { name: "decks" }
+  | { name: "preview"; deckId: string; deck: Deck }
   | { name: "profiles" }
   | { name: "settings" }
   | { name: "my-decks" }
@@ -84,15 +87,18 @@ export function App() {
   const auth = useAccountAuth();
   const [accountState, setAccountState] = useState<AccountState>({ status: "none" });
   const [importNote, setImportNote] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"pending" | "saving" | "confirmed" | "unknown" | "failed" | "expired" | "denied">("confirmed");
   const [joinToken, setJoinToken] = useState<string | null>(initialJoinToken);
   const [kidState, setKidState] = useState<KidState>({ status: "loading" });
 
   // Points are saved answer by answer, so nothing earned is lost by leaving a
   // deck early, ending the session or closing the page.
   const profileIdRef = useRef<string | null>(null);
+  const confirmedPointsRef = useRef(0);
   const saverRef = useRef<ScoreSaver | null>(null);
   saverRef.current ??= new ScoreSaver((answers, options) => api.submitScore(answers, options), {
     onSaved: (r) => {
+      confirmedPointsRef.current = r.sessionPoints;
       setSessionState((s) => (s.status === "active" ? { ...s, session: { ...s.session, points: r.sessionPoints } } : s));
       const profileId = profileIdRef.current;
       if (!profileId) return;
@@ -104,6 +110,19 @@ export function App() {
     },
     isExpired: (err) => err instanceof ApiError && err.status === 401,
     onExpired: () => sessionExpired(),
+    isDenied: (err) => err instanceof ApiError && err.status === 403,
+    isRejected: (err) => err instanceof ApiError && [400, 409, 422].includes(err.status),
+    onState: setSaveStatus,
+    onDenied: (err, deckId) => {
+      setScreen({ name: "decks" });
+      if (err instanceof Error && err.message.includes("device is no longer linked")) {
+        setKidState({ status: "none" });
+        setSessionState({ status: "none", notice: "This device is no longer linked. Ask an adult for a new link. Recent points may not have been saved." });
+      } else {
+        if (deckId) forgetPrivateDeck(deckId);
+        setImportNote({ kind: "error", text: "This deck is no longer available. Your most recent answers may not have been saved. Access changes can only be checked when connected; downloaded content may remain on this device." });
+      }
+    },
   });
   const saver = saverRef.current;
 
@@ -125,6 +144,9 @@ export function App() {
   }, [saver]);
 
   const session = sessionState.status === "active" ? sessionState.session : null;
+  const liveSessionRef = useRef<SessionInfo | null>(session);
+  liveSessionRef.current = session;
+  if (session) confirmedPointsRef.current = session.points;
   profileIdRef.current = session?.profileId ?? null;
   const ready = accountState.status === "ready" ? accountState : null;
   const kid = kidState.status === "linked" && !auth.isSignedIn ? kidState.kid : null;
@@ -181,6 +203,8 @@ export function App() {
 
   async function startKidSession() {
     try {
+      saver.clear();
+      setSaveStatus("confirmed");
       const [s, fresh] = await Promise.all([api.startKidSession(), api.kidHome()]);
       if (fresh) setKidState({ status: "linked", kid: fresh }); // pick up the parent's latest decks
       setSessionState({ status: "active", session: s });
@@ -198,14 +222,19 @@ export function App() {
 
   async function unlinkThisDevice() {
     await savePending();
+    const unresolved = saver.pending > 0;
+    if (unresolved && !window.confirm("Some recent points have not been confirmed. Remove this device anyway?")) throw new Error("Device removal cancelled; your points are still waiting.");
+    saver.clear();
     await api.endSession().catch(() => undefined);
     await api.unlinkThisDevice();
     setKidState({ status: "none" });
-    setSessionState({ status: "none", notice: "This device was removed. Ask your parent for a new link to study as yourself again." });
+    setSessionState({ status: "none", notice: `This device was removed. Ask your parent for a new link to study as yourself again.${unresolved ? " Some recent points could not be confirmed." : ""}` });
     setScreen({ name: "decks" });
   }
 
   async function startProfileSession(profileId: string) {
+    saver.clear();
+    setSaveStatus("confirmed");
     const s = await api.startProfileSession(profileId);
     setSessionState({ status: "active", session: s });
     setScreen({ name: "decks" });
@@ -213,9 +242,12 @@ export function App() {
 
   async function signOut() {
     await savePending();
+    const unresolved = saver.pending > 0;
+    if (unresolved && !window.confirm("Some recent points have not been confirmed. Sign out anyway?")) return;
+    saver.clear();
     await api.endSession().catch(() => undefined);
     await auth.signOut();
-    setSessionState({ status: "none" });
+    setSessionState({ status: "none", ...(unresolved ? { notice: "Some recent points could not be confirmed before sign-out." } : {}) });
     setAccountState({ status: "none" });
     setScreen({ name: "decks" });
   }
@@ -241,18 +273,25 @@ export function App() {
     if (!session) return;
     const timer = window.setTimeout(
       () => {
+        liveSessionRef.current = null;
+        const unresolved = saver.pending > 0;
+        saver.clear();
+        setSaveStatus("expired");
+        setScreen((current) => current.name === "preview" ? { name: "decks" } : current);
         const next = session.profileId ? "" : " Enter your name to start a new session.";
         setSessionState({
           status: "none",
-          notice: `Time's up, ${session.name}! Your 60-minute session is over — you earned ${session.points} points.${next}`,
+          notice: `Your session has ended, ${session.name}. ${session.points} points were confirmed.${unresolved ? " Some recent points could not be confirmed." : ""}${next}`,
         });
       },
       Math.max(0, session.deadline - Date.now()),
     );
     return () => window.clearTimeout(timer);
-  }, [session]);
+  }, [session, saver]);
 
   async function startSession(name: string) {
+    saver.clear();
+    setSaveStatus("confirmed");
     const s = await api.startSession(name);
     setSessionState({ status: "active", session: s });
     setScreen({ name: "decks" });
@@ -260,28 +299,59 @@ export function App() {
 
   async function endSession() {
     await savePending();
+    const unresolved = saver.pending > 0;
+    if (unresolved && !window.confirm("Some answers may not be saved yet. End the session anyway?")) return;
     saver.clear();
     await api.endSession().catch(() => undefined);
-    setSessionState({ status: "none" });
+    setSessionState({ status: "none", ...(unresolved ? { notice: "Some recent points could not be confirmed before the session ended." } : {}) });
     setScreen({ name: "decks" });
   }
 
   function sessionExpired() {
+    liveSessionRef.current = null;
     setSessionState((s) =>
       s.status === "active"
         ? {
             status: "none",
-            notice: s.session.profileId ? "Your session has ended." : "Your session has ended. Enter your name to start a new one.",
+            notice: s.session.profileId ? "Your session has ended. Recent points may not have been confirmed." : "Your session has ended. Recent points may not have been confirmed. Enter your name to start a new one.",
           }
         : s,
     );
   }
 
-  function startQuiz(deckId: string, deck: Deck, cards: Card[] = deck.cards, isRetry = false) {
+  function forgetPrivateDeck(deckId: string) {
+    setAccountState((state) => state.status === "ready" ? { ...state, decks: state.decks.filter((deck) => deck.id !== deckId) } : state);
+    setKidState((state) => state.status === "linked" ? { ...state, kid: { ...state.kid, decks: state.kid.decks.filter((deck) => deck.id !== deckId) } } : state);
+  }
+
+  function deckAccessFailed(err: unknown, deckId: string) {
+    setScreen({ name: "decks" });
+    if (err instanceof Error && err.message.includes("device is no longer linked")) {
+      setKidState({ status: "none" });
+      setSessionState({ status: "none", notice: "This device is no longer linked. Ask an adult for a new link." });
+    } else {
+      if (err instanceof ApiError && err.status === 403) forgetPrivateDeck(deckId);
+      setImportNote({ kind: "error", text: "This deck couldn't be opened. Check your connection or ask an adult. Access changes can only be checked when connected; downloaded content may remain on this device." });
+    }
+  }
+
+  async function startQuiz(deckId: string, deck: Deck, cards: Card[] = deck.cards, isRetry = false) {
+    const startingSession = liveSessionRef.current;
+    if (!startingSession) { setScreen({ name: "decks" }); return; }
+    const privateDeckId = deckId.startsWith("account:") ? deckId.slice("account:".length) : undefined;
+    if (privateDeckId) {
+      const access = await checkSessionAccess(startingSession.sessionTag, () => liveSessionRef.current?.sessionTag, () => api.checkPrivateDeck(privateDeckId));
+      if (access.status === "stale") return;
+      if (access.status === "denied") { deckAccessFailed(access.error, privateDeckId); return; }
+    }
+    if (!liveSessionRef.current || liveSessionRef.current.sessionTag !== startingSession.sessionTag) {
+      setScreen({ name: "decks" });
+      return;
+    }
     // A signed-in parent's "card order" setting overrides each deck's choice.
     const shuffle = ready?.account.settings.shuffle ?? "deck";
     const forRun = shuffle === "deck" ? deck : { ...deck, shuffle: shuffle === "on" };
-    saver.newRound(); // each round's streak starts from zero
+    saver.newRound(privateDeckId, startingSession.sessionTag); // each round's streak starts from zero
     setScreen({
       name: "quiz",
       deckId,
@@ -299,16 +369,17 @@ export function App() {
       setScreen((sc) => (sc.name === "results" && sc.run === run ? { ...sc, save } : sc));
     const roundPoints = results.reduce((sum, r) => sum + r.points, 0);
 
+    if (!liveSessionRef.current) { update({ status: "expired", confirmedPoints: confirmedPointsRef.current }); return; }
     update({ status: "saving" });
     saver
       .flush({ final: true })
       .then((saved) => {
-        if (!saved?.leaderboard) throw new Error("Couldn't load the leaderboard.");
-        update({ status: "saved", result: { ...saved, leaderboard: saved.leaderboard, pointsEarned: roundPoints } });
+        if (!saved) throw new Error("The score status is unknown.");
+        update({ status: "saved", result: { ...saved, pointsEarned: roundPoints } });
       })
       .catch((err: Error) => {
-        if (err instanceof ApiError && err.status === 401) update({ status: "expired" });
-        else update({ status: "error", message: err.message });
+        if (err instanceof ApiError && err.status === 401) update({ status: "expired", confirmedPoints: confirmedPointsRef.current });
+        else update({ status: "error", kind: err instanceof ApiError && [400, 409, 422].includes(err.status) ? "failed" : "unknown", message: err.message });
       });
   }
 
@@ -374,9 +445,12 @@ export function App() {
         <JoinInvite
           token={joinToken}
           onJoined={async (k) => {
+            await savePending();
+            const unresolved = saver.pending > 0;
+            saver.clear();
             await api.endSession().catch(() => undefined); // any guest session on this device
             setKidState({ status: "linked", kid: k });
-            setSessionState({ status: "none" });
+            setSessionState({ status: "none", ...(unresolved ? { notice: "Some points from the previous session could not be confirmed." } : {}) });
             setScreen({ name: "decks" });
             setJoinToken(null);
           }}
@@ -479,6 +553,7 @@ export function App() {
             notice={notice}
             onStart={startKidSession}
             onUnlink={unlinkThisDevice}
+            onParentSignIn={AUTH_MODE === "off" ? undefined : auth.signIn}
           />
         </main>
       );
@@ -506,17 +581,39 @@ export function App() {
       {session && <SessionBar session={session} onEnd={endSession} endLabel={onKidDevice ? "Finish" : undefined} />}
 
       {screen.name === "decks" && (
+        <>
+        {saver.pending > 0 && <div className="save-problem" role="status"><p>{saveStatus === "failed" ? "Some recent points were rejected. End this session and start a new one." : "Some recent points have not been confirmed."}</p>{saveStatus !== "failed" && <button type="button" className="btn btn--secondary" onClick={() => void saver.flush().catch(() => undefined)}>Retry saving</button>}</div>}
         <DeckList
           decks={decks}
           bestScores={bestScores}
-          onStart={(entry) => entry.ok && startQuiz(entry.id, entry.deck)}
+          onStart={async (entry) => {
+            if (!entry.ok) return;
+            const startingSession = liveSessionRef.current;
+            if (!startingSession) { setScreen({ name: "decks" }); return; }
+            if (entry.id.startsWith("account:")) {
+              const privateDeckId = entry.id.slice("account:".length);
+              const access = await checkSessionAccess(startingSession.sessionTag, () => liveSessionRef.current?.sessionTag, () => api.checkPrivateDeck(privateDeckId));
+              if (access.status === "stale") return;
+              if (access.status === "denied") { deckAccessFailed(access.error, privateDeckId); return; }
+            }
+            if (!liveSessionRef.current || liveSessionRef.current.sessionTag !== startingSession.sessionTag) return;
+            setScreen({ name: "preview", deckId: entry.id, deck: entry.deck });
+            window.scrollTo({ top: 0 });
+          }}
           onImport={importFiles}
           onRemove={removeDeck}
           importNote={importNote}
         />
+        </>
+      )}
+
+      {screen.name === "preview" && (
+        <DeckPreview deck={screen.deck} onBack={() => setScreen({ name: "decks" })} onStart={() => void startQuiz(screen.deckId, screen.deck)} />
       )}
 
       {screen.name === "quiz" && (
+        <>
+        <p className="save-status" role="status">{saveStatus === "confirmed" ? "Points saved" : saveStatus === "pending" || saveStatus === "saving" ? "Saving points…" : saveStatus === "unknown" ? "We couldn't confirm whether your latest points were saved" : saveStatus === "failed" ? "Your latest points could not be saved" : "Your latest points may not have been saved"}</p>
         <Quiz
           key={screen.run}
           deck={screen.deck}
@@ -531,6 +628,7 @@ export function App() {
             setScreen({ name: "decks" });
           }}
         />
+        </>
       )}
 
       {screen.name === "results" && (

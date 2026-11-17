@@ -1,12 +1,8 @@
 import { useState, type FormEvent } from "react";
-import { POINTS_PER_CORRECT, STREAK_BONUS, STREAK_THRESHOLD } from "../points";
-import { LeaderboardPanel } from "./LeaderboardPanel";
 
 interface Props {
-  /** Shown above the form, e.g. when a session just ended. */
   notice?: string;
   onStart: (name: string) => Promise<void>;
-  /** Parent/teacher sign-in, when accounts are available. */
   parentSignIn?: { label: string; onClick: () => void };
 }
 
@@ -29,80 +25,33 @@ export function Welcome({ notice, onStart, parentSignIn }: Props) {
   }
 
   return (
-    <div className="welcome">
-      <h1 className="brand welcome__brand">
-        <span aria-hidden="true">⚡</span> Quizzlet
-      </h1>
-
-      {notice && (
-        <p className="welcome__notice" role="status">
-          {notice}
-        </p>
-      )}
-
-      <form className="welcome__card" onSubmit={submit}>
-        <label htmlFor="student-name" className="welcome__label">
-          Welcome! What's your nickname?
-        </label>
-        <div className="welcome__row">
-          <input
-            id="student-name"
-            className="welcome__input"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            maxLength={24}
-            autoComplete="off"
-            spellCheck={false}
-            autoFocus
-            placeholder="A nickname, like StarCat or Nova7"
-            aria-describedby="welcome-help"
-            aria-invalid={error ? true : undefined}
-          />
-          <button type="submit" className="btn btn--primary" disabled={!name.trim() || busy}>
-            {busy ? "Starting…" : "Start studying →"}
-          </button>
-        </div>
-        {error && (
-          <p className="welcome__error" role="alert">
-            {error}
-          </p>
-        )}
-        <p id="welcome-help" className="muted welcome__help">
-          Your session lasts 60 minutes. Your nickname shows on the leaderboard, so please don't use
-          your real name.
-        </p>
-      </form>
-
-      <LeaderboardPanel />
-
-      {parentSignIn && (
-        <section className="welcome__parents" aria-label="Parents and teachers">
-          <div>
-            <h2 className="section-title">Parents &amp; teachers</h2>
-            <p className="muted">
-              Sign in to create nickname-only profiles for your kids, keep their points, and choose who appears on
-              the leaderboard.
-            </p>
-          </div>
-          <button type="button" className="btn btn--secondary" onClick={parentSignIn.onClick}>
-            {parentSignIn.label}
-          </button>
+    <div className="welcome field-welcome">
+      <header className="field-welcome__header">
+        <p className="field-mark"><span aria-hidden="true">✳</span> Quizzlet</p>
+        {parentSignIn && <button type="button" className="field-parent-link" onClick={parentSignIn.onClick}>Parent or teacher sign in</button>}
+      </header>
+      <div className="field-welcome__layout">
+        <section className="field-welcome__intro">
+          <p className="field-kicker">A little curiosity goes a long way</p>
+          <h1>Big questions.<br /><em>Bright ideas.</em></h1>
+          <p>Explore a world of questions, discover something new, and learn at your own pace.</p>
+          <div className="field-welcome__illustration" aria-hidden="true" />
         </section>
-      )}
-
-      <section className="welcome__rules" aria-label="How points work">
-        <h2 className="section-title">How to earn points</h2>
-        <ul>
-          <li>
-            <strong>+{POINTS_PER_CORRECT}</strong> for every correct answer
-          </li>
-          <li>
-            <strong>+{STREAK_BONUS} bonus</strong> for each correct answer once you get {STREAK_THRESHOLD} in a
-            row 🔥
-          </li>
-          <li>Points add up across every round — climb the leaderboard!</li>
-        </ul>
-      </section>
+        <section className="field-entry" aria-labelledby="entry-title">
+          <span className="field-entry__number" aria-hidden="true">01 / START HERE</span>
+          <h2 id="entry-title">Ready to explore?</h2>
+          <p>Choose a nickname and pick a deck to begin.</p>
+          {notice && <p className="welcome__notice" role="status">{notice}</p>}
+          <form onSubmit={submit}>
+            <label htmlFor="student-name">Your nickname</label>
+            <input id="student-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={24} autoComplete="off" spellCheck={false} placeholder="For example, Nova7" aria-describedby="welcome-help" aria-invalid={error ? true : undefined} />
+            <p id="welcome-help" className="field-privacy"><strong>Choose carefully:</strong> Your nickname appears on the public leaderboard when you earn points. Please don't use your real name.</p>
+            {error && <p className="welcome__error" role="alert">{error}</p>}
+            <button type="submit" className="btn btn--primary field-entry__submit" disabled={!name.trim() || busy}>{busy ? "Starting…" : "Start exploring"} <span aria-hidden="true">→</span></button>
+          </form>
+          <p className="field-entry__note">Your study session lasts 60 minutes.</p>
+        </section>
+      </div>
     </div>
   );
 }

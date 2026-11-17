@@ -102,6 +102,7 @@ export function KidLinkPanel({ profile, invite, devices, freshUrl, onNewLink, on
 
       <div className="link-panel__devices">
         <h3 className="link-panel__heading">{profile.nickname}'s devices</h3>
+        <p className="muted field__hint">Removing a device stops future access when it next connects. Content already downloaded cannot be recalled.</p>
         {devices.length === 0 ? (
           <p className="muted">No devices linked yet.</p>
         ) : (

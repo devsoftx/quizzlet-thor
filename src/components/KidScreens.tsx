@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { KidCard } from "../account-shared";
 import { api, type KidHomeInfo } from "../api";
-import { LeaderboardPanel } from "./LeaderboardPanel";
 import { ProfileAvatar } from "./ParentHome";
 
 /** Opening an invitation link: confirm, then link this device to the kid's profile. */
@@ -45,9 +44,7 @@ export function JoinInvite({
 
   return (
     <div className="kid-screen">
-      <h1 className="brand">
-        <span aria-hidden="true">⚡</span> Quizzlet
-      </h1>
+      <h1 className="brand">Quizzlet</h1>
       {error ? (
         <>
           <p className="welcome__error" role="alert">
@@ -58,7 +55,7 @@ export function JoinInvite({
           </button>
         </>
       ) : !profile ? (
-        <p className="muted loading">Checking your link…</p>
+          <p className="muted loading" role="status">Checking your link…</p>
       ) : (
         <>
           <ProfileAvatar profile={profile} size={96} />
@@ -88,12 +85,14 @@ export function KidHome({
   notice,
   onStart,
   onUnlink,
+  onParentSignIn,
 }: {
   profile: KidCard;
   totalPoints: number;
   notice?: string;
   onStart: () => Promise<void>;
   onUnlink: () => Promise<void>;
+  onParentSignIn?: () => void;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -105,6 +104,7 @@ export function KidHome({
       await action();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
       setBusy(false);
     }
   }
@@ -112,7 +112,7 @@ export function KidHome({
   return (
     <div className="kid-screen">
       <ProfileAvatar profile={profile} size={96} />
-      <h1 className="kid-screen__title">Hi, {profile.nickname}!</h1>
+      <h1 className="kid-screen__title">Welcome back, {profile.nickname}.</h1>
       <p className="kid-screen__points" aria-label={`${totalPoints} points so far`}>
         ⭐ {totalPoints.toLocaleString()} points so far
       </p>
@@ -126,11 +126,10 @@ export function KidHome({
           {error}
         </p>
       )}
-      <p className="muted kid-screen__text">Ready to study? Your session lasts 60 minutes.</p>
+      <p className="muted kid-screen__text">Ready for another discovery? Your study session lasts 60 minutes.</p>
       <button type="button" className="btn btn--primary kid-screen__start" onClick={() => run(onStart)} disabled={busy}>
-        Start studying →
+        Explore decks →
       </button>
-      <LeaderboardPanel />
       <button
         type="button"
         className="btn btn--ghost kid-screen__unlink"
@@ -143,6 +142,7 @@ export function KidHome({
       >
         Not {profile.nickname}? Remove this device
       </button>
+      {onParentSignIn && <button type="button" className="btn btn--ghost" onClick={onParentSignIn}>Parent or teacher sign in</button>}
     </div>
   );
 }

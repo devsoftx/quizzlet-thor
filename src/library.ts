@@ -20,6 +20,17 @@ export function isVisible(entry: DeckEntry): boolean {
   return entry.ok ? entry.deck.enabled : entry.enabled !== false;
 }
 
+/** Search only actual deck metadata. Missing subjects are explicitly uncategorized. */
+export function filterDecks(entries: DeckEntry[], query: string, subject: string): DeckEntry[] {
+  const q = query.trim().toLocaleLowerCase();
+  return entries.filter((entry) => {
+    if (!entry.ok || !entry.deck.enabled) return false;
+    const text = `${entry.deck.title} ${entry.deck.description ?? ""}`.toLocaleLowerCase();
+    const matchesSubject = !subject || (subject === "__uncategorized__" ? !entry.deck.subject : entry.deck.subject === subject);
+    return matchesSubject && (!q || text.includes(q));
+  });
+}
+
 export interface StoredDeck {
   fileName: string;
   text: string;

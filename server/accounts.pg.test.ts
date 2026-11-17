@@ -4,7 +4,8 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { PGlite } from "@electric-sql/pglite";
 import type { NeonQueryFunction } from "@neondatabase/serverless";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import pgDriver from "pg";
 import { MemoryAccounts, PostgresAccounts, type AccountsDb } from "./accounts.js";
 
 let pg: PGlite;
@@ -193,5 +194,30 @@ describe("Postgres accounts (PGlite)", () => {
     await expect(
       db.createProfile("g1", { nickname: "Z", gradeBand: "college" as never, color: "#4255ff", emoji: "🦊", showOnLeaderboard: false }),
     ).rejects.toThrow();
+  });
+});
+
+
+// This suite only targets the explicitly created disposable container; it never
+// uses DATABASE_URL, which might point to the user's real account data.
+const disposablePgUrl = process.env.QUIZZLET_DISPOSABLE_PG === "1" ? process.env.QUIZZLET_TEST_PG_URL : undefined;
+describe.skipIf(!disposablePgUrl)("Postgres accounts (isolated PostgreSQL service)", () => {
+  let pool: pgDriver.Pool;
+  beforeAll(async () => {
+    pool = new pgDriver.Pool({ connectionString: disposablePgUrl });
+    const dir = new URL("../db/migrations/", import.meta.url);
+    for (const file of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) {
+      await pool.query(readFileSync(new URL(file, dir), "utf8"));
+    }
+  });
+  afterAll(async () => { await pool?.end(); });
+  it("matches memory for accounts, private decks, devices, visibility and deletion", async () => {
+    const tagged = async (strings: TemplateStringsArray, ...values: unknown[]) => {
+      let text = strings[0];
+      values.forEach((_, i) => (text += `$${i + 1}${strings[i + 1]}`));
+      return (await pool.query(text, values)).rows;
+    };
+    const store = new PostgresAccounts(tagged as unknown as NeonQueryFunction<false, false>);
+    expect(await scenario(store, "pgservice")).toEqual(await scenario(new MemoryAccounts(), "memservice"));
   });
 });

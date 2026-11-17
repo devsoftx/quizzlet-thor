@@ -119,11 +119,11 @@ export function MyFiles({ onBack }: Props) {
         <button type="button" className="btn btn--ghost" onClick={onBack}>
           ← Back
         </button>
-        <h1>My files</h1>
+        <h1>Study files</h1>
       </header>
       <p className="muted manage__intro">
-        Keep study material here: PDFs, Word documents (.docx) and pictures, up to {formatBytes(MAX_FILE_BYTES)} each.
-        Files are private: only you can open them, through your sign-in.
+        Keep your PDFs, Word documents (.docx) and pictures together, up to {formatBytes(MAX_FILE_BYTES)} each.
+        These files are private to your signed-in account; learners cannot open them.
       </p>
 
       {loadError ? (

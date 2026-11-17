@@ -175,3 +175,17 @@ describe("titleFromFileName", () => {
     expect(titleFromFileName("decks/quick_math.yml")).toBe("Quick math");
   });
 });
+
+describe("subject metadata", () => {
+  const source = (line: string) => `title: Stars\n${line}\nenabled: true\ncards:\n  - question: Q\n    options: [A, B]\n    answer: A\n`;
+  it("keeps an explicit subject and accepts an older deck without one", () => {
+    const tagged = parseDeck(source("subject: Space science"), "x");
+    const legacy = parseDeck(source(""), "x");
+    expect(tagged.ok && tagged.deck.subject).toBe("Space science");
+    expect(legacy.ok && legacy.deck.subject).toBeUndefined();
+  });
+  it("rejects invalid subject metadata and duplicate choices", () => {
+    expect(parseDeck(source("subject: [a, b]"), "x").ok).toBe(false);
+    expect(parseDeck(source("").replace("[A, B]", "[A, A]"), "x").ok).toBe(false);
+  });
+});

@@ -5,6 +5,17 @@ questions. Pick an answer and the card flips over to show whether you got it
 right, the correct answer and an optional explanation. At the end you get a
 score, a review of every card, and a button to retry only the ones you missed.
 
+Search decks by title or description, preview a deck before starting, and use
+the results screen to review answers or practice missed questions. The
+leaderboard is optional to view. A guest's nickname is public on the leaderboard
+when they earn points; use a nickname rather than a real name. A parent-managed
+profile is private on that board unless its adult enables visibility.
+
+Points are sent in batches while studying. If a connection is interrupted,
+the app may not know whether the latest batch was saved until it can retry;
+leaving or closing the tab can lose queued work. A current round's question
+position and answer history are not restored after a reload.
+
 ## Run it
 
 ```bash
@@ -46,6 +57,7 @@ wrong, so you can fix the file — unless it isn't enabled.
 ```yaml
 title: Norse Mythology            # optional, defaults to the file name
 description: Gods and realms      # optional
+subject: History                  # optional, author-provided category
 enabled: true                     # required to show the deck (true / false)
 shuffle: true                     # shuffle card order (default: true)
 shuffleOptions: true              # shuffle the options on each card (default: true)

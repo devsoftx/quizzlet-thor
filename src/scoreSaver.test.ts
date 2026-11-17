@@ -124,3 +124,129 @@ describe("saving points answer by answer", () => {
     expect(saver.pending).toBe(0);
   });
 });
+
+describe("ambiguous score responses", () => {
+  it("retries an identical batch with the same ID even if more answers arrive", async () => {
+    const seen: Array<{ id: string | undefined; answers: boolean[] }> = [];
+    let lost = true;
+    const submit: SubmitScore = async (answers, options) => {
+      seen.push({ id: options.batchId, answers: [...answers] });
+      if (lost) { lost = false; throw new Error("response lost after commit"); }
+      return { pointsEarned: 10, sessionPoints: 10, totalPoints: 10, leaderboard: null };
+    };
+    const saver = new ScoreSaver(submit, { onSaved: () => {}, isExpired: () => false, onExpired: () => {} });
+    saver.newRound();
+    saver.add(true);
+    await settle();
+    saver.add(false);
+    await saver.flush();
+    expect(seen[0].id).toBeTruthy();
+    expect(seen[1]).toEqual(seen[0]);
+    expect(seen[2].answers).toEqual([false]);
+    expect(seen[2].id).not.toBe(seen[0].id);
+  });
+});
+
+describe("session isolation", () => {
+  it("does not send queued answers or apply an in-flight result after the session changes", async () => {
+    let release!: (value: SavedScore) => void;
+    const saved: number[] = [];
+    const sent: boolean[][] = [];
+    const submit: SubmitScore = (answers) => {
+      sent.push([...answers]);
+      if (sent.length === 1) return new Promise((resolve) => { release = resolve; });
+      return Promise.resolve({ pointsEarned: 0, sessionPoints: 0, totalPoints: 0, leaderboard: null });
+    };
+    const saver = new ScoreSaver(submit, { onSaved: (r) => saved.push(r.totalPoints), isExpired: () => false, onExpired: () => {} });
+    saver.newRound();
+    saver.add(true);
+    await settle();
+    saver.add(true); // queued in the original session
+    saver.clear(); // session changes while first request is in flight
+    saver.newRound();
+    saver.add(false);
+    release({ pointsEarned: 10, sessionPoints: 10, totalPoints: 10, leaderboard: null });
+    await saver.flush();
+    expect(sent).toEqual([[true], [false]]);
+    expect(saved).toEqual([0]);
+  });
+});
+
+describe("definitive failures", () => {
+  it("does not automatically resubmit a rejected batch when more answers arrive", async () => {
+    let attempts = 0;
+    const states: string[] = [];
+    const saver = new ScoreSaver(async () => { attempts++; throw Object.assign(new Error("rejected"), { status: 409 }); }, {
+      onSaved: () => {}, isExpired: () => false, onExpired: () => {},
+      isRejected: (err) => (err as { status?: number }).status === 409,
+      onState: (state) => states.push(state),
+    });
+    saver.newRound(); saver.add(true); await settle(); saver.add(false); await settle();
+    expect(attempts).toBe(1);
+    expect(states.at(-1)).toBe("failed");
+    await expect(saver.flush()).rejects.toThrow("rejected");
+    expect(attempts).toBe(1);
+  });
+});
+
+describe("private deck finalization", () => {
+  it("keeps the original deck and session binding on an empty final request", async () => {
+    const calls: Array<{ deckId?: string; sessionTag?: string; answers: boolean[] }> = [];
+    const saver = new ScoreSaver(async (answers, options) => {
+      calls.push({ deckId: options.deckId, sessionTag: options.sessionTag, answers: [...answers] });
+      return { pointsEarned: 0, sessionPoints: 0, totalPoints: 0, leaderboard: null };
+    }, { onSaved: () => {}, isExpired: () => false, onExpired: () => {} });
+    saver.newRound("private-deck", "session-tag");
+    saver.add(false);
+    await settle();
+    await saver.flush({ final: true });
+    expect(calls.at(-1)).toEqual({ deckId: "private-deck", sessionTag: "session-tag", answers: [] });
+  });
+});
+
+describe("revocation at finalization", () => {
+  it("reports the denied deck when the empty final request is rejected", async () => {
+    let deniedDeck: string | undefined;
+    let saves = 0;
+    const saver = new ScoreSaver(async (answers) => {
+      if (!answers.length) throw Object.assign(new Error("deck removed"), { status: 403 });
+      return { pointsEarned: 10, sessionPoints: 10, totalPoints: 10, leaderboard: null };
+    }, {
+      onSaved: () => { saves++; }, isExpired: () => false, onExpired: () => {},
+      isDenied: (err) => (err as { status?: number }).status === 403,
+      onDenied: (_err, deckId) => { deniedDeck = deckId; },
+    });
+    saver.newRound("private-123", "session"); saver.add(true); await settle();
+    await expect(saver.flush({ final: true })).rejects.toThrow("deck removed");
+    expect(deniedDeck).toBe("private-123");
+    expect(saves).toBe(1);
+  });
+});
+
+describe("private deck access denial", () => {
+  it("identifies the denied deck and clears queued inaccessible work", async () => {
+    let deniedDeck: string | undefined;
+    const saver = new ScoreSaver(async () => { throw Object.assign(new Error("deck removed"), { status: 403 }); }, {
+      onSaved: () => {}, isExpired: () => false, onExpired: () => {},
+      isDenied: (err) => (err as { status?: number }).status === 403,
+      onDenied: (_err, deckId) => { deniedDeck = deckId; },
+    });
+    saver.newRound("private-123", "session"); saver.add(true); await settle();
+    expect(deniedDeck).toBe("private-123");
+    expect(saver.pending).toBe(0);
+  });
+});
+
+describe("an expired round", () => {
+  it("does not create or submit a new unbound round after the queue is cleared", async () => {
+    const { server, saver } = setup();
+    saver.newRound("private-deck", "expired-session");
+    saver.add(true);
+    await settle();
+    saver.clear();
+    saver.add(true);
+    expect(await saver.flush({ final: true })).toBeNull();
+    expect(server.calls).toHaveLength(1);
+    expect(saver.pending).toBe(0);
+  });
+});

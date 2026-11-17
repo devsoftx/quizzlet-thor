@@ -19,6 +19,7 @@ export interface SessionInfo {
   deadline: number;
   /** Set when the session belongs to a kid profile (started by a signed-in parent). */
   profileId: string | null;
+  sessionTag?: string;
 }
 
 export interface LeaderboardEntry {
@@ -91,6 +92,7 @@ interface SessionResponse {
   points: number;
   secondsLeft: number;
   profileId?: string | null;
+  sessionTag?: string;
 }
 
 // Use the server's "seconds left" so a wrong device clock doesn't matter.
@@ -99,6 +101,7 @@ const toSession = (s: SessionResponse): SessionInfo => ({
   points: s.points,
   deadline: Date.now() + s.secondsLeft * 1000,
   profileId: s.profileId ?? null,
+  sessionTag: s.sessionTag,
 });
 
 export interface AccountInfo {
@@ -158,6 +161,11 @@ export const api = {
     }
   },
 
+  /** Check a private deck is still assigned to this learner before opening it. */
+  async checkPrivateDeck(deckId: string): Promise<void> {
+    await call(`/api/session?deckId=${encodeURIComponent(deckId)}`);
+  },
+
   async startSession(name: string): Promise<SessionInfo> {
     return toSession(await call<SessionResponse>("/api/session", { method: "POST", body: { name } }));
   },
@@ -174,11 +182,12 @@ export const api = {
 
   submitScore(
     answers: boolean[],
-    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean },
+    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId?: string; deckId?: string; sessionTag?: string },
   ): Promise<ScoreSave> {
+    if (!options.sessionTag) return Promise.reject(new ApiError("This session cannot safely save points. Refresh and start a new session.", 409));
     return call<ScoreSave>("/api/score", {
       method: "POST",
-      body: { answers, streakBefore: options.streakBefore, leaderboard: options.leaderboard },
+      body: { answers, streakBefore: options.streakBefore, leaderboard: options.leaderboard, batchId: options.batchId, deckId: options.deckId, sessionTag: options.sessionTag },
       keepalive: options.keepalive,
     });
   },

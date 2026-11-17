@@ -85,6 +85,8 @@ function readDevUser(): string | null {
 
 function DevAuth({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<string | null>(readDevUser);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [devId, setDevId] = useState("parent-a");
 
   setAuthHeaders(async (): Promise<Record<string, string>> => (user ? { "x-dev-user": user } : {}));
 
@@ -93,16 +95,7 @@ function DevAuth({ children }: { children: ReactNode }) {
       mode: "dev",
       isLoaded: true,
       isSignedIn: Boolean(user),
-      signIn: () => {
-        const id = window.prompt("Local dev sign-in — parent id (letters, numbers, dashes):", "parent-a");
-        if (!id || !/^[a-z0-9-]{1,40}$/i.test(id)) return;
-        try {
-          localStorage.setItem(DEV_USER_KEY, id);
-        } catch {
-          // still signed in for this page
-        }
-        setUser(id);
-      },
+      signIn: () => setShowSignIn(true),
       signOut: async () => {
         try {
           localStorage.removeItem(DEV_USER_KEY);
@@ -114,5 +107,26 @@ function DevAuth({ children }: { children: ReactNode }) {
     }),
     [user],
   );
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}{showSignIn && <div className="dev-signin" role="dialog" aria-modal="true" aria-labelledby="dev-signin-title" onKeyDown={(e) => {
+    if (e.key === "Escape") { setShowSignIn(false); return; }
+    if (e.key !== "Tab") return;
+    const controls = [...e.currentTarget.querySelectorAll<HTMLElement>('input:not([disabled]), button:not([disabled])')];
+    const first = controls[0], last = controls.at(-1);
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+  }}>
+    <form className="dev-signin__form" onSubmit={(e) => {
+      e.preventDefault();
+      if (!/^[a-z0-9-]{1,40}$/i.test(devId)) return;
+      try { localStorage.setItem(DEV_USER_KEY, devId); } catch { /* local session only */ }
+      setUser(devId);
+      setShowSignIn(false);
+    }}>
+      <h2 id="dev-signin-title">Local test sign-in</h2>
+      <p>This is a disposable local account, not a real sign-in.</p>
+      <label htmlFor="dev-parent-id">Parent test ID</label>
+      <input id="dev-parent-id" value={devId} onChange={(e) => setDevId(e.target.value)} pattern="[A-Za-z0-9-]{1,40}" required autoFocus />
+      <div><button className="btn btn--primary" type="submit">Continue</button> <button className="btn btn--secondary" type="button" onClick={() => setShowSignIn(false)}>Cancel</button></div>
+    </form>
+  </div>}</AuthContext.Provider>;
 }

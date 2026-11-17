@@ -48,7 +48,7 @@ export function Settings({ account, onSaved, onDeleted, onBack }: Props) {
         <button type="button" className="btn btn--ghost" onClick={onBack}>
           ← Back
         </button>
-        <h1>Settings</h1>
+        <h1>Account settings</h1>
       </header>
 
       <form className="manage__item settings-form" onSubmit={save}>

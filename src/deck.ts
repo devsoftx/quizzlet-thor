@@ -14,6 +14,8 @@ export interface Card {
 export interface Deck {
   title: string;
   description?: string;
+  /** Optional, author-supplied subject; missing means uncategorized. */
+  subject?: string;
   /** Only decks with `enabled: true` are shown in the app (default: false). */
   enabled: boolean;
   /** Shuffle card order each session (default: true). */
@@ -137,6 +139,9 @@ export function parseDeck(source: string, fallbackTitle: string): ParseResult {
 
   const enabled = parseEnabled(root.enabled);
   const errors: string[] = enabled.error ? [enabled.error] : [];
+  if (root.subject !== undefined && (typeof root.subject !== "string" || !root.subject.trim() || root.subject.trim().length > 80)) {
+    errors.push('"subject" must be nonempty text of at most 80 characters.');
+  }
 
   if (!Array.isArray(root.cards)) {
     errors.push('The file needs a "cards:" list.');
@@ -155,6 +160,7 @@ export function parseDeck(source: string, fallbackTitle: string): ParseResult {
     deck: {
       title: toText(root.title) || fallbackTitle,
       description: toText(root.description) || undefined,
+      ...(typeof root.subject === "string" && root.subject.trim() ? { subject: root.subject.trim() } : {}),
       enabled: enabled.value,
       shuffle: optionalBool(root.shuffle, true),
       shuffleOptions: optionalBool(root.shuffleOptions, true),
