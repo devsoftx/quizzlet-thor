@@ -153,12 +153,8 @@ const fileUrl = (id: string) => `/api/files?id=${encodeURIComponent(id)}`;
 export const api = {
   /** The current session, or null if there isn't one. */
   async getSession(): Promise<SessionInfo | null> {
-    try {
-      return toSession(await call<SessionResponse>("/api/session"));
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 401) return null;
-      throw err;
-    }
+    const session = await call<SessionResponse | null>("/api/session");
+    return session ? toSession(session) : null;
   },
 
   /** Check a private deck is still assigned to this learner before opening it. */
