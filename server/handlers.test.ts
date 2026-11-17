@@ -105,18 +105,31 @@ describe("sessions", () => {
 
     advance(60 * 1000);
     const expired = await getSession(req("/api/session", { cookie }), deps);
-    expect(expired.status).toBe(401);
+    expect(expired.status).toBe(200);
+    expect(await expired.json()).toBeNull();
     expect(expired.headers.get("set-cookie")).toContain("Max-Age=0");
   });
 
-  it("401s without a cookie and ends a session on DELETE", async () => {
+  it("answers null (not an error) without a session, and ends a session on DELETE", async () => {
     const { deps } = setup();
-    expect((await getSession(req("/api/session"), deps)).status).toBe(401);
+    const none = await getSession(req("/api/session"), deps);
+    expect(none.status).toBe(200);
+    expect(await none.json()).toBeNull();
+    expect(none.headers.get("set-cookie")).toBeNull(); // nothing to clear
 
     const cookie = await login(deps, "Ana");
     const res = await endSession(req("/api/session", { method: "DELETE", cookie }), deps);
     expect(res.headers.get("set-cookie")).toContain("Max-Age=0");
-    expect((await getSession(req("/api/session", { cookie }), deps)).status).toBe(401);
+    const ended = await getSession(req("/api/session", { cookie }), deps);
+    expect(ended.status).toBe(200);
+    expect(await ended.json()).toBeNull();
+  });
+
+  it("still 401s a private-deck check when there is no session", async () => {
+    const { deps } = setup();
+    const res = await getSession(req("/api/session?deckId=some-deck"), deps);
+    expect(res.status).toBe(401);
+    expect(await res.json()).toEqual({ error: "No active session." });
   });
 });
 

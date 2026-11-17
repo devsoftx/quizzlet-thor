@@ -119,7 +119,9 @@ async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: s
     expect(await retried.json()).toEqual(await committed.json());
     expect(await (await getSession(request("/api/session", { method: "GET", cookie: guest }), deps)).json()).toMatchObject({ points: 20 });
     now += 3601_000;
-    expect((await getSession(request("/api/session", { method: "GET", cookie: sessionCookie }), deps)).status).toBe(401);
+    const expired = await getSession(request("/api/session", { method: "GET", cookie: sessionCookie }), deps);
+    expect(expired.status).toBe(200);
+    expect(await expired.json()).toBeNull();
     expect((await guestScore({ answers: [true], batchId: "guest-replay", leaderboard: false })).status).toBe(401);
   } finally {
     await cleanup(accounts, players, sessions, batches);

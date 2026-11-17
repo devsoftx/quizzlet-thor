@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { LeaderboardPanel } from "./LeaderboardPanel";
 
 interface Props {
   notice?: string;
@@ -52,6 +53,8 @@ export function Welcome({ notice, onStart, parentSignIn }: Props) {
           <p className="field-entry__note">Your study session lasts 60 minutes.</p>
         </section>
       </div>
+      {/* The public leaderboard, no sign-in needed. */}
+      <LeaderboardPanel />
     </div>
   );
 }

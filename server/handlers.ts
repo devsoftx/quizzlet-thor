@@ -59,16 +59,23 @@ async function linkedSessionWasRevoked(request: Request, deps: Deps): Promise<bo
 
 // ------------------------------------------------------------ /api/session
 
-/** GET: the current session, or 401 if there is none (or it expired). */
+/**
+ * GET: the current session, or `null` if there is none (or it expired). The app
+ * asks on every page load, so "nobody is playing" is a normal 200 answer rather
+ * than an error the browser flags.
+ * GET ?deckId=: the same, but also checks a private deck is still assigned; here
+ * a missing session is a 401, so an ended session can't pass the check.
+ */
 export async function getSession(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   if (!deps.store) return storageMissing();
   const session = await currentSession(request, deps);
+  const deckId = new URL(request.url).searchParams.get("deckId");
   if (!session) {
     const hadCookie = readCookie(request, SESSION_COOKIE) !== null;
     if (await linkedSessionWasRevoked(request, deps)) return json({ error: "This device is no longer linked. Ask an adult for a new link." }, 403, { "set-cookie": clearCookie(request) });
-    return json({ error: "No active session." }, 401, hadCookie ? { "set-cookie": clearCookie(request) } : {});
+    const clear: HeadersInit = hadCookie ? { "set-cookie": clearCookie(request) } : {};
+    return deckId ? json({ error: "No active session." }, 401, clear) : json(null, 200, clear);
   }
-  const deckId = new URL(request.url).searchParams.get("deckId");
   if (deckId && !(await canAccessPrivateDeck(session, deckId, deps))) return error(403, "This deck is no longer available.");
   return json(publicSession(session, deps.now()));
 }

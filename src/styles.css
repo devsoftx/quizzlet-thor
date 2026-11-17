@@ -1562,6 +1562,8 @@ a.btn {
   --good-soft: #e6f1e5;
   --bad: #943d30;
   --bad-soft: #faebe4;
+  /* Points text: dark enough for 4.5:1 on these light backgrounds (dark mode keeps its own). */
+  --gold: #8a5a12;
   --shadow: 0 10px 30px rgb(32 46 37 / 7%);
   --radius: 12px;
 }
@@ -1580,6 +1582,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .field-welcome { max-width: none; gap: 0; text-align: left; }
 .field-welcome__header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 0 0 18px; }
 .field-parent-link { border: 0; background: transparent; color: var(--accent-strong); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; min-height: 44px; }
+.field-welcome > .board-panel { margin-bottom: 40px; }
 .field-welcome__layout { display: grid; grid-template-columns: 1fr minmax(320px, 440px); gap: clamp(32px, 7vw, 100px); align-items: center; padding: clamp(38px, 7vw, 90px) 0 32px; }
 .field-welcome__intro { position: relative; min-height: 460px; overflow: hidden; }
 .field-welcome__intro h1 { font-size: clamp(3.2rem, 6.8vw, 6.3rem); line-height: .99; margin: 18px 0 24px; }
