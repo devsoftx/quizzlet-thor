@@ -12,9 +12,9 @@ import {
   submitScore,
 } from "./handlers.js";
 import { getStore, MemoryStore, PACE_BURST, PACE_MS_PER_ANSWER } from "./store.js";
-import { cookieNamed, playing, score, type Playing } from "./test-support.js";
+import { captureLog, cookieNamed, playing, score, type Playing } from "./test-support.js";
 
-const BASE = "https://quizzlet.test";
+const BASE = "https://localhost";
 
 function setup() {
   let clock = Date.UTC(2026, 10, 7, 12, 0, 0);
@@ -434,6 +434,31 @@ describe("leaderboard switch and blocked nicknames", () => {
       expect(await res.json()).toEqual({ error: "Please choose a different nickname." });
     }
     expect((await startSession(req("/api/session", { method: "POST", body: { name: "Good name" } }), deps)).status).toBe(201);
+  });
+
+  it("refuses a nickname with a built-in blocked word or look-alike letters, with no operator list at all", async () => {
+    const { deps } = setup();
+    const log = captureLog();
+    try {
+      const start = (name: string) => startSession(req("/api/session", { method: "POST", body: { name } }), deps);
+
+      const blocked = await start("Sh1thead");
+      expect(blocked.status).toBe(400);
+      expect(await blocked.json()).toEqual({ error: "Please choose a different nickname." });
+      expect(blocked.headers.get("set-cookie")).toBeNull();
+
+      // "Аna" with a Cyrillic А would sit on the board looking like "Ana".
+      const lookalike = await start("\u0410na");
+      expect(lookalike.status).toBe(400);
+      expect(await lookalike.json()).toEqual({ error: "Please use letters from one alphabet in your nickname." });
+
+      expect((await start("Ana")).status).toBe(201);
+      // Logged like the operator's list, and never with the nickname itself.
+      expect(log.named("session.name_blocked")).toHaveLength(1);
+      expect(log.lines.join("\n")).not.toMatch(/sh1thead/i);
+    } finally {
+      log.restore();
+    }
   });
 
   it("keeps a removed nickname off the board even if it's played again", async () => {

@@ -9,6 +9,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import {
   deckIsFor,
+  DEVICE_DAYS,
   INVITE_DAYS,
   MAX_DEVICES_PER_PROFILE,
   type AccountsDb,
@@ -22,7 +23,6 @@ import { cookie, error, json, readCookie, readJson } from "./http.js";
 import { securityEvent } from "./log.js";
 
 export const KID_COOKIE = "qz_kid";
-const DEVICE_DAYS = 180;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const LINK_GONE = "This link has expired or was already used. Ask your parent for a new one.";
@@ -85,8 +85,8 @@ function unlinked(device: (LinkTarget & { id: string }) | null, by: "kid" | "rep
   if (device) securityEvent("device.unlinked", { accountId: device.accountId, profileId: device.profileId, deviceId: device.id, by });
 }
 
-async function devicesFor(accounts: AccountsDb, target: LinkTarget) {
-  return (await accounts.forAccount(target.accountId).listDevices()).filter((d) => d.profileId === target.profileId);
+async function devicesFor(accounts: AccountsDb, target: LinkTarget, now: string) {
+  return (await accounts.forAccount(target.accountId).listDevices(now)).filter((d) => d.profileId === target.profileId);
 }
 
 // ------------------------------------------------- /api/invites (parents)
@@ -95,7 +95,8 @@ async function devicesFor(accounts: AccountsDb, target: LinkTarget) {
 export async function listLinks(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
-  return json({ invites: await ctx.scope.listInvites(iso(deps.now())), devices: await ctx.scope.listDevices() });
+  const now = iso(deps.now());
+  return json({ invites: await ctx.scope.listInvites(now), devices: await ctx.scope.listDevices(now) });
 }
 
 /**
@@ -108,7 +109,7 @@ export async function createInvite(request: Request, deps: Deps = defaultDeps())
   const body = (await readJson(request)) ?? {};
   const profile = typeof body.profileId === "string" ? await ctx.scope.getProfile(body.profileId) : null;
   if (!profile) return error(404, "Profile not found.");
-  const linked = (await ctx.scope.listDevices()).filter((d) => d.profileId === profile.id);
+  const linked = (await ctx.scope.listDevices(iso(deps.now()))).filter((d) => d.profileId === profile.id);
   if (linked.length >= MAX_DEVICES_PER_PROFILE) {
     return error(400, `${profile.nickname} already has ${MAX_DEVICES_PER_PROFILE} devices. Remove one first.`);
   }
@@ -148,7 +149,7 @@ export async function getKid(request: Request, deps: Deps = defaultDeps()): Prom
   const device = await kidDevice(request, deps);
   const profile = device ? await deps.accounts!.forAccount(device.accountId).getProfile(device.profileId) : null;
   if (!device || !profile) {
-    // Unlinked (or removed by the parent): forget the stale cookie.
+    // Unlinked, removed by the parent, or the link ran out: forget the stale cookie.
     return json({ kid: null }, 200, hadCookie ? { "set-cookie": cookie(request, KID_COOKIE, "", 0) } : {});
   }
   const decks = (await deps.accounts!.forAccount(device.accountId).listDecks()).filter((d) => deckIsFor(d, profile.id));
@@ -171,7 +172,8 @@ export async function postKid(request: Request, deps: Deps = defaultDeps()): Pro
   };
   if (!isSecret(body.token)) return miss();
   const tokenHash = fingerprint(body.token);
-  const now = iso(deps.now());
+  const nowMs = deps.now();
+  const now = iso(nowMs);
 
   const open = await accounts.findInvite(tokenHash, now);
   const profile = open ? await accounts.forAccount(open.accountId).getProfile(open.profileId) : null;
@@ -180,7 +182,7 @@ export async function postKid(request: Request, deps: Deps = defaultDeps()): Pro
   if (body.action === "peek") return json({ profile: card(profile), expiresAt: open.expiresAt });
   if (body.action !== "join") return error(400, "Unknown action.");
 
-  if ((await devicesFor(accounts, open)).length >= MAX_DEVICES_PER_PROFILE) {
+  if ((await devicesFor(accounts, open, now)).length >= MAX_DEVICES_PER_PROFILE) {
     return error(400, `This profile already has ${MAX_DEVICES_PER_PROFILE} devices. Ask your parent to remove one.`);
   }
   // A device studies as one kid at a time: joining replaces any earlier link here.
@@ -193,6 +195,8 @@ export async function postKid(request: Request, deps: Deps = defaultDeps()): Pro
     id: deviceId,
     tokenHash: fingerprint(secret),
     label: deviceLabel(request.headers.get("user-agent")),
+    // The same lifetime as the cookie below.
+    expiresAt: iso(nowMs + DEVICE_DAYS * DAY_MS),
   });
   if (!linked) return miss();
   securityEvent("device.linked", { accountId: linked.accountId, profileId: linked.profileId, deviceId });

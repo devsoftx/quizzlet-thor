@@ -10,7 +10,7 @@ import { MemoryFileStore } from "./files.js";
 import { MemoryStore } from "./store.js";
 import { playing, score } from "./test-support.js";
 
-const BASE = "https://quizzlet.test";
+const BASE = "https://localhost";
 const IPAD = "Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -228,6 +228,41 @@ describe("a kid's linked device", () => {
     expect(await whoAmI(deps, first)).toBeNull();
     expect((await whoAmI(deps, second)).profile.nickname).toBe("StarCat");
     expect((await (await listLinks(req("/api/invites", { user: "ana" }), deps)).json()).devices).toHaveLength(1);
+  });
+});
+
+describe("device links expire", () => {
+  it("an expired device gets {kid: null} and its cookie is cleared", async () => {
+    const { deps, later } = setup();
+    const nova = await kid(deps, "ana", "Nova7");
+    const device = await linkDevice(deps, "ana", nova.id);
+    const links = async () => (await (await listLinks(req("/api/invites", { user: "ana" }), deps)).json()).devices;
+    expect(await links()).toMatchObject([{ profileId: nova.id, expiresAt: "2027-05-14T12:00:00.000Z" }]); // 180 days on
+
+    later(180 * DAY - 1);
+    expect((await whoAmI(deps, device)).profile.nickname).toBe("Nova7");
+    const started = await startSession(req("/api/session", { method: "POST", body: { kid: true }, cookie: device }), deps);
+    expect(started.status).toBe(201);
+    const session = await playing(started, device);
+
+    later(1);
+    const res = await getKid(req("/api/kid", { cookie: device }), deps);
+    expect(await res.json()).toEqual({ kid: null });
+    expect(res.headers.get("set-cookie")).toMatch(new RegExp(`^${KID_COOKIE}=; Path=/; Max-Age=0;`));
+    // The link is gone everywhere: no new session, the running one ends, the parent's list is empty.
+    expect((await startSession(req("/api/session", { method: "POST", body: { kid: true }, cookie: device }), deps)).status).toBe(401);
+    expect((await score(deps, session, { answers: [true] })).status).toBe(403);
+    expect((await getLeaderboard(req("/api/leaderboard", { cookie: device }), deps)).status).toBe(200);
+    expect(await links()).toEqual([]);
+  });
+
+  it("an expired device doesn't count against the kid's device limit", async () => {
+    const { deps, later } = setup();
+    const nova = await kid(deps, "ana", "Nova7");
+    for (let i = 0; i < MAX_DEVICES_PER_PROFILE; i++) await linkDevice(deps, "ana", nova.id);
+    later(180 * DAY);
+    const fresh = await linkDevice(deps, "ana", nova.id);
+    expect((await whoAmI(deps, fresh)).profile.nickname).toBe("Nova7");
   });
 });
 

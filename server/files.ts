@@ -6,6 +6,7 @@
 import { BlobNotFoundError, del, head, issueSignedToken, list, presignUrl } from "@vercel/blob";
 import { handleUploadPresigned, type HandleUploadPresignedBody } from "@vercel/blob/client";
 import { createHash } from "node:crypto";
+import { isLocalDev, type Env } from "./env.js";
 
 /** What may be uploaded to one path. */
 export interface UploadRule {
@@ -196,9 +197,9 @@ export class BlobFileStore implements FileStore {
 
 const globalState = globalThis as typeof globalThis & { __quizzletMemoryFiles?: MemoryFileStore };
 
-/** Blob when a store is connected; memory locally; null on Vercel without one. */
-export function getFileStore(env: Record<string, string | undefined> = process.env): FileStore | null {
+/** Blob when a store is connected; memory locally; null anywhere else without one. */
+export function getFileStore(env: Env = process.env): FileStore | null {
   if (env.BLOB_STORE_ID || env.BLOB_READ_WRITE_TOKEN) return new BlobFileStore();
-  if (env.VERCEL) return null;
+  if (!isLocalDev(env)) return null;
   return (globalState.__quizzletMemoryFiles ??= new MemoryFileStore());
 }

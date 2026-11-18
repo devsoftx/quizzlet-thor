@@ -48,6 +48,7 @@ services (the unit tests use in-memory stand-ins and an in-process Postgres):
 | `python3 scripts/test-redis-score.py` | The Redis Lua scripts: scoring, the pace limit, removed players, nickname claims, pruning | Docker, or `QUIZZLET_REDIS_LOCAL=1` with a local `redis-server` |
 | `scripts/test-foundation-postgres.sh` | The account SQL and the limit triggers, including parallel inserts at a limit | Docker |
 | `npm test -- server/store.redis.test.ts` | The Redis store against the in-memory one, step by step | A disposable Redis behind an Upstash-compatible REST endpoint (see the file) |
+| `npm test -- scripts/cleanup-orphan-players.test.ts` | The one-off cleanup of deleted profiles' leaderboard leftovers | The same Redis; run it on its own (each of these two files empties it) |
 
 ### End-to-end tests
 
@@ -79,6 +80,7 @@ and in any order.
 | `decks-and-files.e2e.ts`| Private decks (who sees them), study files and their limits            |
 | `errors.e2e.ts`         | No connection, server errors, refused saves, sessions ending          |
 | `api.e2e.ts`            | The API's rules: who may call what, input checks, counting a save once |
+| `security.e2e.ts`       | The response headers on the wire, framing by another site, the content policy, nickname rules |
 | `a11y.e2e.ts`           | Automated accessibility checks (axe-core, WCAG 2.2 AA) on every screen  |
 
 Bugs that were fixed have a test named after them (for example, a fast double
@@ -163,7 +165,8 @@ A signed-in parent can:
 - **link a kid's own device**: each new profile gets an invitation link (one use,
   7 days). The kid opens it on their tablet or computer and that device studies
   as them, still with no email, password or account. The parent sees each linked
-  device under Kid profiles → Devices and can remove it or make a new link;
+  device under Kid profiles → Devices and can remove it or make a new link. A
+  device stays linked for 180 days, then needs a new link;
 - choose per profile whether the nickname appears on the public leaderboard
   (off by default; points still count privately);
 - keep **private decks** (My decks): upload YAML decks into the account, switch
@@ -243,6 +246,13 @@ cleanup job, the log events) and the alert rules to add to a log tool.
 you in as a made-up parent id; use two different ids to try two separate
 parents. Accounts, decks and uploaded files are kept in memory.
 
+The made-up sign-in and the in-memory stores exist only on a developer's
+machine: never on Vercel, never when `NODE_ENV` is `production`, and the
+sign-in only with `QUIZZLET_DEV_AUTH=1` (the dev server sets it) and only for
+requests to `localhost`. `npm run dev` and `npm run preview` send the response
+headers from `vercel.json`, so what the browser enforces locally is what it
+enforces in production.
+
 Don't put production database URLs in `.env.local`: the dev server loads it.
 
 ## Project layout
@@ -253,7 +263,7 @@ api/                   Vercel Functions (session, score, leaderboard, me, profil
 server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store,
                        security log (log.ts), request guard (route.ts), operator switches (flags.ts)
 db/migrations/         SQL migrations (npm run db:migrate)
-scripts/               migrations, the leaderboard removal tool, checks against real Redis and Postgres
+scripts/               migrations, the leaderboard removal and cleanup tools, checks against real Redis and Postgres
 docs/security/         remediation plan, runbook, alert rules
 vercel.json            response headers, the daily cleanup schedule
 e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts

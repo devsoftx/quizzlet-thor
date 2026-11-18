@@ -139,6 +139,8 @@ async function scenario(db: AccountsDb, prefix: string) {
   const T0 = "2026-11-15T12:00:00.000Z";
   const T1 = "2026-11-22T12:00:00.000Z";
   const T2 = "2026-11-15T13:30:00.000Z";
+  /** When the device links made here stop working: 180 days on. */
+  const T9 = "2027-05-14T12:00:00.000Z";
   seen.invite = await a.createInvite(`${prefix}-p1`, `${prefix}-h1`, T0, T1);
   seen.inviteAgain = await a.createInvite(`${prefix}-p1`, `${prefix}-h2`, T0, T1);
   seen.replacedGone = await db.findInvite(`${prefix}-h1`, T0);
@@ -147,18 +149,22 @@ async function scenario(db: AccountsDb, prefix: string) {
   seen.invitesA = await a.listInvites(T0);
   seen.invitesB = await b.listInvites(T0);
   seen.bInviteForA = await b.createInvite(`${prefix}-p1`, `${prefix}-hb`, T0, T1).then(() => "saved", () => "rejected");
-  seen.redeemed = await db.redeemInvite(`${prefix}-h2`, T0, { id: `${prefix}-dev1`, tokenHash: `${prefix}-dh1`, label: "iPad · Safari" });
-  seen.redeemTwice = await db.redeemInvite(`${prefix}-h2`, T0, { id: `${prefix}-dev2`, tokenHash: `${prefix}-dh2`, label: "x" });
+  seen.redeemed = await db.redeemInvite(`${prefix}-h2`, T0, { id: `${prefix}-dev1`, tokenHash: `${prefix}-dh1`, label: "iPad · Safari", expiresAt: T9 });
+  seen.redeemTwice = await db.redeemInvite(`${prefix}-h2`, T0, { id: `${prefix}-dev2`, tokenHash: `${prefix}-dh2`, label: "x", expiresAt: T9 });
   seen.invitesAfterUse = await a.listInvites(T0);
   seen.device = await db.findDevice(`${prefix}-dh1`, T2);
-  seen.devices = await a.listDevices(); // last seen refreshed to T2
-  seen.bDevices = await b.listDevices();
+  seen.devices = await a.listDevices(T2); // last seen refreshed to T2
+  seen.bDevices = await b.listDevices(T2);
   seen.bDeleteDevice = await b.deleteDevice(`${prefix}-dev1`);
+  // The link ends on the server at its expiry: not found, not listed.
+  seen.deviceJustBeforeExpiry = await db.findDevice(`${prefix}-dh1`, "2027-05-14T11:59:59.999Z");
+  seen.deviceAtExpiry = await db.findDevice(`${prefix}-dh1`, T9);
+  seen.devicesAtExpiry = await a.listDevices(T9);
   await a.createInvite(`${prefix}-p2`, `${prefix}-h3`, T0, T1);
-  await db.redeemInvite(`${prefix}-h3`, T0, { id: `${prefix}-dev3`, tokenHash: `${prefix}-dh3`, label: "Mac · Chrome" });
+  await db.redeemInvite(`${prefix}-h3`, T0, { id: `${prefix}-dev3`, tokenHash: `${prefix}-dh3`, label: "Mac · Chrome", expiresAt: T9 });
   seen.kidUnlinks = await db.removeDevice(`${prefix}-dh3`);
   await a.createInvite(`${prefix}-p2`, `${prefix}-h4`, T0, T1);
-  await db.redeemInvite(`${prefix}-h4`, T0, { id: `${prefix}-dev4`, tokenHash: `${prefix}-dh4`, label: "Mac · Chrome" });
+  await db.redeemInvite(`${prefix}-h4`, T0, { id: `${prefix}-dev4`, tokenHash: `${prefix}-dh4`, label: "Mac · Chrome", expiresAt: T9 });
   seen.cancel = await a.cancelInvites(`${prefix}-p1`);
   seen.cancelNone = await a.cancelInvites(`${prefix}-p1`);
 
@@ -217,7 +223,12 @@ describe("Postgres accounts (PGlite)", () => {
     expect(postgres.redeemed).toEqual({ accountId: "X-a", profileId: "X-p1" });
     expect(postgres.redeemTwice).toBeNull();
     expect(postgres.invitesAfterUse).toEqual([]);
-    expect(postgres.devices).toMatchObject([{ id: "X-dev1", profileId: "X-p1", label: "iPad · Safari", lastSeenAt: "2026-11-15T13:30:00.000Z" }]);
+    expect(postgres.devices).toMatchObject([
+      { id: "X-dev1", profileId: "X-p1", label: "iPad · Safari", lastSeenAt: "2026-11-15T13:30:00.000Z", expiresAt: "2027-05-14T12:00:00.000Z" },
+    ]);
+    expect(postgres.deviceJustBeforeExpiry).toEqual({ id: "X-dev1", accountId: "X-a", profileId: "X-p1" });
+    expect(postgres.deviceAtExpiry).toBeNull();
+    expect(postgres.devicesAtExpiry).toEqual([]);
     expect(postgres.bDevices).toEqual([]);
     expect(postgres.bDeleteDevice).toBeNull();
     expect(postgres.kidUnlinks).toEqual({ id: "X-dev3", accountId: "X-a", profileId: "X-p2" });
@@ -348,6 +359,26 @@ describe("Postgres accounts (PGlite)", () => {
     expect(sql).toContain(`quizzlet_enforce_limit('decks', '${MAX_DECKS}')`);
     expect(sql).toContain(`quizzlet_enforce_limit('files', '${MAX_FILES}')`);
     expect(sql).toContain(`quizzlet_reserve_upload('${MAX_FILES}', '${MAX_TOTAL_FILE_BYTES}')`);
+  });
+
+  it("gives device links made before they could expire 180 days from when they were linked", async () => {
+    // A database as it was before migration 006, with a device already linked.
+    const old = new PGlite();
+    const dir = new URL("../db/migrations/", import.meta.url);
+    const files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
+    for (const file of files.filter((f) => f < "006")) await old.exec(readFileSync(new URL(file, dir), "utf8"));
+    await old.exec(`
+      insert into accounts (id, display_name) values ('old-a', 'Ana');
+      insert into kid_profiles (id, account_id, nickname, color, emoji) values ('old-p', 'old-a', 'Nova7', '#4255ff', '🦊');
+      insert into kid_devices (id, token_hash, account_id, profile_id, label, created_at, last_seen_at)
+        values ('old-d', 'old-hash', 'old-a', 'old-p', 'iPad · Safari', '2026-10-01T00:00:00Z', '2026-10-02T00:00:00Z');`);
+    for (const file of files.filter((f) => f >= "006")) await old.exec(readFileSync(new URL(file, dir), "utf8"));
+
+    const db = new PostgresAccounts(sqlFor(old));
+    expect(await db.forAccount("old-a").listDevices("2026-11-18T00:00:00.000Z")).toMatchObject([{ id: "old-d", expiresAt: "2027-03-30T00:00:00.000Z" }]);
+    expect(await db.findDevice("old-hash", "2027-03-29T23:59:59.000Z")).toMatchObject({ id: "old-d" });
+    expect(await db.findDevice("old-hash", "2027-03-30T00:00:00.000Z")).toBeNull();
+    await old.close();
   });
 
   it("rejects an unknown grade band at the database too", async () => {

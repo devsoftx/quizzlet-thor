@@ -34,7 +34,8 @@ if (!url || !token) {
 
 // A guest's key is the lowercased nickname (as in server/handlers.ts); a kid profile's is "p:<id>".
 const isProfile = given.startsWith("p:");
-const playerKey = isProfile ? given : given.normalize("NFC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en");
+// (NFKC, like the server's own tidying of a nickname in server/names.ts.)
+const playerKey = isProfile ? given : given.normalize("NFKC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en");
 const redis = new Redis({ url, token });
 
 const [points, name, total, removed] = await Promise.all([

@@ -52,7 +52,9 @@ then add the item:
   still saved. Each function instance re-reads the item every 30 seconds, so allow up to a minute.
 - **Block a nickname:** add an entry to `blockedNames`. A guest nickname that *contains* an entry is
   refused, ignoring case, spaces and punctuation (`"badword"` also blocks `Bad-Word 7`), so keep entries
-  specific. Kid profile nicknames are chosen by a signed-in parent and aren't checked.
+  specific. Kid profile nicknames are chosen by a signed-in parent and aren't checked against this list.
+  A short built-in list (`server/names.ts`) is always on, for guests and kid profiles alike, and needs
+  no Global Config; it also refuses a nickname that mixes letters from two alphabets.
 - **Remove an entry** (a bad name, a forged score). First look, then remove:
 
   ```bash
@@ -69,6 +71,22 @@ then add the item:
   parent switches the leaderboard on. Points still count for the player privately. To undo a removal,
   run `SREM leaderboard-removed "<player key>"` against the Redis database. The script prints an
   `admin.leaderboard.remove` log line; keep it with the incident notes.
+- **Clear what deleted profiles left behind** (once, after deploying the session checks). Before sessions
+  were checked on every request, a score saved within an hour of a profile's deletion recreated that
+  kid's total and nickname, possibly on the public board. This finds every `p:<profileId>` with
+  leaderboard data and no profile in the database, and removes it the same way as above. First look,
+  then remove:
+
+  ```bash
+  vercel env run -e production -- node scripts/cleanup-orphan-players.mjs
+  ```
+
+  ```bash
+  vercel env run -e production -- node scripts/cleanup-orphan-players.mjs --yes
+  ```
+
+  It needs `DATABASE_URL` from the same environment as Redis. If every profile looks deleted it assumes
+  the database is the wrong one and removes nothing.
 
 With no Global Config connected, the board is on and nothing is blocked.
 

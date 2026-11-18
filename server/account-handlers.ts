@@ -16,7 +16,8 @@ import {
 } from "./accounts.js";
 import { defaultDeps, type Deps } from "./deps.js";
 import { accountFolder } from "./files.js";
-import { cleanName, error, json, NAME_MAX, readJson } from "./http.js";
+import { cleanName, error, json, readJson } from "./http.js";
+import { checkName, nameProblemMessage } from "./names.js";
 import { errorName, routeOf, securityEvent } from "./log.js";
 
 export interface AccountContext {
@@ -94,9 +95,9 @@ export async function updateMe(request: Request, deps: Deps = defaultDeps()): Pr
 
   const patch: { displayName?: string; settings?: typeof DEFAULT_SETTINGS } = {};
   if (body.displayName !== undefined) {
-    const name = cleanName(body.displayName);
-    if (!name) return error(400, `Please enter a name (up to ${NAME_MAX} letters, numbers or spaces).`);
-    patch.displayName = name;
+    const checked = checkName(body.displayName);
+    if (!checked.ok) return error(400, nameProblemMessage(checked.problem, "name"));
+    patch.displayName = checked.name;
   }
   if (body.settings !== undefined) {
     patch.settings = normalizeSettings({ ...current.settings, ...(body.settings as object) });
@@ -136,9 +137,9 @@ type ProfilePatch = Partial<ProfileInput>;
 export function parseProfileInput(body: Record<string, unknown>, requireNickname: boolean): ProfilePatch | string {
   const out: ProfilePatch = {};
   if (body.nickname !== undefined || requireNickname) {
-    const nickname = cleanName(body.nickname);
-    if (!nickname) return `Please enter a nickname (up to ${NAME_MAX} letters, numbers or spaces).`;
-    out.nickname = nickname;
+    const checked = checkName(body.nickname);
+    if (!checked.ok) return nameProblemMessage(checked.problem);
+    out.nickname = checked.name;
   }
   if (body.gradeBand !== undefined) {
     if (body.gradeBand !== null && !GRADE_BANDS.includes(body.gradeBand as never)) return "Unknown grade band.";

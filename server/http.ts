@@ -1,6 +1,6 @@
 // Small helpers shared by the API handlers.
 
-export const NAME_MAX = 24;
+export { cleanName, NAME_MAX } from "./names.js";
 
 /**
  * A JSON response that is never cached. `headers` may repeat a name (an array
@@ -33,15 +33,6 @@ export async function readJson(request: Request): Promise<Record<string, unknown
   } catch {
     return null;
   }
-}
-
-/** Trim and collapse spaces; letters, numbers, spaces, - ' . only. */
-export function cleanName(raw: unknown): string | null {
-  if (typeof raw !== "string") return null;
-  const name = raw.normalize("NFC").replace(/\s+/g, " ").trim();
-  if (name.length < 1 || name.length > NAME_MAX) return null;
-  if (!/^[\p{L}\p{N}][\p{L}\p{N} '.-]*$/u.test(name)) return null;
-  return name;
 }
 
 /** A cookie's value, or null when it's missing or isn't valid percent-encoding. */

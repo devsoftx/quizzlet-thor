@@ -1,6 +1,7 @@
 import { Redis } from "@upstash/redis";
 import { MAX_DEVICES_PER_PROFILE } from "../src/account-shared.js";
 import { POINTS_PER_CORRECT, scoreRound, STREAK_BONUS, STREAK_THRESHOLD } from "../src/points.js";
+import { isLocalDev, type Env } from "./env.js";
 
 export const SESSION_TTL_SECONDS = 60 * 60;
 
@@ -687,13 +688,14 @@ const globalState = globalThis as typeof globalThis & { __quizzletMemoryStore?: 
 /**
  * Redis when Upstash credentials are present (Vercel's Upstash integration
  * provides KV_REST_API_*), otherwise an in-memory store for local dev.
- * Returns null on a Vercel deployment with no Redis connected.
+ * Returns null anywhere else that has no Redis connected (a Vercel deployment
+ * or any production build).
  */
-export function getStore(env: Record<string, string | undefined> = process.env): Store | null {
+export function getStore(env: Env = process.env): Store | null {
   const url = env.UPSTASH_REDIS_REST_URL ?? env.KV_REST_API_URL;
   const token = env.UPSTASH_REDIS_REST_TOKEN ?? env.KV_REST_API_TOKEN;
   if (url && token) return new RedisStore(new Redis({ url, token }));
-  if (env.VERCEL) return null;
+  if (!isLocalDev(env)) return null;
   // Survive Vite reloading this module during development.
   return (globalState.__quizzletMemoryStore ??= new MemoryStore());
 }
