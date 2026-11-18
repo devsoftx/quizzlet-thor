@@ -55,6 +55,10 @@ export default defineConfig(
     },
   },
 
+  // Type declarations for the .mjs scripts. A tsconfig.json covers one only when
+  // server code imports its script, so these get the rules that need no types.
+  { files: ["scripts/**/*.d.mts"], extends: [tseslint.configs.disableTypeChecked] },
+
   // The browser app: React.
   {
     files: ["src/**/*.{ts,tsx}"],
