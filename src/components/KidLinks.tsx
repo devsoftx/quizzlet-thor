@@ -119,7 +119,7 @@ export function KidLinkPanel({ profile, invite, devices, freshUrl, onNewLink, on
                   disabled={busy}
                   aria-label={`Remove ${d.label} from ${profile.nickname}'s devices`}
                   onClick={() => {
-                    if (window.confirm(`Remove ${d.label}? It will stop studying as ${profile.nickname}.`)) run(() => onRemoveDevice(d));
+                    if (window.confirm(`Remove ${d.label}? It will stop studying as ${profile.nickname}.`)) void run(() => onRemoveDevice(d));
                   }}
                 >
                   Remove

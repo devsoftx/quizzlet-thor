@@ -35,7 +35,7 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState<AnswerRecord[]>([]);
   /** The last card answered, so a fast double tap can't answer (or score) a card twice. */
-  const answered = useRef(-1);
+  const answeredRef = useRef(-1);
 
   const card = cards[index];
   const current = results[index];
@@ -46,8 +46,8 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
 
   const pick = useCallback(
     (option: string) => {
-      if (results.length > index || answered.current >= index) return; // already answered
-      answered.current = index;
+      if (results.length > index || answeredRef.current >= index) return; // already answered
+      answeredRef.current = index;
       const correct = option === card.answer;
       onAnswer?.(correct);
       setResults((prev) => {
@@ -59,13 +59,13 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
   );
 
   /** Set once the round is handed over, so a double tap on the last card can't finish it twice. */
-  const finished = useRef(false);
+  const finishedRef = useRef(false);
 
   const next = useCallback(() => {
     if (results.length <= index) return; // not answered yet
     if (isLast) {
-      if (finished.current) return;
-      finished.current = true;
+      if (finishedRef.current) return;
+      finishedRef.current = true;
       onFinish(results);
       return;
     }

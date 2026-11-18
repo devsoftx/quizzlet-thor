@@ -473,6 +473,7 @@ const iso = (v: unknown) => new Date(String(v)).toISOString();
 const toDeck = (r: Row): AccountDeck => ({
   id: String(r.id),
   title: String(r.title),
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string -- a text column
   description: r.description == null ? null : String(r.description),
   cardCount: Number(r.card_count),
   yaml: String(r.yaml),

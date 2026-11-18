@@ -145,7 +145,7 @@ export async function startSession(request: Request, deps: Deps = defaultDeps())
       const account = await requireAccount(request, deps);
       if (account instanceof Response) return account;
       accountId = account.userId;
-      profile = await account.scope.getProfile(body!.profileId as string);
+      profile = await account.scope.getProfile(body.profileId as string);
       if (!profile) return error(404, "Profile not found.");
     }
     player = {
@@ -256,7 +256,7 @@ export async function submitScore(request: Request, deps: Deps = defaultDeps()):
   }
 
   const fingerprint = createHash("sha256").update(JSON.stringify({ answers, streakBefore: streakBefore ?? null, leaderboard: wantsBoard, deckId: body.deckId ?? null })).digest("hex");
-  const saved = await deps.store.addScoreBatch(session, { id: batchId, fingerprint, answers: answers as boolean[], streakBefore: streakBefore as number | undefined }, deps.now());
+  const saved = await deps.store.addScoreBatch(session, { id: batchId, fingerprint, answers, streakBefore: streakBefore as number | undefined }, deps.now());
   if (saved === "conflict") {
     securityEvent("score.conflict", { ...logFields, reason: "batch", batch: batchId });
     return error(409, "This score batch was already used for different answers.");

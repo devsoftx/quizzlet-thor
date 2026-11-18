@@ -38,6 +38,7 @@ Then open http://localhost:5173.
 | `npm test`          | Run the unit tests (also validates `decks/`) |
 | `npm run test:e2e`  | Run the end-to-end tests in a real browser |
 | `npm run typecheck` | TypeScript check                           |
+| `npm run lint`      | ESLint: TypeScript and React rules         |
 | `npm run build`     | Build a static site into `dist/`           |
 
 Three more checks run the production storage code against real, disposable
@@ -86,6 +87,30 @@ and in any order.
 Bugs that were fixed have a test named after them (for example, a fast double
 tap skipping a card), so they can't quietly come back. On failure, Playwright
 keeps a trace and screenshot: `npm run test:e2e:report` opens them.
+
+### Linting
+
+`npm run lint` runs ESLint over the whole repository. The rules are in
+`eslint.config.js`:
+
+- **TypeScript**: typescript-eslint's recommended rules, including the ones
+  that use type information (a promise nobody awaits, an `any` leaking into
+  typed code).
+- **React** (in `src/`): the Rules of Hooks and the React Compiler's rules
+  (`eslint-plugin-react-hooks`), Fast Refresh (`eslint-plugin-react-refresh`),
+  and `@eslint-react` for JSX, DOM and browser-API mistakes (a list item
+  without a `key`, a timer or listener that is never cleaned up).
+- Tests follow the same rules, except that they may read loosely typed JSON.
+
+`npm run lint -- --fix` applies the fixes ESLint can make by itself.
+
+Two versions of TypeScript are installed. ESLint's TypeScript parser needs
+TypeScript's JavaScript API, which TypeScript 7 (the native compiler) doesn't
+have yet. So in `package.json`, `@typescript/compiler` is TypeScript 7 and
+provides `tsc`, which `npm run typecheck` and the build use as before, while
+the `typescript` package is TypeScript 6 and is there only for the linter.
+`npx tsc -v` shows which compiler runs. Once typescript-eslint supports
+TypeScript 7, `typescript` can go back to `^7` and the extra entry can go.
 
 ## Adding decks
 
@@ -266,6 +291,7 @@ db/migrations/         SQL migrations (npm run db:migrate)
 scripts/               migrations, the leaderboard removal and cleanup tools, checks against real Redis and Postgres
 docs/security/         remediation plan, runbook, alert rules
 vercel.json            response headers, the daily cleanup schedule
+eslint.config.js       lint rules (npm run lint)
 e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts
 src/deck.ts            YAML parsing, validation and shuffling
 src/library.ts         loads decks from decks/ and local storage, best scores
