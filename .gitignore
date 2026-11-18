@@ -2,17 +2,14 @@ node_modules
 dist
 .DS_Store
 *.local
-
-# Source study guides (third-party material, kept local only).
-# docs/security/ holds the project's own security docs and is tracked.
+# Source study guides (third-party material, kept local only)
 docs/*
-!docs/security/
+!docs/red-remediation-plan.md
+!docs/blue-remediation-plan.md
 .vercel
 .env*
-
 build/
 *.log
-
 # Playwright
 playwright-report/
 test-results/
