@@ -23,6 +23,33 @@ give them (a burst of 20, then one every 2 seconds, per session and per
 player), so a streak bonus can't be claimed and points can't be poured in by a
 script.
 
+## Languages
+
+The app speaks **English and Spanish** (Latin American Spanish, informal "tú").
+It starts in the browser's language (Spanish when it comes before English in the
+browser's preferences, English otherwise), and the **English / Español** switch at
+the top of every screen changes it on the spot. The choice is remembered on that
+device, for guests, kids on their own linked device and parents alike, and sets
+the page's `lang` so screen readers use the right voice. Numbers and dates follow
+the language too, as do Clerk's sign-in window, the deck template download and
+the messages the server sends (the API itself always answers in English; the
+browser translates what it shows).
+
+Decks are written in whatever language their author chooses. A deck can say
+which with `language:` (`en`, `es`, `es-MX`…); the decks in `decks/` count as
+English unless they say otherwise. Deck text is then marked with its language,
+so an English question on a Spanish screen is still read in English. A deck
+whose language isn't the app's shows it in the deck list, and once decks come
+in more than one language the list can be filtered by it.
+
+To change or add wording, edit [`src/i18n/en.ts`](src/i18n/en.ts) and
+[`src/i18n/es.ts`](src/i18n/es.ts): TypeScript fails the build if the Spanish
+catalog misses a message or takes different values. A new message from the
+server needs its Spanish version in
+[`src/i18n/server-messages.ts`](src/i18n/server-messages.ts) (a unit test reads
+the server's code and fails when one is missing), and deck validation messages
+live in [`src/deck-messages.ts`](src/deck-messages.ts).
+
 ## Run it
 
 ```bash
@@ -81,7 +108,8 @@ and in any order.
 | `errors.e2e.ts`         | No connection, server errors, refused saves, sessions ending          |
 | `api.e2e.ts`            | The API's rules: who may call what, input checks, counting a save once |
 | `security.e2e.ts`       | The response headers on the wire, framing by another site, the content policy, nickname rules |
-| `a11y.e2e.ts`           | Automated accessibility checks (axe-core, WCAG 2.2 AA) on every screen  |
+| `i18n.e2e.ts`           | Spanish: from the browser's language, the switch, server and deck messages, parents |
+| `a11y.e2e.ts`           | Automated accessibility checks (axe-core, WCAG 2.2 AA) on every screen, in both languages |
 
 Bugs that were fixed have a test named after them (for example, a fast double
 tap skipping a card), so they can't quietly come back. On failure, Playwright
@@ -90,7 +118,8 @@ keeps a trace and screenshot: `npm run test:e2e:report` opens them.
 ## Adding decks
 
 Start from the template: use **Download template** in the app, or copy
-[`public/deck-template.yaml`](public/deck-template.yaml). It's a small,
+[`public/deck-template.yaml`](public/deck-template.yaml) (in Spanish:
+[`public/deck-template.es.yaml`](public/deck-template.es.yaml)). It's a small,
 commented deck that shows every option.
 
 There are two ways to add a deck:
@@ -113,6 +142,7 @@ wrong, so you can fix the file — unless it isn't enabled.
 title: Norse Mythology            # optional, defaults to the file name
 description: Gods and realms      # optional
 subject: History                  # optional, author-provided category
+language: en                      # optional, the language the cards are in (en, es, es-MX…)
 enabled: true                     # required to show the deck (true / false)
 shuffle: true                     # shuffle card order (default: true)
 shuffleOptions: true              # shuffle the options on each card (default: true)
@@ -137,6 +167,8 @@ Rules:
 
 - `enabled: true` shows the deck; `enabled: false` or no `enabled` line hides
   it. (`enabled` / `disabled` also work as values.)
+- The keys (`title`, `cards`, `question`, `options`, `answer`…) are always
+  written in English, whatever language the deck is in.
 - Each card needs a `question`, at least two `options`, and an `answer`.
 - `answer` is the **text** of the correct option (matched exactly, or
   ignoring upper/lower case).
@@ -280,6 +312,7 @@ vercel.json            response headers, the daily cleanup schedule
 e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts
 src/deck.ts            YAML parsing, validation and shuffling
 src/library.ts         loads decks from decks/ and local storage, best scores
+src/i18n/              languages: the English and Spanish messages, the language switch's store, server messages in Spanish
 src/components/        DeckList, Quiz, FlipCard, Results, parent screens (profiles, My decks, My files, settings)
 src/styles.css         all styling (light and dark mode)
 ```

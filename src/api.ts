@@ -10,6 +10,8 @@ import type {
   KidProfile,
   ProfileInput,
 } from "./account-shared";
+import { getLanguage, messagesFor } from "./i18n";
+import { translateServerMessage } from "./i18n/server-messages";
 
 export interface SessionInfo {
   name: string;
@@ -46,15 +48,26 @@ export interface ScoreResult {
 export type ScoreSave = Omit<ScoreResult, "leaderboard"> & { leaderboard: Leaderboard | null };
 
 export class ApiError extends Error {
+  /** The server's own words (always English), for checks on what went wrong; `message` is in the app's language. */
+  readonly serverMessage: string;
+
   constructor(
     message: string,
     readonly status: number,
     /** Extra detail some routes send, e.g. what's wrong with a deck. */
     readonly details: string[] = [],
+    serverMessage?: string,
   ) {
     super(message);
+    this.serverMessage = serverMessage ?? message;
   }
 }
+
+/** Does this error's server message contain `text`? (The shown message may be translated.) */
+export const serverSaid = (err: unknown, text: string): boolean =>
+  err instanceof Error && (err instanceof ApiError ? err.serverMessage : err.message).includes(text);
+
+const t = () => messagesFor(getLanguage());
 
 /** Set by the sign-in layer (src/auth.tsx): headers proving who the parent is. */
 let authHeaders: () => Promise<Record<string, string>> = async () => ({});
@@ -79,12 +92,13 @@ async function call<T>(
       keepalive: init.keepalive,
     });
   } catch {
-    throw new ApiError("Can't reach the server. Check your internet connection.", 0);
+    throw new ApiError(t().api.offline, 0);
   }
   const data = await res.json().catch(() => null);
   if (!res.ok) {
     const details = Array.isArray(data?.errors) ? data.errors.map(String) : [];
-    throw new ApiError(data?.error ?? `Something went wrong (${res.status}).`, res.status, details);
+    const said = typeof data?.error === "string" ? data.error : undefined;
+    throw new ApiError(said ? translateServerMessage(said, getLanguage()) : t().api.failed(res.status), res.status, details, said);
   }
   return data as T;
 }
@@ -186,7 +200,7 @@ export const api = {
     answers: boolean[],
     options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId?: string; deckId?: string; sessionTag?: string },
   ): Promise<ScoreSave> {
-    if (!options.sessionTag) return Promise.reject(new ApiError("This session cannot safely save points. Refresh and start a new session.", 409));
+    if (!options.sessionTag) return Promise.reject(new ApiError(t().api.noSessionTag, 409));
     return call<ScoreSave>("/api/score", {
       method: "POST",
       body: { answers, streakBefore: options.streakBefore, leaderboard: options.leaderboard, batchId: options.batchId, deckId: options.deckId, sessionTag: options.sessionTag },
@@ -318,7 +332,7 @@ export const api = {
           onUploadProgress: onProgress ? ({ percentage }) => onProgress(percentage) : undefined,
         });
       } catch {
-        throw new ApiError("The upload didn't go through. Please try again.", 0);
+        throw new ApiError(t().api.uploadFailed, 0);
       }
     } else {
       await call(`/api/files?pathname=${encodeURIComponent(start.pathname)}`, { method: "PUT", raw: file });
@@ -339,7 +353,7 @@ export const api = {
   async fileBytes(id: string): Promise<Blob> {
     const headers = await authHeaders().catch(() => ({}));
     const res = await fetch(`${fileUrl(id)}&raw=1`, { headers }).catch(() => null);
-    if (!res?.ok) throw new ApiError("Couldn't open that file.", res?.status ?? 0);
+    if (!res?.ok) throw new ApiError(t().api.openFailed, res?.status ?? 0);
     return res.blob();
   },
 

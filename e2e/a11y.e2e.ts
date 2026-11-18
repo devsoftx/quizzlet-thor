@@ -106,6 +106,25 @@ test.describe("accessibility", () => {
     await device.context.close();
   });
 
+  test("the learner screens in Spanish", async ({ browser }) => {
+    // A browser set to Spanish: the page says so (lang="es"), and English deck text says it's English.
+    const context = await browser.newContext({ locale: "es-MX" });
+    const page = await context.newPage();
+    await page.goto("/");
+    await expect(page.getByRole("region", { name: /Tabla de posiciones/ })).toBeVisible();
+    await expectAccessible(page, "the welcome screen (Spanish)");
+    await page.getByLabel("Tu apodo").fill(unique("Axe"));
+    await page.getByRole("button", { name: /Empezar a explorar/ }).click();
+    await importDeck(page, "Accessible planets");
+    await expect(page.getByRole("button", { name: "Estudiar Accessible planets" })).toBeVisible();
+    await expectAccessible(page, "the deck list (Spanish)");
+    await page.getByRole("button", { name: "Estudiar Accessible planets" }).click();
+    await page.getByRole("button", { name: /Empezar a practicar/ }).click();
+    await answer(page, "Venus");
+    await expectAccessible(page, "the feedback after a wrong answer (Spanish)");
+    await context.close();
+  });
+
   test("the dark theme passes too", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "dark" });
     await page.goto("/");

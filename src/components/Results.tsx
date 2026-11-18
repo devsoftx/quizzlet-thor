@@ -1,6 +1,8 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import type { SaveState } from "../App";
 import type { Deck } from "../deck";
+import { useI18n, type Messages } from "../i18n";
+import { rich } from "../i18n/rich";
 import { LeaderboardPanel } from "./LeaderboardPanel";
 import type { AnswerRecord } from "./Quiz";
 
@@ -17,11 +19,11 @@ interface Props {
   onExit: () => void;
 }
 
-function message(percent: number): string {
-  if (percent === 100) return "Every question answered. Wonderful work!";
-  if (percent >= 80) return "Nice exploring. See what you discovered below.";
-  if (percent >= 50) return "Every question is a chance to learn something new.";
-  return "Curiosity starts with trying. Take another look below.";
+function message(percent: number, t: Messages): string {
+  if (percent === 100) return t.results.perfect;
+  if (percent >= 80) return t.results.great;
+  if (percent >= 50) return t.results.good;
+  return t.results.keepGoing;
 }
 
 function PointsAndLeaderboard({
@@ -35,27 +37,28 @@ function PointsAndLeaderboard({
   onRetrySave: () => void;
   onNewSession: () => void;
 }) {
+  const { t } = useI18n();
   switch (save.status) {
     case "saving":
       return (
         <p className="muted" role="status">
-          Saving your +{roundPoints} points…
+          {t.results.saving(roundPoints)}
         </p>
       );
     case "expired":
       return (
         <div className="save-problem" role="alert">
-          <p>Your session ended. {save.confirmedPoints.toLocaleString()} points were confirmed in this session. Recent points may not have been confirmed, and answers after the session ended were not saved.</p>
+          <p>{t.results.expired(save.confirmedPoints)}</p>
           <button type="button" className="btn btn--primary" onClick={onNewSession}>
-            Start a new session
+            {t.results.newSession}
           </button>
         </div>
       );
     case "error":
       return (
         <div className="save-problem" role="alert">
-          <p>{save.kind === "failed" ? "Your latest points were rejected." : "We couldn't confirm whether your latest points were saved."} {save.message}</p>
-          {save.kind === "unknown" && <button type="button" className="btn btn--secondary" onClick={onRetrySave}>Try again</button>}
+          <p>{save.kind === "failed" ? t.results.rejected : t.results.unknown} {save.message}</p>
+          {save.kind === "unknown" && <button type="button" className="btn btn--secondary" onClick={onRetrySave}>{t.results.tryAgain}</button>}
         </div>
       );
     case "saved": {
@@ -64,15 +67,15 @@ function PointsAndLeaderboard({
         <>
           <div className="points-summary">
             <div className="points-summary__earned">
-              <span className="points-summary__big">+{result.pointsEarned}</span>
-              <span className="muted">points this round</span>
+              <span className="points-summary__big">+{result.pointsEarned.toLocaleString(t.locale)}</span>
+              <span className="muted">{t.results.pointsThisRound}</span>
             </div>
             <div className="points-summary__totals">
               <span>
-                This session <strong>{result.sessionPoints.toLocaleString()}</strong>
+                {t.results.thisSession} <strong>{result.sessionPoints.toLocaleString(t.locale)}</strong>
               </span>
               <span>
-                All-time total <strong>{result.totalPoints.toLocaleString()}</strong>
+                {t.results.allTime} <strong>{result.totalPoints.toLocaleString(t.locale)}</strong>
               </span>
             </div>
           </div>
@@ -94,6 +97,7 @@ export function Results({
   onRestart,
   onExit,
 }: Props) {
+  const { t } = useI18n();
   const headingRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => { headingRef.current?.focus({ preventScroll: true }); }, []);
   const correct = results.filter((r) => r.correct).length;
@@ -104,25 +108,25 @@ export function Results({
   return (
     <div className="results">
       <header className="results__summary">
-        <p className="eyebrow">{isRetry ? `${deck.title} · missed questions` : deck.title}</p>
+        <p className="eyebrow">{rich(isRetry ? t.results.missedEyebrow("{title}") : "{title}", { title: <span lang={deck.language}>{deck.title}</span> })}</p>
         <div
           className="score-ring"
           style={{ "--pct": `${percent}` } as CSSProperties}
           role="img"
-          aria-label={`${percent}% correct`}
+          aria-label={t.results.percentCorrect(percent)}
         >
-          <span>{percent}%</span>
+          <span>{t.results.percent(percent)}</span>
         </div>
         <h1 ref={headingRef} tabIndex={-1}>
-          {correct} of {results.length} correct
+          {t.results.correctOf(correct, results.length)}
         </h1>
         <p className="muted">
-          {message(percent)}
+          {message(percent, t)}
         </p>
         <div className="results__actions">
           {missed > 0 && (
             <button type="button" className="btn btn--primary" onClick={onRetryMissed}>
-              Practice missed questions ({missed})
+              {t.results.practiceMissed(missed)}
             </button>
           )}
           <button
@@ -130,10 +134,10 @@ export function Results({
             className={`btn ${missed > 0 ? "btn--secondary" : "btn--primary"}`}
             onClick={onRestart}
           >
-            Restart deck
+            {t.results.restart}
           </button>
           <button type="button" className="btn btn--ghost" onClick={onExit}>
-            Explore more decks
+            {t.results.exploreMore}
           </button>
         </div>
       </header>
@@ -148,26 +152,26 @@ export function Results({
       </section>
 
       <section>
-        <h2 className="section-title">Review</h2>
+        <h2 className="section-title">{t.results.review}</h2>
         <ol className="review">
           {results.map((r, i) => (
             <li key={i} className={`review__item ${r.correct ? "is-correct" : "is-wrong"}`}>
-              <span className="review__mark" aria-label={r.correct ? "Correct" : "Wrong"}>
+              <span className="review__mark" aria-label={r.correct ? t.results.correct : t.results.wrong}>
                 {r.correct ? "✓" : "✗"}
               </span>
               <div>
-                <p className="review__question">{r.card.question}</p>
+                <p className="review__question" lang={deck.language}>{r.card.question}</p>
                 <p className="review__answer">
-                  Answer: <strong>{r.card.answer}</strong>
+                  {t.results.answer} <strong lang={deck.language}>{r.card.answer}</strong>
                   {!r.correct && (
                     <>
                       {" "}
-                      · You chose: <span className="strike">{r.picked}</span>
+                      · {t.results.youChose} <span className="strike" lang={deck.language}>{r.picked}</span>
                     </>
                   )}
                 </p>
                 {!r.correct && r.card.explanation && (
-                  <p className="review__explanation">{r.card.explanation}</p>
+                  <p className="review__explanation" lang={deck.language}>{r.card.explanation}</p>
                 )}
               </div>
             </li>

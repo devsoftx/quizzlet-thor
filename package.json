@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@clerk/backend": "^3.27.0",
+    "@clerk/localizations": "^4.24.5",
     "@clerk/react": "^6.18.6",
     "@neondatabase/serverless": "^1.2.0",
     "@upstash/redis": "^1.41.0",

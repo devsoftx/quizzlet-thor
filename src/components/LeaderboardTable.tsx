@@ -1,30 +1,33 @@
 import type { Leaderboard, LeaderboardEntry } from "../api";
+import { useI18n } from "../i18n";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
 function Row({ entry, isYou }: { entry: LeaderboardEntry; isYou: boolean }) {
+  const { t } = useI18n();
   return (
     <li className={`leaderboard__row${isYou ? " is-you" : ""}`}>
-      <span className="leaderboard__rank" aria-label={`Rank ${entry.rank}`}>
+      <span className="leaderboard__rank" aria-label={t.leaderboard.rank(entry.rank)}>
         {MEDALS[entry.rank - 1] ?? entry.rank}
       </span>
       <span className="leaderboard__name">
         {entry.emoji && (
-          <span className="leaderboard__emoji" title="Kid profile" aria-hidden="true">
+          <span className="leaderboard__emoji" title={t.leaderboard.kidProfile} aria-hidden="true">
             {entry.emoji}
           </span>
         )}
         {entry.name}
-        {isYou && <span className="tag leaderboard__you">You</span>}
+        {isYou && <span className="tag leaderboard__you">{t.leaderboard.you}</span>}
       </span>
-      <span className="leaderboard__points">{entry.points.toLocaleString()} pts</span>
+      <span className="leaderboard__points">{t.common.pts(entry.points)}</span>
     </li>
   );
 }
 
 export function LeaderboardTable({ board }: { board: Leaderboard }) {
+  const { t } = useI18n();
   if (board.top.length === 0) {
-    return <p className="muted">No points yet — be the first on the board!</p>;
+    return <p className="muted">{t.leaderboard.empty}</p>;
   }
   const you = board.you;
   const youInTop = you !== null && board.top.some((e) => e.rank === you.rank);

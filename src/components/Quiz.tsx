@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Card, Deck } from "../deck";
+import { useI18n } from "../i18n";
 import { pointsForAnswer } from "../points";
 import { FlipCard } from "./FlipCard";
 
@@ -32,6 +33,7 @@ function isTypingTarget(target: EventTarget | null): boolean {
 }
 
 export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props) {
+  const { t } = useI18n();
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState<AnswerRecord[]>([]);
   /** The last card answered, so a fast double tap can't answer (or score) a card twice. */
@@ -110,18 +112,18 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
     <div className="quiz">
       <header className="quiz__header">
         <button type="button" className="btn btn--ghost" onClick={onExit}>
-          ← Decks
+          {t.quiz.back}
         </button>
         <div className="quiz__title">
-          <h1>{deck.title}</h1>
-          {isRetry && <span className="tag">Retrying missed</span>}
+          <h1 lang={deck.language}>{deck.title}</h1>
+          {isRetry && <span className="tag">{t.quiz.retrying}</span>}
         </div>
-        <div className="quiz__stats" aria-label="Progress">
+        <div className="quiz__stats" aria-label={t.quiz.progress}>
           <span>
             {index + 1} / {cards.length}
           </span>
           <span className="quiz__score">✓ {score}</span>
-          <span className="quiz__points" aria-label={`${points} points this round`}>
+          <span className="quiz__points" aria-label={t.quiz.roundPoints(points)}>
             ⭐ {points}
           </span>
         </div>
@@ -130,7 +132,7 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
       <div
         className="progress"
         role="progressbar"
-        aria-label="Questions answered"
+        aria-label={t.quiz.answered}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(progress)}
@@ -143,6 +145,7 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
       <FlipCard
         key={index}
         card={card}
+        lang={deck.language}
         picked={picked}
         earned={current ? { points: current.points, streak: current.streak, bonus: current.bonus } : null}
         isLast={isLast}

@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { buildSession, parseDeck, titleFromFileName } from "./deck";
-import { isVisible, loadBundledDecks, type DeckEntry } from "./library";
+import { deckMessagesEs } from "./deck-messages";
+import { deckProblems, filterDecks, isVisible, loadBundledDecks, type DeckEntry } from "./library";
 import template from "../public/deck-template.yaml?raw";
+import templateEs from "../public/deck-template.es.yaml?raw";
 
 describe("deck template", () => {
   it("is a valid, enabled deck that shows every card feature", () => {
@@ -11,6 +13,19 @@ describe("deck template", () => {
     expect(result.deck.enabled).toBe(true);
     expect(result.deck.cards.some((c) => c.explanation)).toBe(true);
     expect(result.deck.cards.some((c) => c.shuffleOptions === false)).toBe(true);
+  });
+
+  it("has a Spanish version that is the same kind of deck, in Spanish", () => {
+    const english = parseDeck(template, "template");
+    const spanish = parseDeck(templateEs, "plantilla", deckMessagesEs);
+    expect(spanish.ok ? [] : spanish.errors).toEqual([]);
+    if (!english.ok || !spanish.ok) return;
+    expect(english.deck.language).toBe("en");
+    expect(spanish.deck.language).toBe("es");
+    expect(spanish.deck.enabled).toBe(true);
+    expect(spanish.deck.cards.map((c) => c.options.length)).toEqual(english.deck.cards.map((c) => c.options.length));
+    expect(spanish.deck.cards.some((c) => c.explanation)).toBe(true);
+    expect(spanish.deck.cards.some((c) => c.shuffleOptions === false)).toBe(true);
   });
 });
 
@@ -187,5 +202,74 @@ describe("subject metadata", () => {
   it("rejects invalid subject metadata and duplicate choices", () => {
     expect(parseDeck(source("subject: [a, b]"), "x").ok).toBe(false);
     expect(parseDeck(source("").replace("[A, B]", "[A, A]"), "x").ok).toBe(false);
+  });
+});
+
+describe("deck language", () => {
+  const source = (line: string) => `title: Estrellas\n${line}\nenabled: true\ncards:\n  - question: ¿Sol?\n    options: [Sí, No]\n    answer: Sí\n`;
+
+  it("keeps the language a deck is written in, tidied to its standard form", () => {
+    const tagged = (line: string) => {
+      const r = parseDeck(source(line), "x");
+      return r.ok ? r.deck.language : r.errors;
+    };
+    expect(tagged("language: es")).toBe("es");
+    expect(tagged("language: ES-mx")).toBe("es-MX");
+    expect(tagged("")).toBeUndefined();
+  });
+
+  it("rejects something that isn't a language code", () => {
+    const result = parseDeck(source("language: Spanish please"), "x");
+    expect(result.ok ? [] : result.errors).toEqual(['"language" must be a language code such as en or es (got "Spanish please").']);
+    expect(parseDeck(source("language: [es]"), "x").ok).toBe(false);
+  });
+
+  it("marks the bundled decks as English unless they say otherwise", () => {
+    const bundled = loadBundledDecks().filter((d) => d.ok);
+    expect(bundled.length).toBeGreaterThan(0);
+    for (const d of bundled) if (d.ok) expect(d.deck.language).toBe("en");
+  });
+
+  it("filters decks by language", () => {
+    const entry = (id: string, language?: string): DeckEntry => ({
+      id, fileName: `${id}.yaml`, source: "imported", ok: true,
+      deck: { title: id, enabled: true, shuffle: false, shuffleOptions: false, cards: [], ...(language ? { language } : {}) },
+    });
+    const decks = [entry("a", "es"), entry("b", "es-MX"), entry("c", "en"), entry("d")];
+    expect(filterDecks(decks, "", "", "es").map((d) => d.id)).toEqual(["a", "b"]);
+    expect(filterDecks(decks, "", "", "en").map((d) => d.id)).toEqual(["c"]);
+    expect(filterDecks(decks, "", "").map((d) => d.id)).toEqual(["a", "b", "c", "d"]);
+  });
+});
+
+describe("deck problems in Spanish", () => {
+  it("describes every problem in the learner's language", () => {
+    const result = parseDeck(
+      "title: Mal\nenabled: quizás\nsubject: ''\ncards:\n  - 3\n  - options: [A, B]\n  - question: ¿Uno?\n    options: [A]\n  - question: ¿Dos?\n    options: [A, A]\n  - question: ¿Tres?\n    options: [A, B]\n  - question: ¿Cuatro?\n    options: [A, B]\n    answer: C\n",
+      "x",
+      deckMessagesEs,
+    );
+    expect(result.ok ? [] : result.errors).toEqual([
+      '"enabled" debe ser true o false (se encontró "quizás").',
+      '"subject" debe ser un texto no vacío de 80 caracteres como máximo.',
+      "Tarjeta 1: se esperaba un bloque con question, options y answer.",
+      'Tarjeta 2: falta "question".',
+      'Tarjeta 3 ("¿Uno?"): "options" debe ser una lista con al menos 2 elementos.',
+      'Tarjeta 4 ("¿Dos?"): la opción "A" aparece dos veces.',
+      'Tarjeta 5 ("¿Tres?"): falta "answer".',
+      'Tarjeta 6 ("¿Cuatro?"): la respuesta "C" no es una de las opciones.',
+    ]);
+    expect(parseDeck("a: [", "x", deckMessagesEs)).toMatchObject({ ok: false, errors: [expect.stringMatching(/^El YAML no es válido: /)] });
+    expect(titleFromFileName(".yaml", deckMessagesEs)).toBe("Mazo sin título");
+  });
+
+  it("re-reads a deck the server refused, to list its problems in Spanish", () => {
+    const yaml = "enabled: true\ncards: []\n";
+    expect(deckProblems("x.yaml", yaml, ['"cards" is empty — add at least one card.'], deckMessagesEs)).toEqual([
+      '"cards" está vacía: agrega al menos una tarjeta.',
+    ]);
+    // Nothing wrong here, so the server checked something else: keep its words.
+    const fine = "enabled: true\ncards:\n  - question: Q\n    options: [A, B]\n    answer: A\n";
+    expect(deckProblems("x.yaml", fine, ["Too big."], deckMessagesEs)).toEqual(["Too big."]);
   });
 });

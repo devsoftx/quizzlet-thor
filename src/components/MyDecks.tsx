@@ -1,7 +1,8 @@
 import { useRef, useState, type FormEvent } from "react";
 import { MAX_DECKS, type AccountDeck, type KidProfile } from "../account-shared";
 import { api, ApiError } from "../api";
-import { TEMPLATE_URL } from "../library";
+import { useI18n, type Messages } from "../i18n";
+import { deckProblems, TEMPLATE_URLS } from "../library";
 import { ProfileAvatar } from "./ParentHome";
 
 interface Props {
@@ -19,11 +20,11 @@ interface UploadProblem {
   details: string[];
 }
 
-function audience(deck: AccountDeck, profiles: KidProfile[]): string {
-  if (!deck.enabled) return "Off: hidden from every kid";
-  if (deck.profileIds === null) return "All kids";
+function audience(deck: AccountDeck, profiles: KidProfile[], t: Messages): string {
+  if (!deck.enabled) return t.myDecks.off;
+  if (deck.profileIds === null) return t.myDecks.allKids;
   const names = profiles.filter((p) => deck.profileIds!.includes(p.id)).map((p) => p.nickname);
-  return names.length ? names.join(", ") : "No kids picked yet";
+  return names.length ? names.join(", ") : t.myDecks.noKidsPicked;
 }
 
 function saveText(text: string, fileName: string) {
@@ -50,6 +51,7 @@ function DeckForm({
   onDelete: () => Promise<void>;
   onCancel: () => void;
 }) {
+  const { t } = useI18n();
   const [title, setTitle] = useState(deck.title);
   const [everyone, setEveryone] = useState(deck.profileIds === null);
   const [picked, setPicked] = useState<string[]>(deck.profileIds ?? []);
@@ -62,7 +64,7 @@ function DeckForm({
     try {
       await action();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : t.common.somethingWentWrong);
       setBusy(false);
     }
   }
@@ -75,22 +77,22 @@ function DeckForm({
   return (
     <form className="profile-form" onSubmit={submit}>
       <label className="field">
-        <span>Title</span>
+        <span>{t.myDecks.titleField}</span>
         <input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={80} required />
       </label>
       <fieldset className="field">
-        <legend>Who can study it</legend>
+        <legend>{t.myDecks.whoCanStudy}</legend>
         <label className="check">
           <input type="radio" name={`who-${deck.id}`} checked={everyone} onChange={() => setEveryone(true)} />
-          <span>All my kids</span>
+          <span>{t.myDecks.allMyKids}</span>
         </label>
         <label className="check">
           <input type="radio" name={`who-${deck.id}`} checked={!everyone} onChange={() => setEveryone(false)} />
-          <span>Only these kids:</span>
+          <span>{t.myDecks.onlyThese}</span>
         </label>
         {!everyone &&
           (profiles.length === 0 ? (
-            <p className="muted field__hint">Add kid profiles first.</p>
+            <p className="muted field__hint">{t.myDecks.addProfilesFirst}</p>
           ) : (
             <div className="kid-checks">
               {profiles.map((p) => (
@@ -114,23 +116,23 @@ function DeckForm({
       )}
       <div className="profile-form__actions">
         <button type="submit" className="btn btn--primary" disabled={busy || !title.trim()}>
-          Save
+          {t.common.save}
         </button>
         <button type="button" className="btn btn--ghost" onClick={onCancel} disabled={busy}>
-          Cancel
+          {t.common.cancel}
         </button>
         <button type="button" className="btn btn--ghost" onClick={() => saveText(deck.yaml, yamlName(deck.title))}>
-          Download YAML
+          {t.myDecks.downloadYaml}
         </button>
         <button
           type="button"
           className="btn btn--danger"
           disabled={busy}
           onClick={() => {
-            if (window.confirm(`Delete "${deck.title}"? This can't be undone.`)) run(onDelete);
+            if (window.confirm(t.myDecks.confirmDelete(deck.title))) run(onDelete);
           }}
         >
-          Delete deck
+          {t.myDecks.deleteDeck}
         </button>
       </div>
     </form>
@@ -139,6 +141,7 @@ function DeckForm({
 
 /** A parent's private decks: add, switch on/off, pick which kids see each one. */
 export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Props) {
+  const { language, t } = useI18n();
   const fileInput = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
@@ -155,15 +158,16 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
     let current = decks;
     const failed: UploadProblem[] = [];
     for (const [i, item] of items.entries()) {
-      setBusy(`Adding ${i + 1} of ${items.length}…`);
+      setBusy(t.myDecks.adding(i + 1, items.length));
       try {
         current = [...current, await api.createDeck(item.fileName, item.text)];
         onChange(current);
       } catch (err) {
         failed.push({
           fileName: item.fileName,
-          message: err instanceof Error ? err.message : "Couldn't add this deck.",
-          details: err instanceof ApiError ? err.details : [],
+          message: err instanceof Error ? err.message : t.myDecks.addFailed,
+          // The server lists a deck's problems in English: describe them in the app's language.
+          details: err instanceof ApiError && err.details.length ? deckProblems(item.fileName, item.text, err.details, t.deck) : [],
         });
       }
     }
@@ -182,7 +186,7 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
       const updated = await api.updateDeck(deck.id, { enabled });
       onChange(decks.map((d) => (d.id === deck.id ? updated : d)));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Couldn't change that deck.");
+      setError(err instanceof Error ? err.message : t.myDecks.changeFailed);
     }
   }
 
@@ -190,13 +194,12 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
     <div className="manage">
       <header className="manage__header">
         <button type="button" className="btn btn--ghost" onClick={onBack}>
-          ← Back
+          {t.common.back}
         </button>
-        <h1>Private decks</h1>
+        <h1>{t.myDecks.title}</h1>
       </header>
       <p className="muted manage__intro">
-        Your private collection stays in your account. Choose which learners can see each deck, or switch it off
-        to hide it from everyone.
+        {t.myDecks.intro}
       </p>
 
       <div className="manage__toolbar">
@@ -206,13 +209,13 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
           onClick={() => fileInput.current?.click()}
           disabled={busy !== null || decks.length >= MAX_DECKS}
         >
-          + Add YAML deck…
+          {t.myDecks.add}
         </button>
-        <a className="btn btn--ghost" href={TEMPLATE_URL} download="quizzlet-deck-template.yaml">
-          Download template
+        <a className="btn btn--ghost" href={TEMPLATE_URLS[language]} download={t.common.templateFileName}>
+          {t.common.downloadTemplate}
         </a>
         <span className="muted manage__count">
-          {decks.length} of {MAX_DECKS} decks
+          {t.myDecks.count(decks.length, MAX_DECKS)}
         </span>
         <input
           ref={fileInput}
@@ -257,18 +260,18 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
       {notCopied.length > 0 && (
         <div className="manage__item library-banner">
           <span>
-            {notCopied.length} deck{notCopied.length === 1 ? " is" : "s are"} saved only in this browser.
+            {t.myDecks.browserOnly(notCopied.length)}
           </span>
           <button type="button" className="btn btn--secondary" disabled={busy !== null} onClick={() => addAll(notCopied)}>
-            Copy to my account
+            {t.myDecks.copyToAccount}
           </button>
         </div>
       )}
 
       {decks.length === 0 ? (
         <div className="empty">
-          <p>No decks yet.</p>
-          <p className="muted">Start from the template, fill in your questions, then add the file here.</p>
+          <p>{t.myDecks.empty}</p>
+          <p className="muted">{t.myDecks.emptyHint}</p>
         </div>
       ) : (
         <ul className="manage__list">
@@ -295,25 +298,25 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
                   <div className="manage__info">
                     <strong>{d.title}</strong>
                     <span className="muted">
-                      {d.cardCount} card{d.cardCount === 1 ? "" : "s"} · {audience(d, profiles)}
+                      {t.myDecks.cards(d.cardCount)} · {audience(d, profiles, t)}
                     </span>
                   </div>
-                  <label className="check" title={d.enabled ? "Switch off to hide from kids" : "Switch on"}>
+                  <label className="check" title={d.enabled ? t.myDecks.switchOffTitle : t.myDecks.switchOnTitle}>
                     <input
                       type="checkbox"
                       checked={d.enabled}
                       onChange={(e) => toggle(d, e.target.checked)}
-                      aria-label={`Show "${d.title}" to kids`}
+                      aria-label={t.myDecks.showToKids(d.title)}
                     />
-                    <span aria-hidden="true">On</span>
+                    <span aria-hidden="true">{t.myDecks.on}</span>
                   </label>
                   <button
                     type="button"
                     className="btn btn--secondary"
                     onClick={() => setEditing(d.id)}
-                    aria-label={`Edit "${d.title}"`}
+                    aria-label={t.myDecks.editLabel(d.title)}
                   >
-                    Edit
+                    {t.common.edit}
                   </button>
                 </div>
               )}

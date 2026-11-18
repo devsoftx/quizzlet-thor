@@ -1,4 +1,7 @@
 import { parse } from "yaml";
+import { deckMessagesEn, type DeckMessages } from "./deck-messages.js";
+
+export type { DeckMessages };
 
 /** One multiple-choice flashcard. */
 export interface Card {
@@ -16,6 +19,12 @@ export interface Deck {
   description?: string;
   /** Optional, author-supplied subject; missing means uncategorized. */
   subject?: string;
+  /**
+   * The language the cards are written in (a BCP 47 code such as "en" or "es"),
+   * so the app can mark them for screen readers and filter by it. Missing means
+   * unknown: the text then takes the app's own language.
+   */
+  language?: string;
   /** Only decks with `enabled: true` are shown in the app (default: false). */
   enabled: boolean;
   /** Shuffle card order each session (default: true). */
@@ -34,7 +43,7 @@ export type ParseResult =
  * Reads the deck-level `enabled` flag. Missing means disabled. Accepts
  * true/false, plus the words "enabled"/"disabled".
  */
-function parseEnabled(raw: unknown): { value: boolean | null; error?: string } {
+function parseEnabled(raw: unknown, messages: DeckMessages): { value: boolean | null; error?: string } {
   if (raw === undefined || raw === null) return { value: false };
   if (typeof raw === "boolean") return { value: raw };
   if (typeof raw === "string") {
@@ -42,7 +51,7 @@ function parseEnabled(raw: unknown): { value: boolean | null; error?: string } {
     if (word === "true" || word === "enabled") return { value: true };
     if (word === "false" || word === "disabled") return { value: false };
   }
-  return { value: null, error: `"enabled" must be true or false (got "${String(raw)}").` };
+  return { value: null, error: messages.enabledInvalid(String(raw)) };
 }
 
 type Rng = () => number;
@@ -66,33 +75,33 @@ function preview(text: string): string {
   return text.length > 40 ? `${text.slice(0, 40)}…` : text;
 }
 
-function parseCard(raw: unknown, index: number, errors: string[]): Card | null {
-  const label = `Card ${index + 1}`;
+function parseCard(raw: unknown, index: number, errors: string[], messages: DeckMessages): Card | null {
+  const label = messages.card(index + 1);
   if (!isRecord(raw)) {
-    errors.push(`${label}: expected a mapping with question, options and answer.`);
+    errors.push(messages.notAMapping(label));
     return null;
   }
 
   const question = toText(raw.question);
   if (!question) {
-    errors.push(`${label}: missing "question".`);
+    errors.push(messages.missingQuestion(label));
     return null;
   }
-  const where = `${label} ("${preview(question)}")`;
+  const where = messages.cardWithQuestion(label, preview(question));
 
   if (!Array.isArray(raw.options) || raw.options.length < 2) {
-    errors.push(`${where}: "options" must be a list with at least 2 items.`);
+    errors.push(messages.needsOptions(where));
     return null;
   }
   const options: string[] = [];
   for (const [i, opt] of raw.options.entries()) {
     const text = toText(opt);
     if (!text) {
-      errors.push(`${where}: option ${i + 1} is empty or not plain text.`);
+      errors.push(messages.optionEmpty(where, i + 1));
       return null;
     }
     if (options.includes(text)) {
-      errors.push(`${where}: option "${text}" appears twice.`);
+      errors.push(messages.optionTwice(where, text));
       return null;
     }
     options.push(text);
@@ -100,7 +109,7 @@ function parseCard(raw: unknown, index: number, errors: string[]): Card | null {
 
   const answerText = toText(raw.answer);
   if (!answerText) {
-    errors.push(`${where}: missing "answer".`);
+    errors.push(messages.missingAnswer(where));
     return null;
   }
   // Exact match first, then a forgiving case-insensitive match.
@@ -108,7 +117,7 @@ function parseCard(raw: unknown, index: number, errors: string[]): Card | null {
     options.find((o) => o === answerText) ??
     options.find((o) => o.toLowerCase() === answerText.toLowerCase());
   if (!answer) {
-    errors.push(`${where}: answer "${answerText}" is not one of the options.`);
+    errors.push(messages.answerNotAnOption(where, answerText));
     return null;
   }
 
@@ -120,36 +129,55 @@ function parseCard(raw: unknown, index: number, errors: string[]): Card | null {
 }
 
 /**
+ * A deck's `language`: a BCP 47 code ("en", "es", "es-MX"), tidied to its
+ * canonical form. Undefined when the file doesn't say; null when it's not a code.
+ */
+function parseLanguage(raw: unknown): string | null | undefined {
+  if (raw === undefined || raw === null) return undefined;
+  if (typeof raw !== "string" || !/^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(raw.trim())) return null;
+  try {
+    return Intl.getCanonicalLocales(raw.trim())[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Parse a deck from YAML. The file is a mapping with a `cards:` list.
  * (A bare list of cards still parses, but it has nowhere to say
  * `enabled: true`, so it is always disabled.)
+ *
+ * Problems are described with `messages` (English unless the browser asks
+ * for another language).
  */
-export function parseDeck(source: string, fallbackTitle: string): ParseResult {
+export function parseDeck(source: string, fallbackTitle: string, messages: DeckMessages = deckMessagesEn): ParseResult {
   let data: unknown;
   try {
     data = parse(source);
   } catch (err) {
-    return { ok: false, errors: [`Invalid YAML: ${(err as Error).message}`], enabled: null };
+    return { ok: false, errors: [messages.invalidYaml((err as Error).message)], enabled: null };
   }
 
   const root = Array.isArray(data) ? { cards: data } : data;
   if (!isRecord(root)) {
-    return { ok: false, errors: ['The file needs a "cards:" list.'], enabled: null };
+    return { ok: false, errors: [messages.needsCards], enabled: null };
   }
 
-  const enabled = parseEnabled(root.enabled);
+  const enabled = parseEnabled(root.enabled, messages);
   const errors: string[] = enabled.error ? [enabled.error] : [];
   if (root.subject !== undefined && (typeof root.subject !== "string" || !root.subject.trim() || root.subject.trim().length > 80)) {
-    errors.push('"subject" must be nonempty text of at most 80 characters.');
+    errors.push(messages.subjectInvalid);
   }
+  const language = parseLanguage(root.language);
+  if (language === null) errors.push(messages.languageInvalid(String(root.language)));
 
   if (!Array.isArray(root.cards)) {
-    errors.push('The file needs a "cards:" list.');
+    errors.push(messages.needsCards);
   } else if (root.cards.length === 0) {
-    errors.push('"cards" is empty — add at least one card.');
+    errors.push(messages.cardsEmpty);
   }
   const cards = (Array.isArray(root.cards) ? root.cards : [])
-    .map((raw, i) => parseCard(raw, i, errors))
+    .map((raw, i) => parseCard(raw, i, errors, messages))
     .filter((c): c is Card => c !== null);
   if (errors.length > 0 || enabled.value === null) {
     return { ok: false, errors, enabled: enabled.value };
@@ -161,6 +189,7 @@ export function parseDeck(source: string, fallbackTitle: string): ParseResult {
       title: toText(root.title) || fallbackTitle,
       description: toText(root.description) || undefined,
       ...(typeof root.subject === "string" && root.subject.trim() ? { subject: root.subject.trim() } : {}),
+      ...(language ? { language } : {}),
       enabled: enabled.value,
       shuffle: optionalBool(root.shuffle, true),
       shuffleOptions: optionalBool(root.shuffleOptions, true),
@@ -195,8 +224,8 @@ export function buildSession(
 }
 
 /** Turn "norse-mythology.yaml" into "Norse mythology". */
-export function titleFromFileName(fileName: string): string {
+export function titleFromFileName(fileName: string, messages: DeckMessages = deckMessagesEn): string {
   const base = fileName.replace(/^.*\//, "").replace(/\.ya?ml$/i, "");
   const words = base.replace(/[-_]+/g, " ").trim();
-  return words ? words[0].toUpperCase() + words.slice(1) : "Untitled deck";
+  return words ? words[0].toUpperCase() + words.slice(1) : messages.untitled;
 }

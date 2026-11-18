@@ -4,8 +4,10 @@
 //  - "off":   accounts aren't available; guest mode only
 
 import { ClerkProvider, useAuth, useClerk } from "@clerk/react";
+import { esMX } from "@clerk/localizations/es-MX";
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { setAuthHeaders } from "./api";
+import { useI18n } from "./i18n";
 
 export type AuthMode = "clerk" | "dev" | "off";
 
@@ -34,9 +36,11 @@ const AuthContext = createContext<AccountAuth>(OFF);
 export const useAccountAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  // Clerk's sign-in window follows the app's language (Latin American Spanish).
+  const { language } = useI18n();
   if (AUTH_MODE === "clerk") {
     return (
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY!} afterSignOutUrl="/">
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY!} afterSignOutUrl="/" localization={language === "es" ? esMX : undefined}>
         <ClerkBridge>{children}</ClerkBridge>
       </ClerkProvider>
     );
@@ -84,6 +88,7 @@ function readDevUser(): string | null {
 }
 
 function DevAuth({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
   const [user, setUser] = useState<string | null>(readDevUser);
   const [showSignIn, setShowSignIn] = useState(false);
   const [devId, setDevId] = useState("parent-a");
@@ -122,11 +127,11 @@ function DevAuth({ children }: { children: ReactNode }) {
       setUser(devId);
       setShowSignIn(false);
     }}>
-      <h2 id="dev-signin-title">Local test sign-in</h2>
-      <p>This is a disposable local account, not a real sign-in.</p>
-      <label htmlFor="dev-parent-id">Parent test ID</label>
+      <h2 id="dev-signin-title">{t.devSignIn.title}</h2>
+      <p>{t.devSignIn.text}</p>
+      <label htmlFor="dev-parent-id">{t.devSignIn.parentId}</label>
       <input id="dev-parent-id" value={devId} onChange={(e) => setDevId(e.target.value)} pattern="[A-Za-z0-9-]{1,40}" required autoFocus />
-      <div><button className="btn btn--primary" type="submit">Continue</button> <button className="btn btn--secondary" type="button" onClick={() => setShowSignIn(false)}>Cancel</button></div>
+      <div><button className="btn btn--primary" type="submit">{t.devSignIn.continue}</button> <button className="btn btn--secondary" type="button" onClick={() => setShowSignIn(false)}>{t.common.cancel}</button></div>
     </form>
   </div>}</AuthContext.Provider>;
 }

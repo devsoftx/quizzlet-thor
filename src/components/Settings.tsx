@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { api, type AccountInfo } from "../api";
 import type { AccountSettings } from "../account-shared";
+import { useI18n } from "../i18n";
+import { rich } from "../i18n/rich";
 
 interface Props {
   account: AccountInfo;
@@ -10,6 +12,7 @@ interface Props {
 }
 
 export function Settings({ account, onSaved, onDeleted, onBack }: Props) {
+  const { t } = useI18n();
   const [displayName, setDisplayName] = useState(account.displayName);
   const [settings, setSettings] = useState<AccountSettings>(account.settings);
   const [status, setStatus] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
@@ -22,9 +25,9 @@ export function Settings({ account, onSaved, onDeleted, onBack }: Props) {
     setStatus(null);
     try {
       onSaved(await api.updateMe({ displayName, settings }));
-      setStatus({ kind: "ok", text: "Saved." });
+      setStatus({ kind: "ok", text: t.settings.saved });
     } catch (err) {
-      setStatus({ kind: "error", text: err instanceof Error ? err.message : "Couldn't save." });
+      setStatus({ kind: "error", text: err instanceof Error ? err.message : t.settings.saveFailed });
     } finally {
       setBusy(false);
     }
@@ -37,7 +40,7 @@ export function Settings({ account, onSaved, onDeleted, onBack }: Props) {
       await api.deleteMe();
       await onDeleted();
     } catch (err) {
-      setStatus({ kind: "error", text: err instanceof Error ? err.message : "Couldn't delete the account." });
+      setStatus({ kind: "error", text: err instanceof Error ? err.message : t.settings.deleteFailed });
       setBusy(false);
     }
   }
@@ -46,37 +49,37 @@ export function Settings({ account, onSaved, onDeleted, onBack }: Props) {
     <div className="manage">
       <header className="manage__header">
         <button type="button" className="btn btn--ghost" onClick={onBack}>
-          ← Back
+          {t.common.back}
         </button>
-        <h1>Account settings</h1>
+        <h1>{t.settings.title}</h1>
       </header>
 
       <form className="manage__item settings-form" onSubmit={save}>
         <label className="field">
-          <span>Your name</span>
+          <span>{t.settings.yourName}</span>
           <input value={displayName} onChange={(e) => setDisplayName(e.target.value)} maxLength={24} />
-          <span className="muted field__hint">Only you see this. Kids appear by their profile nickname.</span>
+          <span className="muted field__hint">{t.settings.yourNameHint}</span>
         </label>
         <label className="field">
-          <span>Theme</span>
+          <span>{t.settings.theme}</span>
           <select
             value={settings.theme}
             onChange={(e) => setSettings({ ...settings, theme: e.target.value as AccountSettings["theme"] })}
           >
-            <option value="system">Match this device</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
+            <option value="system">{t.settings.themes.system}</option>
+            <option value="light">{t.settings.themes.light}</option>
+            <option value="dark">{t.settings.themes.dark}</option>
           </select>
         </label>
         <label className="field">
-          <span>Card order</span>
+          <span>{t.settings.cardOrder}</span>
           <select
             value={settings.shuffle}
             onChange={(e) => setSettings({ ...settings, shuffle: e.target.value as AccountSettings["shuffle"] })}
           >
-            <option value="deck">Each deck decides</option>
-            <option value="on">Always shuffle</option>
-            <option value="off">Never shuffle</option>
+            <option value="deck">{t.settings.cardOrders.deck}</option>
+            <option value="on">{t.settings.cardOrders.on}</option>
+            <option value="off">{t.settings.cardOrders.off}</option>
           </select>
         </label>
         {status && (
@@ -86,29 +89,29 @@ export function Settings({ account, onSaved, onDeleted, onBack }: Props) {
         )}
         <div className="profile-form__actions">
           <button type="submit" className="btn btn--primary" disabled={busy}>
-            Save settings
+            {t.settings.saveSettings}
           </button>
         </div>
       </form>
 
       <section className="manage__item danger-zone">
-        <h2 className="section-title">Delete my account</h2>
+        <h2 className="section-title">{t.settings.deleteTitle}</h2>
         <p className="muted">
-          Permanently deletes your account, all kid profiles and their leaderboard points, your private decks and your files. This can't be undone.
+          {t.settings.deleteText}
         </p>
         <label className="field">
           <span>
-            Type <strong>DELETE</strong> to confirm
+            {rich(t.settings.typeToConfirm, { word: <strong>{t.settings.deleteWord}</strong> })}
           </span>
           <input value={confirmText} onChange={(e) => setConfirmText(e.target.value)} autoComplete="off" />
         </label>
         <button
           type="button"
           className="btn btn--danger"
-          disabled={busy || confirmText !== "DELETE"}
+          disabled={busy || confirmText.trim() !== t.settings.deleteWord}
           onClick={deleteAccount}
         >
-          Delete my account
+          {t.settings.deleteButton}
         </button>
       </section>
     </div>

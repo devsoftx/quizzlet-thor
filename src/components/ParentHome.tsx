@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { KidProfile } from "../account-shared";
+import { useI18n } from "../i18n";
 
 interface Props {
   displayName: string;
@@ -40,6 +41,7 @@ export function ParentHome({
   onSettings,
   onSignOut,
 }: Props) {
+  const { t } = useI18n();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,7 +51,7 @@ export function ParentHome({
     try {
       await onPick(id);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Couldn't start the session.");
+      setError(err instanceof Error ? err.message : t.parentHome.startFailed);
       setBusy(null);
     }
   }
@@ -57,24 +59,24 @@ export function ParentHome({
   return (
     <div className="parent-home">
       <header className="parent-home__bar">
-        <span><strong className="field-mark">Quizzlet</strong><br /><span className="muted">Parent &amp; teacher workspace · {displayName}</span></span>
+        <span><strong className="field-mark">Quizzlet</strong><br /><span className="muted">{t.parentHome.workspace(displayName)}</span></span>
         <span className="parent-home__actions">
           <button type="button" className="btn btn--ghost" onClick={onDecks}>
-            My decks
+            {t.parentHome.myDecks}
           </button>
           <button type="button" className="btn btn--ghost" onClick={onFiles}>
-            My files
+            {t.parentHome.myFiles}
           </button>
           <button type="button" className="btn btn--ghost" onClick={onSettings}>
-            Settings
+            {t.parentHome.settings}
           </button>
           <button type="button" className="btn btn--ghost" onClick={onSignOut}>
-            Sign out
+            {t.app.signOut}
           </button>
         </span>
       </header>
 
-      <div className="parent-home__intro"><h1 className="parent-home__title">Who's exploring today?</h1><p className="muted">Choose a learner to begin, or manage your family's study space.</p></div>
+      <div className="parent-home__intro"><h1 className="parent-home__title">{t.parentHome.title}</h1><p className="muted">{t.parentHome.intro}</p></div>
 
       {notice && (
         <p className="welcome__notice" role="status">
@@ -89,10 +91,10 @@ export function ParentHome({
 
       {profiles.length === 0 ? (
         <div className="empty">
-          <p>No kid profiles yet.</p>
-          <p className="muted">Create a nickname-only profile for each child who studies with Quizzlet.</p>
+          <p>{t.parentHome.noProfiles}</p>
+          <p className="muted">{t.parentHome.noProfilesHint}</p>
           <button type="button" className="btn btn--primary" onClick={onManage}>
-            Add a profile
+            {t.parentHome.addProfile}
           </button>
         </div>
       ) : (
@@ -105,12 +107,12 @@ export function ParentHome({
                 <button type="button" className="profile-tile" onClick={() => pick(p.id)} disabled={busy !== null}>
                   <ProfileAvatar profile={p} />
                   <span className="profile-tile__name">
-                    <span className="visually-hidden">Study as </span>
-                    {busy === p.id ? "Starting…" : p.nickname}
+                    <span className="visually-hidden">{t.parentHome.studyAs}</span>
+                    {busy === p.id ? t.parentHome.starting : p.nickname}
                   </span>
                   <span className="profile-tile__points">
                     <span aria-hidden="true">⭐ </span>
-                    {(points[p.id] ?? 0).toLocaleString()} pts
+                    {t.common.pts(points[p.id] ?? 0)}
                   </span>
                 </button>
               </li>
@@ -118,7 +120,7 @@ export function ParentHome({
           </ul>
           <p className="parent-home__manage">
             <button type="button" className="btn btn--secondary" onClick={onManage}>
-              Manage profiles
+              {t.parentHome.manage}
             </button>
           </p>
         </>
