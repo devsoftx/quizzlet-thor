@@ -71,7 +71,9 @@ test.describe("API", () => {
     const device = await playwright.request.newContext({ baseURL: test.info().project.use.baseURL });
     const start = await device.post("/api/session", { headers: parent.headers, data: { profileId: hidden.id } });
     expect(start.status()).toBe(201);
-    expect((await device.post("/api/score", { data: { answers: [true, true, true, true, true, true], leaderboard: false } })).status()).toBe(200);
+    const saved = await device.post("/api/score", { data: { batchId: "hidden-kid", answers: [true, true, true, true, true, true], leaderboard: false } });
+    expect(saved.status()).toBe(200);
+    expect(await saved.json()).toMatchObject({ pointsEarned: 80, totalPoints: 80 }); // counted, privately
 
     const board = await (await request.get("/api/leaderboard")).json();
     expect(board.top.map((e: { name: string }) => e.name)).not.toContain(hidden.nickname);

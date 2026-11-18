@@ -170,15 +170,19 @@ export const api = {
     await call("/api/session", { method: "DELETE" });
   },
 
-  /** Saves points for answers; `streakBefore` carries the streak over from the previous save. */
   /** The public leaderboard (no sign-in needed). */
   getLeaderboard(): Promise<Leaderboard> {
     return call<Leaderboard>("/api/leaderboard");
   },
 
+  /**
+   * Saves points for answers. `batchId` makes a retry of the same save count
+   * once. The server keeps the streak itself; `streakBefore` only tells it when
+   * a new round starts from zero.
+   */
   submitScore(
     answers: boolean[],
-    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId?: string; deckId?: string; sessionTag?: string },
+    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId: string; deckId?: string; sessionTag?: string },
   ): Promise<ScoreSave> {
     if (!options.sessionTag) return Promise.reject(new ApiError("This session cannot safely save points. Refresh and start a new session.", 409));
     return call<ScoreSave>("/api/score", {

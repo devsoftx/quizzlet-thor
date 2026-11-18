@@ -110,6 +110,30 @@ test.describe("saving points", () => {
     await expect(banner.getByRole("button", { name: "Retry saving" })).toHaveCount(0);
   });
 
+  test("asked to slow down: the points wait, and are saved when sent again", async ({ page }) => {
+    await page.route("**/api/score", (route) =>
+      route.fulfill({
+        status: 429,
+        contentType: "application/json",
+        headers: { "retry-after": "3" },
+        body: JSON.stringify({ error: "You're answering faster than points can be saved. Wait a moment and try again." }),
+      }),
+    );
+    await answer(page, "Mercury");
+    await expect(page.getByText("Slow down a little: your latest points are waiting to be saved")).toBeVisible();
+    expect(await serverSession(page)).toMatchObject({ points: 0 });
+
+    // Not lost and not rejected: the same answers go out again and count once.
+    await page.getByRole("button", { name: "← Decks" }).click();
+    const banner = page.locator(".save-problem");
+    await expect(banner).toContainText("Some recent points have not been confirmed.");
+    await page.unroute("**/api/score");
+    await banner.getByRole("button", { name: "Retry saving" }).click();
+    await expect(banner).toHaveCount(0);
+    await expect(sessionBar(page)).toContainText("10 pts");
+    expect(await serverSession(page)).toMatchObject({ points: 10 });
+  });
+
   test("the server ends the session mid-round: the round can be finished, then a new session started", async ({ page }) => {
     await page.route("**/api/score", (route) =>
       route.fulfill({ status: 401, contentType: "application/json", body: JSON.stringify({ error: "Your session has ended. Start a new one to save points." }) }),

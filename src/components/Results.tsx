@@ -54,8 +54,8 @@ function PointsAndLeaderboard({
     case "error":
       return (
         <div className="save-problem" role="alert">
-          <p>{save.kind === "failed" ? "Your latest points were rejected." : "We couldn't confirm whether your latest points were saved."} {save.message}</p>
-          {save.kind === "unknown" && <button type="button" className="btn btn--secondary" onClick={onRetrySave}>Try again</button>}
+          <p>{save.kind === "failed" ? "Your latest points were rejected." : save.kind === "waiting" ? "Your latest points are waiting to be saved." : "We couldn't confirm whether your latest points were saved."} {save.message}</p>
+          {save.kind !== "failed" && <button type="button" className="btn btn--secondary" onClick={onRetrySave}>Try again</button>}
         </div>
       );
     case "saved": {

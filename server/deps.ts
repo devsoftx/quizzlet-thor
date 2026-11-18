@@ -1,6 +1,7 @@
 import { getAccountsDb, type AccountsDb } from "./accounts.js";
 import { getAuthenticator, type Authenticator } from "./auth.js";
 import { getFileStore, type FileStore } from "./files.js";
+import { consoleLogger, type Logger } from "./log.js";
 import { getStore, type Store } from "./store.js";
 
 /** Everything a handler needs from the outside world; tests pass their own. */
@@ -14,6 +15,8 @@ export interface Deps {
   accounts?: AccountsDb | null;
   /** Private file storage; null when no Blob store is connected. */
   files?: FileStore | null;
+  /** Where security events go; silent when left out (tests pass their own). */
+  log?: Logger;
 }
 
 export function defaultDeps(): Deps {
@@ -24,5 +27,6 @@ export function defaultDeps(): Deps {
     auth: getAuthenticator(),
     accounts: getAccountsDb(),
     files: getFileStore(),
+    log: consoleLogger,
   };
 }

@@ -10,12 +10,19 @@ import {
   updateProfile,
 } from "./account-handlers.js";
 import { MemoryAccounts } from "./accounts.js";
-import { DevAuthenticator, authorizedParties } from "./auth.js";
+import { DevAuthenticator, authorizedParties, getAuthenticator, isLoopbackHost } from "./auth.js";
 import type { Deps } from "./deps.js";
 import { cleanName, getLeaderboard, startSession, submitScore } from "./handlers.js";
 import { MemoryStore } from "./store.js";
 
-const BASE = "https://quizzlet.test";
+// A loopback name: the local sign-in stand-in answers nowhere else.
+const BASE = "https://localhost";
+
+let batches = 0;
+/** A score save as the app sends it: with its own batch id. */
+const saveScore = (deps: Deps, cookie: string, answers: boolean[]) =>
+  submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: `batch-${++batches}`, answers } }), deps);
+const board = async (deps: Deps, cookie?: string) => (await getLeaderboard(req("/api/leaderboard", { cookie }), deps)).json();
 
 class TestAuth extends DevAuthenticator {
   deleted: string[] = [];
@@ -156,18 +163,19 @@ describe("kid sessions and the leaderboard", () => {
     const cookie = cookieFrom(start);
 
     // Hidden by default: points count, but the board doesn't show the kid.
-    const first = await (await submitScore(req("/api/score", { method: "POST", cookie, body: { answers: [true] } }), deps)).json();
-    expect(first).toMatchObject({ pointsEarned: 10, totalPoints: 10, leaderboard: { top: [], you: null } });
+    const first = await (await saveScore(deps, cookie, [true])).json();
+    expect(first).toMatchObject({ pointsEarned: 10, totalPoints: 10 });
+    expect(await board(deps, cookie)).toEqual({ top: [], you: null });
 
     // Parent opts in: the kid appears with their whole total.
     await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: true } }), deps);
-    const board = await (await getLeaderboard(req("/api/leaderboard", { cookie }), deps)).json();
-    expect(board.top).toEqual([{ rank: 1, name: "Nova7", points: 10 }]);
+    expect((await board(deps, cookie)).top).toEqual([{ rank: 1, name: "Nova7", points: 10 }]);
 
     // Parent opts out mid-session: later points still don't put the kid back on the board.
     await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: false } }), deps);
-    const later = await (await submitScore(req("/api/score", { method: "POST", cookie, body: { answers: [true] } }), deps)).json();
-    expect(later).toMatchObject({ totalPoints: 20, leaderboard: { top: [] } });
+    const later = await (await saveScore(deps, cookie, [true])).json();
+    expect(later).toMatchObject({ totalPoints: 20 });
+    expect((await board(deps, cookie)).top).toEqual([]);
   });
 
   it("keeps guest names and profile keys apart", () => {
@@ -180,7 +188,7 @@ describe("deleting an account", () => {
     const { deps, auth } = setup();
     const kid = await newProfile(deps, "ana", { nickname: "Nova7", showOnLeaderboard: true });
     const cookie = cookieFrom(await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps));
-    await submitScore(req("/api/score", { method: "POST", cookie, body: { answers: [true, true] } }), deps);
+    await saveScore(deps, cookie, [true, true]);
     expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toHaveLength(1);
 
     expect((await deleteMe(req("/api/me", { method: "DELETE", user: "ana", body: {} }), deps)).status).toBe(400);
@@ -201,11 +209,38 @@ describe("sign-in configuration", () => {
     expect(authorizedParties({})).toContain("http://localhost:5173");
   });
 
-  it("only uses the dev stand-in off Vercel", async () => {
-    const { getAuthenticator } = await import("./auth.js");
-    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1" })).toBeInstanceOf(DevAuthenticator);
-    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1", VERCEL: "1" })).toBeNull();
-    expect(getAuthenticator({})).toBeNull();
+  it("only uses the dev stand-in locally: off Vercel, not a production build, and switched on", () => {
+    for (const VERCEL of [undefined, "1"]) {
+      for (const NODE_ENV of [undefined, "development", "test", "production"]) {
+        for (const QUIZZLET_DEV_AUTH of [undefined, "0", "1"]) {
+          const allowed = !VERCEL && NODE_ENV !== "production" && QUIZZLET_DEV_AUTH === "1";
+          const auth = getAuthenticator({ VERCEL, NODE_ENV, QUIZZLET_DEV_AUTH });
+          expect(auth instanceof DevAuthenticator, `VERCEL=${VERCEL} NODE_ENV=${NODE_ENV} QUIZZLET_DEV_AUTH=${QUIZZLET_DEV_AUTH}`).toBe(allowed);
+          if (!allowed) expect(auth).toBeNull();
+        }
+      }
+    }
+    // Clerk, when configured, always wins over the stand-in.
+    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1", CLERK_SECRET_KEY: "sk_test_x" })).not.toBeInstanceOf(DevAuthenticator);
+  });
+
+  it("the dev stand-in only answers requests addressed to this machine", async () => {
+    const auth = new DevAuthenticator();
+    const as = (url: string) => auth.authenticate(new Request(url, { headers: { [DevAuthenticator.HEADER]: "ana" } }));
+    for (const url of ["http://localhost:5173/api/me", "http://127.0.0.1:5173/api/me", "http://[::1]:5173/api/me", "http://app.localhost/api/me"]) {
+      expect(await as(url), url).toEqual({ userId: "dev_ana" });
+    }
+    for (const url of ["https://quizzlet.example/api/me", "http://192.168.1.20:5173/api/me", "http://localhost.evil.example/api/me", "http://127.0.0.1.evil.example/api/me"]) {
+      expect(await as(url), url).toBeNull();
+    }
+    expect(isLoopbackHost("LOCALHOST")).toBe(true);
+    expect(isLoopbackHost("notlocalhost")).toBe(false);
+  });
+
+  it("a made-up parent header from another host is not a sign-in", async () => {
+    const { deps } = setup();
+    const res = await getMe(new Request("https://quizzlet.example/api/me", { headers: { [DevAuthenticator.HEADER]: "ana" } }), deps);
+    expect(res.status).toBe(401);
   });
 });
 

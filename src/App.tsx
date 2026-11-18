@@ -17,7 +17,7 @@ import {
 import { DeckList } from "./components/DeckList";
 import { DeckPreview } from "./components/DeckPreview";
 import { JoinInvite, KidHome } from "./components/KidScreens";
-import { ScoreSaver } from "./scoreSaver";
+import { ScoreSaver, type SaveStatus } from "./scoreSaver";
 import { checkSessionAccess } from "./sessionAccess";
 import { MyDecks } from "./components/MyDecks";
 import { MyFiles } from "./components/MyFiles";
@@ -39,7 +39,7 @@ export type SaveState =
   | { status: "saving" }
   | { status: "saved"; result: ScoreSave }
   | { status: "expired"; confirmedPoints: number }
-  | { status: "error"; kind: "failed" | "unknown"; message: string };
+  | { status: "error"; kind: "failed" | "unknown" | "waiting"; message: string };
 
 /** The signed-in parent's account (loaded after sign-in). */
 type AccountState =
@@ -87,7 +87,7 @@ export function App() {
   const auth = useAccountAuth();
   const [accountState, setAccountState] = useState<AccountState>({ status: "none" });
   const [importNote, setImportNote] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
-  const [saveStatus, setSaveStatus] = useState<"pending" | "saving" | "confirmed" | "unknown" | "failed" | "expired" | "denied">("confirmed");
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("confirmed");
   const [joinToken, setJoinToken] = useState<string | null>(initialJoinToken);
   const [kidState, setKidState] = useState<KidState>({ status: "loading" });
 
@@ -112,6 +112,7 @@ export function App() {
     onExpired: () => sessionExpired(),
     isDenied: (err) => err instanceof ApiError && err.status === 403,
     isRejected: (err) => err instanceof ApiError && [400, 409, 422].includes(err.status),
+    isThrottled: (err) => err instanceof ApiError && err.status === 429,
     onState: setSaveStatus,
     onDenied: (err, deckId) => {
       setScreen({ name: "decks" });
@@ -176,6 +177,7 @@ export function App() {
       if (token !== null) setJoinToken(token);
     };
     window.addEventListener("hashchange", onHash);
+    onHash(); // a link that arrived after the page loaded but before this listener was attached
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
@@ -379,6 +381,7 @@ export function App() {
       })
       .catch((err: Error) => {
         if (err instanceof ApiError && err.status === 401) update({ status: "expired", confirmedPoints: confirmedPointsRef.current });
+        else if (err instanceof ApiError && err.status === 429) update({ status: "error", kind: "waiting", message: err.message });
         else update({ status: "error", kind: err instanceof ApiError && [400, 409, 422].includes(err.status) ? "failed" : "unknown", message: err.message });
       });
   }
@@ -613,7 +616,7 @@ export function App() {
 
       {screen.name === "quiz" && (
         <>
-        <p className="save-status" role="status">{saveStatus === "confirmed" ? "Points saved" : saveStatus === "pending" || saveStatus === "saving" ? "Saving points…" : saveStatus === "unknown" ? "We couldn't confirm whether your latest points were saved" : saveStatus === "failed" ? "Your latest points could not be saved" : "Your latest points may not have been saved"}</p>
+        <p className="save-status" role="status">{saveStatus === "confirmed" ? "Points saved" : saveStatus === "pending" || saveStatus === "saving" ? "Saving points…" : saveStatus === "unknown" ? "We couldn't confirm whether your latest points were saved" : saveStatus === "throttled" ? "Slow down a little: your latest points are waiting to be saved" : saveStatus === "failed" ? "Your latest points could not be saved" : "Your latest points may not have been saved"}</p>
         <Quiz
           key={screen.run}
           deck={screen.deck}

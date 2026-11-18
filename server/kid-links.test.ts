@@ -9,7 +9,8 @@ import { createDeck, updateDeck } from "./library-handlers.js";
 import { MemoryFileStore } from "./files.js";
 import { MemoryStore } from "./store.js";
 
-const BASE = "https://quizzlet.test";
+// A loopback name: the local sign-in stand-in answers nowhere else.
+const BASE = "https://localhost";
 const IPAD = "Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -44,6 +45,11 @@ function req(path: string, init: { method?: string; body?: unknown; user?: strin
 }
 
 const cookieFrom = (res: Response) => res.headers.get("set-cookie")!.split(";")[0];
+
+let batches = 0;
+/** A score save as the app sends it: with its own batch id. */
+const saveScore = (deps: Deps, cookie: string, body: Record<string, unknown>) =>
+  submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: `batch-${++batches}`, ...body } }), deps);
 
 async function kid(deps: Deps, parent: string, nickname: string) {
   const res = await createProfile(req("/api/profiles", { method: "POST", user: parent, body: { nickname } }), deps);
@@ -164,8 +170,9 @@ describe("a kid's linked device", () => {
     expect(start.status).toBe(201);
     expect(await start.json()).toMatchObject({ name: "Nova7", profileId: nova.id });
     const session = cookieFrom(start);
-    const scored = await (await submitScore(req("/api/score", { method: "POST", cookie: `${session}; ${device}`, body: { answers: [true] } }), deps)).json();
-    expect(scored).toMatchObject({ pointsEarned: 10, leaderboard: { top: [] } }); // private by default
+    const scored = await (await saveScore(deps, `${session}; ${device}`, { answers: [true] })).json();
+    expect(scored).toMatchObject({ pointsEarned: 10, totalPoints: 10 });
+    expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toEqual([]); // private by default
 
     // The points belong to the kid's profile even while it's off the leaderboard.
     expect((await whoAmI(deps, device)).totalPoints).toBe(10);
@@ -279,7 +286,7 @@ describe("active linked session revocation", () => {
     expect(started.status).toBe(201);
     const sessionCookie = cookieFrom(started);
     await deleteKid(req("/api/kid", { method: "DELETE", cookie: deviceCookie }), deps);
-    const response = await submitScore(req("/api/score", { method: "POST", cookie: `${deviceCookie}; ${sessionCookie}`, body: { answers: [true], leaderboard: false } }), deps);
+    const response = await saveScore(deps, `${deviceCookie}; ${sessionCookie}`, { answers: [true], leaderboard: false });
     expect(response.status).toBe(403);
   });
 });
@@ -294,7 +301,7 @@ describe("private deck access during a session", () => {
     const deck = (await made.json()).deck as { id: string };
     const started = await startSession(req("/api/session", { method: "POST", cookie: device, body: { kid: true } }), deps);
     const cookies = `${device}; ${cookieFrom(started)}`;
-    const score = (deckId: string) => submitScore(req("/api/score", { method: "POST", cookie: cookies, body: { deckId, answers: [true], leaderboard: false } }), deps);
+    const score = (deckId: string) => saveScore(deps, cookies, { deckId, answers: [true], leaderboard: false });
     expect((await score(deck.id)).status).toBe(200);
     const otherDeck = (await (await createDeck(req("/api/decks", { method: "POST", user: "other", body: { yaml } }), deps)).json()).deck as { id: string };
     expect((await score(otherDeck.id)).status).toBe(403);
@@ -317,6 +324,41 @@ describe("profile deletion during a session", () => {
     const started = await startSession(req("/api/session", { method: "POST", cookie: device, body: { kid: true } }), deps);
     const cookies = `${device}; ${cookieFrom(started)}`;
     await deleteProfile(req(`/api/profiles?id=${profile.id}`, { method: "DELETE", user: "ana" }), deps);
-    expect((await submitScore(req("/api/score", { method: "POST", cookie: cookies, body: { answers: [true], leaderboard: false } }), deps)).status).toBe(403);
+    expect((await saveScore(deps, cookies, { answers: [true], leaderboard: false })).status).toBe(403);
+  });
+});
+
+describe("device links expire", () => {
+  it("an expired device gets {kid: null} and its cookie is cleared", async () => {
+    const { deps, later } = setup();
+    const nova = await kid(deps, "ana", "Nova7");
+    const device = await linkDevice(deps, "ana", nova.id);
+    const links = async () => (await (await listLinks(req("/api/invites", { user: "ana" }), deps)).json()).devices;
+    expect(await links()).toMatchObject([{ profileId: nova.id, expiresAt: "2027-05-14T12:00:00.000Z" }]); // 180 days on
+
+    later(180 * DAY - 1);
+    expect((await whoAmI(deps, device)).profile.nickname).toBe("Nova7");
+    const started = await startSession(req("/api/session", { method: "POST", body: { kid: true }, cookie: device }), deps);
+    expect(started.status).toBe(201);
+    const cookies = `${device}; ${cookieFrom(started)}`;
+
+    later(1);
+    const res = await getKid(req("/api/kid", { cookie: device }), deps);
+    expect(await res.json()).toEqual({ kid: null });
+    expect(res.headers.get("set-cookie")).toMatch(new RegExp(`^${KID_COOKIE}=; Path=/; Max-Age=0;`));
+    // The link is gone everywhere: no new session, the running one ends, the parent's list is empty.
+    expect((await startSession(req("/api/session", { method: "POST", body: { kid: true }, cookie: device }), deps)).status).toBe(401);
+    expect((await saveScore(deps, cookies, { answers: [true] })).status).toBe(403);
+    expect((await getLeaderboard(req("/api/leaderboard", { cookie: device }), deps)).status).toBe(200);
+    expect(await links()).toEqual([]);
+  });
+
+  it("an expired device doesn't count against the kid's device limit", async () => {
+    const { deps, later } = setup();
+    const nova = await kid(deps, "ana", "Nova7");
+    for (let i = 0; i < MAX_DEVICES_PER_PROFILE; i++) await linkDevice(deps, "ana", nova.id);
+    later(180 * DAY);
+    const fresh = await linkDevice(deps, "ana", nova.id);
+    expect((await whoAmI(deps, fresh)).profile.nickname).toBe("Nova7");
   });
 });

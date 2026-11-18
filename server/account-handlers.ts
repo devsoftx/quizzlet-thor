@@ -13,9 +13,12 @@ import {
   type KidProfile,
   type ProfileInput,
 } from "./accounts.js";
-import { defaultDeps, type Deps } from "./deps.js";
+import type { Deps } from "./deps.js";
 import { accountFolder } from "./files.js";
-import { cleanName, error, json, NAME_MAX, readJson } from "./http.js";
+import { error, json, readJson } from "./http.js";
+import { noLog } from "./log.js";
+import { checkName, cleanName, nameProblemMessage } from "./names.js";
+import { route } from "./route.js";
 
 export interface AccountContext {
   userId: string;
@@ -28,12 +31,18 @@ export async function requireAccount(request: Request, deps: Deps): Promise<Acco
   const accounts = deps.accounts ?? null;
   if (!auth || !accounts) return error(503, "Parent accounts aren't set up yet.");
   let user = null;
+  let failed = false;
   try {
     user = await auth.authenticate(request);
   } catch {
-    user = null;
+    failed = true;
   }
-  if (!user) return error(401, "Please sign in.");
+  if (!user) {
+    // "missing": nothing to check was sent. "rejected": a sign-in was sent and didn't hold up.
+    const sent = request.headers.has("authorization") || request.headers.has("x-dev-user") || /(?:^|;\s*)__session=/.test(request.headers.get("cookie") ?? "");
+    (deps.log ?? noLog)({ event: "auth.failed", reason: failed ? "error" : sent ? "rejected" : "missing", path: new URL(request.url).pathname });
+    return error(401, "Please sign in.");
+  }
   return { userId: user.userId, scope: accounts.forAccount(user.userId) };
 }
 
@@ -64,7 +73,7 @@ const idParam = (request: Request) => new URL(request.url).searchParams.get("id"
 // ----------------------------------------------------------------- /api/me
 
 /** GET: the account (created on first sign-in) and its kid profiles. */
-export async function getMe(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
+export const getMe = route({ name: "me.get" }, async (request, deps) => {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
   const account = await ensureAccount(ctx, deps);
@@ -74,10 +83,10 @@ export async function getMe(request: Request, deps: Deps = defaultDeps()): Promi
     profiles,
     points: await profilePoints(deps, profiles.map((p) => p.id)),
   });
-}
+});
 
 /** PATCH {displayName?, settings?}: update the account. */
-export async function updateMe(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
+export const updateMe = route({ name: "me.update" }, async (request, deps) => {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
   const current = await ensureAccount(ctx, deps);
@@ -85,9 +94,9 @@ export async function updateMe(request: Request, deps: Deps = defaultDeps()): Pr
 
   const patch: { displayName?: string; settings?: typeof DEFAULT_SETTINGS } = {};
   if (body.displayName !== undefined) {
-    const name = cleanName(body.displayName);
-    if (!name) return error(400, `Please enter a name (up to ${NAME_MAX} letters, numbers or spaces).`);
-    patch.displayName = name;
+    const checked = checkName(body.displayName);
+    if (!checked.ok) return error(400, nameProblemMessage(checked.problem, "name"));
+    patch.displayName = checked.name;
   }
   if (body.settings !== undefined) {
     patch.settings = normalizeSettings({ ...current.settings, ...(body.settings as object) });
@@ -95,14 +104,14 @@ export async function updateMe(request: Request, deps: Deps = defaultDeps()): Pr
   const account = await ctx.scope.update(patch);
   if (!account) return error(404, "Account not found.");
   return json({ account: { displayName: account.displayName, plan: account.plan, settings: account.settings } });
-}
+});
 
 /**
  * DELETE {confirm: true}: delete the account's stored files, then the account
  * with its profiles, decks and file records, their leaderboard entries, and
  * finally the sign-in.
  */
-export async function deleteMe(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
+export const deleteMe = route({ name: "me.delete" }, async (request, deps) => {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
   const body = await readJson(request);
@@ -114,9 +123,10 @@ export async function deleteMe(request: Request, deps: Deps = defaultDeps()): Pr
   if (deps.store) {
     for (const id of profileIds) await deps.store.removePlayer(playerKeyForProfile(id));
   }
+  (deps.log ?? noLog)({ event: "account.deleted", account: ctx.userId, profiles: profileIds.length });
   await deps.auth!.deleteUser(ctx.userId); // data first, so a failure here can be retried
   return json({ ok: true, deletedProfiles: profileIds.length });
-}
+});
 
 // ----------------------------------------------------------- /api/profiles
 
@@ -126,9 +136,9 @@ type ProfilePatch = Partial<ProfileInput>;
 export function parseProfileInput(body: Record<string, unknown>, requireNickname: boolean): ProfilePatch | string {
   const out: ProfilePatch = {};
   if (body.nickname !== undefined || requireNickname) {
-    const nickname = cleanName(body.nickname);
-    if (!nickname) return `Please enter a nickname (up to ${NAME_MAX} letters, numbers or spaces).`;
-    out.nickname = nickname;
+    const checked = checkName(body.nickname);
+    if (!checked.ok) return nameProblemMessage(checked.problem);
+    out.nickname = checked.name;
   }
   if (body.gradeBand !== undefined) {
     if (body.gradeBand !== null && !GRADE_BANDS.includes(body.gradeBand as never)) return "Unknown grade band.";
@@ -149,13 +159,15 @@ export function parseProfileInput(body: Record<string, unknown>, requireNickname
   return out;
 }
 
-export async function listProfiles(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
+export const listProfiles = route({ name: "profiles.list" }, async (request, deps) => {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
   return json({ profiles: await ctx.scope.listProfiles() });
-}
+});
 
-export async function createProfile(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
+const TOO_MANY_PROFILES = `You can have up to ${MAX_PROFILES} profiles.`;
+
+export const createProfile = route({ name: "profiles.create" }, async (request, deps) => {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
   await ensureAccount(ctx, deps);
@@ -163,8 +175,9 @@ export async function createProfile(request: Request, deps: Deps = defaultDeps()
   if (typeof parsed === "string") return error(400, parsed);
 
   const existing = await ctx.scope.listProfiles();
-  if (existing.length >= MAX_PROFILES) return error(400, `You can have up to ${MAX_PROFILES} profiles.`);
+  if (existing.length >= MAX_PROFILES) return error(400, TOO_MANY_PROFILES);
   const n = existing.length;
+  // The count above picks the default color; the insert itself enforces the limit.
   const profile = await ctx.scope.createProfile(deps.newId(), {
     nickname: parsed.nickname!,
     gradeBand: parsed.gradeBand ?? null,
@@ -172,10 +185,11 @@ export async function createProfile(request: Request, deps: Deps = defaultDeps()
     emoji: parsed.emoji ?? PROFILE_EMOJIS[n % PROFILE_EMOJIS.length],
     showOnLeaderboard: parsed.showOnLeaderboard ?? false, // private unless the parent opts in
   });
+  if (!profile) return error(400, TOO_MANY_PROFILES);
   return json({ profile }, 201);
-}
+});
 
-export async function updateProfile(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
+export const updateProfile = route({ name: "profiles.update" }, async (request, deps) => {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
   const parsed = parseProfileInput((await readJson(request)) ?? {}, false);
@@ -185,13 +199,14 @@ export async function updateProfile(request: Request, deps: Deps = defaultDeps()
   if (!profile) return error(404, "Profile not found.");
   await deps.store?.syncPlayer(playerKeyForProfile(profile.id), profile.nickname, profile.showOnLeaderboard);
   return json({ profile });
-}
+});
 
-export async function deleteProfile(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
+export const deleteProfile = route({ name: "profiles.delete" }, async (request, deps) => {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
   const id = idParam(request);
   if (!(await ctx.scope.deleteProfile(id))) return error(404, "Profile not found.");
   await deps.store?.removePlayer(playerKeyForProfile(id));
+  (deps.log ?? noLog)({ event: "profile.deleted", account: ctx.userId, profile: id });
   return json({ ok: true });
-}
+});

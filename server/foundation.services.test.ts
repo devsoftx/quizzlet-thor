@@ -16,7 +16,7 @@ const request = (path: string, options: { body?: unknown; user?: string; cookie?
   const headers = new Headers({ "content-type": "application/json" });
   if (options.user) headers.set(DevAuthenticator.HEADER, options.user);
   if (options.cookie) headers.set("cookie", options.cookie);
-  return new Request(`https://test.invalid${path}`, { method: options.method ?? "POST", headers, body: options.body === undefined ? undefined : JSON.stringify(options.body) });
+  return new Request(`https://localhost${path}`, { method: options.method ?? "POST", headers, body: options.body === undefined ? undefined : JSON.stringify(options.body) });
 };
 const cookie = (response: Response) => response.headers.get("set-cookie")!.split(";")[0];
 
@@ -27,7 +27,7 @@ async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: s
   const accounts = [`dev_${owner}`, `dev_${stranger}`];
   const players: string[] = [];
   const sessions: string[] = [];
-  const batches = ["dup", "private", "guest-replay", "precommit", "parent"];
+  const batches = ["dup", "private", "guest-replay", "precommit", "parent", "first"];
   let now = Date.now();
   deps.now = () => now;
   try {
@@ -97,7 +97,8 @@ async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: s
     const guest = cookie(guestStart);
     sessions.push(decodeURIComponent(guest.split("=")[1]));
     const guestScore = (body: unknown) => submitScore(request("/api/score", { cookie: guest, body }), deps);
-    expect((await guestScore({ answers: [true], leaderboard: false })).status).toBe(200); // legacy caller
+    expect((await guestScore({ answers: [true], leaderboard: false })).status).toBe(400); // no batch id: refused, nothing saved
+    expect((await guestScore({ answers: [true], batchId: "first", leaderboard: false })).status).toBe(200);
     expect((await guestScore({ answers: ["true"], batchId: "guest-replay", leaderboard: false })).status).toBe(400);
     const originalStore = deps.store!;
     let injectFailure = true;

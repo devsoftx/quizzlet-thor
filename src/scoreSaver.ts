@@ -25,8 +25,12 @@ interface Hooks {
   isDenied?: (err: unknown) => boolean;
   onDenied?: (err: unknown, deckId?: string) => void;
   isRejected?: (err: unknown) => boolean;
-  onState?: (state: "pending" | "saving" | "confirmed" | "unknown" | "failed" | "expired" | "denied") => void;
+  /** True when the server asked to slow down: the answers stay queued and are sent again later. */
+  isThrottled?: (err: unknown) => boolean;
+  onState?: (state: SaveStatus) => void;
 }
+
+export type SaveStatus = "pending" | "saving" | "confirmed" | "unknown" | "failed" | "expired" | "denied" | "throttled";
 
 interface Round {
   /** Answers not saved yet. */
@@ -149,7 +153,8 @@ export class ScoreSaver {
     } else if (this.hooks.isRejected?.(err)) {
       this.rejected = err;
       this.hooks.onState?.("failed");
-    } else this.hooks.onState?.("unknown");
+    } else if (this.hooks.isThrottled?.(err)) this.hooks.onState?.("throttled");
+    else this.hooks.onState?.("unknown");
   }
 
 }

@@ -1,6 +1,19 @@
 import { Redis } from "@upstash/redis";
+import { POINTS_PER_CORRECT, scoreRound, STREAK_BONUS, STREAK_THRESHOLD } from "../src/points.js";
+import { isLocalDev, type Env } from "./env.js";
 
 export const SESSION_TTL_SECONDS = 60 * 60;
+
+/**
+ * Pace cap: a session may have saved at most one answer per PACE_MS_PER_ANSWER
+ * of its age, plus PACE_BURST to start with. Nobody reads and answers faster
+ * for long; a script claiming points has to wait like everyone else.
+ */
+export const PACE_MS_PER_ANSWER = 1500;
+export const PACE_BURST = 20;
+
+/** How many answers a session of this age may have saved in total. */
+export const answersAllowed = (ageMs: number) => PACE_BURST + Math.floor(Math.max(0, ageMs) / PACE_MS_PER_ANSWER);
 
 export interface Session {
   id: string;
@@ -9,6 +22,10 @@ export interface Session {
   playerKey: string;
   expiresAt: number; // epoch ms
   points: number; // earned during this session
+  /** Correct answers in a row so far. Kept here, not taken from the browser. */
+  streak?: number;
+  /** Answers saved so far, for the pace cap. */
+  answers?: number;
   /** Set when a signed-in parent started the session for one of their kid profiles. */
   profileId?: string;
   /** Only sessions started from a linked device carry this binding. */
@@ -31,13 +48,39 @@ export interface Leaderboard {
   you: LeaderboardEntry | null;
 }
 
+/** One save of answers. The same id is only ever credited once. */
+export interface ScoreBatch {
+  id: string;
+  /** A hash of the request, to tell a retry from a different batch reusing the id. */
+  fingerprint: string;
+  answers: readonly boolean[];
+  /**
+   * The browser's own count of the streak before these answers. It can only
+   * lower the streak kept in the session (a new round starts from 0), never raise it.
+   */
+  streakCap?: number;
+}
+
+export interface ScoreReceipt {
+  pointsEarned: number;
+  sessionPoints: number;
+  totalPoints: number;
+}
+
+/** "conflict": the id was used for other answers. "too-fast": over the pace cap, nothing added. */
+export type ScoreOutcome = ScoreReceipt | "conflict" | "expired" | "too-fast";
+
 export interface Store {
   createSession(session: Session): Promise<void>;
   getSession(id: string, now: number): Promise<Session | null>;
   deleteSession(id: string): Promise<void>;
-  /** Adds points to the session and the student's total (shown on the leaderboard if listed). */
-  addPoints(session: Session, points: number): Promise<{ sessionPoints: number; totalPoints: number }>;
-  addScoreBatch(session: Session, id: string, fingerprint: string, points: number, now: number): Promise<{ sessionPoints: number; totalPoints: number } | "conflict" | "expired">;
+  /**
+   * Scores the answers with the session's own streak and adds the points to the
+   * session and the student's total (shown on the leaderboard if listed), in one step.
+   */
+  addScoreBatch(session: Session, batch: ScoreBatch, now: number): Promise<ScoreOutcome>;
+  /** Counts a request in a fixed time window (for rate limits): the count so far and when it resets. */
+  hit(key: string, windowMs: number, now: number): Promise<{ count: number; resetAt: number }>;
   leaderboard(limit: number, playerKey?: string): Promise<Leaderboard>;
   /** Updates a player's display name and whether they appear on the leaderboard. */
   syncPlayer(playerKey: string, name: string, listed: boolean): Promise<void>;
@@ -60,7 +103,8 @@ interface MemoryState {
 }
 
 export class MemoryStore implements Store {
-  private receipts = new Map<string, { fingerprint: string; sessionPoints: number; totalPoints: number; expiresAt: number }>();
+  private receipts = new Map<string, ScoreReceipt & { fingerprint: string; expiresAt: number }>();
+  private hits = new Map<string, { count: number; resetAt: number }>();
   constructor(
     private state: MemoryState = { sessions: new Map(), totals: new Map(), names: new Map(), hidden: new Set() },
   ) {}
@@ -83,8 +127,8 @@ export class MemoryStore implements Store {
 
   async createSession(session: Session) {
     this.state.sessions.set(session.id, { ...session });
+    // A guest's name is stored when they first earn points, not for every session started.
     if (session.profileId) await this.syncPlayer(session.playerKey, session.name, session.listed !== false);
-    else this.state.names.set(session.playerKey, session.name);
   }
 
   async getSession(id: string, now: number) {
@@ -101,35 +145,54 @@ export class MemoryStore implements Store {
     this.state.sessions.delete(id);
   }
 
-  async addPoints(session: Session, points: number) {
-    const stored = this.state.sessions.get(session.id);
-    const sessionPoints = (stored?.points ?? session.points) + points;
-    if (stored) stored.points = sessionPoints;
-    const totalPoints = (this.state.totals.get(session.playerKey) ?? 0) + points;
-    this.state.totals.set(session.playerKey, totalPoints);
-    if (session.profileId) this.state.names.set(session.playerKey, session.name); // visibility stays as the parent set it
-    else await this.syncPlayer(session.playerKey, session.name, true);
-    return { sessionPoints, totalPoints };
-  }
-
-  async addScoreBatch(session: Session, id: string, fingerprint: string, points: number, now: number) {
+  async addScoreBatch(session: Session, batch: ScoreBatch, now: number): Promise<ScoreOutcome> {
     for (const [receiptKey, value] of this.receipts) if (value.expiresAt <= now) this.receipts.delete(receiptKey);
-    const key = `${session.id}:${id}`;
+    const key = `${session.id}:${batch.id}`;
     const receipt = this.receipts.get(key);
-    if (receipt && receipt.expiresAt > now) {
-      return receipt.fingerprint === fingerprint ? { sessionPoints: receipt.sessionPoints, totalPoints: receipt.totalPoints } : "conflict" as const;
+    if (receipt) {
+      if (receipt.fingerprint !== batch.fingerprint) return "conflict";
+      return { pointsEarned: receipt.pointsEarned, sessionPoints: receipt.sessionPoints, totalPoints: receipt.totalPoints };
     }
     const stored = this.state.sessions.get(session.id);
-    if (!stored || stored.expiresAt <= now) return "expired" as const;
+    if (!stored || stored.expiresAt <= now) return "expired";
+
+    const count = batch.answers.length;
+    const answered = stored.answers ?? 0;
+    const age = now - (stored.expiresAt - SESSION_TTL_SECONDS * 1000);
+    if (count > 0 && answered + count > answersAllowed(age)) return "too-fast";
+    const round = scoreRound(batch.answers, Math.min(stored.streak ?? 0, batch.streakCap ?? Infinity));
+
     // Mutate all state synchronously before yielding, so concurrent calls cannot interleave.
-    stored.points += points;
-    const totalPoints = (this.state.totals.get(session.playerKey) ?? 0) + points;
-    this.state.totals.set(session.playerKey, totalPoints);
-    this.state.names.set(session.playerKey, session.name);
-    if (!session.profileId) this.state.hidden.delete(session.playerKey);
-    const result = { sessionPoints: stored.points, totalPoints };
-    this.receipts.set(key, { fingerprint, ...result, expiresAt: session.expiresAt + 300_000 });
+    stored.points += round.points;
+    if (count > 0) {
+      stored.streak = round.streak;
+      stored.answers = answered + count;
+    }
+    let totalPoints = this.state.totals.get(session.playerKey) ?? 0;
+    if (round.points > 0) {
+      totalPoints += round.points;
+      this.state.totals.set(session.playerKey, totalPoints);
+      this.state.names.set(session.playerKey, session.name);
+      if (!session.profileId) this.state.hidden.delete(session.playerKey); // a profile's visibility stays as the parent set it
+    }
+    const result = { pointsEarned: round.points, sessionPoints: stored.points, totalPoints };
+    // An empty batch only reads the totals: nothing to remember.
+    if (count > 0) this.receipts.set(key, { fingerprint: batch.fingerprint, ...result, expiresAt: session.expiresAt + 300_000 });
     return result;
+  }
+
+  async hit(key: string, windowMs: number, now: number) {
+    if (this.hits.size > 5000) {
+      for (const [k, v] of this.hits) if (v.resetAt <= now) this.hits.delete(k);
+    }
+    const current = this.hits.get(key);
+    if (!current || current.resetAt <= now) {
+      const fresh = { count: 1, resetAt: now + windowMs };
+      this.hits.set(key, fresh);
+      return { ...fresh };
+    }
+    current.count++;
+    return { ...current };
   }
 
   async leaderboard(limit: number, playerKey?: string) {
@@ -145,18 +208,106 @@ export class MemoryStore implements Store {
 
 // ----------------------------------------------------------------- Redis
 // Keys:
-//   session:<id>     hash {name, playerKey, expiresAt, points, profileId?, listed}, expires after 60 min
+//   session:<id>     hash {name, playerKey, expiresAt, points, streak, answers, profileId?, listed}, expires after 60 min
 //   leaderboard      sorted set: playerKey -> total points (listed players only)
-//   player-names     hash: playerKey -> display name
+//   player-names     hash: playerKey -> display name (written when points are first earned)
 //   leaderboard-hidden  set of "p:<profileId>" the parent keeps off the leaderboard
 //   player-totals    hash: "p:<profileId>" -> total points, kept even while a profile is unlisted
 //                    (guests' totals live only in the leaderboard, as before)
+//   score-receipt:<session>:<batch>  the result of a saved batch, kept a little longer than the session
+//   rate:<bucket>:<ip fingerprint>   request counter for a rate limit, expires with its window
+
+/**
+ * Saves one batch of answers atomically: replay check, session expiry, pace
+ * cap, scoring with the session's own streak, then the totals and the receipt.
+ * KEYS: session, receipt. ARGV: 1 fingerprint, 2 answers as "1"/"0" characters,
+ * 3 player key, 4 now, 5 name, 6 "1" for a kid profile, 7 receipt expiry,
+ * 8 the browser's streak (-1: none), 9 session length in ms, 10 ms per answer,
+ * 11 burst, 12 points per correct answer, 13 streak bonus, 14 streak threshold.
+ */
+const SCORE_SCRIPT = `
+  local function validType(key, expected)
+    local t = redis.call('TYPE', key).ok
+    return t == 'none' or t == expected
+  end
+  if not validType(KEYS[1], 'hash') or not validType(KEYS[2], 'string') or
+     not validType('player-names', 'hash') or not validType('leaderboard', 'zset') or
+     not validType('player-totals', 'hash') or not validType('leaderboard-hidden', 'set') then
+    return {'error'}
+  end
+  local previous = redis.call('GET', KEYS[2])
+  if previous then
+    local receipt = cjson.decode(previous)
+    if receipt.fingerprint ~= ARGV[1] then return {'conflict'} end
+    return {'ok', tostring(receipt.pointsEarned or 0), tostring(receipt.sessionPoints), tostring(receipt.totalPoints)}
+  end
+  local now = tonumber(ARGV[4])
+  local expiresAt = tonumber(redis.call('HGET', KEYS[1], 'expiresAt') or '0') or 0
+  if redis.call('EXISTS', KEYS[1]) == 0 or expiresAt <= now then return {'expired'} end
+
+  local answers = ARGV[2]
+  local count = string.len(answers)
+  local answered = tonumber(redis.call('HGET', KEYS[1], 'answers') or '0') or 0
+  local age = math.max(0, now - (expiresAt - tonumber(ARGV[9])))
+  if count > 0 and answered + count > tonumber(ARGV[11]) + math.floor(age / tonumber(ARGV[10])) then return {'too-fast'} end
+
+  local streak = tonumber(redis.call('HGET', KEYS[1], 'streak') or '0') or 0
+  local cap = tonumber(ARGV[8])
+  if cap >= 0 and cap < streak then streak = cap end
+  local points = 0
+  for i = 1, count do
+    if string.sub(answers, i, i) == '1' then
+      streak = streak + 1
+      points = points + tonumber(ARGV[12])
+      if streak >= tonumber(ARGV[14]) then points = points + tonumber(ARGV[13]) end
+    else
+      streak = 0
+    end
+  end
+
+  local current = redis.call('HGET', KEYS[1], 'points') or '0'
+  local total = ARGV[6] == '1' and (redis.call('HGET', 'player-totals', ARGV[3]) or '0') or (redis.call('ZSCORE', 'leaderboard', ARGV[3]) or '0')
+  if not tonumber(current) or not tonumber(total) or not string.match(current, '^%-?%d+$') or
+     (ARGV[6] == '1' and not string.match(total, '^%-?%d+$')) or
+     math.abs(tonumber(current)) > 9000000000000000 or math.abs(tonumber(total)) > 9000000000000000 then return {'error'} end
+
+  local sessionPoints = redis.call('HINCRBY', KEYS[1], 'points', points)
+  if count > 0 then redis.call('HSET', KEYS[1], 'streak', streak, 'answers', answered + count) end
+  local totalPoints = tonumber(total)
+  if points > 0 then
+    if ARGV[6] == '1' then
+      totalPoints = redis.call('HINCRBY', 'player-totals', ARGV[3], points)
+      if redis.call('SISMEMBER', 'leaderboard-hidden', ARGV[3]) == 0 then redis.call('ZADD', 'leaderboard', totalPoints, ARGV[3]) end
+    else
+      totalPoints = tonumber(redis.call('ZINCRBY', 'leaderboard', points, ARGV[3]))
+    end
+    redis.call('HSET', 'player-names', ARGV[3], ARGV[5])
+  end
+  if count > 0 then
+    redis.call('SET', KEYS[2], cjson.encode({fingerprint=ARGV[1],pointsEarned=points,sessionPoints=tonumber(sessionPoints),totalPoints=tonumber(totalPoints)}))
+    redis.call('PEXPIREAT', KEYS[2], ARGV[7])
+  end
+  return {'ok', tostring(points), tostring(sessionPoints), tostring(totalPoints)}
+`;
+
+/** Counts one request in a fixed window. KEYS: counter. ARGV: 1 window in ms. Returns {count, ms left}. */
+const RATE_SCRIPT = `
+  local count = redis.call('INCR', KEYS[1])
+  local left = redis.call('PTTL', KEYS[1])
+  if count == 1 or left < 0 then
+    redis.call('PEXPIRE', KEYS[1], ARGV[1])
+    left = tonumber(ARGV[1])
+  end
+  return {count, left}
+`;
 
 export class RedisStore implements Store {
   constructor(private redis: Redis) {}
 
   async createSession(session: Session) {
     const key = `session:${session.id}`;
+    // A guest's name goes into player-names when they first earn points (the
+    // score script), so starting sessions can't grow that hash without limit.
     await this.redis
       .multi()
       .hset(key, {
@@ -164,6 +315,8 @@ export class RedisStore implements Store {
         playerKey: session.playerKey,
         expiresAt: session.expiresAt,
         points: session.points,
+        streak: 0,
+        answers: 0,
         profileId: session.profileId ?? "",
         linkedDeviceId: session.linkedDeviceId ?? "",
         linkedAccountId: session.linkedAccountId ?? "",
@@ -171,7 +324,6 @@ export class RedisStore implements Store {
         listed: session.listed === false ? 0 : 1,
       })
       .pexpireat(key, session.expiresAt)
-      .hset("player-names", { [session.playerKey]: session.name })
       .exec();
     if (session.profileId) await this.syncPlayer(session.playerKey, session.name, session.listed !== false);
   }
@@ -215,6 +367,8 @@ export class RedisStore implements Store {
       playerKey: String(data.playerKey),
       expiresAt,
       points: Number(data.points) || 0,
+      streak: Number(data.streak) || 0,
+      answers: Number(data.answers) || 0,
       ...(profileId ? { profileId } : {}),
       ...(data.linkedDeviceId ? { linkedDeviceId: String(data.linkedDeviceId) } : {}),
       ...(data.linkedAccountId ? { linkedAccountId: String(data.linkedAccountId) } : {}),
@@ -227,74 +381,35 @@ export class RedisStore implements Store {
     await this.redis.del(`session:${id}`);
   }
 
-  async addPoints(session: Session, points: number) {
-    if (session.profileId) {
-      // Kid profiles keep a private total; the leaderboard mirrors it only when listed.
-      const [sessionPoints, total] = await this.redis
-        .multi()
-        .hincrby(`session:${session.id}`, "points", points)
-        .hincrby("player-totals", session.playerKey, points)
-        .hset("player-names", { [session.playerKey]: session.name })
-        .exec<[number, number, number]>();
-      const totalPoints = Number(total);
-      const hidden = await this.redis.sismember("leaderboard-hidden", session.playerKey);
-      if (!hidden) {
-        await this.redis.zadd("leaderboard", { score: totalPoints, member: session.playerKey });
-      }
-      return { sessionPoints: Number(sessionPoints), totalPoints };
-    }
-
-    // Guests: HINCRBY keeps the session's original expiry.
-    const [sessionPoints, totalPoints] = await this.redis
-      .multi()
-      .hincrby(`session:${session.id}`, "points", points)
-      .zincrby("leaderboard", points, session.playerKey)
-      .hset("player-names", { [session.playerKey]: session.name })
-      .exec<[number, number, number]>();
-    return { sessionPoints: Number(sessionPoints), totalPoints: Number(totalPoints) };
+  async addScoreBatch(session: Session, batch: ScoreBatch, now: number): Promise<ScoreOutcome> {
+    const result = await this.redis.eval<(string | number)[], (string | number)[]>(
+      SCORE_SCRIPT,
+      [`session:${session.id}`, `score-receipt:${session.id}:${batch.id}`],
+      [
+        batch.fingerprint,
+        batch.answers.map((correct) => (correct ? "1" : "0")).join(""),
+        session.playerKey,
+        now,
+        session.name,
+        session.profileId ? "1" : "0",
+        session.expiresAt + 300_000,
+        batch.streakCap ?? -1,
+        SESSION_TTL_SECONDS * 1000,
+        PACE_MS_PER_ANSWER,
+        PACE_BURST,
+        POINTS_PER_CORRECT,
+        STREAK_BONUS,
+        STREAK_THRESHOLD,
+      ],
+    );
+    if (result[0] === "conflict" || result[0] === "expired" || result[0] === "too-fast") return result[0];
+    if (result[0] !== "ok") throw new Error("Score storage is unavailable or invalid.");
+    return { pointsEarned: Number(result[1]), sessionPoints: Number(result[2]), totalPoints: Number(result[3]) };
   }
 
-  async addScoreBatch(session: Session, id: string, fingerprint: string, points: number, now: number) {
-    const script = `
-      local function validType(key, expected)
-        local t = redis.call('TYPE', key).ok
-        return t == 'none' or t == expected
-      end
-      if not validType(KEYS[1], 'hash') or not validType(KEYS[2], 'string') or
-         not validType('player-names', 'hash') or not validType('leaderboard', 'zset') or
-         not validType('player-totals', 'hash') or not validType('leaderboard-hidden', 'set') then
-        return {'error'}
-      end
-      local previous = redis.call('GET', KEYS[2])
-      if previous then
-        local receipt = cjson.decode(previous)
-        if receipt.fingerprint ~= ARGV[1] then return {'conflict'} end
-        return {'ok', tostring(receipt.sessionPoints), tostring(receipt.totalPoints)}
-      end
-      if redis.call('EXISTS', KEYS[1]) == 0 or tonumber(redis.call('HGET', KEYS[1], 'expiresAt') or '0') <= tonumber(ARGV[4]) then return {'expired'} end
-      local current = redis.call('HGET', KEYS[1], 'points') or '0'
-      local total = ARGV[6] == '1' and (redis.call('HGET', 'player-totals', ARGV[3]) or '0') or (redis.call('ZSCORE', 'leaderboard', ARGV[3]) or '0')
-      if not tonumber(current) or not tonumber(total) or not string.match(current, '^%-?%d+$') or
-         (ARGV[6] == '1' and not string.match(total, '^%-?%d+$')) or
-         math.abs(tonumber(current)) > 9000000000000000 or math.abs(tonumber(total)) > 9000000000000000 then return {'error'} end
-      local sessionPoints = redis.call('HINCRBY', KEYS[1], 'points', ARGV[2])
-      local totalPoints
-      if ARGV[6] == '1' then
-        totalPoints = redis.call('HINCRBY', 'player-totals', ARGV[3], ARGV[2])
-        if redis.call('SISMEMBER', 'leaderboard-hidden', ARGV[3]) == 0 then redis.call('ZADD', 'leaderboard', totalPoints, ARGV[3]) end
-      else
-        totalPoints = redis.call('ZINCRBY', 'leaderboard', ARGV[2], ARGV[3])
-      end
-      redis.call('HSET', 'player-names', ARGV[3], ARGV[5])
-      redis.call('SET', KEYS[2], cjson.encode({fingerprint=ARGV[1],sessionPoints=tonumber(sessionPoints),totalPoints=tonumber(totalPoints)}))
-      redis.call('PEXPIREAT', KEYS[2], ARGV[7])
-      return {'ok', tostring(sessionPoints), tostring(totalPoints)}
-    `;
-    const result = await this.redis.eval<unknown[], (string | number)[]>(script, [`session:${session.id}`, `score-receipt:${session.id}:${id}`], [fingerprint, points, session.playerKey, now, session.name, session.profileId ? "1" : "0", session.expiresAt + 300_000]);
-    if (result[0] === "conflict") return "conflict" as const;
-    if (result[0] === "expired") return "expired" as const;
-    if (result[0] !== "ok") throw new Error("Score storage is unavailable or invalid.");
-    return { sessionPoints: Number(result[1]), totalPoints: Number(result[2]) };
+  async hit(key: string, windowMs: number, now: number) {
+    const [count, left] = await this.redis.eval<number[], number[]>(RATE_SCRIPT, [`rate:${key}`], [windowMs]);
+    return { count: Number(count), resetAt: now + Number(left) };
   }
 
   async leaderboard(limit: number, playerKey?: string) {
@@ -339,13 +454,14 @@ const globalState = globalThis as typeof globalThis & { __quizzletMemoryStore?: 
 /**
  * Redis when Upstash credentials are present (Vercel's Upstash integration
  * provides KV_REST_API_*), otherwise an in-memory store for local dev.
- * Returns null on a Vercel deployment with no Redis connected.
+ * Returns null anywhere else that has no Redis connected (a Vercel deployment
+ * or any production build).
  */
-export function getStore(env: Record<string, string | undefined> = process.env): Store | null {
+export function getStore(env: Env = process.env): Store | null {
   const url = env.UPSTASH_REDIS_REST_URL ?? env.KV_REST_API_URL;
   const token = env.UPSTASH_REDIS_REST_TOKEN ?? env.KV_REST_API_TOKEN;
   if (url && token) return new RedisStore(new Redis({ url, token }));
-  if (env.VERCEL) return null;
+  if (!isLocalDev(env)) return null;
   // Survive Vite reloading this module during development.
   return (globalState.__quizzletMemoryStore ??= new MemoryStore());
 }
