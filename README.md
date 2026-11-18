@@ -135,10 +135,14 @@ keeps a trace and screenshot: `npm run test:e2e:report` opens them.
 Two versions of TypeScript are installed. ESLint's TypeScript parser needs
 TypeScript's JavaScript API, which TypeScript 7 (the native compiler) doesn't
 have yet. So in `package.json`, `@typescript/compiler` is TypeScript 7 and
-provides `tsc`, which `npm run typecheck` and the build use as before, while
-the `typescript` package is TypeScript 6 and is there only for the linter.
-`npx tsc -v` shows which compiler runs. Once typescript-eslint supports
-TypeScript 7, `typescript` can go back to `^7` and the extra entry can go.
+provides `tsc`, which `npm run typecheck` and `npm run build` use as before,
+while the `typescript` package is TypeScript 6. The linter needs that one, and
+Vercel uses it too: its build compiles the functions in `api/` with the
+project's `typescript` package, and says so in the build log (`Using
+TypeScript 6.0.3 (local user-provided)`). `npx tsc -v` shows which compiler
+`tsc` is. Once typescript-eslint supports TypeScript 7, `typescript` can go
+back to `^7` and the extra entry can go, which also changes what Vercel
+compiles the functions with.
 
 ### Continuous integration
 
