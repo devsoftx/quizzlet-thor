@@ -25,6 +25,13 @@ import { securityEvent } from "./log.js";
 
 /** How long a started upload holds its place in the quota before it must be confirmed. */
 export const UPLOAD_RESERVATION_MS = 15 * 60 * 1000;
+/**
+ * An upload whose reservation ran out this long ago can no longer be saved by
+ * any request still in flight, so what was sent for it may be deleted.
+ */
+export const ABANDONED_AFTER_MS = 60 * 1000;
+/** How many of an account's abandoned uploads one request clears away. */
+const ABANDONED_PER_REQUEST = 200;
 
 const TITLE_MAX = 80;
 const DESCRIPTION_MAX = 300;
@@ -223,10 +230,11 @@ export async function postFiles(request: Request, deps: Deps = defaultDeps()): P
     if (size <= 0) return error(400, "That file is empty.");
     if (size > MAX_FILE_BYTES) return error(400, `Files can be up to ${mb(MAX_FILE_BYTES)}.`);
 
-    // Uploads this account started earlier and never confirmed: their time is up, so the bytes go too.
-    // (Best effort here; the daily cleanup catches anything left.)
-    const stale = await ctx.scope.expiredUploads(now);
-    if (stale.length) await ctx.files.delete(stale).catch(() => undefined);
+    // Uploads this account started earlier and never saved: their reservations are on record as
+    // expired, so what was sent for them goes. (Best effort; the daily cleanup does the same and
+    // then drops the records.)
+    const abandoned = await ctx.scope.expiredUploads(iso(deps.now() - ABANDONED_AFTER_MS), ABANDONED_PER_REQUEST);
+    if (abandoned.length) await ctx.files.delete(abandoned).catch(() => undefined);
 
     const extension = FILE_TYPES[contentType].extensions[0];
     const fileId = deps.newId();
@@ -253,7 +261,7 @@ export async function postFiles(request: Request, deps: Deps = defaultDeps()): P
         reason = !rule ? "path" : "reservation";
         if (!rule || !reservation) return null;
         signed = { fileId: rule.fileId, bytes: Math.min(rule.maxBytes, reservation.declaredBytes) };
-        return { contentType: rule.contentType, maxBytes: signed.bytes };
+        return { contentType: rule.contentType, maxBytes: signed.bytes, validUntil: Date.parse(reservation.expiresAt) };
       });
       securityEvent("file.sign", { accountId, ...(signed ?? {}) });
       return json(result);
@@ -270,28 +278,48 @@ export async function postFiles(request: Request, deps: Deps = defaultDeps()): P
     const name = cleanText(body?.name, FILE_NAME_MAX);
     if (!rule || !name || fileTypeFor(name) !== rule.contentType) return error(400, "That upload can't be saved.");
 
-    const already = (await ctx.scope.listFiles()).find((f) => f.pathname === pathname);
+    const saved = async () => (await ctx.scope.listFiles()).find((f) => f.pathname === pathname);
+    const already = await saved();
     if (already) return json({ file: publicFile(already) });
+
+    const refused = (reason: string, message: string, bytes: number | null = null) => {
+      securityEvent("file.rejected", { accountId, fileId: rule.fileId, bytes, reason });
+      return error(400, message);
+    };
+    /**
+     * No live reservation (any more). Either another request for the same upload saved it a moment
+     * ago, or its time ran out. Nothing is deleted here: an expired reservation stays on record,
+     * and the cleanup deletes what was uploaded for it.
+     */
+    const noReservation = async (uploaded: boolean) => {
+      const file = await saved();
+      if (file) return json({ file: publicFile(file) });
+      return refused("reservation", uploaded ? "That upload took too long. Please try again." : "That upload can't be saved.");
+    };
 
     const reservation = (await ctx.scope.listReservations(now)).find((r) => r.pathname === pathname);
     const stored = await ctx.files.head(pathname);
-    const reject = async (reason: string, message: string) => {
-      // Nothing recorded points at this path, so whatever was uploaded there is removed.
-      if (stored) await ctx.files.delete([pathname]);
-      securityEvent("file.rejected", { accountId, fileId: rule.fileId, bytes: stored?.size ?? null, reason });
-      return error(400, message);
-    };
-    if (!reservation) return reject("reservation", stored ? "That upload took too long. Please try again." : "That upload can't be saved.");
+    if (!reservation) return noReservation(stored !== null);
     if (!stored) return error(400, "The upload didn't finish. Please try again.");
-    // Re-check what actually arrived; remove it if it breaks the rules.
-    if (stored.size > Math.min(rule.maxBytes, reservation.declaredBytes)) return reject("size", "That file is bigger than the one you picked. Please try again.");
-    if (stored.contentType.split(";")[0].trim() !== rule.contentType) return reject("type", "That file type isn't allowed.");
+    // Re-check what actually arrived. While the reservation is live nothing is recorded for this
+    // path, so an upload that breaks the rules is removed right away.
+    const problem =
+      stored.size > Math.min(rule.maxBytes, reservation.declaredBytes)
+        ? (["size", "That file is bigger than the one you picked. Please try again."] as const)
+        : stored.contentType.split(";")[0].trim() !== rule.contentType
+          ? (["type", "That file type isn't allowed."] as const)
+          : null;
+    if (problem) {
+      await ctx.files.delete([pathname]);
+      return refused(problem[0], problem[1], stored.size);
+    }
     try {
-      const file = await ctx.scope.createFile(rule.fileId, { pathname, name, contentType: rule.contentType, size: stored.size });
+      const file = await ctx.scope.saveUpload(rule.fileId, { pathname, name, contentType: rule.contentType, size: stored.size }, now);
+      if (!file) return noReservation(true);
       securityEvent("file.confirmed", { accountId, fileId: file.id, bytes: file.size });
       return json({ file: publicFile(file) }, 201);
     } catch (err) {
-      if (err instanceof LimitReached) return reject("quota:files", TOO_MANY_FILES);
+      if (err instanceof LimitReached) return refused("quota:files", TOO_MANY_FILES, stored.size);
       return error(400, "That upload can't be saved."); // e.g. a reused file id
     }
   }
@@ -312,7 +340,7 @@ export async function putFile(request: Request, deps: Deps = defaultDeps()): Pro
   if (bytes.byteLength === 0 || bytes.byteLength > Math.min(rule.maxBytes, reservation.declaredBytes)) {
     return error(400, `Files can be up to ${mb(MAX_FILE_BYTES)}, and no bigger than the file you picked.`);
   }
-  await ctx.files.putLocal(pathname, { bytes, contentType: rule.contentType }, deps.now());
+  await ctx.files.putLocal(pathname, { bytes, contentType: rule.contentType });
   return json({ ok: true });
 }
 

@@ -88,18 +88,25 @@ async function scenario(db: AccountsDb, prefix: string) {
   seen.bDeckDelete = await b.deleteDeck(`${prefix}-d2`);
   seen.bDeckForAKid = strip(await b.createDeck(`${prefix}-bd`, { ...deck, profileIds: [`${prefix}-p1`] }));
 
-  // Files.
+  // Files: recorded by using up a live upload reservation, and in no other way.
+  const R0 = "2026-11-15T12:00:00.000Z";
+  const R1 = "2026-11-15T12:15:00.000Z";
   const file = { pathname: `users/${prefix}-a/uploads/f1/a.pdf`, name: "a.pdf", contentType: "application/pdf", size: 1234 };
-  seen.file = strip(await a.createFile(`${prefix}-f1`, file));
-  seen.samePath = await b.createFile(`${prefix}-f2`, file).then(() => "saved", () => "rejected");
+  seen.unreserved = await a.saveUpload(`${prefix}-f1`, file, R0);
+  await a.reserveUpload(file.pathname, file.size, R0, R1);
+  seen.bSavesAsUpload = await b.saveUpload(`${prefix}-f2`, file, R0); // another account can't use it
+  seen.tooLate = await a.saveUpload(`${prefix}-f1`, file, R1);
+  seen.file = strip(await a.saveUpload(`${prefix}-f1`, file, R0));
+  seen.savedTwice = await a.saveUpload(`${prefix}-f2`, file, R0);
+  seen.samePath = await b.reserveUpload(file.pathname, file.size, R0, R1).then(() => "saved", () => "rejected");
   seen.files = (await a.listFiles()).map(strip);
   seen.bFiles = await b.listFiles();
   seen.bFile = await b.getFile(`${prefix}-f1`);
   seen.bFileDelete = await b.deleteFile(`${prefix}-f1`);
 
-  // Upload reservations: they count against the quota until confirmed or expired.
-  const R0 = "2026-11-15T12:00:00.000Z";
-  const R1 = "2026-11-15T12:15:00.000Z";
+  // Upload reservations: live ones count against the quota; expired ones stay on record until
+  // the cleanup has deleted what was uploaded for them.
+  const R2 = "2026-11-15T12:30:00.000Z";
   const upload = (n: number) => `users/${prefix}-a/uploads/r${n}/a.pdf`;
   await a.reserveUpload(upload(1), 1000, R0, R1);
   await a.reserveUpload(upload(2), 2000, R0, R1);
@@ -107,21 +114,25 @@ async function scenario(db: AccountsDb, prefix: string) {
   seen.reservedTwice = await a.reserveUpload(upload(1), 1000, R0, R1).then(() => "saved", () => "rejected");
   seen.bReservations = await b.listReservations(R0);
   seen.liveAtExpiry = await a.listReservations(R1);
-  seen.uploadsExpired = await a.expiredUploads(R1);
-  seen.bExpired = await b.expiredUploads(R1);
-  seen.knownLive = [...(await db.knownUploads([upload(1), file.pathname, "users/nobody/uploads/x/a.pdf"], R0))].sort();
-  seen.knownAfterExpiry = [...(await db.knownUploads([upload(1), file.pathname], R1))].sort();
-  seen.confirmed = strip(await a.createFile(`${prefix}-r1`, { ...file, pathname: upload(1) })); // uses up its reservation
+  seen.notExpiredYet = await a.expiredUploads(R0, 10);
+  seen.uploadsExpired = await a.expiredUploads(R1, 10);
+  seen.uploadsExpiredLimited = await a.expiredUploads(R1, 1);
+  seen.bExpired = await b.expiredUploads(R1, 10);
+  seen.confirmed = strip(await a.saveUpload(`${prefix}-r1`, { ...file, pathname: upload(1) }, R0)); // uses up its reservation
   seen.reservedAfterConfirm = await a.listReservations(R0);
   seen.tooBig = await a
     .reserveUpload(upload(3), MAX_TOTAL_FILE_BYTES, R0, R1)
     .then(() => "saved", (err) => (err instanceof LimitReached ? err.kind : "error"));
-  // A later reservation sweeps this account's expired ones.
-  await a.reserveUpload(upload(4), 10, R1, "2026-11-15T12:30:00.000Z");
+  // A later reservation: the expired one no longer counts, but is still on record.
+  await a.reserveUpload(upload(4), 10, R1, R2);
   seen.reservedLater = await a.listReservations(R1);
-  seen.expiredLater = await a.expiredUploads("2026-11-15T12:20:00.000Z");
-  seen.swept = await db.sweepReservations("2026-11-15T12:30:00.000Z");
-  seen.sweptAgain = await db.sweepReservations("2026-11-15T12:30:00.000Z");
+  seen.expiredLater = await a.expiredUploads(R1, 10);
+  // The cleanup's view, across accounts: oldest first, and a record is only dropped once it has expired.
+  seen.allExpired = await db.expiredReservations(R2, 10);
+  seen.forgotLive = await db.forgetReservations([upload(4)], R1);
+  seen.forgotten = await db.forgetReservations([upload(2), "users/nobody/uploads/x/a.pdf"], R1);
+  seen.expiredAfterForgetting = await db.expiredReservations(R2, 10);
+  await db.forgetReservations([upload(4)], R2);
   await a.deleteFile(`${prefix}-r1`);
 
   // Kid device links (looked up by secret fingerprints, outside any account).
@@ -157,7 +168,9 @@ async function scenario(db: AccountsDb, prefix: string) {
   seen.deckBackToAll = strip(await a.updateDeck(`${prefix}-d1`, { profileIds: null }));
   seen.fileDeleted = strip(await a.deleteFile(`${prefix}-f1`));
   seen.fileGone = await a.getFile(`${prefix}-f1`);
-  await a.createFile(`${prefix}-f3`, { ...file, pathname: `${file.pathname}3` });
+  await a.reserveUpload(`${file.pathname}3`, file.size, R0, R1);
+  await a.saveUpload(`${prefix}-f3`, { ...file, pathname: `${file.pathname}3` }, R0);
+  await a.reserveUpload(`${file.pathname}4`, file.size, R0, R1); // left behind: goes with the account
   seen.removedIds = await a.remove();
   seen.afterRemove = { account: await a.get(), profiles: await a.listProfiles(), decks: await a.listDecks(), files: await a.listFiles() };
   seen.deviceAfterRemove = await db.findDevice(`${prefix}-dh1`, T2);
@@ -186,7 +199,12 @@ describe("Postgres accounts (PGlite)", () => {
     expect(postgres.bDeckUpdate).toBeNull();
     expect(postgres.bDeckDelete).toBe(false);
     expect(postgres.bDeckForAKid).toMatchObject({ profileIds: [] });
-    expect(postgres.samePath).toBe("rejected");
+    expect(postgres.unreserved).toBeNull();
+    expect(postgres.bSavesAsUpload).toBeNull();
+    expect(postgres.tooLate).toBeNull();
+    expect(postgres.file).toMatchObject({ id: "X-f1", pathname: "users/X-a/uploads/f1/a.pdf", size: 1234 });
+    expect(postgres.savedTwice).toBeNull();
+    expect(postgres.samePath).toBe("rejected"); // a path that holds a saved file can't be reserved again, by anyone
     expect(postgres.bFile).toBeNull();
     expect(postgres.bFileDelete).toBeNull();
     expect(postgres.decksAfterKidDeleted).toEqual([[], ["X-p1"]]);
@@ -210,16 +228,18 @@ describe("Postgres accounts (PGlite)", () => {
     expect(postgres.reservedTwice).toBe("rejected");
     expect(postgres.bReservations).toEqual([]);
     expect(postgres.liveAtExpiry).toEqual([]);
+    expect(postgres.notExpiredYet).toEqual([]);
     expect(postgres.uploadsExpired).toEqual(["users/X-a/uploads/r1/a.pdf", "users/X-a/uploads/r2/a.pdf"]);
+    expect(postgres.uploadsExpiredLimited).toEqual(["users/X-a/uploads/r1/a.pdf"]);
     expect(postgres.bExpired).toEqual([]);
-    expect(postgres.knownLive).toEqual(["users/X-a/uploads/f1/a.pdf", "users/X-a/uploads/r1/a.pdf"]);
-    expect(postgres.knownAfterExpiry).toEqual(["users/X-a/uploads/f1/a.pdf"]);
     expect(postgres.reservedAfterConfirm).toMatchObject([{ pathname: "users/X-a/uploads/r2/a.pdf" }]);
     expect(postgres.tooBig).toBe("storage");
     expect(postgres.reservedLater).toMatchObject([{ pathname: "users/X-a/uploads/r4/a.pdf", declaredBytes: 10 }]);
-    expect(postgres.expiredLater).toEqual([]);
-    expect(postgres.swept).toBe(1);
-    expect(postgres.sweptAgain).toBe(0);
+    expect(postgres.expiredLater).toEqual(["users/X-a/uploads/r2/a.pdf"]);
+    expect(postgres.allExpired).toEqual(["users/X-a/uploads/r2/a.pdf", "users/X-a/uploads/r4/a.pdf"]);
+    expect(postgres.forgotLive).toBe(0);
+    expect(postgres.forgotten).toBe(1);
+    expect(postgres.expiredAfterForgetting).toEqual(["users/X-a/uploads/r4/a.pdf"]);
     expect(postgres.cancel).toBe(true);
     expect(postgres.cancelNone).toBe(false);
     expect(postgres.p2DeviceAfterProfileDeleted).toBeNull();
@@ -262,20 +282,23 @@ describe("Postgres accounts (PGlite)", () => {
       const T0 = "2026-11-15T12:00:00.000Z";
       const T1 = "2026-11-15T12:15:00.000Z";
       const path = (n: number | string) => `users/limits-${name}/uploads/u${n}/a.pdf`;
-      // Half confirmed files, half started uploads: together they fill the file limit.
+      const save = async (n: number | string, now = T0, until = T1) => {
+        await scope.reserveUpload(path(n), 10, now, until);
+        return scope.saveUpload(`${name}-${n}`, { pathname: path(n), name: "a.pdf", contentType: "application/pdf", size: 10 }, now);
+      };
+      // Half saved files, half started uploads: together they fill the file limit.
       for (let i = 0; i < MAX_FILES / 2; i++) {
-        await scope.createFile(`${name}-f${i}`, { pathname: path(`f${i}`), name: "a.pdf", contentType: "application/pdf", size: 10 });
+        expect(await save(`f${i}`)).not.toBeNull();
         await scope.reserveUpload(path(i), 10, T0, T1);
       }
       expect(await refused(scope.reserveUpload(path("over"), 10, T0, T1))).toBe("files");
-      // Once the reservations have run out there is room again...
-      await scope.reserveUpload(path("after"), 10, T1, "2026-11-15T12:30:00.000Z");
-      // ...but never for more than the limit of recorded files.
-      for (let i = MAX_FILES / 2; i < MAX_FILES; i++) {
-        await scope.createFile(`${name}-f${i}`, { pathname: path(`f${i}`), name: "a.pdf", contentType: "application/pdf", size: 10 });
-      }
-      expect(await refused(scope.createFile(`${name}-f-over`, { pathname: path("f-over"), name: "a.pdf", contentType: "application/pdf", size: 10 }))).toBe("files");
+      // Once those reservations have run out there is room again, up to the limit of saved files and no further.
+      const T2 = "2026-11-15T12:30:00.000Z";
+      for (let i = MAX_FILES / 2; i < MAX_FILES; i++) expect(await save(`f${i}`, T1, T2)).not.toBeNull();
+      expect(await refused(save("f-over", T1, T2))).toBe("files");
       expect(await scope.listFiles()).toHaveLength(MAX_FILES);
+      // The expired reservations are still on record (for the cleanup), without counting.
+      expect(await scope.expiredUploads(T1, 100)).toHaveLength(MAX_FILES / 2);
     });
 
     it(`counts started uploads' bytes against the storage total in the ${name} store`, async () => {
@@ -291,6 +314,32 @@ describe("Postgres accounts (PGlite)", () => {
       await scope.reserveUpload(path("exact"), left, T0, T1); // exactly full is allowed
     });
   }
+
+  it("stops a file row going in past the limit even without a reservation (the trigger on files)", async () => {
+    const scope = new PostgresAccounts(sqlFor(pg)).forAccount("files-trigger");
+    await scope.ensure({ displayName: "F" });
+    const insert = (n: number) =>
+      pg.query("insert into files (id, account_id, pathname, name, content_type, size_bytes) values ($1, 'files-trigger', $2, 'a.pdf', 'application/pdf', 10)", [`ft-${n}`, `users/files-trigger/uploads/${n}/a.pdf`]);
+    for (let i = 0; i < MAX_FILES; i++) await insert(i);
+    await expect(insert(MAX_FILES)).rejects.toThrow(/quizzlet_limit:files/);
+  });
+
+  it("never treats a path with a saved file as an abandoned upload, even if a reservation row exists for it", async () => {
+    const db = new PostgresAccounts(sqlFor(pg));
+    const scope = db.forAccount("saved-path");
+    await scope.ensure({ displayName: "S" });
+    const pathname = "users/saved-path/uploads/u1/a.pdf";
+    const T0 = "2026-11-15T12:00:00.000Z";
+    const T1 = "2026-11-15T12:15:00.000Z";
+    await scope.reserveUpload(pathname, 10, T0, T1);
+    await scope.saveUpload("saved-f1", { pathname, name: "a.pdf", contentType: "application/pdf", size: 10 }, T0);
+    // A row slipped in behind the trigger's back (it refuses this itself):
+    await pg.query("alter table file_reservations disable trigger file_reservations_quota");
+    await pg.query("insert into file_reservations (pathname, account_id, declared_bytes, created_at, expires_at) values ($1, 'saved-path', 10, $2, $3)", [pathname, T0, T1]);
+    await pg.query("alter table file_reservations enable trigger file_reservations_quota");
+    expect(await scope.expiredUploads("2026-11-16T12:00:00.000Z", 10)).toEqual([]);
+    expect(await db.expiredReservations("2026-11-16T12:00:00.000Z", 1000)).not.toContain(pathname);
+  });
 
   it("uses the same limits in the migrations as in the code", () => {
     const dir = new URL("../db/migrations/", import.meta.url);

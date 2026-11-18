@@ -77,11 +77,12 @@ repository (dashboards, environment variables, a decision); each of those is des
 
 | Check | Result |
 |---|---|
-| Unit tests (`npm test`) and type check | Pass: 217 tests (6 skipped: they need the services below) |
+| Unit tests (`npm test`) and type check | Pass: 229 tests (6 skipped: they need the services below) |
 | Redis Lua scripts on a real Redis 7 (`scripts/test-redis-score.py`, local mode) | Pass |
 | `RedisStore` through the Upstash client against a real Redis (`server/store.redis.test.ts`) | Pass: identical to the in-memory store. Run through a small local stand-in for Upstash's REST API, not against Upstash itself |
 | Account SQL and triggers on PostgreSQL 16, with parallel inserts (`server/accounts.pg.test.ts`) | Pass: 10 parallel creates at 19 profiles leave exactly 20; same for decks, started uploads and their byte total |
 | The least-privilege role in runbook.md on PostgreSQL 16 | Pass: every app statement works; `drop`, `create`, `alter`, `truncate` and replacing a trigger function are refused |
+| An independent read of the finished change, looking for defects | Seven findings, all fixed in a follow-up commit; they are marked "(review)" below |
 | End-to-end suite in Chromium (`npm run test:e2e`) | 81 of 83 pass. The two that fail (`kid-device.e2e.ts`: "a new link replaces the old one", "'Not now' leaves the device unlinked…") fail the same way on the code before these changes, with the older Chromium build that was available for this run; run the suite once with the pinned browser to confirm |
 | `npm audit --omit=dev` | 0 vulnerabilities |
 
@@ -92,8 +93,12 @@ running the new migrations have not run on a deployment. Try them on a preview d
 ### Where the code differs from the text below
 
 - **R1.** The 403 for a parent-started session says "This profile is no longer available…" (a linked
-  device keeps its own message), and the app returns to the profile picker. The hidden marker also applies
-  to guest keys, so an entry removed by an operator (R14) doesn't come back.
+  device keeps its own message), and the app returns to the profile picker. A removed player is recorded
+  in its own set, `leaderboard-removed`, instead of `leaderboard-hidden`: `leaderboard-hidden` is the
+  parent's choice and is changed whenever the profile is saved, so a marker kept there could be undone.
+  Nothing lists a removed key again (review). Starting a session can hide a profile but never un-hide
+  one, because the session's copy of the parent's choice may be a moment out of date; visibility changes
+  are applied in one atomic step (review).
 - **R2.** A session's kind is logged as `sessionKind`: the plan's field name, `kind`, is also the marker
   that makes a line a security event, and one overwrote the other. Extra events: `score.limited`,
   `session.name_taken`, `session.name_blocked`, `request.cross_site`, `csp.violation`, the cleanup's
@@ -109,21 +114,33 @@ running the new migrations have not run on a deployment. Try them on a preview d
   so the saved points match what the learner saw, and a forged value earns nothing extra. `batchId` is
   now required as well as `sessionTag`, and the old non-idempotent path (`addPoints`) is gone: it bypassed
   the script entirely, so leaving it would have left the hole open. A refused batch is a 429 that the app
-  keeps and sends again.
+  keeps and sends again. The limit is also kept **per player across sessions** (review): otherwise each
+  new session started with a fresh burst of 20. A kid profile can be on 10 linked devices at once, so its
+  shared allowance is 10 times a session's; each of its sessions still has the normal limit. What remains
+  open is starting sessions under many different nicknames, which is R3's job.
 - **R7.** `file_reservations` has a `created_at` column, so the quota trigger can use the application's
   clock. The quota (files plus live reservations, by count and bytes) is enforced by a trigger on the
-  insert, with the same account lock as R9. An account's expired reservations and their uploads are also
-  cleared when it next starts an upload, not only by the daily job. The daily job deletes nothing if the
-  database recognises none of the stored files (the signature of a wrong or empty database).
+  insert, with the same account lock as R9. A file can only be recorded by using up a live reservation,
+  in one statement. The upload URL stops working when the reservation does (review).
+  **The cleanup does not list the Blob store** (review). An expired reservation stays on record as the
+  proof that its upload was never saved; a day later the daily job deletes what is at that path and
+  drops the record, and the same account's next upload clears its own sooner. Deleting on "no record
+  found", as the text below describes, would delete parents' files if the job ever ran against the wrong
+  or an older database; with this design a missing record deletes nothing. The cost: uploads left
+  unconfirmed before this change have no record and are not removed automatically (see runbook.md).
 - **R8.** Guests who never score are no longer written to `player-names` at all, and the job also drops
   such names left by earlier versions.
 - **R9.** `scripts/migrate.mjs` now splits statements with a small parser, because the old split on `;`
   at a line end would have cut the trigger functions apart.
 - **R12.** Ownership lasts 30 days from the nickname's last session and is renewed each time, so an
-  abandoned nickname frees up. A kid on a different device has to pick another nickname.
+  abandoned nickname frees up. A kid on a different device has to pick another nickname. Sessions and the
+  leaderboard are now read from Redis through small scripts that answer in JSON (review): the Upstash
+  client turns bare replies that look like numbers into numbers, so a session started as "42.0" was read
+  back as player "42" and could add to that player's points.
 - **R14.** One Global Config item, `leaderboard`, holds both `enabled` and `blockedNames`. A blocked entry
   matches anywhere inside a nickname, ignoring case, spaces and punctuation. The removal script shows what
-  it would remove and needs `--yes` to do it.
+  it would remove and needs `--yes` to do it; a removal is permanent for that key until an operator undoes
+  it (`SREM leaderboard-removed`).
 
 ### Left for you
 

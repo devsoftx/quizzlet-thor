@@ -1,4 +1,5 @@
 import { Redis } from "@upstash/redis";
+import { MAX_DEVICES_PER_PROFILE } from "../src/account-shared.js";
 import { POINTS_PER_CORRECT, scoreRound, STREAK_BONUS, STREAK_THRESHOLD } from "../src/points.js";
 
 export const SESSION_TTL_SECONDS = 60 * 60;
@@ -9,6 +10,12 @@ export const SESSION_TTL_SECONDS = 60 * 60;
  */
 export const PACE_BURST = 20;
 export const PACE_MS_PER_ANSWER = 2000;
+/**
+ * The same limit also follows the player from session to session, so starting
+ * a new session doesn't start a new allowance. A kid profile can be on several
+ * linked devices at once, so its shared allowance is that many times larger.
+ */
+export const PROFILE_PACE_SCALE = MAX_DEVICES_PER_PROFILE;
 
 /** A guest nickname stays with the browser that used it for this long after its last session. */
 export const GUEST_NAME_DAYS = 30;
@@ -75,17 +82,21 @@ export interface Store {
   /**
    * Scores a batch and adds it to the session and the student's total, in one
    * step. The streak and the answer count live in the session, so points don't
-   * depend on what the browser claims. "limited": more answers than the
-   * session's age allows (nothing is saved; the same batch can be sent later).
+   * depend on what the browser claims. "limited": more answers than the pace
+   * limit allows, for this session or for this player across sessions
+   * (nothing is saved; the same batch can be sent later).
    */
   addScoreBatch(session: Session, batch: ScoreBatch, now: number): Promise<ScoreReceipt | "conflict" | "expired" | "limited">;
   leaderboard(limit: number, playerKey?: string): Promise<Leaderboard>;
-  /** Updates a player's display name (and emoji) and whether they appear on the leaderboard. */
+  /**
+   * Updates a player's display name (and emoji) and whether they appear on the
+   * leaderboard: the parent's choice, applied when the profile is saved.
+   */
   syncPlayer(playerKey: string, name: string, listed: boolean, emoji?: string): Promise<void>;
   /**
    * Removes a player's name, total and leaderboard entry (profile or account
-   * deleted, or an operator's removal). The key stays marked as hidden, so a
-   * late write can never put it back on the public leaderboard.
+   * deleted, or an operator's removal). The key is remembered as removed: no
+   * later score, session or visibility change puts it back on the leaderboard.
    */
   removePlayer(playerKey: string): Promise<void>;
   /** All-time totals for kid profiles ("p:<id>" keys), whether or not they're on the leaderboard. */
@@ -104,11 +115,12 @@ const isProfileKey = (playerKey: string) => playerKey.startsWith("p:");
 /** Highest points first; equal points in reverse key order, the way Redis ranks a sorted set read from the top. */
 const byRank = (a: [string, number], b: [string, number]) => b[1] - a[1] || (a[0] < b[0] ? 1 : a[0] > b[0] ? -1 : 0);
 
-/** How many answers a session may have given by `now`. */
-export function answersAllowed(expiresAt: number, now: number): number {
-  const elapsed = Math.max(0, now - (expiresAt - SESSION_TTL_SECONDS * 1000));
-  return PACE_BURST + Math.floor(elapsed / PACE_MS_PER_ANSWER);
+/** How many answers may have been given by `now`, counting from `startedAt`. */
+export function answersAllowed(startedAt: number, now: number): number {
+  return PACE_BURST + Math.floor(Math.max(0, now - startedAt) / PACE_MS_PER_ANSWER);
 }
+
+const startOf = (session: Pick<Session, "expiresAt">) => session.expiresAt - SESSION_TTL_SECONDS * 1000;
 
 // ---------------------------------------------------------------- Memory
 // For local development and tests only: Vercel Functions don't share memory
@@ -121,16 +133,29 @@ interface MemoryState {
   totals: Map<string, number>;
   names: Map<string, string>;
   emojis: Map<string, string>;
-  /** Players kept off the leaderboard (their totals still count), and removed players. */
+  /** Kid profiles their parent keeps off the leaderboard (their totals still count). */
   hidden: Set<string>;
+  /** Players that were removed (deleted profile, operator's removal): never listed again. */
+  removed: Set<string>;
   /** Guest playerKey -> the browser that holds the nickname. */
   owners: Map<string, { hash: string; expiresAt: number }>;
+  /** playerKey -> answers given since `start`, across sessions (forgotten an hour after the last one). */
+  pace: Map<string, { start: number; answered: number; expiresAt: number }>;
 }
 
 export class MemoryStore implements Store {
   private receipts = new Map<string, { fingerprint: string; receipt: Omit<ScoreReceipt, "replay">; expiresAt: number }>();
   constructor(
-    private state: MemoryState = { sessions: new Map(), totals: new Map(), names: new Map(), emojis: new Map(), hidden: new Set(), owners: new Map() },
+    private state: MemoryState = {
+      sessions: new Map(),
+      totals: new Map(),
+      names: new Map(),
+      emojis: new Map(),
+      hidden: new Set(),
+      removed: new Set(),
+      owners: new Map(),
+      pace: new Map(),
+    },
   ) {}
 
   async syncPlayer(playerKey: string, name: string, listed: boolean, emoji?: string) {
@@ -145,7 +170,9 @@ export class MemoryStore implements Store {
     this.state.names.delete(playerKey);
     this.state.emojis.delete(playerKey);
     this.state.owners.delete(playerKey);
-    this.state.hidden.add(playerKey);
+    this.state.pace.delete(playerKey);
+    this.state.hidden.delete(playerKey);
+    this.state.removed.add(playerKey);
   }
 
   async totalsFor(playerKeys: string[]) {
@@ -156,7 +183,12 @@ export class MemoryStore implements Store {
     const { emoji, ...kept } = session; // the emoji belongs to the player, not the session
     this.state.sessions.set(session.id, { ...kept, streak: 0, answered: 0 });
     // A guest's name is only kept once they have points (see addScoreBatch).
-    if (session.profileId) await this.syncPlayer(session.playerKey, session.name, session.listed !== false, emoji);
+    if (!session.profileId) return;
+    this.state.names.set(session.playerKey, session.name);
+    if (emoji) this.state.emojis.set(session.playerKey, emoji);
+    // A session can hide a profile (its copy says "private") but never un-hide one: the copy may be
+    // a moment out of date, and only the parent's saved choice (syncPlayer) makes a profile public.
+    if (session.listed === false) this.state.hidden.add(session.playerKey);
   }
 
   async getSession(id: string, now: number) {
@@ -183,7 +215,14 @@ export class MemoryStore implements Store {
     const stored = this.state.sessions.get(session.id);
     if (!stored || stored.expiresAt <= now) return "expired" as const;
     const count = batch.answers.length;
-    if (count > 0 && stored.answered + count > answersAllowed(stored.expiresAt, now)) return "limited" as const;
+    const playerKey = session.playerKey;
+    let pace = this.state.pace.get(playerKey);
+    if (!pace || pace.expiresAt <= now || pace.start > now) pace = { start: startOf(stored), answered: 0, expiresAt: 0 };
+    if (count > 0) {
+      if (stored.answered + count > answersAllowed(startOf(stored), now)) return "limited" as const;
+      const scale = session.profileId ? PROFILE_PACE_SCALE : 1;
+      if (pace.answered + count > scale * answersAllowed(pace.start, now)) return "limited" as const;
+    }
 
     // Mutate all state synchronously before yielding, so concurrent calls cannot interleave.
     const streakBefore = count > 0 && batch.streakBefore !== undefined ? Math.min(stored.streak, batch.streakBefore) : stored.streak;
@@ -192,14 +231,14 @@ export class MemoryStore implements Store {
     if (count > 0) {
       stored.streak = round.streak;
       stored.answered += count;
+      this.state.pace.set(playerKey, { start: pace.start, answered: pace.answered + count, expiresAt: now + SESSION_TTL_SECONDS * 1000 });
     }
-    const playerKey = session.playerKey;
     let totalPoints: number;
     if (session.profileId) {
       totalPoints = (this.state.totals.get(playerKey) ?? 0) + round.points;
       this.state.totals.set(playerKey, totalPoints);
       this.state.names.set(playerKey, session.name); // visibility stays as the parent set it
-    } else if (this.state.hidden.has(playerKey)) {
+    } else if (this.state.removed.has(playerKey)) {
       totalPoints = stored.points; // a removed nickname earns session points only
     } else {
       totalPoints = (this.state.totals.get(playerKey) ?? 0) + round.points;
@@ -215,7 +254,7 @@ export class MemoryStore implements Store {
 
   async leaderboard(limit: number, playerKey?: string) {
     const ranked = [...this.state.totals.entries()]
-      .filter(([key, points]) => points > 0 && !this.state.hidden.has(key))
+      .filter(([key, points]) => points > 0 && !this.state.hidden.has(key) && !this.state.removed.has(key))
       .sort(byRank)
       .map(([key, points], i) => ({ key, rank: i + 1, name: this.state.names.get(key) ?? key, points }));
     const strip = ({ key, rank, name, points }: (typeof ranked)[number]): LeaderboardEntry => {
@@ -256,21 +295,29 @@ export class MemoryStore implements Store {
 //   leaderboard      sorted set: playerKey -> total points (listed players only)
 //   player-names     hash: playerKey -> display name
 //   player-emojis    hash: "p:<profileId>" -> the profile's emoji
-//   leaderboard-hidden  set of players kept off the leaderboard: profiles the parent keeps private,
-//                    and every removed player (deleted profile, operator removal)
+//   leaderboard-hidden  set of "p:<profileId>" the parent keeps off the leaderboard
+//   leaderboard-removed  set of removed players (deleted profile, operator's removal): never listed again
 //   player-totals    hash: "p:<profileId>" -> total points, kept even while a profile is unlisted
 //                    (guests' totals live only in the leaderboard, as before)
 //   guest-owner:<playerKey>  fingerprint of the browser that holds a guest nickname (30 days)
+//   pace:<playerKey> hash {start, answered}: the player's answers across sessions (an hour after the last)
+//
+// Reads that return names or player keys go through small scripts that answer
+// in JSON. The Upstash client turns bare replies that look like JSON into
+// numbers, booleans or null ("42.0" becomes 42), which would mix up players
+// whose nicknames look like that; a JSON string comes back exactly as stored.
 
 /**
  * Scores one batch atomically. The streak and the number of answers are kept
  * in the session hash; the browser can lower the streak (a new round) but not
- * raise it, and can't answer faster than the pace limit.
+ * raise it, and can't answer faster than the pace limit. The same limit is
+ * kept per player (pace:<playerKey>), so a new session isn't a new allowance.
  * KEYS: session, receipt.
  * ARGV: 1 fingerprint, 2 answers ("1"/"0" per answer), 3 playerKey, 4 now (ms), 5 display name,
  *       6 "1" for a kid profile, 7 receipt expiry (ms), 8 the browser's streak ("" if none),
  *       9 points per correct answer, 10 streak bonus, 11 streak threshold,
- *       12 pace burst, 13 ms per answer, 14 session length (ms).
+ *       12 pace burst, 13 ms per answer, 14 session length (ms),
+ *       15 how many times the limit a player may use across sessions (1 for guests).
  */
 export const SCORE_SCRIPT = `
   local function validType(key, expected)
@@ -279,7 +326,8 @@ export const SCORE_SCRIPT = `
   end
   if not validType(KEYS[1], 'hash') or not validType(KEYS[2], 'string') or
      not validType('player-names', 'hash') or not validType('leaderboard', 'zset') or
-     not validType('player-totals', 'hash') or not validType('leaderboard-hidden', 'set') then
+     not validType('player-totals', 'hash') or not validType('leaderboard-hidden', 'set') or
+     not validType('leaderboard-removed', 'set') or not validType('pace:' .. ARGV[3], 'hash') then
     return {'error'}
   end
   local previous = redis.call('GET', KEYS[2])
@@ -300,10 +348,22 @@ export const SCORE_SCRIPT = `
   local count = string.len(ARGV[2])
   local answered = tonumber(redis.call('HGET', KEYS[1], 'answered') or '0') or 0
   local streak = tonumber(redis.call('HGET', KEYS[1], 'streak') or '0') or 0
+  local sessionStart = expiresAt - tonumber(ARGV[14])
+  local paceKey = 'pace:' .. ARGV[3]
+  local paceStart = tonumber(redis.call('HGET', paceKey, 'start') or '')
+  local paceAnswered = tonumber(redis.call('HGET', paceKey, 'answered') or '0') or 0
+  if not paceStart or paceStart > now then
+    paceStart = sessionStart
+    paceAnswered = 0
+  end
   if count > 0 then
-    local elapsed = now - (expiresAt - tonumber(ARGV[14]))
-    if elapsed < 0 then elapsed = 0 end
-    if answered + count > tonumber(ARGV[12]) + math.floor(elapsed / tonumber(ARGV[13])) then return {'limited'} end
+    local function allowed(since)
+      local elapsed = now - since
+      if elapsed < 0 then elapsed = 0 end
+      return tonumber(ARGV[12]) + math.floor(elapsed / tonumber(ARGV[13]))
+    end
+    if answered + count > allowed(sessionStart) then return {'limited'} end
+    if paceAnswered + count > tonumber(ARGV[15]) * allowed(paceStart) then return {'limited'} end
     if ARGV[8] ~= '' and tonumber(ARGV[8]) < streak then streak = tonumber(ARGV[8]) end
   end
   local points = 0
@@ -317,8 +377,13 @@ export const SCORE_SCRIPT = `
     end
   end
   local sessionPoints = redis.call('HINCRBY', KEYS[1], 'points', points)
-  if count > 0 then redis.call('HSET', KEYS[1], 'streak', streak, 'answered', answered + count) end
-  local hidden = redis.call('SISMEMBER', 'leaderboard-hidden', ARGV[3]) == 1
+  if count > 0 then
+    redis.call('HSET', KEYS[1], 'streak', streak, 'answered', answered + count)
+    redis.call('HSET', paceKey, 'start', paceStart, 'answered', paceAnswered + count)
+    redis.call('PEXPIRE', paceKey, ARGV[14])
+  end
+  local hidden = redis.call('SISMEMBER', 'leaderboard-hidden', ARGV[3]) == 1 or
+                 redis.call('SISMEMBER', 'leaderboard-removed', ARGV[3]) == 1
   local totalPoints
   if isProfile then
     totalPoints = redis.call('HINCRBY', 'player-totals', ARGV[3], points)
@@ -342,6 +407,57 @@ export const CLAIM_SCRIPT = `
   local owner = redis.call('GET', KEYS[1])
   if owner and owner ~= ARGV[1] then return 0 end
   redis.call('SET', KEYS[1], ARGV[1], 'PX', ARGV[2])
+  return 1
+`;
+
+/** KEYS: session. The session's fields and values as one JSON array: [field, value, …], every value a string. */
+export const SESSION_SCRIPT = `
+  return cjson.encode(redis.call('HGETALL', KEYS[1]))
+`;
+
+/**
+ * The top ARGV[1] entries, and the entry of player ARGV[2] ("" for none), as JSON:
+ * {top: [{key, points, name, emoji}], you: {rank, points, name, emoji} | false}.
+ * (A missing name or emoji is false; an empty `top` arrives as {}.)
+ */
+export const LEADERBOARD_SCRIPT = `
+  local function entry(key, points)
+    local e = { key = key, points = points, name = redis.call('HGET', 'player-names', key) }
+    if string.sub(key, 1, 2) == 'p:' then e.emoji = redis.call('HGET', 'player-emojis', key) end
+    return e
+  end
+  local flat = redis.call('ZREVRANGE', 'leaderboard', 0, tonumber(ARGV[1]) - 1, 'WITHSCORES')
+  local top = {}
+  for i = 1, #flat, 2 do top[#top + 1] = entry(flat[i], flat[i + 1]) end
+  local you = false
+  if ARGV[2] ~= '' then
+    local rank = redis.call('ZREVRANK', 'leaderboard', ARGV[2])
+    if rank then
+      you = entry(ARGV[2], redis.call('ZSCORE', 'leaderboard', ARGV[2]))
+      you.rank = rank
+    end
+  end
+  return cjson.encode({ top = top, you = you })
+`;
+
+/**
+ * Sets a player's name and emoji, and their place on the leaderboard, in one step.
+ * ARGV: 1 playerKey, 2 name, 3 "list" | "hide" | "keep" (leave visibility as it is), 4 emoji ("" for none).
+ * A removed player is never listed.
+ */
+export const SYNC_SCRIPT = `
+  redis.call('HSET', 'player-names', ARGV[1], ARGV[2])
+  if ARGV[4] ~= '' then redis.call('HSET', 'player-emojis', ARGV[1], ARGV[4]) end
+  if ARGV[3] == 'hide' then
+    redis.call('SADD', 'leaderboard-hidden', ARGV[1])
+    redis.call('ZREM', 'leaderboard', ARGV[1])
+  elseif ARGV[3] == 'list' then
+    redis.call('SREM', 'leaderboard-hidden', ARGV[1])
+    if redis.call('SISMEMBER', 'leaderboard-removed', ARGV[1]) == 0 then
+      local total = tonumber(redis.call('HGET', 'player-totals', ARGV[1]) or '0') or 0
+      if total > 0 then redis.call('ZADD', 'leaderboard', total, ARGV[1]) end
+    end
+  end
   return 1
 `;
 
@@ -430,30 +546,30 @@ export class RedisStore implements Store {
       .pexpireat(key, session.expiresAt)
       .exec();
     // A guest's name is only kept once they have points (see SCORE_SCRIPT).
-    if (session.profileId) await this.syncPlayer(session.playerKey, session.name, session.listed !== false, session.emoji);
+    // A session can hide a profile (its copy says "private") but never un-hide one: the copy may be
+    // a moment out of date, and only the parent's saved choice (syncPlayer) makes a profile public.
+    if (session.profileId) await this.sync(session.playerKey, session.name, session.listed === false ? "hide" : "keep", session.emoji);
+  }
+
+  private async sync(playerKey: string, name: string, mode: "list" | "hide" | "keep", emoji?: string) {
+    await this.redis.eval<string[], number>(SYNC_SCRIPT, [], [playerKey, name, mode, emoji ?? ""]);
   }
 
   async syncPlayer(playerKey: string, name: string, listed: boolean, emoji?: string) {
-    await this.redis.hset("player-names", { [playerKey]: name });
-    if (emoji) await this.redis.hset("player-emojis", { [playerKey]: emoji });
-    if (!listed) {
-      await this.redis.multi().sadd("leaderboard-hidden", playerKey).zrem("leaderboard", playerKey).exec();
-      return;
-    }
-    await this.redis.srem("leaderboard-hidden", playerKey);
-    const total = Number((await this.redis.hget("player-totals", playerKey)) ?? 0);
-    if (total > 0) await this.redis.zadd("leaderboard", { score: total, member: playerKey });
+    await this.sync(playerKey, name, listed ? "list" : "hide", emoji);
   }
 
   async removePlayer(playerKey: string) {
     await this.redis
       .multi()
-      .sadd("leaderboard-hidden", playerKey) // stays behind as a marker
+      .sadd("leaderboard-removed", playerKey) // stays behind: this key is never listed again
+      .srem("leaderboard-hidden", playerKey)
       .zrem("leaderboard", playerKey)
       .hdel("player-names", playerKey)
       .hdel("player-emojis", playerKey)
       .hdel("player-totals", playerKey)
       .del(`guest-owner:${playerKey}`)
+      .del(`pace:${playerKey}`)
       .exec();
   }
 
@@ -464,8 +580,11 @@ export class RedisStore implements Store {
   }
 
   async getSession(id: string, now: number) {
-    const data = await this.redis.hgetall<Record<string, string | number>>(`session:${id}`);
-    if (!data || !data.playerKey) return null;
+    const flat = await this.redis.eval<string[], unknown>(SESSION_SCRIPT, [`session:${id}`], []);
+    if (!Array.isArray(flat) || flat.length === 0) return null;
+    const data: Record<string, string> = {};
+    for (let i = 0; i + 1 < flat.length; i += 2) data[String(flat[i])] = String(flat[i + 1]);
+    if (!data.playerKey) return null;
     const expiresAt = Number(data.expiresAt);
     if (expiresAt <= now) return null;
     const profileId = data.profileId ? String(data.profileId) : undefined;
@@ -506,6 +625,7 @@ export class RedisStore implements Store {
         PACE_BURST,
         PACE_MS_PER_ANSWER,
         SESSION_TTL_SECONDS * 1000,
+        session.profileId ? PROFILE_PACE_SCALE : 1,
       ],
     );
     if (result[0] === "conflict") return "conflict" as const;
@@ -521,42 +641,20 @@ export class RedisStore implements Store {
   }
 
   async leaderboard(limit: number, playerKey?: string) {
-    const flat = await this.redis.zrange<(string | number)[]>("leaderboard", 0, limit - 1, {
-      rev: true,
-      withScores: true,
+    type Row = { key?: unknown; points?: unknown; name?: unknown; emoji?: unknown; rank?: unknown };
+    const board = await this.redis.eval<(string | number)[], { top?: unknown; you?: unknown } | null>(LEADERBOARD_SCRIPT, [], [limit, playerKey ?? ""]);
+    const entry = (row: Row, rank: number): LeaderboardEntry => ({
+      rank,
+      name: String(row.name || row.key),
+      points: Number(row.points),
+      ...(row.emoji ? { emoji: String(row.emoji) } : {}),
     });
-    const keys: string[] = [];
-    const scores: number[] = [];
-    for (let i = 0; i < flat.length; i += 2) {
-      keys.push(String(flat[i]));
-      scores.push(Number(flat[i + 1]));
-    }
-
-    let you: LeaderboardEntry | null = null;
-    if (playerKey) {
-      const [rank, score] = await Promise.all([
-        this.redis.zrevrank("leaderboard", playerKey),
-        this.redis.zscore("leaderboard", playerKey),
-      ]);
-      if (rank !== null && score !== null && Number(score) > 0) {
-        const [name, emoji] = await Promise.all([
-          this.redis.hget<string>("player-names", playerKey),
-          isProfileKey(playerKey) ? this.redis.hget<string>("player-emojis", playerKey) : null,
-        ]);
-        you = { rank: rank + 1, name: String(name ?? playerKey), points: Number(score), ...(emoji ? { emoji: String(emoji) } : {}) };
-      }
-    }
-
-    const profileKeys = keys.filter(isProfileKey);
-    const [names, emojis] = await Promise.all([
-      keys.length ? this.redis.hmget<Record<string, string>>("player-names", ...keys) : null,
-      profileKeys.length ? this.redis.hmget<Record<string, string>>("player-emojis", ...profileKeys) : null,
-    ]);
-    const top = keys.map((key, i): LeaderboardEntry => {
-      const emoji = emojis?.[key];
-      return { rank: i + 1, name: String(names?.[key] ?? key), points: scores[i], ...(emoji ? { emoji: String(emoji) } : {}) };
-    });
-    return { top: top.filter((e) => e.points > 0), you };
+    const rows = Array.isArray(board?.top) ? (board.top as Row[]) : [];
+    const mine = board?.you && typeof board.you === "object" ? (board.you as Row) : null;
+    return {
+      top: rows.map((row, i) => entry(row, i + 1)).filter((e) => e.points > 0),
+      you: mine && Number(mine.points) > 0 ? entry({ ...mine, key: playerKey }, Number(mine.rank) + 1) : null,
+    };
   }
 
   async claimGuestName(playerKey: string, ownerHash: string, _now: number) {

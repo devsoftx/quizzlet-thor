@@ -12,7 +12,7 @@
 
 import { Redis } from "@upstash/redis";
 import { describe, expect, it } from "vitest";
-import { MemoryStore, PACE_BURST, PACE_MS_PER_ANSWER, RedisStore, SESSION_TTL_SECONDS, type Session, type Store } from "./store.js";
+import { MemoryStore, PACE_BURST, PACE_MS_PER_ANSWER, PROFILE_PACE_SCALE, RedisStore, SESSION_TTL_SECONDS, type Session, type Store } from "./store.js";
 
 const redisUrl = process.env.QUIZZLET_DISPOSABLE_REDIS === "1" ? process.env.QUIZZLET_TEST_REDIS_URL : undefined;
 const redisToken = process.env.QUIZZLET_TEST_REDIS_TOKEN ?? "local";
@@ -69,7 +69,37 @@ async function scenario(store: Store) {
   seen.afterWaiting = await store.addScoreBatch(fast, batch("more", [true]), now + PACE_MS_PER_ANSWER);
   seen.tooFastAgain = await store.addScoreBatch(fast, batch("again", [true, true]), now + PACE_MS_PER_ANSWER);
   seen.hugeBatch = await store.addScoreBatch(fast, batch("huge", new Array(200).fill(true), 200), now + PACE_MS_PER_ANSWER);
+  // A new session isn't a new allowance: the player's answers are counted across sessions.
+  const fastAgain = session({ name: "Speedy", playerKey: "speedy", listed: true }, now + PACE_MS_PER_ANSWER);
+  await store.createSession(fastAgain);
+  seen.newSessionSameLimit = await store.addScoreBatch(fastAgain, batch("s2", [true]), now + PACE_MS_PER_ANSWER);
+  seen.newSessionAfterWaiting = await store.addScoreBatch(fastAgain, batch("s2", [false]), now + 2 * PACE_MS_PER_ANSWER);
   seen.expired = await store.addScoreBatch(fast, batch("late", [true]), fast.expiresAt);
+  // A kid profile may be on several devices at once: each session has the usual limit,
+  // and together they get that many times the allowance, no more.
+  const busyKid = () => session({ name: "Busy", playerKey: "p:busy", profileId: "busy", listed: false, emoji: "🐙", accountId: "acct-1" });
+  const devices: string[] = [];
+  for (let d = 0; d < PROFILE_PACE_SCALE + 1; d++) {
+    const s = busyKid();
+    await store.createSession(s);
+    const result = await store.addScoreBatch(s, batch(`d${d}`, new Array(PACE_BURST).fill(false)), now);
+    devices.push(typeof result === "string" ? result : "ok");
+  }
+  seen.kidDevices = devices;
+
+  // --- Nicknames that look like numbers or JSON stay themselves, and stay apart
+  const odd: Record<string, unknown> = {};
+  for (const name of ["42", "42.0", "1e3", "0", "true", "null", "007"]) {
+    const s = session({ name, playerKey: name, listed: true });
+    await store.createSession(s);
+    const back = await store.getSession(s.id, now);
+    const scored = await store.addScoreBatch(back ?? s, batch("n", name === "42" ? [true, true] : [true]), now);
+    odd[name] = { name: back?.name, playerKey: back?.playerKey, total: typeof scored === "string" ? scored : scored.totalPoints };
+  }
+  seen.oddNames = odd;
+  seen.oddNamesOnBoard = (await store.leaderboard(50, "42.0")).top.filter((e) => Object.keys(odd).includes(e.name)).map((e) => `${e.name}=${e.points}`).sort();
+  seen.oddYou = (await store.leaderboard(50, "42.0")).you;
+  for (const name of Object.keys(odd)) await store.removePlayer(name);
 
   // --- Kid profiles: totals are private, the board follows the parent's choice
   seen.kidScore = await store.addScoreBatch(listedKid, batch("k1", [true, true, true]), now);
@@ -83,11 +113,23 @@ async function scenario(store: Store) {
   seen.boardAfterHiding = await store.leaderboard(10, "p:nova");
   seen.limitOne = (await store.leaderboard(1)).top;
 
-  // --- Removal leaves a marker: a late write never becomes public again
+  // --- A session can hide a profile, never un-hide it (its copy of "listed" may be out of date)
+  const staleCopy = session({ name: "Nova Renamed", playerKey: "p:nova", profileId: "nova", listed: true, emoji: "🚀", accountId: "acct-1" });
+  await store.createSession(staleCopy);
+  seen.staleSessionScore = await store.addScoreBatch(staleCopy, batch("stale", [true]), now);
+  seen.boardAfterStaleSession = await store.leaderboard(10, "p:nova");
+
+  // --- Removal is remembered: nothing puts the player back on the board
   await store.removePlayer("p:secret");
   seen.totalsAfterRemoval = await store.totalsFor(["p:secret"]);
   seen.lateWrite = await store.addScoreBatch(privateKid, batch("late", [true]), now);
   seen.boardAfterRemoval = await store.leaderboard(10, "p:secret");
+  const secretAgain = session({ name: "Secret Kid", playerKey: "p:secret", profileId: "secret", listed: true, emoji: "🐼", accountId: "acct-1" });
+  await store.createSession(secretAgain); // a new session for the removed profile
+  await store.addScoreBatch(secretAgain, batch("again", [true]), now);
+  await store.syncPlayer("p:secret", "Secret Kid", true, "🐼"); // the parent switches the leaderboard on
+  seen.removedStaysOff = await store.leaderboard(10, "p:secret");
+  seen.removedTotalStillCounts = await store.totalsFor(["p:secret"]);
   await store.removePlayer("ana maría"); // an operator removes a guest's row
   const back = session({ name: "Ana María", playerKey: "ana maría", listed: true });
   await store.createSession(back);
@@ -159,7 +201,22 @@ describe("the leaderboard store", () => {
     expect(seen.afterWaiting).toMatchObject({ pointsEarned: 10, sessionPoints: 10 });
     expect(seen.tooFastAgain).toBe("limited");
     expect(seen.hugeBatch).toBe("limited");
+    expect(seen.newSessionSameLimit).toBe("limited");
+    expect(seen.newSessionAfterWaiting).toMatchObject({ pointsEarned: 0 });
     expect(seen.expired).toBe("expired");
+    expect(seen.kidDevices).toEqual([...new Array(PROFILE_PACE_SCALE).fill("ok"), "limited"]);
+
+    expect(seen.oddNames).toEqual({
+      "42": { name: "42", playerKey: "42", total: 20 },
+      "42.0": { name: "42.0", playerKey: "42.0", total: 10 },
+      "1e3": { name: "1e3", playerKey: "1e3", total: 10 },
+      "0": { name: "0", playerKey: "0", total: 10 },
+      true: { name: "true", playerKey: "true", total: 10 },
+      null: { name: "null", playerKey: "null", total: 10 },
+      "007": { name: "007", playerKey: "007", total: 10 },
+    });
+    expect(seen.oddNamesOnBoard).toEqual(["007=10", "0=10", "1e3=10", "42.0=10", "42=20", "null=10", "true=10"]);
+    expect(seen.oddYou).toMatchObject({ name: "42.0", points: 10 });
 
     expect(seen.kidScore).toEqual({ pointsEarned: 35, sessionPoints: 35, totalPoints: 35, replay: false });
     expect(seen.kidTotals).toEqual({ "p:nova": 35, "p:secret": 10, "p:nobody": 0 });
@@ -177,10 +234,17 @@ describe("the leaderboard store", () => {
     expect(JSON.stringify(seen.boardAfterHiding)).not.toContain("Nova");
     expect(seen.limitOne).toEqual([{ rank: 1, name: "Ana María", points: 65 }]);
 
+    expect(seen.staleSessionScore).toMatchObject({ pointsEarned: 10, totalPoints: 45 });
+    expect(seen.boardAfterStaleSession.you).toBeNull();
+    expect(JSON.stringify(seen.boardAfterStaleSession)).not.toContain("Nova");
+
     expect(seen.totalsAfterRemoval).toEqual({ "p:secret": 0 });
     expect(seen.lateWrite).toMatchObject({ pointsEarned: 10 });
     expect(seen.boardAfterRemoval.you).toBeNull();
     expect(JSON.stringify(seen.boardAfterRemoval)).not.toContain("Secret Kid");
+    expect(seen.removedStaysOff.you).toBeNull();
+    expect(JSON.stringify(seen.removedStaysOff)).not.toContain("Secret Kid");
+    expect(seen.removedTotalStillCounts).toEqual({ "p:secret": 20 }); // points still count privately
     expect(seen.removedGuestPlaysAgain).toEqual({ pointsEarned: 20, sessionPoints: 20, totalPoints: 20, replay: false });
     expect(seen.boardWithoutRemovedGuest).toEqual({ top: [{ rank: 1, name: "Speedy", points: 10 }], you: null });
 
@@ -193,7 +257,7 @@ describe("the leaderboard store", () => {
     expect(seen.pruned).toEqual({ removed: 71 }); // the 70 ten-point guests and Speedy
     expect(seen.afterPrune).toEqual({ rows: 550, guestPoints: [20], kids: [] });
     expect(seen.prunedAgain).toEqual({ removed: 0 });
-    expect(seen.kidTotalsAfterPrune).toEqual({ "p:nova": 35 });
+    expect(seen.kidTotalsAfterPrune).toEqual({ "p:nova": 45 });
   });
 
   it.skipIf(!redisUrl)("behaves exactly the same on Redis", async () => {
@@ -206,9 +270,11 @@ describe("the leaderboard store", () => {
     // What only Redis can show: keys expire on their own, and nothing unexpected is left behind.
     expect(await redis.pttl("session:scenario-2")).toBeGreaterThan(0);
     expect(await redis.pttl("guest-owner:zoe")).toBeGreaterThan(0);
-    expect(await redis.sismember("leaderboard-hidden", "p:secret")).toBe(1); // the removal marker
+    expect(await redis.sismember("leaderboard-removed", "p:secret")).toBe(1); // the removal marker
+    expect(await redis.sismember("leaderboard-hidden", "p:secret")).toBe(0);
+    expect(await redis.pttl("pace:speedy")).toBeGreaterThan(0); // the pace record forgets itself
     expect(await redis.hexists("player-names", "quiet")).toBe(0);
-    expect(await redis.hlen("player-names")).toBe(550 + 2); // the guests kept, plus the two kid profiles written to
+    expect(await redis.hlen("player-names")).toBe(550 + 3); // the guests kept, plus the three kid profiles written to
     await redis.flushall();
   }, 120_000);
 });

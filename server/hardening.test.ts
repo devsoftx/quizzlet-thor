@@ -254,5 +254,12 @@ describe("migration splitter (scripts/sql-split.mjs)", () => {
     expect(statements).toHaveLength(2);
     expect(statements[0]).toContain("perform 1; -- inside\n  return new;");
     expect(splitSql("do $body$ begin perform 'a;b'; end $body$; select $1::text")).toEqual(["do $body$ begin perform 'a;b'; end $body$", "select $1::text"]);
+    expect(splitSql("do $fn1$ begin perform 1; end $fn1$; select 2")).toEqual(["do $fn1$ begin perform 1; end $fn1$", "select 2"]);
+  });
+
+  it("follows backslash escapes in E'…' strings only", () => {
+    expect(splitSql("select E'it\\'s; here'; select 2")).toEqual(["select E'it\\'s; here'", "select 2"]);
+    expect(splitSql("select 'ends with a backslash\\'; select 2")).toEqual(["select 'ends with a backslash\\'", "select 2"]);
+    expect(splitSql("select name' ; ' from t")).toEqual(["select name' ; ' from t"]); // not an E-string: `name` ends in e
   });
 });

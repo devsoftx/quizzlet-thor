@@ -185,6 +185,28 @@ describe("kid sessions and the leaderboard", () => {
     ]);
   });
 
+  it("keeps a profile an operator removed off the leaderboard, whatever happens next", async () => {
+    const { deps } = setup();
+    const kid = await newProfile(deps, "ana", { nickname: "Bad Name", showOnLeaderboard: true });
+    const start = () => startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps);
+    const board = async () => (await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top;
+    await score(deps, await playing(await start()), { answers: [true] });
+    expect(await board()).toHaveLength(1);
+
+    await deps.store!.removePlayer(`p:${kid.id}`); // what scripts/leaderboard-remove.mjs does
+    expect(await board()).toEqual([]);
+
+    // A new session, new points, the parent renaming it and switching the leaderboard off and on again:
+    await score(deps, await playing(await start()), { answers: [true] });
+    for (const body of [{ nickname: "Better Name" }, { showOnLeaderboard: false }, { showOnLeaderboard: true }]) {
+      await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body }), deps);
+    }
+    await score(deps, await playing(await start()), { answers: [true] });
+    expect(await board()).toEqual([]);
+    // The kid's own points still count, privately.
+    expect((await (await getMe(req("/api/me", { user: "ana" }), deps)).json()).points[kid.id]).toBe(20);
+  });
+
   it("keeps guest names and profile keys apart", () => {
     expect(cleanName("p:abc")).toBeNull();
   });

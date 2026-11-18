@@ -11,18 +11,13 @@ import { createHash } from "node:crypto";
 export interface UploadRule {
   contentType: string;
   maxBytes: number;
+  /** The upload URL must stop working by then (ms): when the path's reservation runs out. */
+  validUntil?: number;
 }
 
 export interface StoredBytes {
   bytes: Uint8Array;
   contentType: string;
-}
-
-/** One page of what is stored under a folder. */
-export interface StoredPage {
-  blobs: Array<{ pathname: string; uploadedAt: number }>;
-  /** Pass it back to get the next page; absent on the last one. */
-  cursor?: string;
 }
 
 export interface FileStore {
@@ -33,19 +28,18 @@ export interface FileStore {
    * what may go at the requested path, or null to refuse it.
    */
   presignUpload(request: Request, body: unknown, rule: (pathname: string) => UploadRule | null): Promise<unknown>;
-  /** Local mode only: keep uploaded bytes in memory (`uploadedAt` in ms, for the cleanup's age check). */
-  putLocal(pathname: string, data: StoredBytes, uploadedAt?: number): Promise<void>;
+  /** Local mode only: keep uploaded bytes in memory. */
+  putLocal(pathname: string, data: StoredBytes): Promise<void>;
   /** Local mode only. */
   readLocal(pathname: string): Promise<StoredBytes | null>;
   /** Size and type of what was actually uploaded, or null if nothing is there. */
   head(pathname: string): Promise<{ size: number; contentType: string } | null>;
   /** Blob mode: a link that reads the file for a few minutes. */
   readUrl(pathname: string): Promise<string>;
+  /** Deleting a path that holds nothing is not an error. */
   delete(pathnames: string[]): Promise<void>;
   /** Removes everything under a folder (used when an account is deleted). */
   deletePrefix(prefix: string): Promise<void>;
-  /** Everything under a folder, a page at a time (used by the daily cleanup). */
-  list(prefix: string, cursor?: string): Promise<StoredPage>;
 }
 
 export class UploadRefused extends Error {}
@@ -90,13 +84,13 @@ export function parseUploadPath(userId: string, pathname: string): { fileId: str
 
 export class MemoryFileStore implements FileStore {
   readonly mode = "local" as const;
-  private files = new Map<string, StoredBytes & { uploadedAt: number }>();
+  private files = new Map<string, StoredBytes>();
 
   async presignUpload(): Promise<unknown> {
     throw new UploadRefused("Uploads go through /api/files in local mode.");
   }
-  async putLocal(pathname: string, data: StoredBytes, uploadedAt = Date.now()) {
-    this.files.set(pathname, { bytes: new Uint8Array(data.bytes), contentType: data.contentType, uploadedAt });
+  async putLocal(pathname: string, data: StoredBytes) {
+    this.files.set(pathname, { bytes: new Uint8Array(data.bytes), contentType: data.contentType });
   }
   async readLocal(pathname: string) {
     return this.files.get(pathname) ?? null;
@@ -113,12 +107,6 @@ export class MemoryFileStore implements FileStore {
   }
   async deletePrefix(prefix: string) {
     for (const p of [...this.files.keys()]) if (p.startsWith(prefix)) this.files.delete(p);
-  }
-  async list(prefix: string): Promise<StoredPage> {
-    const blobs = [...this.files.entries()]
-      .filter(([pathname]) => pathname.startsWith(prefix))
-      .map(([pathname, f]) => ({ pathname, uploadedAt: f.uploadedAt }));
-    return { blobs };
   }
   /** For tests. */
   paths(): string[] {
@@ -146,7 +134,8 @@ export class BlobFileStore implements FileStore {
       getSignedToken: async (pathname, _clientPayload, multipart) => {
         const allowed = rule(pathname);
         if (!allowed || multipart) throw new UploadRefused("You can't upload to that location.");
-        const validUntil = Date.now() + UPLOAD_WINDOW_MS;
+        // Never longer than the path's reservation: once that is over, nothing new can be put there.
+        const validUntil = Math.min(Date.now() + UPLOAD_WINDOW_MS, allowed.validUntil ?? Number.POSITIVE_INFINITY);
         const limits = { allowedContentTypes: [allowed.contentType], maximumSizeInBytes: allowed.maxBytes };
         const token = await issueSignedToken({ pathname, operations: ["put"], validUntil, ...limits });
         return { token, urlOptions: { ...limits, validUntil, allowOverwrite: false, addRandomSuffix: false } };
@@ -179,7 +168,18 @@ export class BlobFileStore implements FileStore {
   }
 
   async delete(pathnames: string[]) {
-    if (pathnames.length) await del(pathnames);
+    if (pathnames.length === 0) return;
+    try {
+      await del(pathnames);
+    } catch (err) {
+      if (!(err instanceof BlobNotFoundError)) throw err;
+      // One of them was already gone: delete the rest one at a time.
+      for (const pathname of pathnames) {
+        await del(pathname).catch((e: unknown) => {
+          if (!(e instanceof BlobNotFoundError)) throw e;
+        });
+      }
+    }
   }
 
   async deletePrefix(prefix: string) {
@@ -189,14 +189,6 @@ export class BlobFileStore implements FileStore {
       if (page.blobs.length) await del(page.blobs.map((b) => b.pathname));
       cursor = page.hasMore ? page.cursor : undefined;
     } while (cursor);
-  }
-
-  async list(prefix: string, cursor?: string): Promise<StoredPage> {
-    const page = await list({ prefix, cursor, limit: 1000 });
-    return {
-      blobs: page.blobs.map((b) => ({ pathname: b.pathname, uploadedAt: b.uploadedAt.getTime() })),
-      ...(page.hasMore && page.cursor ? { cursor: page.cursor } : {}),
-    };
   }
 }
 

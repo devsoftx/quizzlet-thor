@@ -162,9 +162,9 @@ describe("phase 2 service-backed foundation smoke", () => {
     await exercise({ accounts, store, auth: new DevAuthenticator(), now: Date.now, newId: randomUUID }, async (accountIds, playerIds, sessionIds, batchIds) => {
       const receipts = sessionIds.flatMap((id) => batchIds.map((batch) => `score-receipt:${id}:${batch}`));
       const operations = [
-        // removePlayer leaves the key in leaderboard-hidden as a marker; take the test keys out again
+        // removePlayer leaves the key in leaderboard-removed as a marker; take the test keys out again
         // afterwards, so the dedicated test store doesn't fill up.
-        ...playerIds.map((id) => store.removePlayer(id).then(() => redis.srem("leaderboard-hidden", id))),
+        ...playerIds.map((id) => store.removePlayer(id).then(() => redis.srem("leaderboard-removed", id))),
         ...sessionIds.map((id) => store.deleteSession(id)),
         ...(receipts.length ? [redis.del(...receipts)] : []),
         ...accountIds.map((id) => accounts.forAccount(id).remove()),

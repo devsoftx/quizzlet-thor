@@ -19,8 +19,9 @@ the app may not know whether the latest batch was saved until it can retry;
 leaving or closing the tab can lose queued work. A current round's question
 position and answer history are not restored after a reload. The server keeps
 each session's streak itself and accepts answers no faster than a person can
-give them (a burst of 20, then one every 2 seconds), so a streak bonus can't be
-claimed and points can't be poured in by a script.
+give them (a burst of 20, then one every 2 seconds, per session and per
+player), so a streak bonus can't be claimed and points can't be poured in by a
+script.
 
 ## Run it
 
@@ -217,8 +218,8 @@ A signed-in parent can:
 
 4. **Daily cleanup:** set `CRON_SECRET` to a long random value in the project's
    environment variables. Vercel Cron calls `/api/cron` once a day with it; the
-   job trims old guest leaderboard entries and deletes uploads that were never
-   saved. Without the secret the job refuses to run.
+   job trims old guest leaderboard entries and deletes uploads that were started
+   and never saved. Without the secret the job refuses to run.
 5. **Leaderboard switches (optional):** connect a Vercel Global Config store
    (`GLOBAL_CONFIG`) with a `leaderboard` item to hide the leaderboard or block
    guest nicknames without a deploy. `docs/security/runbook.md` shows the item.

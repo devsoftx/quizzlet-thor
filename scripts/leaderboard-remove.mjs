@@ -10,10 +10,12 @@
 //   vercel env run -e production -- node scripts/leaderboard-remove.mjs "<nickname>"
 //
 // It does what RedisStore.removePlayer does (server/store.ts): the entry, the
-// name and the total go, and the key stays in `leaderboard-hidden`, so the
-// same nickname earns no leaderboard points if it is used again. To refuse
-// the nickname outright, add it to `blockedNames` in Global Config as well
-// (see docs/security/runbook.md).
+// name and the total go, and the key is added to `leaderboard-removed`. A
+// removed player is never listed again: not when the nickname is used again,
+// not when a kid profile starts a new session, not when its parent switches
+// the leaderboard on. To undo that: SREM leaderboard-removed "<player key>".
+// To refuse a guest nickname outright, add it to `blockedNames` in Global
+// Config as well (see docs/security/runbook.md).
 import { Redis } from "@upstash/redis";
 
 const args = process.argv.slice(2);
@@ -35,17 +37,17 @@ const isProfile = given.startsWith("p:");
 const playerKey = isProfile ? given : given.normalize("NFC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en");
 const redis = new Redis({ url, token });
 
-const [points, name, total, hidden] = await Promise.all([
+const [points, name, total, removed] = await Promise.all([
   redis.zscore("leaderboard", playerKey),
   redis.hget("player-names", playerKey),
   redis.hget("player-totals", playerKey),
-  redis.sismember("leaderboard-hidden", playerKey),
+  redis.sismember("leaderboard-removed", playerKey),
 ]);
 console.log(`Player key:       ${playerKey}`);
 console.log(`Shown as:         ${name === null ? "(no name stored)" : String(name)}`);
 console.log(`On the board:     ${points === null ? "no" : `yes, ${points} points`}`);
 if (isProfile) console.log(`Private total:    ${total === null ? "none" : `${total} points`}`);
-console.log(`Marked as hidden: ${hidden ? "yes" : "no"}`);
+console.log(`Removed before:   ${removed ? "yes" : "no"}`);
 
 if (points === null && name === null && total === null) {
   console.log("\nNothing is stored for this player. Check the spelling; guests are stored by their nickname in lowercase.");
@@ -58,12 +60,14 @@ if (!confirmed) {
 
 await redis
   .multi()
-  .sadd("leaderboard-hidden", playerKey)
+  .sadd("leaderboard-removed", playerKey)
+  .srem("leaderboard-hidden", playerKey)
   .zrem("leaderboard", playerKey)
   .hdel("player-names", playerKey)
   .hdel("player-emojis", playerKey)
   .hdel("player-totals", playerKey)
   .del(`guest-owner:${playerKey}`)
+  .del(`pace:${playerKey}`)
   .exec();
 
 // The same shape as the server's security log; a guest's key is their nickname, so it isn't written here.
@@ -77,4 +81,4 @@ console.log(
     event: "admin.leaderboard.remove",
   }),
 );
-console.log("Removed. The key stays hidden from the leaderboard.");
+console.log("Removed. This player will not be listed on the leaderboard again.");

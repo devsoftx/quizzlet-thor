@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { getMe } from "./account-handlers.js";
 import { MemoryAccounts } from "./accounts.js";
 import { DevAuthenticator } from "./auth.js";
-import { GUESTS_KEPT, ORPHAN_AGE_MS, runCleanup } from "./cron-handlers.js";
+import { ABANDONED_UPLOAD_AGE_MS, GUESTS_KEPT, runCleanup } from "./cron-handlers.js";
 import type { Deps } from "./deps.js";
 import { MemoryFileStore } from "./files.js";
 import { postFiles, putFile, UPLOAD_RESERVATION_MS } from "./library-handlers.js";
@@ -122,41 +122,85 @@ describe("guest leaderboard pruning", () => {
 });
 
 describe("unconfirmed upload cleanup", () => {
-  it("deletes an old upload that was never confirmed, and nothing else", async () => {
+  it("deletes an upload that was started and never saved, a day after its time ran out, and nothing else", async () => {
     const { deps, later } = setup();
     await getMe(new Request(`${BASE}/api/me`, { headers: { [DevAuthenticator.HEADER]: "ana" } }), deps);
-    const confirmed = await upload(deps, "ana", "kept.pdf", true);
+    const saved = await upload(deps, "ana", "kept.pdf", true);
     const abandoned = await upload(deps, "ana", "abandoned.pdf", false);
     const files = deps.files as MemoryFileStore;
+    // Something in the store that the database has never heard of (say, put there by hand).
+    const unrecorded = "users/dev_ana/uploads/by-hand/notes.pdf";
+    await files.putLocal(unrecorded, { bytes: pdf(), contentType: "application/pdf" });
 
-    // After 15 minutes the reservation is over, but the bytes are less than a day old: left alone.
+    // The reservation is over, but not for a day yet: left alone.
     later(UPLOAD_RESERVATION_MS + 1);
-    expect(await (await cron(deps)).json()).toMatchObject({ uploads: { scanned: 2, deleted: 0 } });
-    expect(files.paths()).toEqual([abandoned, confirmed].sort());
+    expect(await (await cron(deps)).json()).toMatchObject({ uploads: { deleted: 0 } });
+    expect(files.paths()).toEqual([abandoned, saved, unrecorded].sort());
 
-    later(ORPHAN_AGE_MS);
-    const recent = await upload(deps, "ana", "in-progress.pdf", false); // started just now: its reservation is live
+    later(ABANDONED_UPLOAD_AGE_MS);
+    const inProgress = await upload(deps, "ben", "in-progress.pdf", false); // started just now
     const res = await cron(deps);
-    expect(await res.json()).toMatchObject({ ok: true, uploads: { scanned: 3, deleted: 1 } });
-    expect(files.paths()).toEqual([confirmed, recent].sort());
-    expect(log.named("file.orphan.deleted").at(-1)).toMatchObject({ scanned: 3, deleted: 1 });
+    expect(await res.json()).toMatchObject({ ok: true, uploads: { deleted: 1 } });
+    // Only the path with an expired reservation on record is gone. A missing record deletes nothing.
+    expect(files.paths()).toEqual([inProgress, saved, unrecorded].sort());
+    expect(log.named("file.orphan.deleted").at(-1)).toMatchObject({ deleted: 1 });
+
+    // The record is dropped with the bytes: a second run has nothing to do.
+    expect(await (await cron(deps)).json()).toMatchObject({ uploads: { deleted: 0 } });
+    expect(await deps.accounts!.expiredReservations(new Date(deps.now()).toISOString(), 10)).toEqual([]);
   });
 
-  it("deletes nothing when the database recognises none of the stored files (wrong or empty database)", async () => {
+  it("deletes nothing when pointed at a database that doesn't know the stored files (wrong or empty database)", async () => {
     const { deps, later } = setup();
-    for (let i = 0; i < 12; i++) await upload(deps, `parent-${i}`, "notes.pdf", true);
-    later(ORPHAN_AGE_MS + 1);
+    for (let i = 0; i < 12; i++) await upload(deps, `parent-${i}`, "notes.pdf", i % 2 === 0);
+    later(UPLOAD_RESERVATION_MS + ABANDONED_UPLOAD_AGE_MS + 1);
     const stored = (deps.files as MemoryFileStore).paths();
+    expect(stored).toHaveLength(12);
 
-    // The same file store, looked at through a database that has never heard of these files.
+    // The same file store, looked at through a database that has never heard of these uploads.
     const res = await cron({ ...deps, accounts: new MemoryAccounts() });
-    expect(await res.json()).toMatchObject({ uploads: { scanned: 12, deleted: 0, aborted: true } });
+    expect(await res.json()).toMatchObject({ ok: true, uploads: { deleted: 0 } });
     expect((deps.files as MemoryFileStore).paths()).toEqual(stored);
-    expect(log.named("file.orphan.aborted")).toHaveLength(1);
 
-    // With the right database, all twelve are known and stay.
-    expect(await (await cron(deps)).json()).toMatchObject({ uploads: { scanned: 12, deleted: 0 } });
-    expect((deps.files as MemoryFileStore).paths()).toEqual(stored);
+    // With the right database: the six that were never saved go, the six saved files stay.
+    expect(await (await cron(deps)).json()).toMatchObject({ uploads: { deleted: 6 } });
+    expect((deps.files as MemoryFileStore).paths()).toHaveLength(6);
+  });
+
+  it("works through more abandoned uploads than fit in one page", async () => {
+    const { deps, later } = setup();
+    const accounts = deps.accounts!;
+    const files = deps.files as MemoryFileStore;
+    const t0 = new Date(deps.now()).toISOString();
+    const t1 = new Date(deps.now() + UPLOAD_RESERVATION_MS).toISOString();
+    // 60 accounts with 20 abandoned uploads each (the most one account can hold at once): 1,200 in all.
+    for (let a = 0; a < 60; a++) {
+      const scope = accounts.forAccount(`bulk-${a}`);
+      await scope.ensure({ displayName: "B" });
+      for (let i = 0; i < 20; i++) {
+        const pathname = `users/bulk-${a}/uploads/u${i}/a.pdf`;
+        await scope.reserveUpload(pathname, 10, t0, t1);
+        await files.putLocal(pathname, { bytes: pdf(10), contentType: "application/pdf" });
+      }
+    }
+    later(UPLOAD_RESERVATION_MS + ABANDONED_UPLOAD_AGE_MS + 1);
+    expect(await (await cron(deps)).json()).toMatchObject({ uploads: { deleted: 1200 } });
+    expect(files.paths()).toEqual([]);
+  });
+
+  it("keeps the records when the bytes can't be deleted, and tries again next time", async () => {
+    const { deps, later } = setup();
+    const abandoned = await upload(deps, "ana", "abandoned.pdf", false);
+    later(UPLOAD_RESERVATION_MS + ABANDONED_UPLOAD_AGE_MS + 1);
+    const files = deps.files as MemoryFileStore;
+    const broken = { ...deps, files: Object.assign(Object.create(files), { delete: async () => { throw new Error("storage is down"); } }) };
+    const failed = await cron(broken);
+    expect(failed.status).toBe(500);
+    expect(await failed.json()).toMatchObject({ ok: false, uploads: { failed: true } });
+    expect(files.paths()).toEqual([abandoned]);
+
+    expect(await (await cron(deps)).json()).toMatchObject({ ok: true, uploads: { deleted: 1 } });
+    expect(files.paths()).toEqual([]);
   });
 
   it("is skipped when there is no file storage or no database", async () => {

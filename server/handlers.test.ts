@@ -315,6 +315,37 @@ describe("pace limit", () => {
     expect(allowed.pointsEarned).toBe(scoreRound(new Array(PACE_BURST).fill(true)).points);
   });
 
+  it("starting a new session doesn't start a new allowance", async () => {
+    const { deps, advance } = setup();
+    const first = await play(deps, "Cycler");
+    expect((await score(deps, first, { answers: new Array(PACE_BURST).fill(true) })).status).toBe(200);
+    const total = await sessionPoints(deps, first);
+
+    // Session after session from the same browser, each trying its own "first 20 answers".
+    let cookie = first.cookie;
+    for (let i = 0; i < 5; i++) {
+      const next = await play(deps, "Cycler", cookie);
+      cookie = next.cookie;
+      expect((await score(deps, next, { answers: new Array(PACE_BURST).fill(true) })).status).toBe(429);
+      expect((await score(deps, next, { answers: [true] })).status).toBe(429);
+    }
+    expect((await board(deps)).top).toEqual([{ rank: 1, name: "Cycler", points: total }]);
+
+    // Time still earns answers at the usual pace, in whichever session is current.
+    advance(3 * PACE_MS_PER_ANSWER);
+    const later = await play(deps, "Cycler", cookie);
+    expect((await score(deps, later, { answers: [true, true, true] })).status).toBe(200);
+    expect((await score(deps, later, { answers: [true] })).status).toBe(429);
+  });
+
+  it("gives each player their own allowance", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    const ben = await play(deps, "Ben");
+    expect((await score(deps, ana, { answers: new Array(PACE_BURST).fill(true) })).status).toBe(200);
+    expect((await score(deps, ben, { answers: new Array(PACE_BURST).fill(true) })).status).toBe(200);
+  });
+
   it("always answers a request for the totals", async () => {
     const { deps } = setup();
     const ana = await play(deps, "Ana");
@@ -351,6 +382,26 @@ describe("guest nicknames belong to one browser", () => {
     expect((await startSession(req("/api/session", { method: "POST", body: { name: "Ana" } }), deps)).status).toBe(409);
     advance(2 * 24 * 60 * 60 * 1000);
     expect((await startSession(req("/api/session", { method: "POST", body: { name: "Ana" } }), deps)).status).toBe(201);
+  });
+
+  it("keeps nicknames that look like numbers apart (42 is not 42.0)", async () => {
+    const { deps } = setup();
+    const a = await play(deps, "42");
+    const b = await play(deps, "42.0"); // another browser, another nickname: allowed, and a separate row
+    await score(deps, a, { answers: [true, true] });
+    await score(deps, b, { answers: [true] });
+    expect((await board(deps, b.cookie))).toEqual({
+      top: [
+        { rank: 1, name: "42", points: 20 },
+        { rank: 2, name: "42.0", points: 10 },
+      ],
+      you: { rank: 2, name: "42.0", points: 10 },
+    });
+    // Odd but valid nicknames keep working as sessions.
+    for (const name of ["0", "true", "null"]) {
+      const who = await play(deps, name);
+      expect(await sessionPoints(deps, who)).toBe(0);
+    }
   });
 
   it("two browsers can't add to the same leaderboard row", async () => {

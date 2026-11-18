@@ -27,7 +27,12 @@ export interface StoredFile extends AccountFile {
 
 export type FileInput = Omit<StoredFile, "id" | "createdAt">;
 
-/** A path set aside for an upload that has started; it counts against the quota until it expires. */
+/**
+ * A path set aside for an upload that has started. It counts against the quota
+ * until it expires or the file is saved. After it expires it stays on record
+ * for a while as the proof that whatever was uploaded there was never saved:
+ * only such a record lets stored bytes be deleted.
+ */
 export interface UploadReservation {
   pathname: string;
   declaredBytes: number;
@@ -78,8 +83,12 @@ export interface AccountScope {
   /** Oldest first. */
   listFiles(): Promise<StoredFile[]>;
   getFile(id: string): Promise<StoredFile | null>;
-  /** Records an uploaded file and uses up its reservation. */
-  createFile(id: string, input: FileInput): Promise<StoredFile>;
+  /**
+   * Records an uploaded file by using up its reservation, in one step. Null
+   * when the path has no reservation that is still live at `now` (it ran out,
+   * or another request already saved the file).
+   */
+  saveUpload(id: string, input: FileInput, now: string): Promise<StoredFile | null>;
   /** Returns the deleted record, so its stored bytes can be removed too. */
   deleteFile(id: string): Promise<StoredFile | null>;
 
@@ -91,8 +100,12 @@ export interface AccountScope {
   reserveUpload(pathname: string, declaredBytes: number, now: string, expiresAt: string): Promise<void>;
   /** This account's reservations that haven't expired at `now`. */
   listReservations(now: string): Promise<UploadReservation[]>;
-  /** Paths of this account's reservations that ran out unconfirmed: whatever was uploaded there can go. */
-  expiredUploads(now: string): Promise<string[]>;
+  /**
+   * Paths of this account's reservations that ran out by `before` without the
+   * file being saved (most recent first, at most `limit`): whatever was
+   * uploaded there can be deleted.
+   */
+  expiredUploads(before: string, limit: number): Promise<string[]>;
 
   /** Replaces the profile's invitations with a new one (only its fingerprint is stored). */
   createInvite(profileId: string, tokenHash: string, createdAt: string, expiresAt: string): Promise<KidInvite>;
@@ -139,10 +152,10 @@ export interface AccountsDb {
 
   // Storage housekeeping (the daily cleanup), across all accounts.
 
-  /** Which of these storage paths have a file record or a live reservation at `now`. */
-  knownUploads(pathnames: string[], now: string): Promise<Set<string>>;
-  /** Drops reservations that expired by `now`; returns how many. */
-  sweepReservations(now: string): Promise<number>;
+  /** Paths whose reservation ran out by `before` without the file being saved (oldest first, at most `limit`). */
+  expiredReservations(before: string, limit: number): Promise<string[]>;
+  /** Drops those reservation records, once what was uploaded there has been deleted; returns how many. */
+  forgetReservations(pathnames: string[], before: string): Promise<number>;
 }
 
 const nowIso = () => new Date().toISOString();
@@ -215,23 +228,33 @@ export class MemoryAccounts implements AccountsDb {
     return { id: dev.id, accountId: dev.accountId, profileId: dev.profileId };
   }
 
-  async knownUploads(pathnames: string[], now: string) {
-    const recorded = new Set([...this.state.files.values()].flatMap((m) => [...m.values()].map((f) => f.pathname)));
-    return new Set(pathnames.filter((p) => recorded.has(p) || (this.state.reservations.get(p)?.expiresAt ?? "") > now));
+  /** Does any account have a file saved at this path? (Such a path is never treated as an abandoned upload.) */
+  private isSaved(pathname: string): boolean {
+    return [...this.state.files.values()].some((m) => [...m.values()].some((f) => f.pathname === pathname));
   }
 
-  async sweepReservations(now: string) {
-    let swept = 0;
-    for (const [pathname, r] of this.state.reservations) {
-      if (r.expiresAt <= now && this.state.reservations.delete(pathname)) swept++;
+  async expiredReservations(before: string, limit: number) {
+    return [...this.state.reservations.values()]
+      .filter((r) => r.expiresAt <= before && !this.isSaved(r.pathname))
+      .sort((a, b) => a.expiresAt.localeCompare(b.expiresAt) || a.pathname.localeCompare(b.pathname))
+      .slice(0, limit)
+      .map((r) => r.pathname);
+  }
+
+  async forgetReservations(pathnames: string[], before: string) {
+    let forgotten = 0;
+    for (const pathname of pathnames) {
+      const r = this.state.reservations.get(pathname);
+      if (r && r.expiresAt <= before && this.state.reservations.delete(pathname)) forgotten++;
     }
-    return swept;
+    return forgotten;
   }
 
   forAccount(accountId: string): AccountScope {
     const state = this.state;
     const { accounts, profiles } = state;
     const dropLinks = (match: (l: LinkTarget) => boolean) => this.dropLinks(match);
+    const isSaved = (pathname: string) => this.isSaved(pathname);
     const mine = (l: LinkTarget) => l.accountId === accountId;
     const mapFor = <T>(all: Map<string, Map<string, T>>) => {
       if (!all.has(accountId)) all.set(accountId, new Map());
@@ -374,13 +397,15 @@ export class MemoryAccounts implements AccountsDb {
         const f = files().get(id);
         return f ? copy(f) : null;
       },
-      async createFile(id, input) {
-        const taken = [...state.files.values()].some((m) => [...m.values()].some((f) => f.pathname === input.pathname));
-        if (taken) throw new Error("That file is already saved.");
+      async saveUpload(id, input, now) {
+        const reserved = state.reservations.get(input.pathname);
+        if (!reserved || reserved.accountId !== accountId || reserved.expiresAt <= now) return null;
         if (files().size >= MAX_FILES) throw new LimitReached("files");
+        if ([...state.files.values()].some((m) => m.has(id))) throw new Error("That file id is already used.");
+        if (isSaved(input.pathname)) throw new Error("That file is already saved.");
         const f: StoredFile = { id, ...input, createdAt: nowIso() };
         files().set(id, f);
-        if (state.reservations.get(input.pathname)?.accountId === accountId) state.reservations.delete(input.pathname);
+        state.reservations.delete(input.pathname);
         return copy(f);
       },
       async deleteFile(id) {
@@ -391,11 +416,9 @@ export class MemoryAccounts implements AccountsDb {
       },
 
       async reserveUpload(pathname, declaredBytes, now, expiresAt) {
-        for (const [path, r] of state.reservations) {
-          if (r.accountId === accountId && r.expiresAt <= now) state.reservations.delete(path);
-        }
         if (state.reservations.has(pathname)) throw new Error("That upload has already started.");
-        const live = [...state.reservations.values()].filter((r) => r.accountId === accountId);
+        if (isSaved(pathname)) throw new Error("A file is already saved at this path.");
+        const live = [...state.reservations.values()].filter((r) => r.accountId === accountId && r.expiresAt > now);
         const saved = [...files().values()];
         if (saved.length + live.length >= MAX_FILES) throw new LimitReached("files");
         const bytes = saved.reduce((sum, f) => sum + f.size, 0) + live.reduce((sum, r) => sum + r.declaredBytes, 0);
@@ -408,11 +431,12 @@ export class MemoryAccounts implements AccountsDb {
           .map(({ pathname, declaredBytes, expiresAt }) => ({ pathname, declaredBytes, expiresAt }))
           .sort((a, b) => a.pathname.localeCompare(b.pathname));
       },
-      async expiredUploads(now) {
+      async expiredUploads(before, limit) {
         return [...state.reservations.values()]
-          .filter((r) => r.accountId === accountId && r.expiresAt <= now)
-          .map((r) => r.pathname)
-          .sort();
+          .filter((r) => r.accountId === accountId && r.expiresAt <= before && !isSaved(r.pathname))
+          .sort((a, b) => b.expiresAt.localeCompare(a.expiresAt) || a.pathname.localeCompare(b.pathname))
+          .slice(0, limit)
+          .map((r) => r.pathname);
       },
     };
   }
@@ -530,19 +554,23 @@ export class PostgresAccounts implements AccountsDb {
     return r ? { id: String(r.id), accountId: String(r.account_id), profileId: String(r.profile_id) } : null;
   }
 
-  async knownUploads(pathnames: string[], now: string) {
-    if (pathnames.length === 0) return new Set<string>();
-    const paths = JSON.stringify(pathnames);
+  async expiredReservations(before: string, limit: number) {
     const rows = await this.sql`
-      select pathname from files where pathname in (select jsonb_array_elements_text(${paths}::jsonb))
-      union
-      select pathname from file_reservations
-      where pathname in (select jsonb_array_elements_text(${paths}::jsonb)) and expires_at > ${now}::timestamptz`;
-    return new Set(rows.map((r) => String(r.pathname)));
+      select r.pathname from file_reservations r
+      where r.expires_at <= ${before}::timestamptz
+        and not exists (select 1 from files f where f.pathname = r.pathname)
+      order by r.expires_at, r.pathname
+      limit ${limit}`;
+    return rows.map((r) => String(r.pathname));
   }
 
-  async sweepReservations(now: string) {
-    const rows = await this.sql`delete from file_reservations where expires_at <= ${now}::timestamptz returning pathname`;
+  async forgetReservations(pathnames: string[], before: string) {
+    if (pathnames.length === 0) return 0;
+    const rows = await this.sql`
+      delete from file_reservations
+      where pathname in (select jsonb_array_elements_text(${JSON.stringify(pathnames)}::jsonb))
+        and expires_at <= ${before}::timestamptz
+      returning pathname`;
     return rows.length;
   }
 
@@ -677,14 +705,18 @@ export class PostgresAccounts implements AccountsDb {
         const rows = await sql`select * from files where account_id = ${accountId} and id = ${id}`;
         return rows[0] ? toFile(rows[0]) : null;
       },
-      async createFile(id, f) {
-        // One statement: the reservation is used up exactly when the file is recorded.
+      async saveUpload(id, f, now) {
+        // One statement: the file is recorded only by using up a reservation that is still live.
         const rows = await limited(sql`
-          with used as (delete from file_reservations where account_id = ${accountId} and pathname = ${f.pathname})
+          with used as (
+            delete from file_reservations
+            where account_id = ${accountId} and pathname = ${f.pathname} and expires_at > ${now}::timestamptz
+            returning pathname
+          )
           insert into files (id, account_id, pathname, name, content_type, size_bytes)
-          values (${id}, ${accountId}, ${f.pathname}, ${f.name}, ${f.contentType}, ${f.size})
+          select ${id}, ${accountId}, pathname, ${f.name}, ${f.contentType}, ${f.size} from used
           returning *`);
-        return toFile(rows[0]);
+        return rows[0] ? toFile(rows[0]) : null;
       },
       async deleteFile(id) {
         const rows = await sql`delete from files where account_id = ${accountId} and id = ${id} returning *`;
@@ -692,7 +724,7 @@ export class PostgresAccounts implements AccountsDb {
       },
 
       async reserveUpload(pathname, declaredBytes, now, expiresAt) {
-        // The insert trigger locks the account, drops its expired reservations and checks the quota.
+        // The insert trigger locks the account and checks the quota (saved files plus live reservations).
         await limited(sql`
           insert into file_reservations (pathname, account_id, declared_bytes, created_at, expires_at)
           values (${pathname}, ${accountId}, ${declaredBytes}, ${now}::timestamptz, ${expiresAt}::timestamptz)`);
@@ -704,11 +736,13 @@ export class PostgresAccounts implements AccountsDb {
           order by pathname`;
         return rows.map((r) => ({ pathname: String(r.pathname), declaredBytes: Number(r.declared_bytes), expiresAt: iso(r.expires_at) }));
       },
-      async expiredUploads(now) {
+      async expiredUploads(before, limit) {
         const rows = await sql`
-          select pathname from file_reservations
-          where account_id = ${accountId} and expires_at <= ${now}::timestamptz
-          order by pathname`;
+          select r.pathname from file_reservations r
+          where r.account_id = ${accountId} and r.expires_at <= ${before}::timestamptz
+            and not exists (select 1 from files f where f.pathname = r.pathname)
+          order by r.expires_at desc, r.pathname
+          limit ${limit}`;
         return rows.map((r) => String(r.pathname));
       },
 

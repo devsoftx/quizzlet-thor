@@ -64,9 +64,11 @@ then add the item:
   ```
 
   For a kid profile use its key, `p:<profileId>` (the id is in the log events). The entry, name and
-  total are removed and the key stays in `leaderboard-hidden`, so that nickname earns no leaderboard
-  points if it is used again. The script prints an `admin.leaderboard.remove` log line; keep it with
-  the incident notes.
+  total are removed and the key is added to `leaderboard-removed`. A removed player is **never listed
+  again**: not if the nickname is used again, not when a kid profile starts a new session, not when its
+  parent switches the leaderboard on. Points still count for the player privately. To undo a removal,
+  run `SREM leaderboard-removed "<player key>"` against the Redis database. The script prints an
+  `admin.leaderboard.remove` log line; keep it with the incident notes.
 
 With no Global Config connected, the board is on and nothing is blocked.
 
@@ -79,11 +81,16 @@ It does two things and logs both:
 
 - `leaderboard.pruned`: keeps the top 1,000 guest entries and removes the rest. Kid profiles are never
   removed.
-- `file.orphan.deleted`: deletes stored uploads that are more than 24 hours old and have neither a
-  file record nor a live reservation.
-- `file.orphan.aborted`: the database recognised **none** of the stored files, so nothing was deleted.
-  That almost always means the function is pointed at the wrong (or an empty) database. Check
-  `DATABASE_URL` before anything else.
+- `file.orphan.deleted`: deletes uploads that were started and never saved. Starting an upload leaves a
+  reservation record; if the file isn't saved, the record expires after 15 minutes and stays. A day
+  later the job deletes whatever was uploaded to that path and drops the record. (The same account's
+  next upload clears its own abandoned ones sooner.)
+
+The job only deletes a path the database has on record as "started, never saved". It never deletes a
+file because a record is *missing*, so pointing it at the wrong or an empty database deletes nothing.
+The other side of that: uploads left unconfirmed **before** this change have no such record and are not
+removed by the job. If storage use suggests there are some, compare the Blob store's `users/` folder
+with the `files` table by hand, and delete with care.
 
 To run it by hand:
 
@@ -119,7 +126,7 @@ or kid nickname. A session appears as `sessionHash`, which can't be turned back 
 | `deck.created`, `deck.deleted` | |
 | `request.cross_site`, `request.error` | A write from another site (403); an unexpected error (500, with `requestId`) |
 | `csp.violation` | A browser's Content-Security-Policy report |
-| `leaderboard.pruned`, `file.orphan.deleted`, `file.orphan.aborted`, `cron.denied`, `cron.error` | The daily cleanup |
+| `leaderboard.pruned`, `file.orphan.deleted`, `cron.denied`, `cron.error` | The daily cleanup |
 | `flags.error` | Global Config couldn't be read |
 
 Vercel keeps runtime logs only briefly. Set up a **log drain** to the team's log tool and record here
@@ -189,8 +196,11 @@ often shares one IP address, so the limits allow for about 30 kids at once.
 
 Record here when each rule was created and when it was switched to deny: _not set up yet._
 
-The application has its own limit that doesn't depend on these: a session can't save answers faster than
-one every 2 seconds after a burst of 20 (`score.limited`).
+The application has its own limit that doesn't depend on these: answers can't be saved faster than one
+every 2 seconds after a burst of 20 (`score.limited`). It applies to each session and, across sessions, to
+each player, so starting new sessions doesn't get around it. (A kid profile can be on up to 10 linked
+devices, so its shared allowance across sessions is 10 times that.) What it can't stop is someone
+starting sessions under many different nicknames; that is what the `/api/session` rule above is for.
 
 ## When something looks wrong
 

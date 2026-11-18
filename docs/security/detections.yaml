@@ -10,7 +10,7 @@
 # once the drain exists.
 
 title: Score minting burst
-description: One session earning more than a fast, perfect player could. The server caps a session at about 27,000 points an hour.
+description: One session earning more than a fast, perfect player could. The server caps a guest at about 27,000 points an hour, across sessions.
 logsource: { product: vercel }
 detection:
   sel: { event: score.saved }
@@ -79,12 +79,19 @@ detection:
   condition: sel | count() by route > 10                # timeframe: 10m
 level: high
 ---
-title: Daily cleanup failed, was refused, or refused to delete
-description: file.orphan.aborted means the database recognised none of the stored files (wrong or empty database).
+title: Daily cleanup failed or was refused
+description: cron.error names the task that failed; cron.denied is a call without the right CRON_SECRET.
 detection:
-  sel: { event: [cron.error, cron.denied, file.orphan.aborted] }
+  sel: { event: [cron.error, cron.denied] }
   condition: sel | count() > 0                          # timeframe: 24h
 level: high
+---
+title: Unusually many abandoned uploads
+description: Uploads started and never saved, removed by the daily cleanup. A large number means someone is filling storage on purpose.
+detection:
+  sel: { event: file.orphan.deleted }
+  condition: sel | sum(deleted) > 200                   # timeframe: 24h
+level: medium
 ---
 title: Daily cleanup did not run
 detection:
