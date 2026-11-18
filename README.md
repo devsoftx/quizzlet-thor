@@ -157,6 +157,45 @@ Actions (`.github/workflows/ci.yml`):
 No check needs a secret or reaches a real service. The two Redis checks that
 need an Upstash-compatible endpoint (in the table above) are not part of it.
 
+### Deploying
+
+Merging a pull request deploys it to production, once CI agrees:
+
+1. The merge is a push to `main`, so the checks above run on it.
+2. When they have all passed, the Deploy workflow
+   (`.github/workflows/deploy.yml`) asks Vercel for a production deployment
+   of that commit. Vercel builds it and applies new database migrations, as
+   described under [Setup](#setup).
+3. If a check fails, nothing is deployed. If the build or a migration fails,
+   the workflow fails and the site keeps running the previous deployment.
+
+Only the newest commit on `main` is deployed. When two pull requests are
+merged close together, the first may be skipped and go out with the second,
+and re-running an old CI run can't put an old commit back in production. To
+go back to an earlier deployment, use Vercel's rollback.
+
+**Run workflow** on the Deploy workflow (Actions tab) deploys `main` again
+by hand, with the same two conditions. A pull request still gets its preview
+deployment from Vercel itself. Only `main` is switched off there
+(`git.deploymentEnabled` in `vercel.json`), so that production is deployed
+once, by the workflow, and never before CI has passed.
+
+The workflow needs three GitHub Actions secrets (**Settings → Secrets and
+variables → Actions**):
+
+| Secret              | Value                                                        |
+| ------------------- | ------------------------------------------------------------ |
+| `VERCEL_TOKEN`      | A Vercel access token (Account Settings → Tokens), scoped to the team that owns the project |
+| `VERCEL_ORG_ID`     | The team's ID: `orgId` in `.vercel/project.json` after `vercel link`, or Team Settings → General |
+| `VERCEL_PROJECT_ID` | The project's ID: `projectId` in the same file, or Project Settings → General |
+
+Until they are set, the workflow fails with a message that names the missing
+one, and nothing is deployed. The token can do anything on the team, so the
+job reads it through a GitHub environment named `production`: storing the
+three as secrets of that environment, limited to the `main` branch, keeps
+them away from workflows that run for other branches. Repository secrets
+work too. `docs/security/runbook.md` says how to rotate the token.
+
 ## Adding decks
 
 Start from the template: use **Download template** in the app, or copy
@@ -352,7 +391,7 @@ scripts/               migrations, the leaderboard removal and cleanup tools, ch
 docs/security/         remediation plan, runbook, alert rules
 vercel.json            response headers, the daily cleanup schedule
 eslint.config.js       lint rules (npm run lint)
-.github/workflows/     the checks GitHub Actions runs on every pull request
+.github/workflows/     the checks GitHub Actions runs on every pull request (ci.yml), the production deploy (deploy.yml)
 e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts
 src/deck.ts            YAML parsing, validation and shuffling
 src/library.ts         loads decks from decks/ and local storage, best scores

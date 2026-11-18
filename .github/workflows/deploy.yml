@@ -1,0 +1,131 @@
+# Deploys main to production on Vercel, once CI has passed for that commit.
+#
+#   pull request merged -> CI runs on main -> CI passes -> this workflow deploys
+#
+# It can also be started by hand from the Actions tab, to deploy main again.
+# Either way a commit is deployed only if CI passed for it and it is still the
+# newest commit on main.
+#
+# Vercel builds the app, as before, so the build's migration step and every
+# production secret stay on Vercel; this workflow only holds a Vercel token.
+# vercel.json turns off Vercel's own deploy of main, which makes this the only
+# production deploy. Pull requests still get Vercel's preview deployments.
+#
+# It needs three secrets: VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID
+# (see "Deploying" in the README).
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI] # the `name:` in ci.yml
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read # to read CI's result
+
+# One production deploy at a time, and a deploy that has started is never cancelled.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  COMMIT: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+jobs:
+  gate:
+    name: Check CI
+    # Only main, in this repository: CI's run for a push to main that passed (a
+    # pull request's CI never deploys, even from a branch that is also called
+    # main), or a run started by hand on main.
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository &&
+       github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      deploy: ${{ steps.newest.outputs.deploy }}
+    steps:
+      - name: Check that CI passed for this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Asked up to three times: a run that has just finished can take a moment to be listed.
+          for attempt in 1 2 3; do
+            passed=$(gh api -X GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" \
+              -f head_sha="$COMMIT" -f branch=main -f event=push -f status=success --jq '.total_count')
+            if [ "$passed" -ge 1 ]; then
+              echo "CI passed for $COMMIT."
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then sleep 10; fi
+          done
+          echo "::error::CI has not passed for $COMMIT on main, so it is not deployed."
+          exit 1
+
+      # Re-running an old CI run must not put an old commit back in production.
+      - name: Check that this is still the newest commit on main
+        id: newest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          head=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha')
+          if [ "$head" = "$COMMIT" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::main has moved on to $head, so $COMMIT is not deployed. The newer commit is deployed when its CI passes."
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  production:
+    name: Production
+    needs: gate
+    if: needs.gate.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Check that the Vercel secrets are set
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          missing=0
+          for name in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::The $name secret is not set, so nothing was deployed. See \"Deploying\" in the README."
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.COMMIT }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # Uploads the commit; Vercel builds it, migrates the database and, if both
+      # succeed, points the production domain at it. A failed build or migration
+      # fails this step and leaves the previous deployment serving.
+      - name: Deploy to Vercel
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          url=$(npx --yes vercel@66.1.0 deploy --prod --yes)
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Deployed \`${COMMIT:0:7}\` to production: $url" >> "$GITHUB_STEP_SUMMARY"

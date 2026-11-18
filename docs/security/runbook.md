@@ -18,6 +18,7 @@ _not yet practised._
 | `BLOB_READ_WRITE_TOKEN` | Private file storage | The Blob store's settings in Vercel | Update the Vercel env var, redeploy | Uploads and file links fail until the redeploy |
 | `CRON_SECRET` | Lets Vercel Cron call `/api/cron` | Generate a new random value (32+ characters) | Update the Vercel env var, redeploy | The daily cleanup is refused (401) until both match |
 | `GLOBAL_CONFIG` | Reading the leaderboard switches | The Global Config store's tokens in Vercel | Update the Vercel env var, redeploy | The last switch values read are kept until the redeploy |
+| `VERCEL_TOKEN` (a GitHub Actions secret, not a Vercel env var) | The Deploy workflow's production deploys | Vercel: Account Settings → Tokens: create a new token, then delete the old one | Update the GitHub secret (Settings → Secrets and variables → Actions, or the `production` environment) | None for the running app; merges aren't deployed until the secret is updated. Re-run the failed Deploy workflow afterwards |
 
 After any rotation: check `/api/session` (200), sign in as a parent, open My files, and look for
 `request.error` and `auth.error` events in the log.
