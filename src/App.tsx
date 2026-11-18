@@ -153,6 +153,7 @@ export function App() {
       }
     },
   });
+  // eslint-disable-next-line react-hooks/refs -- one saver for the whole visit; it re-renders the app through onState
   const saver = saverRef.current;
 
   /** Sends any answers not saved yet (before a session ends, or the page closes). */
@@ -174,9 +175,11 @@ export function App() {
 
   const session = sessionState.status === "active" ? sessionState.session : null;
   const liveSessionRef = useRef<SessionInfo | null>(session);
+  /* eslint-disable react-hooks/refs -- kept current on every render, for saves and access checks that finish after it */
   liveSessionRef.current = session;
   if (session) confirmedPointsRef.current = session.points;
   profileIdRef.current = session?.profileId ?? null;
+  /* eslint-enable react-hooks/refs */
   const ready = accountState.status === "ready" ? accountState : null;
   const kid = kidState.status === "linked" && !auth.isSignedIn ? kidState.kid : null;
   // A kid studying under a parent's account sees the shared decks plus the
@@ -213,6 +216,7 @@ export function App() {
   useEffect(() => {
     if (!auth.isLoaded) return;
     if (!auth.isSignedIn) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- the account shown follows the sign-in
       setAccountState({ status: "none" });
       return;
     }
@@ -620,6 +624,7 @@ export function App() {
 
       {screen.name === "decks" && (
         <>
+        {/* eslint-disable-next-line react-hooks/refs -- see `saver` above */}
         {saver.pending > 0 && <div className="save-problem" role="status"><p>{saveStatus === "failed" ? t.app.pointsRejected : t.app.pointsUnconfirmed}</p>{saveStatus !== "failed" && <button type="button" className="btn btn--secondary" onClick={() => void saver.flush().catch(() => undefined)}>{t.app.retrySaving}</button>}</div>}
         <DeckList
           decks={decks}

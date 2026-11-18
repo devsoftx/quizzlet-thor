@@ -58,7 +58,7 @@ async function parseProfileIds(raw: unknown, scope: AccountScope): Promise<strin
   if (!Array.isArray(raw) || !raw.every((id) => typeof id === "string")) return "profileIds must be null or a list of profile ids.";
   const own = new Set((await scope.listProfiles()).map((p) => p.id));
   if (!raw.every((id) => own.has(id))) return "Profile not found.";
-  return [...new Set(raw as string[])];
+  return [...new Set(raw)];
 }
 
 // --------------------------------------------------------------- /api/decks

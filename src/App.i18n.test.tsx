@@ -61,7 +61,7 @@ describe("the language switch", () => {
   it("shows the server's refusal in Spanish", async () => {
     setLanguage("es");
     vi.spyOn(globalThis, "fetch").mockImplementation(async (input) =>
-      String(input).startsWith("/api/session")
+      (input instanceof Request ? input.url : input.toString()).startsWith("/api/session")
         ? new Response(JSON.stringify({ error: "That nickname is taken. Please pick another one." }), { status: 409 })
         : new Response("null"),
     );

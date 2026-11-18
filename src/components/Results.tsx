@@ -155,6 +155,7 @@ export function Results({
         <h2 className="section-title">{t.results.review}</h2>
         <ol className="review">
           {results.map((r, i) => (
+            // eslint-disable-next-line @eslint-react/no-array-index-key -- a fixed list, in the order answered
             <li key={i} className={`review__item ${r.correct ? "is-correct" : "is-wrong"}`}>
               <span className="review__mark" aria-label={r.correct ? t.results.correct : t.results.wrong}>
                 {r.correct ? "✓" : "✗"}

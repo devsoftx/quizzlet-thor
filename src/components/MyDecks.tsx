@@ -71,7 +71,7 @@ function DeckForm({
 
   function submit(e: FormEvent) {
     e.preventDefault();
-    run(() => onSave({ title, profileIds: everyone ? null : picked }));
+    void run(() => onSave({ title, profileIds: everyone ? null : picked }));
   }
 
   return (
@@ -129,7 +129,7 @@ function DeckForm({
           className="btn btn--danger"
           disabled={busy}
           onClick={() => {
-            if (window.confirm(t.myDecks.confirmDelete(deck.title))) run(onDelete);
+            if (window.confirm(t.myDecks.confirmDelete(deck.title))) void run(onDelete);
           }}
         >
           {t.myDecks.deleteDeck}
@@ -142,7 +142,7 @@ function DeckForm({
 /** A parent's private decks: add, switch on/off, pick which kids see each one. */
 export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Props) {
   const { language, t } = useI18n();
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [problems, setProblems] = useState<UploadProblem[]>([]);
@@ -206,7 +206,7 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
         <button
           type="button"
           className="btn btn--primary"
-          onClick={() => fileInput.current?.click()}
+          onClick={() => fileInputRef.current?.click()}
           disabled={busy !== null || decks.length >= MAX_DECKS}
         >
           {t.myDecks.add}
@@ -218,13 +218,13 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
           {t.myDecks.count(decks.length, MAX_DECKS)}
         </span>
         <input
-          ref={fileInput}
+          ref={fileInputRef}
           type="file"
           accept=".yaml,.yml"
           multiple
           hidden
           onChange={(e) => {
-            pickFiles(e.target.files);
+            void pickFiles(e.target.files);
             e.target.value = "";
           }}
         />

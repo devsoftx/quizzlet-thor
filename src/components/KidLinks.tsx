@@ -5,7 +5,7 @@ import { formatDate, useI18n, type Language, type Messages } from "../i18n";
 const day = (iso: string, language: Language) => formatDate(iso, { month: "short", day: "numeric" }, language);
 
 /** A device's name ("Android tablet · Chrome") in the app's language; product names stay as they are. */
-export const deviceName = (label: string, t: Messages) =>
+const deviceName = (label: string, t: Messages) =>
   label
     .split(" · ")
     .map((part) => t.links.deviceWords[part] ?? part)
@@ -127,7 +127,7 @@ export function KidLinkPanel({ profile, invite, devices, freshUrl, onNewLink, on
                   disabled={busy}
                   aria-label={t.links.removeDeviceLabel(deviceName(d.label, t), profile.nickname)}
                   onClick={() => {
-                    if (window.confirm(t.links.confirmRemove(deviceName(d.label, t), profile.nickname))) run(() => onRemoveDevice(d));
+                    if (window.confirm(t.links.confirmRemove(deviceName(d.label, t), profile.nickname))) void run(() => onRemoveDevice(d));
                   }}
                 >
                   {t.common.remove}

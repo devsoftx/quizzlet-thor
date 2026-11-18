@@ -17,7 +17,7 @@ interface Props {
 export function DeckList({ decks: allDecks, onStart, onImport, onRemove, importNote }: Props) {
   const { language: appLanguage, t } = useI18n();
   const templateUrl = TEMPLATE_URLS[appLanguage];
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => { headingRef.current?.focus({ preventScroll: true }); }, []);
   const [dragging, setDragging] = useState(false);
@@ -65,11 +65,11 @@ export function DeckList({ decks: allDecks, onStart, onImport, onRemove, importN
           <a className="btn btn--ghost" href={templateUrl} download={t.common.templateFileName}>
             {t.common.downloadTemplate}
           </a>
-          <button type="button" className="btn btn--secondary" onClick={() => fileInput.current?.click()}>
+          <button type="button" className="btn btn--secondary" onClick={() => fileInputRef.current?.click()}>
             {t.deckList.importYaml}
           </button>
           <input
-            ref={fileInput}
+            ref={fileInputRef}
             type="file"
             accept=".yaml,.yml"
             multiple

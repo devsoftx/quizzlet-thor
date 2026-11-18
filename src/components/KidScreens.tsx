@@ -22,6 +22,7 @@ export function JoinInvite({
 
   useEffect(() => {
     if (!token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- a link with no token has nothing to load
       setError(messagesFor(getLanguage()).kid.linkIncomplete);
       return;
     }
@@ -68,7 +69,7 @@ export function JoinInvite({
           </p>
           <div className="kid-screen__actions">
             <button type="button" className="btn btn--primary" onClick={join} disabled={busy}>
-              {busy ? t.kid.linking : t.kid.useDevice(profile.nickname)}
+              {busy ? t.kid.linking : t.kid.joinAs(profile.nickname)}
             </button>
             <button type="button" className="btn btn--ghost" onClick={onClose} disabled={busy}>
               {t.kid.notNow}
@@ -139,7 +140,7 @@ export function KidHome({
         disabled={busy}
         onClick={() => {
           if (window.confirm(t.kid.confirmUnlink(profile.nickname))) {
-            run(onUnlink);
+            void run(onUnlink);
           }
         }}
       >

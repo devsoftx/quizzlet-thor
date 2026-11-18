@@ -16,6 +16,7 @@ export function LeaderboardPanel({ collapsible = false }: { collapsible?: boolea
   useEffect(() => {
     if (!open) return;
     let current = true;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- clears the last failure before loading again
     setFailed(false);
     api
       .getLeaderboard()

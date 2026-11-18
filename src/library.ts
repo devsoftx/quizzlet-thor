@@ -139,7 +139,7 @@ function writeJson(key: string, value: unknown): void {
 function readImported(): StoredDeck[] {
   const stored = readJson<unknown>(IMPORTED_KEY, []);
   return Array.isArray(stored)
-    ? stored.filter(
+    ? (stored as (Partial<StoredDeck> | null)[]).filter(
         (d): d is StoredDeck =>
           typeof d?.fileName === "string" && typeof d?.text === "string",
       )

@@ -228,7 +228,7 @@ cards:
     linkExplain: (name) =>
       `Este dispositivo quedará vinculado al perfil de ${name}, para que puedas estudiar aquí y ganar puntos. No necesitas correo electrónico ni contraseña. El adulto que te invitó puede quitar este dispositivo cuando quiera.`,
     linking: "Vinculando…",
-    useDevice: (name) => `Usar este dispositivo como ${name}`,
+    joinAs: (name) => `Usar este dispositivo como ${name}`,
     notNow: "Ahora no",
     welcomeBack: (name) => `¡Hola de nuevo, ${name}!`,
     pointsSoFar: (n) => `${num(n)} ${plural(n, "punto", "puntos")} hasta ahora`,
@@ -376,7 +376,7 @@ cards:
     deleteFailed: "No se pudo eliminar ese archivo.",
     confirmDelete: (name) => `¿Eliminar “${name}”? No se puede deshacer.`,
     upload: "+ Subir un archivo…",
-    usage: (count, max, used, total) => `${num(count)} de ${num(max)} archivos · ${used} de ${total}`,
+    storageUsed: (count, max, used, total) => `${num(count)} de ${num(max)} archivos · ${used} de ${total}`,
     empty: "Todavía no hay archivos.",
     emptyHint: "Sube hojas de ejercicios, guías de estudio o fotos de apuntes para tenerlas en un solo lugar.",
     open: "Abrir",

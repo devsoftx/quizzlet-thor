@@ -42,7 +42,7 @@ export class ScoreSaver {
   private rounds: Round[] = [];
   private running: Promise<SavedScore | null> | null = null;
   private generation = 0;
-  private rejected: unknown | null = null;
+  private rejected: unknown = null;
 
   constructor(
     private submit: SubmitScore,
@@ -87,6 +87,7 @@ export class ScoreSaver {
     const generation = this.generation;
     while (this.running) await this.running.catch(() => null);
     if (generation !== this.generation) return null;
+    // eslint-disable-next-line @typescript-eslint/only-throw-error -- rethrows the error a rejected save failed with, as it was
     if (this.rejected !== null) throw this.rejected;
     const mine = this.drain(options, generation);
     this.running = mine;

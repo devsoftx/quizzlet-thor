@@ -61,7 +61,7 @@ function ProfileForm({
 
   function submit(e: FormEvent) {
     e.preventDefault();
-    if (form.nickname.trim()) run(() => onSubmit(form));
+    if (form.nickname.trim()) void run(() => onSubmit(form));
   }
 
   return (
@@ -147,7 +147,7 @@ function ProfileForm({
             className="btn btn--danger"
             disabled={busy}
             onClick={() => {
-              if (window.confirm(t.profiles.confirmDelete(initial.nickname))) run(onDelete);
+              if (window.confirm(t.profiles.confirmDelete(initial.nickname))) void run(onDelete);
             }}
           >
             {t.profiles.deleteProfile}
@@ -160,7 +160,8 @@ function ProfileForm({
 
 export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
   const { t } = useI18n();
-  const [editing, setEditing] = useState<string | "new" | null>(profiles.length === 0 ? "new" : null);
+  /** The profile being edited (its id), "new" for the add form, or none. */
+  const [editing, setEditing] = useState<string | null>(profiles.length === 0 ? "new" : null);
   const [links, setLinks] = useState<KidLinks>({ invites: [], devices: [] });
   const [linksError, setLinksError] = useState<string | null>(null);
   /** Which kid's devices panel is open. */

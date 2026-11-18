@@ -51,7 +51,8 @@ function parseEnabled(raw: unknown, messages: DeckMessages): { value: boolean | 
     if (word === "true" || word === "enabled") return { value: true };
     if (word === "false" || word === "disabled") return { value: false };
   }
-  return { value: null, error: messages.enabledInvalid(String(raw)) };
+  const got = typeof raw === "string" ? raw : JSON.stringify(raw);
+  return { value: null, error: messages.enabledInvalid(got) };
 }
 
 type Rng = () => number;
@@ -169,7 +170,7 @@ export function parseDeck(source: string, fallbackTitle: string, messages: DeckM
     errors.push(messages.subjectInvalid);
   }
   const language = parseLanguage(root.language);
-  if (language === null) errors.push(messages.languageInvalid(String(root.language)));
+  if (language === null) errors.push(messages.languageInvalid(typeof root.language === "string" ? root.language : JSON.stringify(root.language)));
 
   if (!Array.isArray(root.cards)) {
     errors.push(messages.needsCards);

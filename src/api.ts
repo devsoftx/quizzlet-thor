@@ -94,7 +94,7 @@ async function call<T>(
   } catch {
     throw new ApiError(t().api.offline, 0);
   }
-  const data = await res.json().catch(() => null);
+  const data = (await res.json().catch(() => null)) as { error?: string; errors?: unknown[] } | null;
   if (!res.ok) {
     const details = Array.isArray(data?.errors) ? data.errors.map(String) : [];
     const said = typeof data?.error === "string" ? data.error : undefined;

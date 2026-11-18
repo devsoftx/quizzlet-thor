@@ -225,7 +225,7 @@ cards:
     linkExplain: (name: string) =>
       `This device will be linked to ${name}'s profile, so you can study here and earn points. No email or password needed. Your parent can remove this device anytime.`,
     linking: "Linking…",
-    useDevice: (name: string) => `Use this device as ${name}`,
+    joinAs: (name: string) => `Use this device as ${name}`,
     notNow: "Not now",
     welcomeBack: (name: string) => `Welcome back, ${name}.`,
     pointsSoFar: (n: number) => `${num(n)} ${plural(n, "point", "points")} so far`,
@@ -367,7 +367,7 @@ cards:
     deleteFailed: "Couldn't delete that file.",
     confirmDelete: (name: string) => `Delete "${name}"? This can't be undone.`,
     upload: "+ Upload a file…",
-    usage: (count: number, max: number, used: string, total: string) => `${num(count)} of ${num(max)} files · ${used} of ${total}`,
+    storageUsed: (count: number, max: number, used: string, total: string) => `${num(count)} of ${num(max)} files · ${used} of ${total}`,
     empty: "No files yet.",
     emptyHint: "Upload worksheets, study guides or photos of notes to keep them in one place.",
     open: "Open",

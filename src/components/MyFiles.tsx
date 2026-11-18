@@ -14,7 +14,7 @@ interface Props {
   onBack: () => void;
 }
 
-export function formatBytes(bytes: number): string {
+function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1).replace(/\.0$/, "")} MB`;
@@ -39,7 +39,7 @@ function saveBlob(blob: Blob, name: string) {
 /** A parent's private files (study material): upload, open, delete. */
 export function MyFiles({ onBack }: Props) {
   const { language, t } = useI18n();
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [info, setInfo] = useState<FilesInfo | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
@@ -142,22 +142,22 @@ export function MyFiles({ onBack }: Props) {
             <button
               type="button"
               className="btn btn--primary"
-              onClick={() => fileInput.current?.click()}
+              onClick={() => fileInputRef.current?.click()}
               disabled={busy !== null || full}
             >
               {t.myFiles.upload}
             </button>
             <span className="muted manage__count">
-              {t.myFiles.usage(info.usage.count, MAX_FILES, formatBytes(info.usage.bytes), formatBytes(MAX_TOTAL_FILE_BYTES))}
+              {t.myFiles.storageUsed(info.usage.count, MAX_FILES, formatBytes(info.usage.bytes), formatBytes(MAX_TOTAL_FILE_BYTES))}
             </span>
             <input
-              ref={fileInput}
+              ref={fileInputRef}
               type="file"
               accept={FILE_ACCEPT}
               multiple
               hidden
               onChange={(e) => {
-                upload(e.target.files);
+                void upload(e.target.files);
                 e.target.value = "";
               }}
             />

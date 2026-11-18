@@ -3,9 +3,11 @@
 //  - "dev":   a local stand-in during `npm run dev` without Clerk keys
 //  - "off":   accounts aren't available; guest mode only
 
+/* eslint-disable react-refresh/only-export-components -- the mode, the hook and the provider stay together here; editing this file reloads the page in dev */
+
 import { ClerkProvider, useAuth, useClerk } from "@clerk/react";
 import { esMX } from "@clerk/localizations/es-MX";
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, use, useMemo, useState, type ReactNode } from "react";
 import { setAuthHeaders } from "./api";
 import { useI18n } from "./i18n";
 
@@ -33,20 +35,20 @@ const OFF: AccountAuth = {
 };
 
 const AuthContext = createContext<AccountAuth>(OFF);
-export const useAccountAuth = () => useContext(AuthContext);
+export const useAccountAuth = () => use(AuthContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   // Clerk's sign-in window follows the app's language (Latin American Spanish).
   const { language } = useI18n();
   if (AUTH_MODE === "clerk") {
     return (
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY!} afterSignOutUrl="/" localization={language === "es" ? esMX : undefined}>
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/" localization={language === "es" ? esMX : undefined}>
         <ClerkBridge>{children}</ClerkBridge>
       </ClerkProvider>
     );
   }
   if (AUTH_MODE === "dev") return <DevAuth>{children}</DevAuth>;
-  return <AuthContext.Provider value={OFF}>{children}</AuthContext.Provider>;
+  return <AuthContext value={OFF}>{children}</AuthContext>;
 }
 
 function ClerkBridge({ children }: { children: ReactNode }) {
@@ -70,7 +72,7 @@ function ClerkBridge({ children }: { children: ReactNode }) {
     }),
     [isLoaded, isSignedIn, clerk],
   );
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext value={value}>{children}</AuthContext>;
 }
 
 // --------------------------------------------------------------- Dev mode
@@ -112,7 +114,7 @@ function DevAuth({ children }: { children: ReactNode }) {
     }),
     [user],
   );
-  return <AuthContext.Provider value={value}>{children}{showSignIn && <div className="dev-signin" role="dialog" aria-modal="true" aria-labelledby="dev-signin-title" onKeyDown={(e) => {
+  return <AuthContext value={value}>{children}{showSignIn && <div className="dev-signin" role="dialog" aria-modal="true" aria-labelledby="dev-signin-title" onKeyDown={(e) => {
     if (e.key === "Escape") { setShowSignIn(false); return; }
     if (e.key !== "Tab") return;
     const controls = [...e.currentTarget.querySelectorAll<HTMLElement>('input:not([disabled]), button:not([disabled])')];
@@ -133,5 +135,5 @@ function DevAuth({ children }: { children: ReactNode }) {
       <input id="dev-parent-id" value={devId} onChange={(e) => setDevId(e.target.value)} pattern="[A-Za-z0-9-]{1,40}" required autoFocus />
       <div><button className="btn btn--primary" type="submit">{t.devSignIn.continue}</button> <button className="btn btn--secondary" type="button" onClick={() => setShowSignIn(false)}>{t.common.cancel}</button></div>
     </form>
-  </div>}</AuthContext.Provider>;
+  </div>}</AuthContext>;
 }
