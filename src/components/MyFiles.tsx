@@ -8,6 +8,7 @@ import {
   type AccountFile,
 } from "../account-shared";
 import { api, type FilesInfo } from "../api";
+import { formatDate, useI18n, type Language, type Messages } from "../i18n";
 
 interface Props {
   onBack: () => void;
@@ -20,8 +21,11 @@ function formatBytes(bytes: number): string {
 }
 
 const icon = (type: string) => (type === "application/pdf" ? "📄" : type.startsWith("image/") ? "🖼️" : "📝");
-const label = (type: string) => FILE_TYPES[type as keyof typeof FILE_TYPES]?.label ?? "File";
-const date = (iso: string) => new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+const label = (type: string, t: Messages) => {
+  const english = FILE_TYPES[type as keyof typeof FILE_TYPES]?.label;
+  return english ? (t.myFiles.types[english] ?? english) : t.myFiles.file;
+};
+const date = (iso: string, language: Language) => formatDate(iso, { month: "short", day: "numeric", year: "numeric" }, language);
 
 function saveBlob(blob: Blob, name: string) {
   const url = URL.createObjectURL(blob);
@@ -34,6 +38,7 @@ function saveBlob(blob: Blob, name: string) {
 
 /** A parent's private files (study material): upload, open, delete. */
 export function MyFiles({ onBack }: Props) {
+  const { language, t } = useI18n();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [info, setInfo] = useState<FilesInfo | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -53,9 +58,9 @@ export function MyFiles({ onBack }: Props) {
     const failed: string[] = [];
     let current = info;
     for (const file of files) {
-      setBusy(`Uploading ${file.name}…`);
+      setBusy(t.myFiles.uploading(file.name));
       try {
-        const saved = await api.uploadFile(file, (pct) => setBusy(`Uploading ${file.name}… ${Math.round(pct)}%`));
+        const saved = await api.uploadFile(file, (pct) => setBusy(t.myFiles.uploadingPercent(file.name, Math.round(pct))));
         current = {
           ...current,
           files: [...current.files, saved],
@@ -63,7 +68,7 @@ export function MyFiles({ onBack }: Props) {
         };
         setInfo(current);
       } catch (err) {
-        failed.push(`${file.name}: ${err instanceof Error ? err.message : "Couldn't upload this file."}`);
+        failed.push(`${file.name}: ${err instanceof Error ? err.message : t.myFiles.uploadFailed}`);
       }
     }
     setErrors(failed);
@@ -76,7 +81,7 @@ export function MyFiles({ onBack }: Props) {
       try {
         saveBlob(await api.fileBytes(file.id), file.name);
       } catch (err) {
-        setErrors([err instanceof Error ? err.message : "Couldn't open that file."]);
+        setErrors([err instanceof Error ? err.message : t.myFiles.openFailed]);
       }
       return;
     }
@@ -92,12 +97,12 @@ export function MyFiles({ onBack }: Props) {
       }
     } catch (err) {
       tab?.close();
-      setErrors([err instanceof Error ? err.message : "Couldn't open that file."]);
+      setErrors([err instanceof Error ? err.message : t.myFiles.openFailed]);
     }
   }
 
   async function remove(file: AccountFile) {
-    if (!info || !window.confirm(`Delete "${file.name}"? This can't be undone.`)) return;
+    if (!info || !window.confirm(t.myFiles.confirmDelete(file.name))) return;
     setErrors([]);
     try {
       await api.deleteFile(file.id);
@@ -107,7 +112,7 @@ export function MyFiles({ onBack }: Props) {
         usage: { count: info.usage.count - 1, bytes: info.usage.bytes - file.size },
       });
     } catch (err) {
-      setErrors([err instanceof Error ? err.message : "Couldn't delete that file."]);
+      setErrors([err instanceof Error ? err.message : t.myFiles.deleteFailed]);
     }
   }
 
@@ -117,21 +122,20 @@ export function MyFiles({ onBack }: Props) {
     <div className="manage">
       <header className="manage__header">
         <button type="button" className="btn btn--ghost" onClick={onBack}>
-          ← Back
+          {t.common.back}
         </button>
-        <h1>Study files</h1>
+        <h1>{t.myFiles.title}</h1>
       </header>
       <p className="muted manage__intro">
-        Keep your PDFs, Word documents (.docx) and pictures together, up to {formatBytes(MAX_FILE_BYTES)} each.
-        These files are private to your signed-in account; learners cannot open them.
+        {t.myFiles.intro(formatBytes(MAX_FILE_BYTES))}
       </p>
 
       {loadError ? (
         <p className="welcome__error" role="alert">
-          Couldn't load your files: {loadError}
+          {t.myFiles.loadFailed(loadError)}
         </p>
       ) : !info ? (
-        <p className="muted loading">Loading…</p>
+        <p className="muted loading">{t.common.loading}</p>
       ) : (
         <>
           <div className="manage__toolbar">
@@ -141,10 +145,10 @@ export function MyFiles({ onBack }: Props) {
               onClick={() => fileInputRef.current?.click()}
               disabled={busy !== null || full}
             >
-              + Upload a file…
+              {t.myFiles.upload}
             </button>
             <span className="muted manage__count">
-              {info.usage.count} of {MAX_FILES} files · {formatBytes(info.usage.bytes)} of {formatBytes(MAX_TOTAL_FILE_BYTES)}
+              {t.myFiles.storageUsed(info.usage.count, MAX_FILES, formatBytes(info.usage.bytes), formatBytes(MAX_TOTAL_FILE_BYTES))}
             </span>
             <input
               ref={fileInputRef}
@@ -174,8 +178,8 @@ export function MyFiles({ onBack }: Props) {
 
           {info.files.length === 0 ? (
             <div className="empty">
-              <p>No files yet.</p>
-              <p className="muted">Upload worksheets, study guides or photos of notes to keep them in one place.</p>
+              <p>{t.myFiles.empty}</p>
+              <p className="muted">{t.myFiles.emptyHint}</p>
             </div>
           ) : (
             <ul className="manage__list">
@@ -188,14 +192,14 @@ export function MyFiles({ onBack }: Props) {
                     <div className="manage__info">
                       <strong className="file-name">{f.name}</strong>
                       <span className="muted">
-                        {label(f.contentType)} · {formatBytes(f.size)} · {date(f.createdAt)}
+                        {label(f.contentType, t)} · {formatBytes(f.size)} · {date(f.createdAt, language)}
                       </span>
                     </div>
-                    <button type="button" className="btn btn--secondary" onClick={() => open(f)} aria-label={`Open ${f.name}`}>
-                      Open
+                    <button type="button" className="btn btn--secondary" onClick={() => open(f)} aria-label={t.myFiles.openLabel(f.name)}>
+                      {t.myFiles.open}
                     </button>
-                    <button type="button" className="btn btn--ghost" onClick={() => remove(f)} aria-label={`Delete ${f.name}`}>
-                      Delete
+                    <button type="button" className="btn btn--ghost" onClick={() => remove(f)} aria-label={t.myFiles.deleteLabel(f.name)}>
+                      {t.common.delete}
                     </button>
                   </div>
                 </li>

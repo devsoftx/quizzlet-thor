@@ -1,0 +1,49 @@
+# Plantilla de mazo de Quizzlet
+# -----------------------------
+# Copia este archivo, cámbiale el nombre (p. ej., mi-mazo.yaml), reemplaza las
+# tarjetas de ejemplo por las tuyas y luego impórtalo en Quizzlet
+# ("Importar YAML…") o ponlo en la carpeta decks/.
+#
+# Las líneas que empiezan con # son comentarios y se ignoran.
+# Las claves (title, cards, question, options, answer…) se escriben en inglés,
+# tal como aparecen aquí; lo que va después de los dos puntos puede estar en
+# cualquier idioma.
+# Pon el texto entre comillas si contiene ": " (dos puntos y espacio) o si
+# empieza con un carácter especial como * & ! [ { o una comilla.
+
+title: Mi primer mazo               # se muestra en la lista de mazos
+description: Una descripción breve  # opcional, se muestra bajo el título
+# subject: Ciencias del espacio      # opcional, lo indica quien escribe el mazo; omítelo si no lo sabes
+language: es                        # opcional: el idioma de las tarjetas (es = español, en = inglés)
+enabled: true                       # obligatorio para mostrar el mazo (false = oculto)
+shuffle: true                       # mezclar el orden de las tarjetas en cada ronda (predeterminado: true)
+shuffleOptions: true                # mezclar las opciones de cada tarjeta (predeterminado: true)
+
+cards:
+  # Cada tarjeta necesita una pregunta, al menos 2 opciones y una respuesta.
+  # La respuesta debe ser exactamente una de las opciones.
+  - question: ¿Qué planeta es conocido como el planeta rojo?
+    options:
+      - Marte
+      - Venus
+      - Júpiter
+      - Mercurio
+    answer: Marte
+    explanation: El óxido de hierro (herrumbre) de su superficie hace que Marte se vea rojo.  # opcional
+
+  # También funciona la forma corta de las listas:
+  - question: ¿Cuál es el símbolo químico del oro?
+    options: [Au, Ag, Gd, Or]
+    answer: Au
+
+  # Los números sirven como opciones. shuffleOptions en una tarjeta reemplaza
+  # el valor del mazo (útil para números en orden o "Todas las anteriores").
+  - question: ¿Cuántos huesos tiene el cuerpo humano adulto?
+    options: [106, 206, 306]
+    answer: 206
+    shuffleOptions: false
+
+  # Usa comillas cuando el texto contiene ": " o empieza con un carácter especial.
+  - question: "Completa: al nivel del mar, el agua hierve a ___ °C."
+    options: ["90", "100", "110", "120"]
+    answer: "100"

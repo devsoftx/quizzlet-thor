@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { useI18n } from "../i18n";
 import { LeaderboardPanel } from "./LeaderboardPanel";
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export function Welcome({ notice, onStart, parentSignIn }: Props) {
+  const { t } = useI18n();
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +22,7 @@ export function Welcome({ notice, onStart, parentSignIn }: Props) {
     try {
       await onStart(name);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Couldn't start your session.");
+      setError(err instanceof Error ? err.message : t.welcome.startFailed);
       setBusy(false);
     }
   }
@@ -29,28 +31,28 @@ export function Welcome({ notice, onStart, parentSignIn }: Props) {
     <div className="welcome field-welcome">
       <header className="field-welcome__header">
         <p className="field-mark"><span aria-hidden="true">✳</span> Quizzlet</p>
-        {parentSignIn && <button type="button" className="field-parent-link" onClick={parentSignIn.onClick}>Parent or teacher sign in</button>}
+        {parentSignIn && <button type="button" className="field-parent-link" onClick={parentSignIn.onClick}>{t.common.parentSignIn}</button>}
       </header>
       <div className="field-welcome__layout">
         <section className="field-welcome__intro">
-          <p className="field-kicker">A little curiosity goes a long way</p>
-          <h1>Big questions.<br /><em>Bright ideas.</em></h1>
-          <p>Explore a world of questions, discover something new, and learn at your own pace.</p>
+          <p className="field-kicker">{t.welcome.kicker}</p>
+          <h1>{t.welcome.titleLine1}<br /><em>{t.welcome.titleLine2}</em></h1>
+          <p>{t.welcome.intro}</p>
           <div className="field-welcome__illustration" aria-hidden="true" />
         </section>
         <section className="field-entry" aria-labelledby="entry-title">
-          <span className="field-entry__number" aria-hidden="true">01 / START HERE</span>
-          <h2 id="entry-title">Ready to explore?</h2>
-          <p>Choose a nickname and pick a deck to begin.</p>
+          <span className="field-entry__number" aria-hidden="true">{t.welcome.step}</span>
+          <h2 id="entry-title">{t.welcome.entryTitle}</h2>
+          <p>{t.welcome.entryText}</p>
           {notice && <p className="welcome__notice" role="status">{notice}</p>}
           <form onSubmit={submit}>
-            <label htmlFor="student-name">Your nickname</label>
-            <input id="student-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={24} autoComplete="off" spellCheck={false} placeholder="For example, Nova7" aria-describedby="welcome-help" aria-invalid={error ? true : undefined} />
-            <p id="welcome-help" className="field-privacy"><strong>Choose carefully:</strong> Your nickname appears on the public leaderboard when you earn points. Please don't use your real name.</p>
+            <label htmlFor="student-name">{t.welcome.nickname}</label>
+            <input id="student-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={24} autoComplete="off" spellCheck={false} placeholder={t.welcome.nicknamePlaceholder} aria-describedby="welcome-help" aria-invalid={error ? true : undefined} />
+            <p id="welcome-help" className="field-privacy"><strong>{t.welcome.privacyLead}</strong> {t.welcome.privacy}</p>
             {error && <p className="welcome__error" role="alert">{error}</p>}
-            <button type="submit" className="btn btn--primary field-entry__submit" disabled={!name.trim() || busy}>{busy ? "Starting…" : "Start exploring"} <span aria-hidden="true">→</span></button>
+            <button type="submit" className="btn btn--primary field-entry__submit" disabled={!name.trim() || busy}>{busy ? t.welcome.starting : t.welcome.start} <span aria-hidden="true">→</span></button>
           </form>
-          <p className="field-entry__note">Your study session lasts 60 minutes.</p>
+          <p className="field-entry__note">{t.welcome.sessionLength}</p>
         </section>
       </div>
       {/* The public leaderboard, no sign-in needed. */}

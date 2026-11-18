@@ -1,19 +1,23 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { AccountDeck, KidProfile } from "./account-shared";
-import { api, ApiError, takeInviteToken, type AccountInfo, type KidHomeInfo, type ScoreSave, type SessionInfo } from "./api";
+import { api, ApiError, serverSaid, takeInviteToken, type AccountInfo, type KidHomeInfo, type ScoreSave, type SessionInfo } from "./api";
 import { AUTH_MODE, useAccountAuth } from "./auth";
 import { buildSession, type Card, type Deck } from "./deck";
 import {
   accountDecksFor,
+  deckProblems,
+  importedEntry,
   loadBestScores,
   loadBundledDecks,
-  loadImportedDecks,
   loadImportedTexts,
   recordScore,
   removeImportedDeck,
   saveImportedDeck,
   type DeckEntry,
+  type StoredDeck,
 } from "./library";
+import { getLanguage, messagesFor, useI18n } from "./i18n";
+import { LanguageSwitch } from "./components/LanguageSwitch";
 import { DeckList } from "./components/DeckList";
 import { DeckPreview } from "./components/DeckPreview";
 import { JoinInvite, KidHome } from "./components/KidScreens";
@@ -31,6 +35,24 @@ import { Welcome } from "./components/Welcome";
 
 /** Part of the server's answer when a session's kid profile has been deleted. */
 const PROFILE_GONE = "profile is no longer available";
+/** Part of the server's answer when a kid's device has been unlinked. */
+const DEVICE_GONE = "device is no longer linked";
+
+/**
+ * The messages in the language chosen right now. Callbacks that outlive a
+ * render (the score saver, timers) use this rather than a render's `t`.
+ */
+const tr = () => messagesFor(getLanguage());
+
+/** Every screen: the page, with the language switch on top. */
+function Page({ children }: { children: ReactNode }) {
+  return (
+    <main className="app">
+      <LanguageSwitch />
+      {children}
+    </main>
+  );
+}
 
 type SessionState =
   | { status: "loading" }
@@ -70,8 +92,6 @@ type Screen =
       save: SaveState;
     };
 
-const bundledDecks = loadBundledDecks();
-
 /** An invitation link opened in this tab (#join=…), read once and removed from the address bar. */
 const initialJoinToken = takeInviteToken();
 
@@ -82,7 +102,11 @@ type KidState = { status: "loading" } | { status: "none" } | { status: "linked";
 const PARENT_SCREENS = new Set<Screen["name"]>(["profiles", "settings", "my-decks", "my-files"]);
 
 export function App() {
-  const [imported, setImported] = useState<DeckEntry[]>(loadImportedDecks);
+  const { t } = useI18n();
+  // Decks are read again when the language changes, so their problems are described in it.
+  const bundledDecks = useMemo(() => loadBundledDecks(t.deck), [t]);
+  const [importedFiles, setImportedFiles] = useState<StoredDeck[]>(loadImportedTexts);
+  const imported = useMemo(() => importedFiles.map((d) => importedEntry(d, t.deck)), [importedFiles, t]);
   const [bestScores, setBestScores] = useState(loadBestScores);
   const [screen, setScreen] = useState<Screen>({ name: "decks" });
   const [sessionState, setSessionState] = useState<SessionState>({ status: "loading" });
@@ -118,14 +142,14 @@ export function App() {
     onState: setSaveStatus,
     onDenied: (err, deckId) => {
       setScreen({ name: "decks" });
-      if (err instanceof Error && err.message.includes("device is no longer linked")) {
+      if (serverSaid(err, DEVICE_GONE)) {
         setKidState({ status: "none" });
-        setSessionState({ status: "none", notice: "This device is no longer linked. Ask an adult for a new link. Recent points may not have been saved." });
-      } else if (err instanceof Error && err.message.includes(PROFILE_GONE)) {
-        profileRemoved(" Recent points may not have been saved.");
+        setSessionState({ status: "none", notice: tr().app.deviceUnlinkedPointsLost });
+      } else if (serverSaid(err, PROFILE_GONE)) {
+        profileRemoved(true);
       } else {
         if (deckId) forgetPrivateDeck(deckId);
-        setImportNote({ kind: "error", text: "This deck is no longer available. Your most recent answers may not have been saved. Access changes can only be checked when connected; downloaded content may remain on this device." });
+        setImportNote({ kind: "error", text: tr().app.deckGone });
       }
     },
   });
@@ -164,9 +188,9 @@ export function App() {
   const kidId = session?.profileId && ready ? session.profileId : null;
   const onKidDevice = Boolean(kid && session?.profileId === kid.profile.id);
   const decks = kidId
-    ? [...bundledDecks, ...accountDecksFor(ready!.decks, kidId)]
+    ? [...bundledDecks, ...accountDecksFor(ready!.decks, kidId, t.deck)]
     : onKidDevice
-      ? [...bundledDecks, ...accountDecksFor(kid!.decks, kid!.profile.id), ...imported]
+      ? [...bundledDecks, ...accountDecksFor(kid!.decks, kid!.profile.id, t.deck), ...imported]
       : [...bundledDecks, ...imported];
 
   // Is this a kid's linked device? (The link lives in an HttpOnly cookie, so ask the server.)
@@ -233,12 +257,12 @@ export function App() {
   async function unlinkThisDevice() {
     await savePending();
     const unresolved = saver.pending > 0;
-    if (unresolved && !window.confirm("Some recent points have not been confirmed. Remove this device anyway?")) throw new Error("Device removal cancelled; your points are still waiting.");
+    if (unresolved && !window.confirm(tr().app.confirmUnlinkUnsaved)) throw new Error(tr().app.unlinkCancelled);
     saver.clear();
     await api.endSession().catch(() => undefined);
     await api.unlinkThisDevice();
     setKidState({ status: "none" });
-    setSessionState({ status: "none", notice: `This device was removed. Ask your parent for a new link to study as yourself again.${unresolved ? " Some recent points could not be confirmed." : ""}` });
+    setSessionState({ status: "none", notice: tr().app.deviceRemoved(unresolved) });
     setScreen({ name: "decks" });
   }
 
@@ -253,11 +277,11 @@ export function App() {
   async function signOut() {
     await savePending();
     const unresolved = saver.pending > 0;
-    if (unresolved && !window.confirm("Some recent points have not been confirmed. Sign out anyway?")) return;
+    if (unresolved && !window.confirm(tr().app.confirmSignOutUnsaved)) return;
     saver.clear();
     await api.endSession().catch(() => undefined);
     await auth.signOut();
-    setSessionState({ status: "none", ...(unresolved ? { notice: "Some recent points could not be confirmed before sign-out." } : {}) });
+    setSessionState({ status: "none", ...(unresolved ? { notice: tr().app.signOutUnconfirmed } : {}) });
     setAccountState({ status: "none" });
     setScreen({ name: "decks" });
   }
@@ -265,7 +289,7 @@ export function App() {
   async function accountDeleted() {
     await auth.signOut();
     setAccountState({ status: "none" });
-    setSessionState({ status: "none", notice: "Your account and all its kid profiles were deleted." });
+    setSessionState({ status: "none", notice: tr().app.accountDeleted });
     setScreen({ name: "decks" });
   }
 
@@ -288,10 +312,9 @@ export function App() {
         saver.clear();
         setSaveStatus("expired");
         setScreen((current) => current.name === "preview" ? { name: "decks" } : current);
-        const next = session.profileId ? "" : " Enter your name to start a new session.";
         setSessionState({
           status: "none",
-          notice: `Your session has ended, ${session.name}. ${session.points} points were confirmed.${unresolved ? " Some recent points could not be confirmed." : ""}${next}`,
+          notice: tr().app.sessionTimeUp(session.name, session.points, unresolved, !session.profileId),
         });
       },
       Math.max(0, session.deadline - Date.now()),
@@ -310,10 +333,10 @@ export function App() {
   async function endSession() {
     await savePending();
     const unresolved = saver.pending > 0;
-    if (unresolved && !window.confirm("Some answers may not be saved yet. End the session anyway?")) return;
+    if (unresolved && !window.confirm(tr().app.confirmEndUnsaved)) return;
     saver.clear();
     await api.endSession().catch(() => undefined);
-    setSessionState({ status: "none", ...(unresolved ? { notice: "Some recent points could not be confirmed before the session ended." } : {}) });
+    setSessionState({ status: "none", ...(unresolved ? { notice: tr().app.endUnconfirmed } : {}) });
     setScreen({ name: "decks" });
   }
 
@@ -323,19 +346,19 @@ export function App() {
       s.status === "active"
         ? {
             status: "none",
-            notice: s.session.profileId ? "Your session has ended. Recent points may not have been confirmed." : "Your session has ended. Recent points may not have been confirmed. Enter your name to start a new one.",
+            notice: tr().app.sessionExpired(!s.session.profileId),
           }
         : s,
     );
   }
 
   /** The kid profile behind this session was deleted (from another tab or device): the session is over. */
-  function profileRemoved(extra = "") {
+  function profileRemoved(pointsLost = false) {
     const profileId = profileIdRef.current;
     if (profileId) {
       setAccountState((a) => (a.status === "ready" ? { ...a, profiles: a.profiles.filter((p) => p.id !== profileId) } : a));
     }
-    setSessionState({ status: "none", notice: `This profile is no longer available. Ask an adult to start a new session.${extra}` });
+    setSessionState({ status: "none", notice: pointsLost ? tr().app.profileGonePointsLost : tr().app.profileGone });
   }
 
   function forgetPrivateDeck(deckId: string) {
@@ -345,14 +368,14 @@ export function App() {
 
   function deckAccessFailed(err: unknown, deckId: string) {
     setScreen({ name: "decks" });
-    if (err instanceof Error && err.message.includes("device is no longer linked")) {
+    if (serverSaid(err, DEVICE_GONE)) {
       setKidState({ status: "none" });
-      setSessionState({ status: "none", notice: "This device is no longer linked. Ask an adult for a new link." });
-    } else if (err instanceof Error && err.message.includes(PROFILE_GONE)) {
+      setSessionState({ status: "none", notice: tr().app.deviceUnlinked });
+    } else if (serverSaid(err, PROFILE_GONE)) {
       profileRemoved();
     } else {
       if (err instanceof ApiError && err.status === 403) forgetPrivateDeck(deckId);
-      setImportNote({ kind: "error", text: "This deck couldn't be opened. Check your connection or ask an adult. Access changes can only be checked when connected; downloaded content may remain on this device." });
+      setImportNote({ kind: "error", text: tr().app.deckCantOpen });
     }
   }
 
@@ -395,7 +418,7 @@ export function App() {
     saver
       .flush({ final: true })
       .then((saved) => {
-        if (!saved) throw new Error("The score status is unknown.");
+        if (!saved) throw new Error(tr().app.scoreUnknown);
         update({ status: "saved", result: { ...saved, pointsEarned: roundPoints } });
       })
       .catch((err: Error) => {
@@ -423,46 +446,44 @@ export function App() {
       let saved = ready.decks;
       const failed: string[] = [];
       for (const file of files) {
+        const text = await file.text();
         try {
-          saved = [...saved, await api.createDeck(file.name, await file.text())];
+          saved = [...saved, await api.createDeck(file.name, text)];
         } catch (err) {
-          failed.push(`${file.name}: ${err instanceof ApiError && err.details[0] ? err.details[0] : (err as Error).message}`);
+          const problem = err instanceof ApiError && err.details.length ? deckProblems(file.name, text, err.details, tr().deck)[0] : undefined;
+          failed.push(`${file.name}: ${problem ?? (err as Error).message}`);
         }
       }
       setAccountState({ ...ready, decks: saved });
       const added = saved.length - ready.decks.length;
       setImportNote(
         failed.length
-          ? { kind: "error", text: `${added ? `Added ${added}. ` : ""}Couldn't add ${failed.join("; ")}` }
-          : { kind: "ok", text: `Added ${added} deck${added === 1 ? "" : "s"} to your family's private decks.` },
+          ? { kind: "error", text: tr().app.importSome(added, failed) }
+          : { kind: "ok", text: tr().app.importAdded(added) },
       );
       return;
     }
-    const entries = await Promise.all(
-      files.map(async (file) => saveImportedDeck(file.name, await file.text())),
-    );
-    setImported((prev) => [
-      ...prev.filter((p) => !entries.some((e) => e.id === p.id)),
-      ...entries,
-    ]);
+    const stored = await Promise.all(files.map(async (file) => ({ fileName: file.name, text: await file.text() })));
+    for (const d of stored) saveImportedDeck(d.fileName, d.text);
+    setImportedFiles((prev) => [...prev.filter((p) => !stored.some((d) => d.fileName === p.fileName)), ...stored]);
   }
 
   function removeDeck(entry: DeckEntry) {
     removeImportedDeck(entry.fileName);
-    setImported((prev) => prev.filter((p) => p.id !== entry.id));
+    setImportedFiles((prev) => prev.filter((p) => p.fileName !== entry.fileName));
   }
 
   const loading = (
-    <main className="app">
-      <p className="muted loading">Loading…</p>
-    </main>
+    <Page>
+      <p className="muted loading">{t.common.loading}</p>
+    </Page>
   );
   if (sessionState.status === "loading" || !auth.isLoaded || kidState.status === "loading") return loading;
 
   // An invitation link: link this device to a kid's profile (after they confirm).
   if (joinToken !== null) {
     return (
-      <main className="app">
+      <Page>
         <JoinInvite
           token={joinToken}
           onJoined={async (k) => {
@@ -471,13 +492,13 @@ export function App() {
             saver.clear();
             await api.endSession().catch(() => undefined); // any guest session on this device
             setKidState({ status: "linked", kid: k });
-            setSessionState({ status: "none", ...(unresolved ? { notice: "Some points from the previous session could not be confirmed." } : {}) });
+            setSessionState({ status: "none", ...(unresolved ? { notice: tr().app.previousUnconfirmed } : {}) });
             setScreen({ name: "decks" });
             setJoinToken(null);
           }}
           onClose={() => setJoinToken(null)}
         />
-      </main>
+      </Page>
     );
   }
 
@@ -486,7 +507,7 @@ export function App() {
   // Parent pages: kid profiles, private decks and files, settings.
   if (ready && screen.name === "my-decks") {
     return (
-      <main className="app">
+      <Page>
         <MyDecks
           decks={ready.decks}
           profiles={ready.profiles}
@@ -494,38 +515,38 @@ export function App() {
           onChange={(decks) => setAccountState((s) => (s.status === "ready" ? { ...s, decks } : s))}
           onBack={() => setScreen({ name: "decks" })}
         />
-      </main>
+      </Page>
     );
   }
   if (ready && screen.name === "my-files") {
     return (
-      <main className="app">
+      <Page>
         <MyFiles onBack={() => setScreen({ name: "decks" })} />
-      </main>
+      </Page>
     );
   }
   if (ready && screen.name === "profiles") {
     return (
-      <main className="app">
+      <Page>
         <ProfilesManager
           profiles={ready.profiles}
           points={ready.points}
           onChange={(profiles) => setAccountState({ ...ready, profiles })}
           onBack={() => setScreen({ name: "decks" })}
         />
-      </main>
+      </Page>
     );
   }
   if (ready && screen.name === "settings") {
     return (
-      <main className="app">
+      <Page>
         <Settings
           account={ready.account}
           onSaved={(account) => setAccountState({ ...ready, account })}
           onDeleted={accountDeleted}
           onBack={() => setScreen({ name: "decks" })}
         />
-      </main>
+      </Page>
     );
   }
 
@@ -536,20 +557,20 @@ export function App() {
       if (accountState.status === "loading" || accountState.status === "none") return loading;
       if (accountState.status === "error") {
         return (
-          <main className="app">
+          <Page>
             <div className="welcome">
               <p className="welcome__error" role="alert">
-                Couldn't load your account: {accountState.message}
+                {t.app.accountLoadFailed(accountState.message)}
               </p>
               <button type="button" className="btn btn--secondary" onClick={signOut}>
-                Sign out
+                {t.app.signOut}
               </button>
             </div>
-          </main>
+          </Page>
         );
       }
       return (
-        <main className="app">
+        <Page>
           <ParentHome
             displayName={accountState.account.displayName}
             profiles={accountState.profiles}
@@ -562,12 +583,12 @@ export function App() {
             onSettings={() => setScreen({ name: "settings" })}
             onSignOut={signOut}
           />
-        </main>
+        </Page>
       );
     }
     if (kid) {
       return (
-        <main className="app">
+        <Page>
           <KidHome
             profile={kid.profile}
             totalPoints={kid.totalPoints}
@@ -576,11 +597,11 @@ export function App() {
             onUnlink={unlinkThisDevice}
             onParentSignIn={AUTH_MODE === "off" ? undefined : auth.signIn}
           />
-        </main>
+        </Page>
       );
     }
     return (
-      <main className="app">
+      <Page>
         <Welcome
           notice={notice}
           onStart={startSession}
@@ -588,23 +609,23 @@ export function App() {
             AUTH_MODE === "off"
               ? undefined
               : {
-                  label: AUTH_MODE === "dev" ? "Sign in (local dev)" : "Sign in with Google",
+                  label: AUTH_MODE === "dev" ? t.app.signInDev : t.app.signInGoogle,
                   onClick: auth.signIn,
                 }
           }
         />
-      </main>
+      </Page>
     );
   }
 
   return (
-    <main className="app">
-      {session && <SessionBar session={session} onEnd={endSession} endLabel={onKidDevice ? "Finish" : undefined} />}
+    <Page>
+      {session && <SessionBar session={session} onEnd={endSession} endLabel={onKidDevice ? t.app.finish : undefined} />}
 
       {screen.name === "decks" && (
         <>
         {/* eslint-disable-next-line react-hooks/refs -- see `saver` above */}
-        {saver.pending > 0 && <div className="save-problem" role="status"><p>{saveStatus === "failed" ? "Some recent points were rejected. End this session and start a new one." : "Some recent points have not been confirmed."}</p>{saveStatus !== "failed" && <button type="button" className="btn btn--secondary" onClick={() => void saver.flush().catch(() => undefined)}>Retry saving</button>}</div>}
+        {saver.pending > 0 && <div className="save-problem" role="status"><p>{saveStatus === "failed" ? t.app.pointsRejected : t.app.pointsUnconfirmed}</p>{saveStatus !== "failed" && <button type="button" className="btn btn--secondary" onClick={() => void saver.flush().catch(() => undefined)}>{t.app.retrySaving}</button>}</div>}
         <DeckList
           decks={decks}
           bestScores={bestScores}
@@ -635,7 +656,7 @@ export function App() {
 
       {screen.name === "quiz" && (
         <>
-        <p className="save-status" role="status">{saveStatus === "confirmed" ? "Points saved" : saveStatus === "pending" || saveStatus === "saving" ? "Saving points…" : saveStatus === "unknown" ? "We couldn't confirm whether your latest points were saved" : saveStatus === "failed" ? "Your latest points could not be saved" : "Your latest points may not have been saved"}</p>
+        <p className="save-status" role="status">{saveStatus === "confirmed" ? t.app.saveStatus.confirmed : saveStatus === "pending" || saveStatus === "saving" ? t.app.saveStatus.saving : saveStatus === "unknown" ? t.app.saveStatus.unknown : saveStatus === "failed" ? t.app.saveStatus.failed : t.app.saveStatus.other}</p>
         <Quiz
           key={screen.run}
           deck={screen.deck}
@@ -674,6 +695,6 @@ export function App() {
           onExit={() => setScreen({ name: "decks" })}
         />
       )}
-    </main>
+    </Page>
   );
 }

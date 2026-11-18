@@ -1,9 +1,13 @@
 import { useEffect, useRef } from "react";
 import type { Card } from "../deck";
+import { useI18n } from "../i18n";
+import { rich } from "../i18n/rich";
 import type { AnswerPoints } from "../points";
 
 interface Props {
   card: Card;
+  /** The language the deck is written in (for screen readers), when known. */
+  lang?: string;
   picked: string | null;
   earned: AnswerPoints | null;
   isLast: boolean;
@@ -13,7 +17,8 @@ interface Props {
 
 const LETTERS = "ABCDEFGHIJ";
 
-export function FlipCard({ card, picked, earned, isLast, onPick, onNext }: Props) {
+export function FlipCard({ card, lang, picked, earned, isLast, onPick, onNext }: Props) {
+  const { t } = useI18n();
   const answered = picked !== null;
   const correct = picked === card.answer;
   const feedbackRef = useRef<HTMLElement>(null);
@@ -26,27 +31,27 @@ export function FlipCard({ card, picked, earned, isLast, onPick, onNext }: Props
 
   return (
     <div className="question-sheet">
-      <p className="question-sheet__label">Take a moment to think</p>
-      <h2 ref={questionRef} tabIndex={-1} className="question">{card.question}</h2>
+      <p className="question-sheet__label">{t.quiz.think}</p>
+      <h2 ref={questionRef} tabIndex={-1} className="question" lang={lang}>{card.question}</h2>
       {!answered ? (
         <>
           <ol className="options">
             {card.options.map((option, i) => (
               <li key={option}><button type="button" className="option" onClick={() => onPick(option)}>
-                <span className="option__key" aria-hidden="true">{LETTERS[i] ?? i + 1}</span><span className="option__text">{option}</span>
+                <span className="option__key" aria-hidden="true">{LETTERS[i] ?? i + 1}</span><span className="option__text" lang={lang}>{option}</span>
               </button></li>
             ))}
           </ol>
-          <p className="hint">Choose an answer or press a number key.</p>
+          <p className="hint">{t.quiz.hint}</p>
         </>
       ) : (
         <section ref={feedbackRef} tabIndex={-1} className={`field-feedback ${correct ? "is-correct" : "is-wrong"}`} aria-labelledby="feedback-title">
-          <p id="feedback-title" className="field-feedback__title">{correct ? "✓ That's right" : "Not quite — let's look at it"}</p>
-          <p>The answer is <strong>{card.answer}</strong>.</p>
-          {!correct && <p>You chose {picked}.</p>}
-          {card.explanation && <p className="explanation">{card.explanation}</p>}
-          {earned && earned.points > 0 && <p className="field-feedback__points">+{earned.points} points</p>}
-          <button type="button" className="btn btn--primary" onClick={onNext}>{isLast ? "See results" : "Next question"} <span aria-hidden="true">→</span></button>
+          <p id="feedback-title" className="field-feedback__title">{correct ? t.quiz.right : t.quiz.wrong}</p>
+          <p>{rich(t.quiz.answerIs, { answer: <strong lang={lang}>{card.answer}</strong> })}</p>
+          {!correct && <p>{rich(t.quiz.youChose("{picked}"), { picked: <span lang={lang}>{picked}</span> })}</p>}
+          {card.explanation && <p className="explanation" lang={lang}>{card.explanation}</p>}
+          {earned && earned.points > 0 && <p className="field-feedback__points">{t.quiz.plusPoints(earned.points)}</p>}
+          <button type="button" className="btn btn--primary" onClick={onNext}>{isLast ? t.quiz.seeResults : t.quiz.next} <span aria-hidden="true">→</span></button>
         </section>
       )}
     </div>

@@ -10,6 +10,7 @@
 title: My first deck                # shown in the deck list
 description: A short description    # optional, shown under the title
 # subject: Space science             # optional, author-provided; omit if unknown
+language: en                        # optional: the language the cards are written in (en, es…)
 enabled: true                       # required to show the deck (false = hidden)
 shuffle: true                       # shuffle the card order each round (default: true)
 shuffleOptions: true                # shuffle each card's answer options (default: true)

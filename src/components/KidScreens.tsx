@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { KidCard } from "../account-shared";
 import { api, type KidHomeInfo } from "../api";
+import { getLanguage, messagesFor, useI18n } from "../i18n";
 import { LeaderboardPanel } from "./LeaderboardPanel";
 import { ProfileAvatar } from "./ParentHome";
 
@@ -14,6 +15,7 @@ export function JoinInvite({
   onJoined: (kid: KidHomeInfo) => void;
   onClose: () => void;
 }) {
+  const { t } = useI18n();
   const [profile, setProfile] = useState<KidCard | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -21,7 +23,7 @@ export function JoinInvite({
   useEffect(() => {
     if (!token) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- a link with no token has nothing to load
-      setError("This link isn't complete. Ask your parent to send it again.");
+      setError(messagesFor(getLanguage()).kid.linkIncomplete);
       return;
     }
     api
@@ -36,10 +38,10 @@ export function JoinInvite({
     try {
       await api.joinInvite(token);
       const kid = await api.kidHome();
-      if (!kid) throw new Error("This device couldn't be linked. Please try the link again.");
+      if (!kid) throw new Error(t.kid.linkRetry);
       onJoined(kid);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "This device couldn't be linked.");
+      setError(err instanceof Error ? err.message : t.kid.linkFailed);
       setBusy(false);
     }
   }
@@ -53,25 +55,24 @@ export function JoinInvite({
             {error}
           </p>
           <button type="button" className="btn btn--secondary" onClick={onClose}>
-            OK
+            {t.common.ok}
           </button>
         </>
       ) : !profile ? (
-          <p className="muted loading" role="status">Checking your link…</p>
+          <p className="muted loading" role="status">{t.kid.checking}</p>
       ) : (
         <>
           <ProfileAvatar profile={profile} size={96} />
-          <h2 className="kid-screen__title">Study as {profile.nickname}?</h2>
+          <h2 className="kid-screen__title">{t.kid.studyAsQuestion(profile.nickname)}</h2>
           <p className="muted kid-screen__text">
-            This device will be linked to {profile.nickname}'s profile, so you can study here and earn points. No
-            email or password needed. Your parent can remove this device anytime.
+            {t.kid.linkExplain(profile.nickname)}
           </p>
           <div className="kid-screen__actions">
             <button type="button" className="btn btn--primary" onClick={join} disabled={busy}>
-              {busy ? "Linking…" : `Use this device as ${profile.nickname}`}
+              {busy ? t.kid.linking : t.kid.joinAs(profile.nickname)}
             </button>
             <button type="button" className="btn btn--ghost" onClick={onClose} disabled={busy}>
-              Not now
+              {t.kid.notNow}
             </button>
           </div>
         </>
@@ -96,6 +97,7 @@ export function KidHome({
   onUnlink: () => Promise<void>;
   onParentSignIn?: () => void;
 }) {
+  const { t } = useI18n();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -105,7 +107,7 @@ export function KidHome({
     try {
       await action();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : t.common.somethingWentWrong);
     } finally {
       setBusy(false);
     }
@@ -114,9 +116,9 @@ export function KidHome({
   return (
     <div className="kid-screen">
       <ProfileAvatar profile={profile} size={96} />
-      <h1 className="kid-screen__title">Welcome back, {profile.nickname}.</h1>
-      <p className="kid-screen__points" aria-label={`${totalPoints} points so far`}>
-        ⭐ {totalPoints.toLocaleString()} points so far
+      <h1 className="kid-screen__title">{t.kid.welcomeBack(profile.nickname)}</h1>
+      <p className="kid-screen__points" aria-label={t.kid.pointsSoFar(totalPoints)}>
+        ⭐ {t.kid.pointsSoFar(totalPoints)}
       </p>
       {notice && (
         <p className="welcome__notice" role="status">
@@ -128,23 +130,23 @@ export function KidHome({
           {error}
         </p>
       )}
-      <p className="muted kid-screen__text">Ready for another discovery? Your study session lasts 60 minutes.</p>
+      <p className="muted kid-screen__text">{t.kid.ready}</p>
       <button type="button" className="btn btn--primary kid-screen__start" onClick={() => run(onStart)} disabled={busy}>
-        Explore decks →
+        {t.kid.explore}
       </button>
       <button
         type="button"
         className="btn btn--ghost kid-screen__unlink"
         disabled={busy}
         onClick={() => {
-          if (window.confirm(`Remove this device from ${profile.nickname}'s profile? You'll need a new link from your parent.`)) {
+          if (window.confirm(t.kid.confirmUnlink(profile.nickname))) {
             void run(onUnlink);
           }
         }}
       >
-        Not {profile.nickname}? Remove this device
+        {t.kid.notMe(profile.nickname)}
       </button>
-      {onParentSignIn && <button type="button" className="btn btn--ghost" onClick={onParentSignIn}>Parent or teacher sign in</button>}
+      {onParentSignIn && <button type="button" className="btn btn--ghost" onClick={onParentSignIn}>{t.common.parentSignIn}</button>}
       <LeaderboardPanel />
     </div>
   );

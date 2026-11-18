@@ -3,13 +3,13 @@ import { api, type KidLinks } from "../api";
 import { KidLinkPanel } from "./KidLinks";
 import {
   GRADE_BANDS,
-  GRADE_LABELS,
   MAX_PROFILES,
   PROFILE_COLORS,
   PROFILE_EMOJIS,
   type KidProfile,
   type ProfileInput,
 } from "../account-shared";
+import { useI18n, type Messages } from "../i18n";
 import { ProfileAvatar } from "./ParentHome";
 
 interface Props {
@@ -41,6 +41,7 @@ function ProfileForm({
   onCancel?: () => void;
   onDelete?: () => Promise<void>;
 }) {
+  const { t } = useI18n();
   const [form, setForm] = useState<ProfileInput>(initial);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +53,7 @@ function ProfileForm({
     try {
       await action();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : t.common.somethingWentWrong);
     } finally {
       setBusy(false);
     }
@@ -69,32 +70,32 @@ function ProfileForm({
         <ProfileAvatar profile={form} size={56} />
       </div>
       <label className="field">
-        <span>Nickname</span>
+        <span>{t.profiles.nickname}</span>
         <input
           value={form.nickname}
           onChange={(e) => set({ nickname: e.target.value })}
           maxLength={24}
           autoComplete="off"
-          placeholder="e.g. StarCat (not their real name)"
+          placeholder={t.profiles.nicknamePlaceholder}
           required
         />
       </label>
       <label className="field">
-        <span>Grade</span>
+        <span>{t.profiles.grade}</span>
         <select
           value={form.gradeBand ?? ""}
           onChange={(e) => set({ gradeBand: (e.target.value || null) as ProfileInput["gradeBand"] })}
         >
-          <option value="">Not set</option>
+          <option value="">{t.profiles.gradeNotSet}</option>
           {GRADE_BANDS.map((g) => (
             <option key={g} value={g}>
-              {GRADE_LABELS[g]}
+              {t.profiles.grades[g]}
             </option>
           ))}
         </select>
       </label>
       <fieldset className="field">
-        <legend>Color</legend>
+        <legend>{t.profiles.color}</legend>
         <div className="swatches">
           {PROFILE_COLORS.map((c) => (
             <label key={c} className="swatch" style={{ background: c }}>
@@ -105,7 +106,7 @@ function ProfileForm({
         </div>
       </fieldset>
       <fieldset className="field">
-        <legend>Picture</legend>
+        <legend>{t.profiles.picture}</legend>
         <div className="swatches">
           {PROFILE_EMOJIS.map((em) => (
             <label key={em} className="emoji-choice">
@@ -123,7 +124,7 @@ function ProfileForm({
           onChange={(e) => set({ showOnLeaderboard: e.target.checked })}
         />
         <span>
-          Show this nickname on the public leaderboard <span className="muted">(off keeps this profile's score off the public board)</span>
+          {t.profiles.showOnBoard} <span className="muted">{t.profiles.showOnBoardHint}</span>
         </span>
       </label>
       {error && (
@@ -137,7 +138,7 @@ function ProfileForm({
         </button>
         {onCancel && (
           <button type="button" className="btn btn--ghost" onClick={onCancel} disabled={busy}>
-            Cancel
+            {t.common.cancel}
           </button>
         )}
         {onDelete && (
@@ -146,10 +147,10 @@ function ProfileForm({
             className="btn btn--danger"
             disabled={busy}
             onClick={() => {
-              if (window.confirm(`Delete ${initial.nickname}'s profile? Their points will be removed.`)) void run(onDelete);
+              if (window.confirm(t.profiles.confirmDelete(initial.nickname))) void run(onDelete);
             }}
           >
-            Delete profile
+            {t.profiles.deleteProfile}
           </button>
         )}
       </div>
@@ -158,6 +159,7 @@ function ProfileForm({
 }
 
 export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
+  const { t } = useI18n();
   /** The profile being edited (its id), "new" for the add form, or none. */
   const [editing, setEditing] = useState<string | null>(profiles.length === 0 ? "new" : null);
   const [links, setLinks] = useState<KidLinks>({ invites: [], devices: [] });
@@ -185,17 +187,16 @@ export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
     <div className="manage">
       <header className="manage__header">
         <button type="button" className="btn btn--ghost" onClick={onBack}>
-          ← Back
+          {t.common.back}
         </button>
-        <h1>Learner profiles</h1>
+        <h1>{t.profiles.title}</h1>
       </header>
       <p className="muted manage__intro">
-        Each profile is just a nickname and a picture — no real names, emails or birthdays. Kids pick their profile on
-        this device, or open their invitation link on their own tablet or computer, to study and earn points.
+        {t.profiles.intro}
       </p>
       {linksError && (
         <p className="welcome__error" role="alert">
-          Couldn't load linked devices: {linksError}
+          {t.profiles.linksFailed(linksError)}
         </p>
       )}
 
@@ -205,7 +206,7 @@ export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
             {editing === p.id ? (
               <ProfileForm
                 initial={p}
-                submitLabel="Save"
+                submitLabel={t.common.save}
                 onCancel={() => setEditing(null)}
                 onSubmit={async (input) => {
                   const updated = await api.updateProfile(p.id, input);
@@ -230,9 +231,9 @@ export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
                   <div className="manage__info">
                     <strong>{p.nickname}</strong>
                     <span className="muted">
-                      {p.gradeBand ? GRADE_LABELS[p.gradeBand] : "Grade not set"} ·{" "}
-                      ⭐ {(points[p.id] ?? 0).toLocaleString()} pts · {p.showOnLeaderboard ? "On the leaderboard" : "Private"} ·{" "}
-                      {devicesLabel(links, p.id)}
+                      {p.gradeBand ? t.profiles.grades[p.gradeBand] : t.profiles.noGrade} ·{" "}
+                      ⭐ {t.common.pts(points[p.id] ?? 0)} · {p.showOnLeaderboard ? t.profiles.onBoard : t.common.private} ·{" "}
+                      {devicesLabel(links, p.id, t)}
                     </span>
                   </div>
                   <button
@@ -241,10 +242,10 @@ export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
                     aria-expanded={open === p.id}
                     onClick={() => setOpen(open === p.id ? null : p.id)}
                   >
-                    Devices
+                    {t.profiles.devices}
                   </button>
-                  <button type="button" className="btn btn--secondary" onClick={() => setEditing(p.id)} aria-label={`Edit ${p.nickname}`}>
-                    Edit
+                  <button type="button" className="btn btn--secondary" onClick={() => setEditing(p.id)} aria-label={t.profiles.editLabel(p.nickname)}>
+                    {t.common.edit}
                   </button>
                 </div>
                 {open === p.id && (
@@ -273,14 +274,14 @@ export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
 
       {editing === "new" ? (
         <div className="manage__item">
-          <h2 className="section-title">New profile</h2>
+          <h2 className="section-title">{t.profiles.newProfile}</h2>
           <ProfileForm
             initial={{
               ...BLANK,
               color: PROFILE_COLORS[profiles.length % PROFILE_COLORS.length],
               emoji: PROFILE_EMOJIS[profiles.length % PROFILE_EMOJIS.length],
             }}
-            submitLabel="Create profile"
+            submitLabel={t.profiles.create}
             onCancel={profiles.length > 0 ? () => setEditing(null) : undefined}
             onSubmit={async (input) => {
               const created = await api.createProfile(input);
@@ -294,7 +295,7 @@ export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
       ) : (
         profiles.length < MAX_PROFILES && (
           <button type="button" className="btn btn--primary" onClick={() => setEditing("new")}>
-            + Add a profile
+            {t.profiles.add}
           </button>
         )
       )}
@@ -302,7 +303,6 @@ export function ProfilesManager({ profiles, points, onChange, onBack }: Props) {
   );
 }
 
-function devicesLabel(links: KidLinks, profileId: string): string {
-  const n = links.devices.filter((d) => d.profileId === profileId).length;
-  return n === 0 ? "No devices linked" : `${n} device${n === 1 ? "" : "s"} linked`;
+function devicesLabel(links: KidLinks, profileId: string, t: Messages): string {
+  return t.profiles.deviceCount(links.devices.filter((d) => d.profileId === profileId).length);
 }
