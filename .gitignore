@@ -3,8 +3,10 @@ dist
 .DS_Store
 *.local
 
-# Source study guides (third-party material, kept local only)
-docs/
+# Source study guides (third-party material, kept local only).
+# docs/security/ holds the project's own security docs and is tracked.
+docs/*
+!docs/security/
 .vercel
 .env*
 
