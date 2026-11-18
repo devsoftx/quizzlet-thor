@@ -69,7 +69,7 @@ function DeckForm({
 
   function submit(e: FormEvent) {
     e.preventDefault();
-    run(() => onSave({ title, profileIds: everyone ? null : picked }));
+    void run(() => onSave({ title, profileIds: everyone ? null : picked }));
   }
 
   return (
@@ -127,7 +127,7 @@ function DeckForm({
           className="btn btn--danger"
           disabled={busy}
           onClick={() => {
-            if (window.confirm(`Delete "${deck.title}"? This can't be undone.`)) run(onDelete);
+            if (window.confirm(`Delete "${deck.title}"? This can't be undone.`)) void run(onDelete);
           }}
         >
           Delete deck
@@ -139,7 +139,7 @@ function DeckForm({
 
 /** A parent's private decks: add, switch on/off, pick which kids see each one. */
 export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Props) {
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [problems, setProblems] = useState<UploadProblem[]>([]);
@@ -203,7 +203,7 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
         <button
           type="button"
           className="btn btn--primary"
-          onClick={() => fileInput.current?.click()}
+          onClick={() => fileInputRef.current?.click()}
           disabled={busy !== null || decks.length >= MAX_DECKS}
         >
           + Add YAML deck…
@@ -215,13 +215,13 @@ export function MyDecks({ decks, profiles, browserDecks, onChange, onBack }: Pro
           {decks.length} of {MAX_DECKS} decks
         </span>
         <input
-          ref={fileInput}
+          ref={fileInputRef}
           type="file"
           accept=".yaml,.yml"
           multiple
           hidden
           onChange={(e) => {
-            pickFiles(e.target.files);
+            void pickFiles(e.target.files);
             e.target.value = "";
           }}
         />

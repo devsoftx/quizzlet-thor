@@ -648,6 +648,7 @@ export class RedisStore implements Store {
       rank,
       name: String(row.name || row.key),
       points: Number(row.points),
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string -- the script returns the emoji as text
       ...(row.emoji ? { emoji: String(row.emoji) } : {}),
     });
     const rows = Array.isArray(board?.top) ? (board.top as Row[]) : [];

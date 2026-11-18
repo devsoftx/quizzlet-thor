@@ -16,7 +16,8 @@ interface HeaderRule {
  * refresh needs that, and the production build has no inline script.
  */
 function vercelHeaders(): Plugin {
-  const rules = (JSON.parse(readFileSync(new URL("./vercel.json", import.meta.url), "utf8")).headers ?? []) as HeaderRule[];
+  const config = JSON.parse(readFileSync(new URL("./vercel.json", import.meta.url), "utf8")) as { headers?: HeaderRule[] };
+  const rules = config.headers ?? [];
   const compiled = rules.map((rule) => ({ test: new RegExp(`^${rule.source}$`), headers: rule.headers }));
 
   const middleware = (dev: boolean): Connect.NextHandleFunction => (req, res, next) => {
@@ -86,7 +87,7 @@ function vercelFunctionsDev(): Plugin {
       body: hasBody ? new Uint8Array(await readBody(req)) : undefined,
     });
 
-    const response = (await handler(request)) as Response;
+    const response = await (handler as (request: Request) => Response | Promise<Response>)(request);
     res.statusCode = response.status;
     response.headers.forEach((value, key) => {
       if (key !== "set-cookie") res.setHeader(key, value);

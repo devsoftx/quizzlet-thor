@@ -42,7 +42,8 @@ function parseEnabled(raw: unknown): { value: boolean | null; error?: string } {
     if (word === "true" || word === "enabled") return { value: true };
     if (word === "false" || word === "disabled") return { value: false };
   }
-  return { value: null, error: `"enabled" must be true or false (got "${String(raw)}").` };
+  const got = typeof raw === "string" ? raw : JSON.stringify(raw);
+  return { value: null, error: `"enabled" must be true or false (got "${got}").` };
 }
 
 type Rng = () => number;

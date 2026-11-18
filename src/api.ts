@@ -81,7 +81,7 @@ async function call<T>(
   } catch {
     throw new ApiError("Can't reach the server. Check your internet connection.", 0);
   }
-  const data = await res.json().catch(() => null);
+  const data = (await res.json().catch(() => null)) as { error?: string; errors?: unknown[] } | null;
   if (!res.ok) {
     const details = Array.isArray(data?.errors) ? data.errors.map(String) : [];
     throw new ApiError(data?.error ?? `Something went wrong (${res.status}).`, res.status, details);

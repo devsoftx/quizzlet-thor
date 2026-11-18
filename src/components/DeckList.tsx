@@ -31,7 +31,7 @@ cards:
     explanation: Odin, the All-Father, rules Asgard.  # optional`;
 
 export function DeckList({ decks: allDecks, onStart, onImport, onRemove, importNote }: Props) {
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => { headingRef.current?.focus({ preventScroll: true }); }, []);
   const [dragging, setDragging] = useState(false);
@@ -75,11 +75,11 @@ export function DeckList({ decks: allDecks, onStart, onImport, onRemove, importN
           <a className="btn btn--ghost" href={TEMPLATE_URL} download={TEMPLATE_FILE_NAME}>
             Download template
           </a>
-          <button type="button" className="btn btn--secondary" onClick={() => fileInput.current?.click()}>
+          <button type="button" className="btn btn--secondary" onClick={() => fileInputRef.current?.click()}>
             Import YAML…
           </button>
           <input
-            ref={fileInput}
+            ref={fileInputRef}
             type="file"
             accept=".yaml,.yml"
             multiple

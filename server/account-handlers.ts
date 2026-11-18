@@ -14,6 +14,7 @@ import {
   type KidProfile,
   type ProfileInput,
 } from "./accounts.js";
+import type { AuthUser } from "./auth.js";
 import { defaultDeps, type Deps } from "./deps.js";
 import { accountFolder } from "./files.js";
 import { cleanName, error, json, readJson } from "./http.js";
@@ -30,7 +31,7 @@ export async function requireAccount(request: Request, deps: Deps): Promise<Acco
   const auth = deps.auth ?? null;
   const accounts = deps.accounts ?? null;
   if (!auth || !accounts) return error(503, "Parent accounts aren't set up yet.");
-  let user = null;
+  let user: AuthUser | null;
   try {
     user = await auth.authenticate(request);
   } catch (err) {

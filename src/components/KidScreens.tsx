@@ -20,6 +20,7 @@ export function JoinInvite({
 
   useEffect(() => {
     if (!token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- a link with no token has nothing to load
       setError("This link isn't complete. Ask your parent to send it again.");
       return;
     }
@@ -137,7 +138,7 @@ export function KidHome({
         disabled={busy}
         onClick={() => {
           if (window.confirm(`Remove this device from ${profile.nickname}'s profile? You'll need a new link from your parent.`)) {
-            run(onUnlink);
+            void run(onUnlink);
           }
         }}
       >

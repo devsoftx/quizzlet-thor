@@ -1,0 +1,88 @@
+# Checks every pull request and every push to main: lint, types, unit tests,
+# the production build, the storage code against a real PostgreSQL and Redis,
+# and the end-to-end tests in a real browser. No job needs a secret, and none
+# touches a real service: the storage checks start their own throwaway
+# containers, and the end-to-end tests run on in-memory data.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A new push to a pull request replaces the run still in progress for it.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NODE_VERSION: 22
+
+jobs:
+  checks:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Lint
+            command: npm run lint
+          - name: Typecheck
+            command: npm run typecheck
+          - name: Unit tests
+            command: npm test
+          - name: Build
+            command: npm run build
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: ${{ matrix.command }}
+
+  storage:
+    name: Storage (PostgreSQL and Redis)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: The account SQL, on a disposable PostgreSQL
+        run: sh scripts/test-foundation-postgres.sh
+      - name: The Redis scripts, on a disposable Redis
+        run: python3 scripts/test-redis-score.py
+
+  e2e:
+    name: End-to-end tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Install the browser
+        run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Keep the report and traces of a failed run
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
