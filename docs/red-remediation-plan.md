@@ -12,31 +12,37 @@ privacy defect around deleted profiles.
 
 | ID | Issue | Severity | Phase | Status |
 |---|---|---|---|---|
-| R-05 | A live session keeps working after its profile or account is deleted | Medium | 1 | Done on `main` (blue-team R1, #15). The one-off cleanup is in #14; not yet run. |
-| R-01 | Scores are accepted as the browser reports them | Medium | 1 | Done on `main` (blue-team R6, #15). Residual risk accepted (blue-team R11). |
-| R-02 | Guest identity is only a nickname; no filter or removal path | Medium | 1 | Mostly done on `main` (blue-team R12, R14, #15); the one-alphabet rule and a built-in word list are in #14. |
-| R-04 | Uploads that are never confirmed don't count against the quota | Medium | 2 | Done on `main` (blue-team R7, #15). |
-| R-03 | No rate limits; a permanent Redis entry per guest name | Medium | 2 | Names: done on `main` (blue-team R8, #15). Rate limits: **open**, Vercel Firewall rules (blue-team R3). |
-| R-07 | Profile, deck and file limits are check-then-insert | Low | 2 | Done on `main` (blue-team R9, #15). |
-| R-12 | No security logging | Low | 3 | Done on `main` (blue-team R2, #15). Log drain still to set up. |
-| R-06 | Kid device links never expire on the server | Low | 3 | In progress: #14. Needs migration `006`. |
-| R-08 | Cookie-setting POSTs accept any origin and content type | Low | 3 | Done on `main` (blue-team R5, #15). |
-| R-09 | A malformed cookie causes a 500 | Low | 3 | Done on `main` (blue-team R4, #15). |
-| R-10 | Dev sign-in and memory stores are gated only on `VERCEL` being unset | Low | 3 | In progress: #14. |
-| R-11 | No CSP or framing headers | Low | 3 | Done on `main` (blue-team R5, #15); the content policy is report-only. #14 adds the checks on the wire. |
+| R-05 | A live session keeps working after its profile or account is deleted | Medium | 1 | Done: [#15] (blue-team R1). The one-off cleanup script came with [#14]; **still to be run once** on production. |
+| R-01 | Scores are accepted as the browser reports them | Medium | 1 | Done: [#15] (blue-team R6). Residual risk accepted (blue-team R11, not started). |
+| R-02 | Guest identity is only a nickname; no filter or removal path | Medium | 1 | Done: [#15] (blue-team R12, R14), [#14] (one-alphabet rule, built-in word list), [#18] (Spanish and more English words). Guests stay listed. |
+| R-04 | Uploads that are never confirmed don't count against the quota | Medium | 2 | Done: [#15] (blue-team R7). |
+| R-03 | No rate limits; a permanent Redis entry per guest name | Medium | 2 | Names: done, [#15] (blue-team R8). Rate limits: **open**, Vercel Firewall rules (blue-team R3). |
+| R-07 | Profile, deck and file limits are check-then-insert | Low | 2 | Done: [#15] (blue-team R9). |
+| R-12 | No security logging | Low | 3 | Done: [#15] (blue-team R2). Log drain still to set up. |
+| R-06 | Kid device links never expire on the server | Low | 3 | Done: [#14]. Migration `006` is applied by the production deploy that ships it ([#16]). |
+| R-08 | Cookie-setting POSTs accept any origin and content type | Low | 3 | Done: [#15] (blue-team R5). |
+| R-09 | A malformed cookie causes a 500 | Low | 3 | Done: [#15] (blue-team R4). |
+| R-10 | Dev sign-in and memory stores are gated only on `VERCEL` being unset | Low | 3 | Done: [#14]. |
+| R-11 | No CSP or framing headers | Low | 3 | Done: [#15] (blue-team R5), with the checks on the wire in [#14]. The content policy is still report-only. |
 
-Update the Status column as each item merges (Open → In progress → Done, with the PR link).
+All the code for this plan is merged. What is left is outside the code: one cleanup run, the rate-limit
+rules, and the settings questions in Phase 0 (see [Still open](#still-open)).
+
+[#14]: https://github.com/devsoftx/quizzlet-thor/pull/14
+[#15]: https://github.com/devsoftx/quizzlet-thor/pull/15
+[#16]: https://github.com/devsoftx/quizzlet-thor/pull/16
+[#18]: https://github.com/devsoftx/quizzlet-thor/pull/18
 
 ## How this plan was carried out (18 November 2026)
 
 Two reviews of the same code produced two plans: this one and
 [`docs/security/blue-remediation-plan.md`](security/blue-remediation-plan.md). The blue-team plan was
-implemented and merged first (#15), and it covers most of the items here, sometimes by a different route.
-Where the two overlap, `main`'s implementation stands and nothing here replaces it. Pull request #14 adds
-only what this plan asks for that `main` did not have yet. For the items done on `main`, the blue-team
-plan's "Implementation status" section is the record of what was built and checked.
+implemented and merged first ([#15]), and it covers most of the items here, sometimes by a different route.
+Where the two overlap, that implementation stands and nothing here replaced it. Pull request [#14] then
+added only what this plan asks for that `main` did not have yet. For the items done in [#15], the
+blue-team plan's "Implementation status" section is the record of what was built and checked.
 
-### What #14 adds
+### What #14 added
 
 - **R-06.** Migration `006_device_expiry.sql` gives `kid_devices` an `expires_at`. A link lasts a fixed
   180 days from when it was made, the same as its cookie; it is not extended by use. After that the device
@@ -47,9 +53,10 @@ plan's "Implementation status" section is the record of what was built and check
   `QUIZZLET_DEV_AUTH=1`; and it only answers requests addressed to `localhost`. The in-memory stores have
   the same Vercel and `NODE_ENV` guard. The tests now call the API on `https://localhost` for that reason.
 - **R-02.** `server/names.ts`: a nickname's letters must come from one alphabet (Japanese and Korean
-  writing may mix their own scripts), styled letters are folded to plain ones, and a short built-in word
-  list is always on. It applies to guests, kid profiles and the parent's name, and needs no Global Config.
-  The operator's `blockedNames` list (blue-team R14) is checked after it, for guests, as before.
+  writing may mix their own scripts), styled letters are folded to plain ones, and a built-in word list
+  is always on ([#18] later added Spanish and more English words to it). It applies to guests, kid
+  profiles and the parent's name, and needs no Global Config. The operator's `blockedNames` list
+  (blue-team R14) is checked after it, for guests, as before.
 - **R-05, cleanup.** `scripts/cleanup-orphan-players.mjs` removes leaderboard data left by profiles that
   were deleted before sessions were re-checked. It only reports unless given `--yes`, and removes nothing
   if every profile looks deleted (the sign of a `DATABASE_URL` from another environment).
@@ -77,17 +84,24 @@ plan's "Implementation status" section is the record of what was built and check
 - **R-01:** the browser's `streakBefore` may lower the stored streak, never raise it, so a new round
   starts from zero as the app shows it.
 
-### Before deploying #14
+### Now that it is merged
 
-1. Run the migrations (`vercel env run -e production -- npm run db:migrate`): `006_device_expiry.sql`
-   is new, and the code reads its column.
-2. After deploying, run `scripts/cleanup-orphan-players.mjs` once, first without `--yes`.
+1. **Migrations run with the deploy.** Since [#16], a production deploy applies new migrations in its
+   build, so `006_device_expiry.sql` goes in with the deploy that ships the code that reads it. Nothing
+   to run by hand (the runbook says which database role that step needs). Kid devices linked more than
+   180 days ago stop working at that point.
+2. **Run the cleanup once**, after that deploy, first without `--yes`:
+
+   ```bash
+   vercel env run -e production -- node scripts/cleanup-orphan-players.mjs
+   ```
 
 ### Still open
 
+- The one cleanup run above.
+- R-03's rate limits (Firewall rules). Until they exist the open routes have no request limit.
 - The four Phase 0 questions below, and the R-02 decision if listing only parent-approved profiles is
   still wanted.
-- R-03's rate limits (Firewall rules).
 - Everything under "Left for you" in the blue-team plan.
 
 ## Phase 0: settings to check first (no code)
