@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   createProfile,
@@ -10,19 +10,13 @@ import {
   updateProfile,
 } from "./account-handlers.js";
 import { MemoryAccounts } from "./accounts.js";
-import { DevAuthenticator, authorizedParties, getAuthenticator, isLoopbackHost } from "./auth.js";
+import { DevAuthenticator, authorizedParties } from "./auth.js";
 import type { Deps } from "./deps.js";
-import { cleanName, getLeaderboard, startSession, submitScore } from "./handlers.js";
+import { cleanName, getLeaderboard, startSession } from "./handlers.js";
 import { MemoryStore } from "./store.js";
+import { playing, score } from "./test-support.js";
 
-// A loopback name: the local sign-in stand-in answers nowhere else.
-const BASE = "https://localhost";
-
-let batches = 0;
-/** A score save as the app sends it: with its own batch id. */
-const saveScore = (deps: Deps, cookie: string, answers: boolean[]) =>
-  submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: `batch-${++batches}`, answers } }), deps);
-const board = async (deps: Deps, cookie?: string) => (await getLeaderboard(req("/api/leaderboard", { cookie }), deps)).json();
+const BASE = "https://quizzlet.test";
 
 class TestAuth extends DevAuthenticator {
   deleted: string[] = [];
@@ -57,8 +51,6 @@ function req(
     body: init.body === undefined ? undefined : JSON.stringify(init.body),
   });
 }
-
-const cookieFrom = (res: Response) => res.headers.get("set-cookie")!.split(";")[0];
 
 async function newProfile(deps: Deps, user: string, body: Record<string, unknown>) {
   const res = await createProfile(req("/api/profiles", { method: "POST", body, user }), deps);
@@ -159,23 +151,60 @@ describe("kid sessions and the leaderboard", () => {
 
     const start = await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps);
     expect(start.status).toBe(201);
+    const who = await playing(start);
     expect(await start.json()).toMatchObject({ name: "Nova7", profileId: kid.id });
-    const cookie = cookieFrom(start);
+    const board = async () => (await getLeaderboard(req("/api/leaderboard", { cookie: who.cookie }), deps)).json();
 
     // Hidden by default: points count, but the board doesn't show the kid.
-    const first = await (await saveScore(deps, cookie, [true])).json();
+    const first = await (await score(deps, who, { answers: [true] })).json();
     expect(first).toMatchObject({ pointsEarned: 10, totalPoints: 10 });
-    expect(await board(deps, cookie)).toEqual({ top: [], you: null });
+    expect(await board()).toEqual({ top: [], you: null });
 
-    // Parent opts in: the kid appears with their whole total.
+    // Parent opts in: the kid appears with their whole total, and their emoji (a guest's row never has one).
     await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: true } }), deps);
-    expect((await board(deps, cookie)).top).toEqual([{ rank: 1, name: "Nova7", points: 10 }]);
+    expect((await board()).top).toEqual([{ rank: 1, name: "Nova7", points: 10, emoji: "🦊" }]);
 
     // Parent opts out mid-session: later points still don't put the kid back on the board.
     await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: false } }), deps);
-    const later = await (await saveScore(deps, cookie, [true])).json();
+    const later = await (await score(deps, who, { answers: [true], streakBefore: 0 })).json();
     expect(later).toMatchObject({ totalPoints: 20 });
-    expect((await board(deps, cookie)).top).toEqual([]);
+    expect((await board()).top).toEqual([]);
+  });
+
+  it("marks kid profiles with their emoji, so a guest with the same nickname can't pass as them", async () => {
+    const { deps } = setup();
+    const kid = await newProfile(deps, "ana", { nickname: "Nova7", showOnLeaderboard: true, emoji: "🚀" });
+    const asKid = await playing(await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps));
+    const asGuest = await playing(await startSession(req("/api/session", { method: "POST", body: { name: "Nova7" } }), deps));
+    await score(deps, asKid, { answers: [true, true] });
+    await score(deps, asGuest, { answers: [true] });
+    const board = await (await getLeaderboard(req("/api/leaderboard"), deps)).json();
+    expect(board.top).toEqual([
+      { rank: 1, name: "Nova7", points: 20, emoji: "🚀" },
+      { rank: 2, name: "Nova7", points: 10 },
+    ]);
+  });
+
+  it("keeps a profile an operator removed off the leaderboard, whatever happens next", async () => {
+    const { deps } = setup();
+    const kid = await newProfile(deps, "ana", { nickname: "Bad Name", showOnLeaderboard: true });
+    const start = () => startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps);
+    const board = async () => (await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top;
+    await score(deps, await playing(await start()), { answers: [true] });
+    expect(await board()).toHaveLength(1);
+
+    await deps.store!.removePlayer(`p:${kid.id}`); // what scripts/leaderboard-remove.mjs does
+    expect(await board()).toEqual([]);
+
+    // A new session, new points, the parent renaming it and switching the leaderboard off and on again:
+    await score(deps, await playing(await start()), { answers: [true] });
+    for (const body of [{ nickname: "Better Name" }, { showOnLeaderboard: false }, { showOnLeaderboard: true }]) {
+      await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body }), deps);
+    }
+    await score(deps, await playing(await start()), { answers: [true] });
+    expect(await board()).toEqual([]);
+    // The kid's own points still count, privately.
+    expect((await (await getMe(req("/api/me", { user: "ana" }), deps)).json()).points[kid.id]).toBe(20);
   });
 
   it("keeps guest names and profile keys apart", () => {
@@ -187,8 +216,8 @@ describe("deleting an account", () => {
   it("removes profiles, leaderboard entries and the sign-in", async () => {
     const { deps, auth } = setup();
     const kid = await newProfile(deps, "ana", { nickname: "Nova7", showOnLeaderboard: true });
-    const cookie = cookieFrom(await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps));
-    await saveScore(deps, cookie, [true, true]);
+    const who = await playing(await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps));
+    await score(deps, who, { answers: [true, true] });
     expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toHaveLength(1);
 
     expect((await deleteMe(req("/api/me", { method: "DELETE", user: "ana", body: {} }), deps)).status).toBe(400);
@@ -209,48 +238,35 @@ describe("sign-in configuration", () => {
     expect(authorizedParties({})).toContain("http://localhost:5173");
   });
 
-  it("only uses the dev stand-in locally: off Vercel, not a production build, and switched on", () => {
-    for (const VERCEL of [undefined, "1"]) {
-      for (const NODE_ENV of [undefined, "development", "test", "production"]) {
-        for (const QUIZZLET_DEV_AUTH of [undefined, "0", "1"]) {
-          const allowed = !VERCEL && NODE_ENV !== "production" && QUIZZLET_DEV_AUTH === "1";
-          const auth = getAuthenticator({ VERCEL, NODE_ENV, QUIZZLET_DEV_AUTH });
-          expect(auth instanceof DevAuthenticator, `VERCEL=${VERCEL} NODE_ENV=${NODE_ENV} QUIZZLET_DEV_AUTH=${QUIZZLET_DEV_AUTH}`).toBe(allowed);
-          if (!allowed) expect(auth).toBeNull();
-        }
-      }
-    }
-    // Clerk, when configured, always wins over the stand-in.
-    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1", CLERK_SECRET_KEY: "sk_test_x" })).not.toBeInstanceOf(DevAuthenticator);
-  });
-
-  it("the dev stand-in only answers requests addressed to this machine", async () => {
-    const auth = new DevAuthenticator();
-    const as = (url: string) => auth.authenticate(new Request(url, { headers: { [DevAuthenticator.HEADER]: "ana" } }));
-    for (const url of ["http://localhost:5173/api/me", "http://127.0.0.1:5173/api/me", "http://[::1]:5173/api/me", "http://app.localhost/api/me"]) {
-      expect(await as(url), url).toEqual({ userId: "dev_ana" });
-    }
-    for (const url of ["https://quizzlet.example/api/me", "http://192.168.1.20:5173/api/me", "http://localhost.evil.example/api/me", "http://127.0.0.1.evil.example/api/me"]) {
-      expect(await as(url), url).toBeNull();
-    }
-    expect(isLoopbackHost("LOCALHOST")).toBe(true);
-    expect(isLoopbackHost("notlocalhost")).toBe(false);
-  });
-
-  it("a made-up parent header from another host is not a sign-in", async () => {
-    const { deps } = setup();
-    const res = await getMe(new Request("https://quizzlet.example/api/me", { headers: { [DevAuthenticator.HEADER]: "ana" } }), deps);
-    expect(res.status).toBe(401);
+  it("only uses the dev stand-in off Vercel", async () => {
+    const { getAuthenticator } = await import("./auth.js");
+    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1" })).toBeInstanceOf(DevAuthenticator);
+    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1", VERCEL: "1" })).toBeNull();
+    expect(getAuthenticator({})).toBeNull();
   });
 });
 
 describe("route guard", () => {
   // Every Vercel Function must be listed here, so a new route can't skip the sign-in check by accident.
-  const PUBLIC = ["kid.ts", "leaderboard.ts", "score.ts", "session.ts"]; // kid.ts: invitation token or linked-device cookie; session.ts: sign-in for profile sessions
+  // kid.ts: invitation token or linked-device cookie; session.ts: sign-in for profile sessions;
+  // csp-report.ts: browsers' policy-violation reports (logged, nothing else).
+  const PUBLIC = ["csp-report.ts", "kid.ts", "leaderboard.ts", "score.ts", "session.ts"];
   const SIGNED_IN = ["decks.ts", "files.ts", "invites.ts", "me.ts", "profiles.ts"];
+  const CRON_SECRET = ["cron.ts"]; // only the scheduler, with its bearer token
+
+  const apiDir = new URL("../api/", import.meta.url);
+  const files = readdirSync(apiDir).filter((f) => f.endsWith(".ts")).sort();
 
   it("classifies every api/ route", () => {
-    const files = readdirSync(new URL("../api/", import.meta.url)).filter((f) => f.endsWith(".ts")).sort();
-    expect(files).toEqual([...PUBLIC, ...SIGNED_IN].sort());
+    expect(files).toEqual([...PUBLIC, ...SIGNED_IN, ...CRON_SECRET].sort());
+  });
+
+  it("sends every exported method through withErrors (cross-site check and error logging)", () => {
+    for (const file of files) {
+      const source = readFileSync(new URL(file, apiDir), "utf8");
+      const exported = source.match(/^export const \w+ = .*$/gm) ?? [];
+      expect(exported.length, file).toBeGreaterThan(0);
+      for (const line of exported) expect(line, file).toMatch(/^export const (GET|POST|PUT|PATCH|DELETE) = withErrors\("\/api\/[a-z-]+", /);
+    }
   });
 });

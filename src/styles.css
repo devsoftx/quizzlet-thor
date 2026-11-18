@@ -971,6 +971,10 @@ a.btn {
   white-space: nowrap;
 }
 
+.leaderboard__emoji {
+  margin-right: 0.35em;
+}
+
 .leaderboard__you {
   margin-left: 8px;
 }

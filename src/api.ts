@@ -26,6 +26,8 @@ export interface LeaderboardEntry {
   rank: number;
   name: string;
   points: number;
+  /** Only parent-managed kid profiles have one; a guest's nickname never does. */
+  emoji?: string;
 }
 
 export interface Leaderboard {
@@ -176,13 +178,13 @@ export const api = {
   },
 
   /**
-   * Saves points for answers. `batchId` makes a retry of the same save count
-   * once. The server keeps the streak itself; `streakBefore` only tells it when
-   * a new round starts from zero.
+   * Saves points for answers. The server keeps the streak itself: `streakBefore`
+   * only tells it when a new round starts over from zero, so the points match
+   * what the learner saw. Every save needs the session's tag and a batch id.
    */
   submitScore(
     answers: boolean[],
-    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId: string; deckId?: string; sessionTag?: string },
+    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId?: string; deckId?: string; sessionTag?: string },
   ): Promise<ScoreSave> {
     if (!options.sessionTag) return Promise.reject(new ApiError("This session cannot safely save points. Refresh and start a new session.", 409));
     return call<ScoreSave>("/api/score", {

@@ -1,4 +1,4 @@
-import { neon, type NeonQueryFunction, type NeonQueryPromise } from "@neondatabase/serverless";
+import { neon, type NeonQueryFunction } from "@neondatabase/serverless";
 
 import {
   DEFAULT_SETTINGS,
@@ -17,7 +17,6 @@ import {
   type KidProfile,
   type ProfileInput,
 } from "../src/account-shared.js";
-import { isLocalDev, type Env } from "./env.js";
 
 export * from "../src/account-shared.js";
 
@@ -29,12 +28,25 @@ export interface StoredFile extends AccountFile {
 export type FileInput = Omit<StoredFile, "id" | "createdAt">;
 
 /**
- * An upload that was started but not confirmed yet. Its `size` is the size the
- * browser declared; it holds that much room in the account's quota until
- * `expiresAt`.
+ * A path set aside for an upload that has started. It counts against the quota
+ * until it expires or the file is saved. After it expires it stays on record
+ * for a while as the proof that whatever was uploaded there was never saved:
+ * only such a record lets stored bytes be deleted.
  */
-export interface PendingUpload extends StoredFile {
+export interface UploadReservation {
+  pathname: string;
+  declaredBytes: number;
   expiresAt: string;
+}
+
+export type LimitKind = "profiles" | "decks" | "files" | "storage";
+
+/** An insert that would take the account over one of its limits (enforced where the row is written). */
+export class LimitReached extends Error {
+  constructor(readonly kind: LimitKind) {
+    super(`Limit reached: ${kind}`);
+    this.name = "LimitReached";
+  }
 }
 
 // ------------------------------------------------------------------- Types
@@ -57,39 +69,43 @@ export interface AccountScope {
   remove(): Promise<string[]>;
   listProfiles(): Promise<KidProfile[]>;
   getProfile(id: string): Promise<KidProfile | null>;
-  /** Null when the account already has MAX_PROFILES (checked together with the insert). */
-  createProfile(id: string, input: ProfileInput): Promise<KidProfile | null>;
+  createProfile(id: string, input: ProfileInput): Promise<KidProfile>;
   updateProfile(id: string, patch: Partial<ProfileInput>): Promise<KidProfile | null>;
   deleteProfile(id: string): Promise<boolean>;
 
   /** Oldest first. `profileIds` only ever holds this account's profiles. */
   listDecks(): Promise<AccountDeck[]>;
   getDeck(id: string): Promise<AccountDeck | null>;
-  /** Null when the account already has MAX_DECKS (checked together with the insert). */
-  createDeck(id: string, input: DeckInput): Promise<AccountDeck | null>;
+  createDeck(id: string, input: DeckInput): Promise<AccountDeck>;
   updateDeck(id: string, patch: DeckPatch): Promise<AccountDeck | null>;
   deleteDeck(id: string): Promise<boolean>;
 
-  /** Saved files only (not uploads still in progress), oldest first. */
+  /** Oldest first. */
   listFiles(): Promise<StoredFile[]>;
   getFile(id: string): Promise<StoredFile | null>;
   /**
-   * Reserves room for a new upload of `input.size` bytes until `expiresAt`.
-   * Null when it doesn't fit in MAX_FILES / MAX_TOTAL_FILE_BYTES, counting
-   * saved files and uploads still in progress at `now` (checked together with
-   * the insert).
+   * Records an uploaded file by using up its reservation, in one step. Null
+   * when the path has no reservation that is still live at `now` (it ran out,
+   * or another request already saved the file).
    */
-  startUpload(id: string, input: FileInput, now: string, expiresAt: string): Promise<PendingUpload | null>;
-  /** A started upload that hasn't been confirmed, even if its time is up. */
-  getUpload(id: string): Promise<PendingUpload | null>;
-  /** Turns a started upload into a saved file with its real size; null if it's gone or out of time. */
-  completeUpload(id: string, done: { name: string; size: number }, now: string): Promise<StoredFile | null>;
-  /** Started uploads whose time was up at `before` (to remove them and what they stored). */
-  expiredUploads(before: string): Promise<PendingUpload[]>;
-  /** Storage in use at `now`: saved files plus uploads still in progress. */
-  fileUsage(now: string): Promise<{ count: number; bytes: number }>;
-  /** Deletes a saved file or a started upload; returns the record, so its stored bytes can be removed too. */
+  saveUpload(id: string, input: FileInput, now: string): Promise<StoredFile | null>;
+  /** Returns the deleted record, so its stored bytes can be removed too. */
   deleteFile(id: string): Promise<StoredFile | null>;
+
+  /**
+   * Sets a path aside for a new upload of `declaredBytes`, from `now` until
+   * `expiresAt`. Confirmed files plus live reservations may not exceed the
+   * file count or the storage total: otherwise this throws LimitReached.
+   */
+  reserveUpload(pathname: string, declaredBytes: number, now: string, expiresAt: string): Promise<void>;
+  /** This account's reservations that haven't expired at `now`. */
+  listReservations(now: string): Promise<UploadReservation[]>;
+  /**
+   * Paths of this account's reservations that ran out by `before` without the
+   * file being saved (most recent first, at most `limit`): whatever was
+   * uploaded there can be deleted.
+   */
+  expiredUploads(before: string, limit: number): Promise<string[]>;
 
   /** Replaces the profile's invitations with a new one (only its fingerprint is stored). */
   createInvite(profileId: string, tokenHash: string, createdAt: string, expiresAt: string): Promise<KidInvite>;
@@ -97,9 +113,10 @@ export interface AccountScope {
   cancelInvites(profileId: string): Promise<boolean>;
   /** Invitations that are still unused and unexpired at `now`. */
   listInvites(now: string): Promise<KidInvite[]>;
-  /** Devices whose link is still valid at `now`, oldest first. */
-  listDevices(now: string): Promise<KidDevice[]>;
-  deleteDevice(id: string): Promise<boolean>;
+  /** Oldest first. */
+  listDevices(): Promise<KidDevice[]>;
+  /** Returns the unlinked device, or null if it isn't this account's. */
+  deleteDevice(id: string): Promise<KidDevice | null>;
 }
 
 /** Where a kid link points: one profile in one account. */
@@ -112,12 +129,7 @@ export interface NewDevice {
   id: string;
   tokenHash: string;
   label: string;
-  /** The link stops working at this time; the parent then makes a new one. */
-  expiresAt: string;
 }
-
-/** A linked device and the profile it studies as. */
-export type LinkedDevice = LinkTarget & { id: string };
 
 /** Last-seen times are refreshed at most this often. */
 const SEEN_EVERY_MS = 60 * 60 * 1000;
@@ -133,25 +145,31 @@ export interface AccountsDb {
   findInvite(tokenHash: string, now: string): Promise<(LinkTarget & { expiresAt: string }) | null>;
   /** Uses up an open invitation and links a device, in one step; null if it's no longer open. */
   redeemInvite(tokenHash: string, now: string, device: NewDevice): Promise<LinkTarget | null>;
-  /** A linked device by its secret's fingerprint (refreshing when it was last seen); null once its link has expired. */
-  findDevice(tokenHash: string, now: string): Promise<LinkedDevice | null>;
+  /** A linked device by its secret's fingerprint (refreshing when it was last seen). */
+  findDevice(tokenHash: string, now: string): Promise<(LinkTarget & { id: string }) | null>;
   /** A kid's device unlinking itself; returns what was unlinked. */
-  removeDevice(tokenHash: string): Promise<LinkedDevice | null>;
+  removeDevice(tokenHash: string): Promise<(LinkTarget & { id: string }) | null>;
+
+  // Storage housekeeping (the daily cleanup), across all accounts.
+
+  /** Paths whose reservation ran out by `before` without the file being saved (oldest first, at most `limit`). */
+  expiredReservations(before: string, limit: number): Promise<string[]>;
+  /** Drops those reservation records, once what was uploaded there has been deleted; returns how many. */
+  forgetReservations(pathnames: string[], before: string): Promise<number>;
 }
 
 const nowIso = () => new Date().toISOString();
 
 // ------------------------------------------------------------------ Memory
 
-type MemoryFile = StoredFile & { expiresAt: string | null };
-
 interface MemoryState {
   accounts: Map<string, Account>;
   /** accountId -> profiles (decks, files) */
   profiles: Map<string, Map<string, KidProfile>>;
   decks: Map<string, Map<string, AccountDeck>>;
-  /** Saved files have `expiresAt: null`; uploads still in progress have the time their reservation ends. */
-  files: Map<string, Map<string, MemoryFile>>;
+  files: Map<string, Map<string, StoredFile>>;
+  /** pathname -> upload reservation */
+  reservations: Map<string, UploadReservation & { accountId: string }>;
   /** tokenHash -> invitation */
   invites: Map<string, LinkTarget & { createdAt: string; expiresAt: string; usedAt: string | null }>;
   /** device id -> device */
@@ -169,6 +187,7 @@ export class MemoryAccounts implements AccountsDb {
       profiles: new Map(),
       decks: new Map(),
       files: new Map(),
+      reservations: new Map(),
       invites: new Map(),
       devices: new Map(),
     },
@@ -197,7 +216,7 @@ export class MemoryAccounts implements AccountsDb {
 
   async findDevice(tokenHash: string, now: string) {
     const dev = [...this.state.devices.values()].find((d) => d.tokenHash === tokenHash);
-    if (!dev || dev.expiresAt <= now) return null;
+    if (!dev) return null;
     if (Date.parse(now) - Date.parse(dev.lastSeenAt) >= SEEN_EVERY_MS) dev.lastSeenAt = now;
     return { id: dev.id, accountId: dev.accountId, profileId: dev.profileId };
   }
@@ -209,10 +228,33 @@ export class MemoryAccounts implements AccountsDb {
     return { id: dev.id, accountId: dev.accountId, profileId: dev.profileId };
   }
 
+  /** Does any account have a file saved at this path? (Such a path is never treated as an abandoned upload.) */
+  private isSaved(pathname: string): boolean {
+    return [...this.state.files.values()].some((m) => [...m.values()].some((f) => f.pathname === pathname));
+  }
+
+  async expiredReservations(before: string, limit: number) {
+    return [...this.state.reservations.values()]
+      .filter((r) => r.expiresAt <= before && !this.isSaved(r.pathname))
+      .sort((a, b) => a.expiresAt.localeCompare(b.expiresAt) || a.pathname.localeCompare(b.pathname))
+      .slice(0, limit)
+      .map((r) => r.pathname);
+  }
+
+  async forgetReservations(pathnames: string[], before: string) {
+    let forgotten = 0;
+    for (const pathname of pathnames) {
+      const r = this.state.reservations.get(pathname);
+      if (r && r.expiresAt <= before && this.state.reservations.delete(pathname)) forgotten++;
+    }
+    return forgotten;
+  }
+
   forAccount(accountId: string): AccountScope {
     const state = this.state;
     const { accounts, profiles } = state;
     const dropLinks = (match: (l: LinkTarget) => boolean) => this.dropLinks(match);
+    const isSaved = (pathname: string) => this.isSaved(pathname);
     const mine = (l: LinkTarget) => l.accountId === accountId;
     const mapFor = <T>(all: Map<string, Map<string, T>>) => {
       if (!all.has(accountId)) all.set(accountId, new Map());
@@ -222,9 +264,6 @@ export class MemoryAccounts implements AccountsDb {
     const decks = () => mapFor(state.decks);
     const files = () => mapFor(state.files);
     const copy = <T>(v: T): T => structuredClone(v);
-    const saved = (f: MemoryFile) => f.expiresAt === null;
-    const asFile = ({ expiresAt: _expiresAt, ...file }: MemoryFile): StoredFile => copy(file);
-    const asUpload = (f: MemoryFile): PendingUpload => copy({ ...f, expiresAt: f.expiresAt! });
     /** Like the database: assignments only to this account's existing profiles. */
     const ownProfileIds = (ids: string[] | null) => (ids === null ? null : [...new Set(ids)].filter((id) => own().has(id)).sort());
 
@@ -258,6 +297,7 @@ export class MemoryAccounts implements AccountsDb {
         profiles.delete(accountId);
         state.decks.delete(accountId);
         state.files.delete(accountId);
+        for (const [pathname, r] of state.reservations) if (r.accountId === accountId) state.reservations.delete(pathname);
         dropLinks(mine);
         return ids;
       },
@@ -269,8 +309,7 @@ export class MemoryAccounts implements AccountsDb {
         return p ? copy(p) : null;
       },
       async createProfile(id, input) {
-        // Check and insert with no await in between, like the database's single step.
-        if (own().size >= MAX_PROFILES) return null;
+        if (own().size >= MAX_PROFILES) throw new LimitReached("profiles");
         const p: KidProfile = { id, ...input, createdAt: nowIso() };
         own().set(id, p);
         return copy(p);
@@ -311,15 +350,17 @@ export class MemoryAccounts implements AccountsDb {
           .map((inv) => ({ profileId: inv.profileId, expiresAt: inv.expiresAt }))
           .sort((a, b) => a.profileId.localeCompare(b.profileId));
       },
-      async listDevices(now) {
+      async listDevices() {
         return [...state.devices.values()]
-          .filter((d) => mine(d) && d.expiresAt > now)
-          .map(({ id, profileId, label, createdAt, lastSeenAt, expiresAt }) => ({ id, profileId, label, createdAt, lastSeenAt, expiresAt }))
+          .filter(mine)
+          .map(({ id, profileId, label, createdAt, lastSeenAt }) => ({ id, profileId, label, createdAt, lastSeenAt }))
           .sort(byCreated);
       },
       async deleteDevice(id) {
         const dev = state.devices.get(id);
-        return dev && mine(dev) ? state.devices.delete(id) : false;
+        if (!dev || !mine(dev)) return null;
+        state.devices.delete(id);
+        return { id: dev.id, profileId: dev.profileId, label: dev.label, createdAt: dev.createdAt, lastSeenAt: dev.lastSeenAt };
       },
 
       async listDecks() {
@@ -330,7 +371,7 @@ export class MemoryAccounts implements AccountsDb {
         return d ? copy(d) : null;
       },
       async createDeck(id, input) {
-        if (decks().size >= MAX_DECKS) return null;
+        if (decks().size >= MAX_DECKS) throw new LimitReached("decks");
         const now = nowIso();
         const d: AccountDeck = { id, ...input, profileIds: ownProfileIds(input.profileIds), createdAt: now, updatedAt: now };
         decks().set(id, d);
@@ -350,44 +391,52 @@ export class MemoryAccounts implements AccountsDb {
       },
 
       async listFiles() {
-        return [...files().values()].filter(saved).map(asFile).sort(byCreated);
+        return [...files().values()].map(copy).sort(byCreated);
       },
       async getFile(id) {
         const f = files().get(id);
-        return f && saved(f) ? asFile(f) : null;
+        return f ? copy(f) : null;
       },
-      async startUpload(id, input, now, expiresAt) {
-        const taken = [...state.files.values()].some((m) => m.has(id) || [...m.values()].some((f) => f.pathname === input.pathname));
-        if (taken) throw new Error("That file is already saved.");
-        const counted = [...files().values()].filter((f) => saved(f) || f.expiresAt! > now);
-        if (counted.length >= MAX_FILES) return null;
-        if (counted.reduce((sum, f) => sum + f.size, 0) + input.size > MAX_TOTAL_FILE_BYTES) return null;
-        const f: MemoryFile = { id, ...input, createdAt: nowIso(), expiresAt };
+      async saveUpload(id, input, now) {
+        const reserved = state.reservations.get(input.pathname);
+        if (!reserved || reserved.accountId !== accountId || reserved.expiresAt <= now) return null;
+        if (files().size >= MAX_FILES) throw new LimitReached("files");
+        if ([...state.files.values()].some((m) => m.has(id))) throw new Error("That file id is already used.");
+        if (isSaved(input.pathname)) throw new Error("That file is already saved.");
+        const f: StoredFile = { id, ...input, createdAt: nowIso() };
         files().set(id, f);
-        return asUpload(f);
-      },
-      async getUpload(id) {
-        const f = files().get(id);
-        return f && !saved(f) ? asUpload(f) : null;
-      },
-      async completeUpload(id, done, now) {
-        const f = files().get(id);
-        if (!f || saved(f) || f.expiresAt! <= now) return null;
-        Object.assign(f, { name: done.name, size: done.size, expiresAt: null });
-        return asFile(f);
-      },
-      async expiredUploads(before) {
-        return [...files().values()].filter((f) => !saved(f) && f.expiresAt! <= before).map(asUpload).sort(byCreated);
-      },
-      async fileUsage(now) {
-        const counted = [...files().values()].filter((f) => saved(f) || f.expiresAt! > now);
-        return { count: counted.length, bytes: counted.reduce((sum, f) => sum + f.size, 0) };
+        state.reservations.delete(input.pathname);
+        return copy(f);
       },
       async deleteFile(id) {
         const f = files().get(id);
         if (!f) return null;
         files().delete(id);
-        return asFile(f);
+        return copy(f);
+      },
+
+      async reserveUpload(pathname, declaredBytes, now, expiresAt) {
+        if (state.reservations.has(pathname)) throw new Error("That upload has already started.");
+        if (isSaved(pathname)) throw new Error("A file is already saved at this path.");
+        const live = [...state.reservations.values()].filter((r) => r.accountId === accountId && r.expiresAt > now);
+        const saved = [...files().values()];
+        if (saved.length + live.length >= MAX_FILES) throw new LimitReached("files");
+        const bytes = saved.reduce((sum, f) => sum + f.size, 0) + live.reduce((sum, r) => sum + r.declaredBytes, 0);
+        if (bytes + declaredBytes > MAX_TOTAL_FILE_BYTES) throw new LimitReached("storage");
+        state.reservations.set(pathname, { accountId, pathname, declaredBytes, expiresAt });
+      },
+      async listReservations(now) {
+        return [...state.reservations.values()]
+          .filter((r) => r.accountId === accountId && r.expiresAt > now)
+          .map(({ pathname, declaredBytes, expiresAt }) => ({ pathname, declaredBytes, expiresAt }))
+          .sort((a, b) => a.pathname.localeCompare(b.pathname));
+      },
+      async expiredUploads(before, limit) {
+        return [...state.reservations.values()]
+          .filter((r) => r.accountId === accountId && r.expiresAt <= before && !isSaved(r.pathname))
+          .sort((a, b) => b.expiresAt.localeCompare(a.expiresAt) || a.pathname.localeCompare(b.pathname))
+          .slice(0, limit)
+          .map((r) => r.pathname);
       },
     };
   }
@@ -439,7 +488,19 @@ const toFile = (r: Row): StoredFile => ({
   createdAt: iso(r.created_at),
 });
 
-const toUpload = (r: Row): PendingUpload => ({ ...toFile(r), expiresAt: iso(r.expires_at) });
+/**
+ * The database enforces the per-account limits itself (triggers raise
+ * "quizzlet_limit:<kind>", see db/migrations): turn that into LimitReached.
+ */
+async function limited<T>(query: Promise<T>): Promise<T> {
+  try {
+    return await query;
+  } catch (err) {
+    const kind = /quizzlet_limit:(profiles|decks|files|storage)/.exec(err instanceof Error ? err.message : "")?.[1];
+    if (kind) throw new LimitReached(kind as LimitKind);
+    throw err;
+  }
+}
 
 const toDevice = (r: Row): KidDevice => ({
   id: String(r.id),
@@ -447,10 +508,7 @@ const toDevice = (r: Row): KidDevice => ({
   label: String(r.label),
   createdAt: iso(r.created_at),
   lastSeenAt: iso(r.last_seen_at),
-  expiresAt: iso(r.expires_at),
 });
-
-const toLinked = (r: Row): LinkedDevice => ({ id: String(r.id), accountId: String(r.account_id), profileId: String(r.profile_id) });
 
 export class PostgresAccounts implements AccountsDb {
   constructor(private sql: NeonQueryFunction<false, false>) {}
@@ -471,8 +529,8 @@ export class PostgresAccounts implements AccountsDb {
         where token_hash = ${tokenHash} and used_at is null and expires_at > ${now}::timestamptz
         returning account_id, profile_id
       )
-      insert into kid_devices (id, token_hash, account_id, profile_id, label, created_at, last_seen_at, expires_at)
-      select ${device.id}, ${device.tokenHash}, account_id, profile_id, ${device.label}, ${now}::timestamptz, ${now}::timestamptz, ${device.expiresAt}::timestamptz
+      insert into kid_devices (id, token_hash, account_id, profile_id, label, created_at, last_seen_at)
+      select ${device.id}, ${device.tokenHash}, account_id, profile_id, ${device.label}, ${now}::timestamptz, ${now}::timestamptz
       from used
       returning account_id, profile_id`;
     const r = rows[0];
@@ -481,19 +539,39 @@ export class PostgresAccounts implements AccountsDb {
 
   async findDevice(tokenHash: string, now: string) {
     const rows = await this.sql`
-      select id, account_id, profile_id, last_seen_at from kid_devices
-      where token_hash = ${tokenHash} and expires_at > ${now}::timestamptz`;
+      select id, account_id, profile_id, last_seen_at from kid_devices where token_hash = ${tokenHash}`;
     const r = rows[0];
     if (!r) return null;
     if (Date.parse(now) - Date.parse(iso(r.last_seen_at)) >= SEEN_EVERY_MS) {
       await this.sql`update kid_devices set last_seen_at = ${now}::timestamptz where id = ${String(r.id)}`;
     }
-    return toLinked(r);
+    return { id: String(r.id), accountId: String(r.account_id), profileId: String(r.profile_id) };
   }
 
   async removeDevice(tokenHash: string) {
     const rows = await this.sql`delete from kid_devices where token_hash = ${tokenHash} returning id, account_id, profile_id`;
-    return rows[0] ? toLinked(rows[0]) : null;
+    const r = rows[0];
+    return r ? { id: String(r.id), accountId: String(r.account_id), profileId: String(r.profile_id) } : null;
+  }
+
+  async expiredReservations(before: string, limit: number) {
+    const rows = await this.sql`
+      select r.pathname from file_reservations r
+      where r.expires_at <= ${before}::timestamptz
+        and not exists (select 1 from files f where f.pathname = r.pathname)
+      order by r.expires_at, r.pathname
+      limit ${limit}`;
+    return rows.map((r) => String(r.pathname));
+  }
+
+  async forgetReservations(pathnames: string[], before: string) {
+    if (pathnames.length === 0) return 0;
+    const rows = await this.sql`
+      delete from file_reservations
+      where pathname in (select jsonb_array_elements_text(${JSON.stringify(pathnames)}::jsonb))
+        and expires_at <= ${before}::timestamptz
+      returning pathname`;
+    return rows.length;
   }
 
   forAccount(accountId: string): AccountScope {
@@ -527,17 +605,6 @@ export class PostgresAccounts implements AccountsDb {
     const getDeck = async (id: string) => {
       const rows = await selectDecks(id);
       return rows[0] ? toDeck(rows[0]) : null;
-    };
-
-    /**
-     * Runs an insert that checks a per-account limit, after locking the
-     * account's row in the same transaction. The count inside the insert is
-     * then taken after any other request's insert has finished, so two
-     * requests at the limit can't both get through.
-     */
-    const underAccountLock = async (insert: NeonQueryPromise<false, false>): Promise<Row[]> => {
-      const [, rows] = await sql.transaction([sql`select id from accounts where id = ${accountId} for update`, insert]);
-      return rows as Row[];
     };
 
     return {
@@ -577,12 +644,11 @@ export class PostgresAccounts implements AccountsDb {
         return rows[0] ? toProfile(rows[0]) : null;
       },
       async createProfile(id, p) {
-        const rows = await underAccountLock(sql`
+        const rows = await limited(sql`
           insert into kid_profiles (id, account_id, nickname, grade_band, color, emoji, show_on_leaderboard)
-          select ${id}, ${accountId}, ${p.nickname}, ${p.gradeBand}::text, ${p.color}, ${p.emoji}, ${p.showOnLeaderboard}::boolean
-          where (select count(*) from kid_profiles where account_id = ${accountId}) < ${MAX_PROFILES}
+          values (${id}, ${accountId}, ${p.nickname}, ${p.gradeBand}, ${p.color}, ${p.emoji}, ${p.showOnLeaderboard})
           returning *`);
-        return rows[0] ? toProfile(rows[0]) : null;
+        return toProfile(rows[0]);
       },
       async updateProfile(id, p) {
         const rows = await sql`
@@ -607,14 +673,11 @@ export class PostgresAccounts implements AccountsDb {
       },
       getDeck,
       async createDeck(id, d) {
-        const rows = await underAccountLock(sql`
+        await limited(sql`
           insert into decks (id, account_id, title, description, card_count, yaml, enabled, all_profiles)
-          select ${id}, ${accountId}, ${d.title}, ${d.description}::text, ${d.cardCount}::integer, ${d.yaml}, ${d.enabled}::boolean, ${d.profileIds === null}::boolean
-          where (select count(*) from decks where account_id = ${accountId}) < ${MAX_DECKS}
-          returning id`);
-        if (!rows[0]) return null;
+          values (${id}, ${accountId}, ${d.title}, ${d.description}, ${d.cardCount}, ${d.yaml}, ${d.enabled}, ${d.profileIds === null})`);
         if (d.profileIds !== null) await assign(id, d.profileIds);
-        return getDeck(id);
+        return (await getDeck(id))!;
       },
       async updateDeck(id, p) {
         const rows = await sql`
@@ -635,56 +698,52 @@ export class PostgresAccounts implements AccountsDb {
       },
 
       async listFiles() {
-        const rows = await sql`
-          select * from files where account_id = ${accountId} and status = 'ready' order by created_at, id`;
+        const rows = await sql`select * from files where account_id = ${accountId} order by created_at, id`;
         return rows.map(toFile);
       },
       async getFile(id) {
-        const rows = await sql`select * from files where account_id = ${accountId} and id = ${id} and status = 'ready'`;
+        const rows = await sql`select * from files where account_id = ${accountId} and id = ${id}`;
         return rows[0] ? toFile(rows[0]) : null;
       },
-      async startUpload(id, f, now, expiresAt) {
-        const rows = await underAccountLock(sql`
-          insert into files (id, account_id, pathname, name, content_type, size_bytes, status, expires_at)
-          select ${id}, ${accountId}, ${f.pathname}, ${f.name}, ${f.contentType}, ${f.size}::bigint, 'pending', ${expiresAt}::timestamptz
-          where (
-            select count(*) from files
-            where account_id = ${accountId} and (status = 'ready' or expires_at > ${now}::timestamptz)
-          ) < ${MAX_FILES} and (
-            select coalesce(sum(size_bytes), 0) from files
-            where account_id = ${accountId} and (status = 'ready' or expires_at > ${now}::timestamptz)
-          ) + ${f.size}::bigint <= ${MAX_TOTAL_FILE_BYTES}
+      async saveUpload(id, f, now) {
+        // One statement: the file is recorded only by using up a reservation that is still live.
+        const rows = await limited(sql`
+          with used as (
+            delete from file_reservations
+            where account_id = ${accountId} and pathname = ${f.pathname} and expires_at > ${now}::timestamptz
+            returning pathname
+          )
+          insert into files (id, account_id, pathname, name, content_type, size_bytes)
+          select ${id}, ${accountId}, pathname, ${f.name}, ${f.contentType}, ${f.size} from used
           returning *`);
-        return rows[0] ? toUpload(rows[0]) : null;
-      },
-      async getUpload(id) {
-        const rows = await sql`select * from files where account_id = ${accountId} and id = ${id} and status = 'pending'`;
-        return rows[0] ? toUpload(rows[0]) : null;
-      },
-      async completeUpload(id, done, now) {
-        const rows = await sql`
-          update files set status = 'ready', name = ${done.name}, size_bytes = ${done.size}::bigint, expires_at = null
-          where account_id = ${accountId} and id = ${id} and status = 'pending' and expires_at > ${now}::timestamptz
-          returning *`;
         return rows[0] ? toFile(rows[0]) : null;
-      },
-      async expiredUploads(before) {
-        const rows = await sql`
-          select * from files
-          where account_id = ${accountId} and status = 'pending' and expires_at <= ${before}::timestamptz
-          order by created_at, id`;
-        return rows.map(toUpload);
-      },
-      async fileUsage(now) {
-        // Saved files and uploads still in progress: what counts against the quota.
-        const rows = await sql`
-          select count(*) as count, coalesce(sum(size_bytes), 0) as bytes from files
-          where account_id = ${accountId} and (status = 'ready' or expires_at > ${now}::timestamptz)`;
-        return { count: Number(rows[0].count), bytes: Number(rows[0].bytes) };
       },
       async deleteFile(id) {
         const rows = await sql`delete from files where account_id = ${accountId} and id = ${id} returning *`;
         return rows[0] ? toFile(rows[0]) : null;
+      },
+
+      async reserveUpload(pathname, declaredBytes, now, expiresAt) {
+        // The insert trigger locks the account and checks the quota (saved files plus live reservations).
+        await limited(sql`
+          insert into file_reservations (pathname, account_id, declared_bytes, created_at, expires_at)
+          values (${pathname}, ${accountId}, ${declaredBytes}, ${now}::timestamptz, ${expiresAt}::timestamptz)`);
+      },
+      async listReservations(now) {
+        const rows = await sql`
+          select pathname, declared_bytes, expires_at from file_reservations
+          where account_id = ${accountId} and expires_at > ${now}::timestamptz
+          order by pathname`;
+        return rows.map((r) => ({ pathname: String(r.pathname), declaredBytes: Number(r.declared_bytes), expiresAt: iso(r.expires_at) }));
+      },
+      async expiredUploads(before, limit) {
+        const rows = await sql`
+          select r.pathname from file_reservations r
+          where r.account_id = ${accountId} and r.expires_at <= ${before}::timestamptz
+            and not exists (select 1 from files f where f.pathname = r.pathname)
+          order by r.expires_at desc, r.pathname
+          limit ${limit}`;
+        return rows.map((r) => String(r.pathname));
       },
 
       async createInvite(profileId, tokenHash, createdAt, expiresAt) {
@@ -707,16 +766,13 @@ export class PostgresAccounts implements AccountsDb {
           order by profile_id`;
         return rows.map((r) => ({ profileId: String(r.profile_id), expiresAt: iso(r.expires_at) }));
       },
-      async listDevices(now) {
-        const rows = await sql`
-          select * from kid_devices
-          where account_id = ${accountId} and expires_at > ${now}::timestamptz
-          order by created_at, id`;
+      async listDevices() {
+        const rows = await sql`select * from kid_devices where account_id = ${accountId} order by created_at, id`;
         return rows.map(toDevice);
       },
       async deleteDevice(id) {
-        const rows = await sql`delete from kid_devices where account_id = ${accountId} and id = ${id} returning id`;
-        return rows.length > 0;
+        const rows = await sql`delete from kid_devices where account_id = ${accountId} and id = ${id} returning *`;
+        return rows[0] ? toDevice(rows[0]) : null;
       },
     };
   }
@@ -726,9 +782,9 @@ export class PostgresAccounts implements AccountsDb {
 
 const globalState = globalThis as typeof globalThis & { __quizzletMemoryAccounts?: MemoryAccounts };
 
-/** Postgres when DATABASE_URL is set; memory locally; null anywhere else without a database. */
-export function getAccountsDb(env: Env = process.env): AccountsDb | null {
+/** Postgres when DATABASE_URL is set; memory locally; null on Vercel without a database. */
+export function getAccountsDb(env: Record<string, string | undefined> = process.env): AccountsDb | null {
   if (env.DATABASE_URL) return new PostgresAccounts(neon(env.DATABASE_URL));
-  if (!isLocalDev(env)) return null;
+  if (env.VERCEL) return null;
   return (globalState.__quizzletMemoryAccounts ??= new MemoryAccounts());
 }

@@ -12,131 +12,20 @@ privacy defect around deleted profiles.
 
 | ID | Issue | Severity | Phase | Status |
 |---|---|---|---|---|
-| R-05 | A live session keeps working after its profile or account is deleted | Medium | 1 | In progress: implemented, not merged. Cleanup script not yet run. |
-| R-01 | Scores are accepted as the browser reports them | Medium | 1 | In progress: implemented, not merged. Residual risk accepted (see the item). |
-| R-02 | Guest identity is only a nickname; no filter or removal path | Medium | 1 | In progress: implemented, not merged, on the "guests stay listed" path. **Decision still to confirm.** |
-| R-04 | Uploads that are never confirmed don't count against the quota | Medium | 2 | In progress: implemented, not merged. Needs migration `004`. Cleanup script not yet run. |
-| R-03 | No rate limits; a permanent Redis entry per guest name | Medium | 2 | In progress: implemented in code, not merged. Cleanup script not yet run. |
-| R-07 | Profile, deck and file limits are check-then-insert | Low | 2 | In progress: implemented, not merged (with a row lock; see the notes). |
-| R-12 | No security logging | Low | 3 | In progress: implemented, not merged. |
-| R-06 | Kid device links never expire on the server | Low | 3 | In progress: implemented, not merged. Needs migration `005`. |
-| R-08 | Cookie-setting POSTs accept any origin and content type | Low | 3 | In progress: implemented, not merged. |
-| R-09 | A malformed cookie causes a 500 | Low | 3 | In progress: implemented, not merged. |
-| R-10 | Dev sign-in and memory stores are gated only on `VERCEL` being unset | Low | 3 | In progress: implemented, not merged. |
-| R-11 | No CSP or framing headers | Low | 3 | In progress: implemented, not merged. The content policy is report-only. |
+| R-05 | A live session keeps working after its profile or account is deleted | Medium | 1 | Open |
+| R-01 | Scores are accepted as the browser reports them | Medium | 1 | Open |
+| R-02 | Guest identity is only a nickname; no filter or removal path | Medium | 1 | Open |
+| R-04 | Uploads that are never confirmed don't count against the quota | Medium | 2 | Open |
+| R-03 | No rate limits; a permanent Redis entry per guest name | Medium | 2 | Open |
+| R-07 | Profile, deck and file limits are check-then-insert | Low | 2 | Open |
+| R-12 | No security logging | Low | 3 | Open |
+| R-06 | Kid device links never expire on the server | Low | 3 | Open |
+| R-08 | Cookie-setting POSTs accept any origin and content type | Low | 3 | Open |
+| R-09 | A malformed cookie causes a 500 | Low | 3 | Open |
+| R-10 | Dev sign-in and memory stores are gated only on `VERCEL` being unset | Low | 3 | Open |
+| R-11 | No CSP or framing headers | Low | 3 | Open |
 
-Everything above is on the branch `claude/loving-feynman-k1ittv` as one change set. Update the
-Status column as it merges (In progress → Done, with the PR link).
-
-## Implementation notes (2026-11-18)
-
-What was built, where it differs from the plan below, and what is still open. The plan's own
-text further down is unchanged.
-
-### Before deploying
-
-1. **Run the migrations first** (`vercel env run -e production -- npm run db:migrate`). The new
-   code reads `files.status`, `files.expires_at` (`004_pending_uploads.sql`) and
-   `kid_devices.expires_at` (`005_device_expiry.sql`); without them uploads and kid devices
-   answer with errors. Existing files become `ready`; existing devices expire 180 days after
-   they were linked, so a device linked more than 180 days ago stops working and needs a new link.
-2. Deploy.
-3. Run the cleanup scripts (below) without `--apply`, read the output, then with `--apply`.
-
-A browser tab still open on the old version keeps working: it already sends a batch id with
-every save, and the server reads sessions and receipts written before the change.
-
-### Decisions taken, to confirm
-
-- **R-02: guests stay on the public board.** The welcome screen and the README both tell guests
-  their nickname is public, so this is the path that doesn't change the product. Switching to
-  "only parent-approved profiles are listed" is still open; it would replace the blocklist work
-  with a one-time removal of guest entries.
-- **R-03: the limiter is in code,** on the existing Redis store (`RATE_LIMITS` in
-  `server/route.ts`). Vercel's `vercel.json` can only express `challenge` and `deny` rules; a
-  WAF rate-limit rule has to be made in the dashboard, with `vercel firewall rules add`, the
-  REST API or Terraform (Vercel's docs list one such rule on Hobby). A firewall rule in front of `/api/*` is still
-  worth adding (it stops a flood before a function runs); the code limiter works without it.
-- **R-06: a device link lasts a fixed 180 days** from when it was made, the same as its
-  cookie. It is not extended by use. The parent's device list shows the date.
-- **R-11: the Clerk hosts in the policy are for a development instance** (`*.clerk.accounts.dev`).
-  If production moves to a Clerk production instance, add its Frontend API host
-  (`clerk.<your-domain>`) to `script-src` and `connect-src` in `vercel.json`.
-
-### Where the implementation differs from the plan
-
-- **R-01, "ignore the client's `streakBefore`":** the server keeps the streak and never raises
-  it from the request, but it lets `streakBefore` *lower* it. The app starts every round's
-  streak from zero, and without that signal a streak would carry from one round into the next
-  and the server would award more than the app shows. An inflated value earns nothing extra
-  (tested); the only thing a client can do with the field is give up a bonus.
-- **R-01, pace cap:** 20 answers at once, then one per 1.5 seconds of session age
-  (`PACE_BURST`, `PACE_MS_PER_ANSWER` in `server/store.ts`). A refused save is not lost: the
-  app keeps the batch and sends the same one again.
-- **R-07, "conditional on the count in the same statement":** done, but that alone does not hold
-  on PostgreSQL. Two inserts that overlap each count the rows before the other commits. Checked
-  against a real PostgreSQL 16 with the single statement only: 26 parallel creates left 22
-  profiles (limit 20), 56 left 54 decks (limit 50), and twelve 7 MB uploads were all admitted
-  against the 50 MB cap. Each insert now runs in one transaction with
-  `select … from accounts … for update` first, so the count is taken after the other request
-  has finished. With the lock the same test ends at exactly each limit.
-- **R-04:** `status` and `expires_at` on `files` (not a separate table). An upload link is cut
-  off at the reservation's end and can carry no more than the declared size. The sweep runs on
-  the account's next `start` and removes reservations that ended over an hour ago; expired
-  reservations stop counting at once.
-- **R-08:** a non-JSON body gets `415`, and a body with no content type is not read. The
-  request's "own origin" is taken from `x-forwarded-host`/`x-forwarded-proto` as well as the URL.
-- **R-11:** `frame-ancestors 'none'` and `X-Frame-Options: DENY` are **enforced** now, in a
-  second header; only the rest of the policy is report-only. Report-only gives no framing
-  protection, and nothing legitimate frames the app.
-- **R-12:** two events beyond the list: `request.refused` (cross-site or non-JSON) and
-  `rate_limit.exceeded`.
-- **R-10:** the tests now call the API on `https://localhost`, because the local sign-in
-  stand-in refuses any other host.
-- **Not in the plan:** an invitation link opened right after the page loaded could be missed
-  (the listener was attached a moment later). Two end-to-end tests failed on this before any
-  change here; `src/App.tsx` now checks the address once when the listener is attached.
-- `scripts/test-redis-score.py` is replaced by `server/store.test.ts`, which runs the real
-  `RedisStore` (not a copy of its arguments) against a real Redis; `scripts/test-redis-store.sh`
-  runs it in Docker where `redis-server` isn't installed.
-
-### Cleanup scripts
-
-All three only report unless run with `--apply`, and refuse to remove *everything* they find
-(the sign of a `DATABASE_URL` from the wrong environment) without `--all-orphans`.
-
-```bash
-vercel env run -e production -- node scripts/cleanup-orphan-players.mjs
-```
-
-```bash
-vercel env run -e production -- node scripts/cleanup-guest-names.mjs
-```
-
-```bash
-vercel env run -e production -- node scripts/cleanup-orphan-blobs.mjs
-```
-
-To take one guest off the board (R-02):
-
-```bash
-vercel env run -e production -- node scripts/remove-player.mjs "<nickname>" --apply
-```
-
-### Still open
-
-- The four Phase 0 questions (they need the Vercel and Clerk dashboards).
-- The R-02 decision.
-- Running the migrations and the three cleanup scripts against production.
-- Watching the browser console on production for content-policy reports, then moving the
-  policy from `Content-Security-Policy-Report-Only` to `Content-Security-Policy`. The Clerk
-  sign-in and Blob upload paths could not be exercised locally; the policy for them follows
-  their documentation and packages, not a test. There is no report endpoint yet, so reports
-  only show in the console.
-- Not verified here: that `request.url` and the forwarded headers on Vercel give the public
-  origin the R-08 check expects (it accepts either). Check one sign-in and one upload on a
-  preview deployment before production.
-- R-01's residual risk: server-side marking, as a separate item.
+Update the Status column as each item merges (Open → In progress → Done, with the PR link).
 
 ## Phase 0: settings to check first (no code)
 

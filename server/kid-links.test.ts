@@ -3,14 +3,14 @@ import { createProfile, deleteMe, deleteProfile, getMe, updateProfile } from "./
 import { MAX_DEVICES_PER_PROFILE, MemoryAccounts } from "./accounts.js";
 import { DevAuthenticator } from "./auth.js";
 import type { Deps } from "./deps.js";
-import { getLeaderboard, getSession, startSession, submitScore } from "./handlers.js";
+import { getLeaderboard, getSession, startSession } from "./handlers.js";
 import { createInvite, deleteKid, deleteLink, deviceLabel, getKid, KID_COOKIE, listLinks, postKid } from "./kid-handlers.js";
 import { createDeck, updateDeck } from "./library-handlers.js";
 import { MemoryFileStore } from "./files.js";
 import { MemoryStore } from "./store.js";
+import { playing, score } from "./test-support.js";
 
-// A loopback name: the local sign-in stand-in answers nowhere else.
-const BASE = "https://localhost";
+const BASE = "https://quizzlet.test";
 const IPAD = "Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -45,11 +45,6 @@ function req(path: string, init: { method?: string; body?: unknown; user?: strin
 }
 
 const cookieFrom = (res: Response) => res.headers.get("set-cookie")!.split(";")[0];
-
-let batches = 0;
-/** A score save as the app sends it: with its own batch id. */
-const saveScore = (deps: Deps, cookie: string, body: Record<string, unknown>) =>
-  submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: `batch-${++batches}`, ...body } }), deps);
 
 async function kid(deps: Deps, parent: string, nickname: string) {
   const res = await createProfile(req("/api/profiles", { method: "POST", user: parent, body: { nickname } }), deps);
@@ -168,10 +163,10 @@ describe("a kid's linked device", () => {
 
     const start = await startSession(req("/api/session", { method: "POST", body: { kid: true }, cookie: device }), deps);
     expect(start.status).toBe(201);
+    const who = await playing(start, device);
     expect(await start.json()).toMatchObject({ name: "Nova7", profileId: nova.id });
-    const session = cookieFrom(start);
-    const scored = await (await saveScore(deps, `${session}; ${device}`, { answers: [true] })).json();
-    expect(scored).toMatchObject({ pointsEarned: 10, totalPoints: 10 });
+    const scored = await (await score(deps, who, { answers: [true] })).json();
+    expect(scored).toMatchObject({ pointsEarned: 10 });
     expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toEqual([]); // private by default
 
     // The points belong to the kid's profile even while it's off the leaderboard.
@@ -180,11 +175,11 @@ describe("a kid's linked device", () => {
     expect(me.points).toEqual({ [nova.id]: 10 });
 
     await updateProfile(req(`/api/profiles?id=${nova.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: true } }), deps);
-    expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toEqual([{ rank: 1, name: "Nova7", points: 10 }]);
+    expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toEqual([{ rank: 1, name: "Nova7", points: 10, emoji: "🦊" }]);
 
     // The public leaderboard needs no sign-in; the linked device sees its own rank even between sessions.
     expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).you).toBeNull();
-    expect((await (await getLeaderboard(req("/api/leaderboard", { cookie: device }), deps)).json()).you).toEqual({ rank: 1, name: "Nova7", points: 10 });
+    expect((await (await getLeaderboard(req("/api/leaderboard", { cookie: device }), deps)).json()).you).toEqual({ rank: 1, name: "Nova7", points: 10, emoji: "🦊" });
 
     expect((await startSession(req("/api/session", { method: "POST", body: { kid: true } }), deps)).status).toBe(401);
   });
@@ -284,10 +279,11 @@ describe("active linked session revocation", () => {
     const deviceCookie = await linkDevice(deps, "ana", profile.id);
     const started = await startSession(req("/api/session", { method: "POST", cookie: deviceCookie, body: { kid: true } }), deps);
     expect(started.status).toBe(201);
-    const sessionCookie = cookieFrom(started);
+    const who = await playing(started, deviceCookie);
     await deleteKid(req("/api/kid", { method: "DELETE", cookie: deviceCookie }), deps);
-    const response = await saveScore(deps, `${deviceCookie}; ${sessionCookie}`, { answers: [true], leaderboard: false });
+    const response = await score(deps, who, { answers: [true] });
     expect(response.status).toBe(403);
+    expect(await response.json()).toEqual({ error: "This device is no longer linked. Ask an adult for a new link." });
   });
 });
 
@@ -300,19 +296,20 @@ describe("private deck access during a session", () => {
     const made = await createDeck(req("/api/decks", { method: "POST", user: "ana", body: { yaml } }), deps);
     const deck = (await made.json()).deck as { id: string };
     const started = await startSession(req("/api/session", { method: "POST", cookie: device, body: { kid: true } }), deps);
-    const cookies = `${device}; ${cookieFrom(started)}`;
-    const score = (deckId: string) => saveScore(deps, cookies, { deckId, answers: [true], leaderboard: false });
-    expect((await score(deck.id)).status).toBe(200);
+    const who = await playing(started, device);
+    const cookies = who.cookie;
+    const scoreDeck = (deckId: string) => score(deps, who, { deckId, answers: [true] });
+    expect((await scoreDeck(deck.id)).status).toBe(200);
     const otherDeck = (await (await createDeck(req("/api/decks", { method: "POST", user: "other", body: { yaml } }), deps)).json()).deck as { id: string };
-    expect((await score(otherDeck.id)).status).toBe(403);
+    expect((await scoreDeck(otherDeck.id)).status).toBe(403);
     expect((await getSession(req(`/api/session?deckId=${deck.id}`, { cookie: cookies }), deps)).status).toBe(200);
     await updateDeck(req(`/api/decks?id=${deck.id}`, { method: "PATCH", user: "ana", body: { profileIds: [] } }), deps);
-    expect((await score(deck.id)).status).toBe(403);
-    const final = await submitScore(req("/api/score", { method: "POST", cookie: cookies, body: { deckId: deck.id, answers: [], leaderboard: true, batchId: "final-check" } }), deps);
+    expect((await scoreDeck(deck.id)).status).toBe(403);
+    const final = await score(deps, who, { deckId: deck.id, answers: [], leaderboard: true, batchId: "final-check" });
     expect(final.status).toBe(403);
     expect((await getSession(req(`/api/session?deckId=${deck.id}`, { cookie: cookies }), deps)).status).toBe(403);
     await updateDeck(req(`/api/decks?id=${deck.id}`, { method: "PATCH", user: "ana", body: { enabled: false } }), deps);
-    expect((await score(deck.id)).status).toBe(403);
+    expect((await scoreDeck(deck.id)).status).toBe(403);
   });
 });
 
@@ -322,43 +319,54 @@ describe("profile deletion during a session", () => {
     const profile = await kid(deps, "ana", "Nova7");
     const device = await linkDevice(deps, "ana", profile.id);
     const started = await startSession(req("/api/session", { method: "POST", cookie: device, body: { kid: true } }), deps);
-    const cookies = `${device}; ${cookieFrom(started)}`;
+    const who = await playing(started, device);
     await deleteProfile(req(`/api/profiles?id=${profile.id}`, { method: "DELETE", user: "ana" }), deps);
-    expect((await saveScore(deps, cookies, { answers: [true], leaderboard: false })).status).toBe(403);
-  });
-});
-
-describe("device links expire", () => {
-  it("an expired device gets {kid: null} and its cookie is cleared", async () => {
-    const { deps, later } = setup();
-    const nova = await kid(deps, "ana", "Nova7");
-    const device = await linkDevice(deps, "ana", nova.id);
-    const links = async () => (await (await listLinks(req("/api/invites", { user: "ana" }), deps)).json()).devices;
-    expect(await links()).toMatchObject([{ profileId: nova.id, expiresAt: "2027-05-14T12:00:00.000Z" }]); // 180 days on
-
-    later(180 * DAY - 1);
-    expect((await whoAmI(deps, device)).profile.nickname).toBe("Nova7");
-    const started = await startSession(req("/api/session", { method: "POST", body: { kid: true }, cookie: device }), deps);
-    expect(started.status).toBe(201);
-    const cookies = `${device}; ${cookieFrom(started)}`;
-
-    later(1);
-    const res = await getKid(req("/api/kid", { cookie: device }), deps);
-    expect(await res.json()).toEqual({ kid: null });
-    expect(res.headers.get("set-cookie")).toMatch(new RegExp(`^${KID_COOKIE}=; Path=/; Max-Age=0;`));
-    // The link is gone everywhere: no new session, the running one ends, the parent's list is empty.
-    expect((await startSession(req("/api/session", { method: "POST", body: { kid: true }, cookie: device }), deps)).status).toBe(401);
-    expect((await saveScore(deps, cookies, { answers: [true] })).status).toBe(403);
-    expect((await getLeaderboard(req("/api/leaderboard", { cookie: device }), deps)).status).toBe(200);
-    expect(await links()).toEqual([]);
+    expect((await score(deps, who, { answers: [true] })).status).toBe(403);
   });
 
-  it("an expired device doesn't count against the kid's device limit", async () => {
-    const { deps, later } = setup();
-    const nova = await kid(deps, "ana", "Nova7");
-    for (let i = 0; i < MAX_DEVICES_PER_PROFILE; i++) await linkDevice(deps, "ana", nova.id);
-    later(180 * DAY);
-    const fresh = await linkDevice(deps, "ana", nova.id);
-    expect((await whoAmI(deps, fresh)).profile.nickname).toBe("Nova7");
+  // The review's reproduction: a private profile named "Secret Kid" was deleted while a
+  // parent-started session was still open; the next save put the nickname on the public board.
+  for (const [how, remove] of [
+    ["the profile is deleted", (deps: Deps, id: string) => deleteProfile(req(`/api/profiles?id=${id}`, { method: "DELETE", user: "ana" }), deps)],
+    ["the whole account is deleted", (deps: Deps) => deleteMe(req("/api/me", { method: "DELETE", user: "ana", body: { confirm: true } }), deps)],
+  ] as const) {
+    it(`ends a parent-started session when ${how}, and never lists the nickname`, async () => {
+      const { deps } = setup();
+      const secret = await kid(deps, "ana", "Secret Kid"); // private: the default
+      const started = await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: secret.id } }), deps);
+      expect(started.status).toBe(201);
+      const who = await playing(started);
+      expect((await score(deps, who, { answers: [true] })).status).toBe(200);
+
+      expect((await remove(deps, secret.id)).status).toBe(200);
+
+      const late = await score(deps, who, { answers: [true] });
+      expect(late.status).toBe(403);
+      expect(await late.json()).toEqual({ error: "This profile is no longer available. Ask an adult to start a new session." });
+      const board = await (await getLeaderboard(req("/api/leaderboard"), deps)).json();
+      expect(JSON.stringify(board)).not.toContain("Secret Kid");
+      expect(board.top).toEqual([]);
+      expect(await deps.store!.totalsFor([`p:${secret.id}`])).toEqual({ [`p:${secret.id}`]: 0 });
+
+      // The app is told the session is over, and the cookie is cleared.
+      const check = await getSession(req("/api/session", { cookie: who.cookie }), deps);
+      expect(check.status).toBe(403);
+      expect(check.headers.get("set-cookie")).toContain("Max-Age=0");
+    });
+  }
+
+  it("keeps a deleted profile off the board even if a write arrives late (the marker stays)", async () => {
+    const { deps } = setup();
+    const listed = await createProfile(req("/api/profiles", { method: "POST", user: "ana", body: { nickname: "Was Public", showOnLeaderboard: true } }), deps);
+    const profile = (await listed.json()).profile as { id: string };
+    const started = await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: profile.id } }), deps);
+    const who = await playing(started);
+    const session = (await deps.store!.getSession(who.cookie.split("=")[1], deps.now()))!;
+    await deleteProfile(req(`/api/profiles?id=${profile.id}`, { method: "DELETE", user: "ana" }), deps);
+
+    // A save that slips past the handler's check (written straight to the store) still isn't public.
+    const receipt = await deps.store!.addScoreBatch(session, { id: "late", fingerprint: "f", answers: [true] }, deps.now());
+    expect(receipt).toMatchObject({ pointsEarned: 10 });
+    expect((await deps.store!.leaderboard(10, `p:${profile.id}`))).toEqual({ top: [], you: null });
   });
 });

@@ -103,8 +103,6 @@ export function deckIsFor(deck: AccountDeck, profileId: string): boolean {
 
 /** An invitation link works once, for this many days. */
 export const INVITE_DAYS = 7;
-/** A linked device stays linked for this many days. */
-export const DEVICE_DAYS = 180;
 export const MAX_DEVICES_PER_PROFILE = 10;
 
 /** A kid's open invitation (the link itself is only shown once, when it's made). */
@@ -121,8 +119,6 @@ export interface KidDevice {
   label: string;
   createdAt: string;
   lastSeenAt: string;
-  /** The link stops working then; the parent makes a new one. */
-  expiresAt: string;
 }
 
 /** What a linked kid device may know about its profile. */

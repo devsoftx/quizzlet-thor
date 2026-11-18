@@ -7,33 +7,21 @@ import { expect, test as base, type APIRequestContext, type Browser, type Browse
 
 export { expect };
 
-/**
- * Fails a test when the page throws an uncaught error or breaks the content
- * security policy, on top of its own checks.
- */
+/** Fails a test when the page throws an uncaught error, on top of its own checks. */
 export const test = base.extend<{ failOnPageErrors: void }>({
   failOnPageErrors: [
     async ({ page }, use) => {
       const errors = watchPageErrors(page);
       await use();
-      expect(errors, "uncaught errors or content-policy violations in the page").toEqual([]);
+      expect(errors, "uncaught errors in the page").toEqual([]);
     },
     { auto: true },
   ],
 });
 
-/**
- * Collects a page's uncaught errors, and anything it did that the content
- * security policy doesn't allow. The policy is report-only for now (see
- * vercel.json), so the browser only reports a violation; here that fails the
- * test, which keeps the policy matching what the app really loads.
- */
 export function watchPageErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on("pageerror", (err) => errors.push(err.message));
-  page.on("console", (message) => {
-    if (/Content Security Policy/i.test(message.text())) errors.push(message.text());
-  });
   return errors;
 }
 

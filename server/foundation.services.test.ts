@@ -6,7 +6,7 @@ import { createProfile, deleteProfile } from "./account-handlers.js";
 import { getAccountsDb, MemoryAccounts } from "./accounts.js";
 import { DevAuthenticator } from "./auth.js";
 import type { Deps } from "./deps.js";
-import { startSession, submitScore, getSession } from "./handlers.js";
+import { getLeaderboard, startSession, submitScore, getSession } from "./handlers.js";
 import { createInvite, deleteKid, postKid } from "./kid-handlers.js";
 import { createDeck, updateDeck } from "./library-handlers.js";
 import { MemoryStore, RedisStore } from "./store.js";
@@ -16,9 +16,10 @@ const request = (path: string, options: { body?: unknown; user?: string; cookie?
   const headers = new Headers({ "content-type": "application/json" });
   if (options.user) headers.set(DevAuthenticator.HEADER, options.user);
   if (options.cookie) headers.set("cookie", options.cookie);
-  return new Request(`https://localhost${path}`, { method: options.method ?? "POST", headers, body: options.body === undefined ? undefined : JSON.stringify(options.body) });
+  return new Request(`https://test.invalid${path}`, { method: options.method ?? "POST", headers, body: options.body === undefined ? undefined : JSON.stringify(options.body) });
 };
 const cookie = (response: Response) => response.headers.get("set-cookie")!.split(";")[0];
+const tagOf = async (response: Response) => ((await response.clone().json()) as { sessionTag: string }).sessionTag;
 
 async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: string[], sessionIds: string[], batchIds: string[]) => Promise<void>) {
   const suffix = randomUUID().replaceAll("-", "").slice(0, 12);
@@ -27,7 +28,7 @@ async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: s
   const accounts = [`dev_${owner}`, `dev_${stranger}`];
   const players: string[] = [];
   const sessions: string[] = [];
-  const batches = ["dup", "private", "guest-replay", "precommit", "parent", "first"];
+  const batches = ["dup", "private", "guest-first", "guest-replay", "precommit", "parent", "parent-late"];
   let now = Date.now();
   deps.now = () => now;
   try {
@@ -52,9 +53,10 @@ async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: s
     const start = await startSession(request("/api/session", { cookie: device, body: { kid: true } }), deps);
     expect(start.status).toBe(201);
     const sessionCookie = cookie(start);
+    const sessionTag = await tagOf(start);
     sessions.push(decodeURIComponent(sessionCookie.split("=")[1]));
     const combined = `${device}; ${sessionCookie}`;
-    const score = (deckId: string, batchId: string, answers: boolean[]) => submitScore(request("/api/score", { cookie: combined, body: { deckId, batchId, answers, leaderboard: false } }), deps);
+    const score = (deckId: string, batchId: string, answers: boolean[]) => submitScore(request("/api/score", { cookie: combined, body: { deckId, batchId, sessionTag, answers, leaderboard: false } }), deps);
     const [a, b] = await Promise.all([score(deck.id, "dup", [true]), score(deck.id, "dup", [true])]);
     expect(a.status).toBe(200); expect(b.status).toBe(200);
     expect(await a.json()).toEqual(await b.json());
@@ -76,8 +78,10 @@ async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: s
     const parentStart = await startSession(request("/api/session", { user: owner, body: { profileId: profile2.id } }), deps);
     expect(parentStart.status).toBe(201);
     const parentCookie = cookie(parentStart);
+    const parentTag = await tagOf(parentStart);
     sessions.push(decodeURIComponent(parentCookie.split("=")[1]));
-    expect((await submitScore(request("/api/score", { cookie: parentCookie, body: { answers: [true], batchId: "parent", leaderboard: false } }), deps)).status).toBe(200);
+    const parentScore = (batchId: string) => submitScore(request("/api/score", { cookie: parentCookie, body: { answers: [true], batchId, sessionTag: parentTag, leaderboard: false } }), deps);
+    expect((await parentScore("parent")).status).toBe(200);
     const secondInvite = await createInvite(request("/api/invites", { user: owner, body: { profileId: profile2.id } }), deps);
     expect(secondInvite.status).toBe(201);
     const secondToken = (await secondInvite.json()).token as string;
@@ -90,15 +94,24 @@ async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: s
     sessions.push(decodeURIComponent(secondSession.split("=")[1]));
     expect((await deleteProfile(request(`/api/profiles?id=${profile2.id}`, { method: "DELETE", user: owner }), deps)).status).toBe(200);
     expect((await getSession(request("/api/session", { method: "GET", cookie: `${secondDevice}; ${secondSession}` }), deps)).status).toBe(403);
+    // The parent-started session for the deleted (private) profile is over too, and nothing of it is public.
+    expect((await parentScore("parent-late")).status).toBe(403);
+    expect(await deps.store!.totalsFor([`p:${profile2.id}`])).toEqual({ [`p:${profile2.id}`]: 0 });
+    expect(JSON.stringify(await (await getLeaderboard(request("/api/leaderboard", { method: "GET" }), deps)).json())).not.toContain("Orbit");
     const guestName = `Test${suffix}`;
     players.push(guestName.toLowerCase());
     const guestStart = await startSession(request("/api/session", { body: { name: guestName } }), deps);
     expect(guestStart.status).toBe(201);
     const guest = cookie(guestStart);
+    const guestTag = await tagOf(guestStart);
     sessions.push(decodeURIComponent(guest.split("=")[1]));
-    const guestScore = (body: unknown) => submitScore(request("/api/score", { cookie: guest, body }), deps);
-    expect((await guestScore({ answers: [true], leaderboard: false })).status).toBe(400); // no batch id: refused, nothing saved
-    expect((await guestScore({ answers: [true], batchId: "first", leaderboard: false })).status).toBe(200);
+    // The nickname belongs to that browser: another one can't use it, the same one can.
+    expect((await startSession(request("/api/session", { body: { name: guestName } }), deps)).status).toBe(409);
+    const guestScore = (body: Record<string, unknown>) => submitScore(request("/api/score", { cookie: guest, body: { sessionTag: guestTag, ...body } }), deps);
+    expect((await guestScore({ answers: [true], leaderboard: false })).status).toBe(400); // an old page: no batch id
+    expect((await submitScore(request("/api/score", { cookie: guest, body: { answers: [true], batchId: "guest-first", leaderboard: false } }), deps)).status).toBe(400); // no session tag
+    expect((await guestScore({ answers: [true], batchId: "guest-first", streakBefore: 200, leaderboard: false })).status).toBe(200); // a forged streak earns no bonus
+    expect((await guestScore({ answers: new Array(200).fill(true), batchId: "too-fast", leaderboard: false })).status).toBe(429);
     expect((await guestScore({ answers: ["true"], batchId: "guest-replay", leaderboard: false })).status).toBe(400);
     const originalStore = deps.store!;
     let injectFailure = true;
@@ -111,7 +124,7 @@ async function exercise(deps: Deps, cleanup: (accountIds: string[], playerIds: s
       return typeof value === "function" ? value.bind(target) : value;
     } });
     const faultPayload = { answers: [false], batchId: "precommit", leaderboard: false };
-    await expect(submitScore(request("/api/score", { cookie: guest, body: faultPayload }), { ...deps, store: faultStore })).rejects.toThrow("injected pre-commit failure");
+    await expect(submitScore(request("/api/score", { cookie: guest, body: { sessionTag: guestTag, ...faultPayload } }), { ...deps, store: faultStore })).rejects.toThrow("injected pre-commit failure");
     expect((await guestScore(faultPayload)).status).toBe(200);
     const payload = { answers: [true], batchId: "guest-replay", leaderboard: false };
     const committed = await guestScore(payload); // simulate losing the first response
@@ -149,7 +162,9 @@ describe("phase 2 service-backed foundation smoke", () => {
     await exercise({ accounts, store, auth: new DevAuthenticator(), now: Date.now, newId: randomUUID }, async (accountIds, playerIds, sessionIds, batchIds) => {
       const receipts = sessionIds.flatMap((id) => batchIds.map((batch) => `score-receipt:${id}:${batch}`));
       const operations = [
-        ...playerIds.map((id) => store.removePlayer(id)),
+        // removePlayer leaves the key in leaderboard-removed as a marker; take the test keys out again
+        // afterwards, so the dedicated test store doesn't fill up.
+        ...playerIds.map((id) => store.removePlayer(id).then(() => redis.srem("leaderboard-removed", id))),
         ...sessionIds.map((id) => store.deleteSession(id)),
         ...(receipts.length ? [redis.del(...receipts)] : []),
         ...accountIds.map((id) => accounts.forAccount(id).remove()),

@@ -17,7 +17,7 @@ import {
 import { DeckList } from "./components/DeckList";
 import { DeckPreview } from "./components/DeckPreview";
 import { JoinInvite, KidHome } from "./components/KidScreens";
-import { ScoreSaver, type SaveStatus } from "./scoreSaver";
+import { ScoreSaver } from "./scoreSaver";
 import { checkSessionAccess } from "./sessionAccess";
 import { MyDecks } from "./components/MyDecks";
 import { MyFiles } from "./components/MyFiles";
@@ -29,6 +29,9 @@ import { SessionBar } from "./components/SessionBar";
 import { Settings } from "./components/Settings";
 import { Welcome } from "./components/Welcome";
 
+/** Part of the server's answer when a session's kid profile has been deleted. */
+const PROFILE_GONE = "profile is no longer available";
+
 type SessionState =
   | { status: "loading" }
   | { status: "none"; notice?: string }
@@ -39,7 +42,7 @@ export type SaveState =
   | { status: "saving" }
   | { status: "saved"; result: ScoreSave }
   | { status: "expired"; confirmedPoints: number }
-  | { status: "error"; kind: "failed" | "unknown" | "waiting"; message: string };
+  | { status: "error"; kind: "failed" | "unknown"; message: string };
 
 /** The signed-in parent's account (loaded after sign-in). */
 type AccountState =
@@ -87,7 +90,7 @@ export function App() {
   const auth = useAccountAuth();
   const [accountState, setAccountState] = useState<AccountState>({ status: "none" });
   const [importNote, setImportNote] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>("confirmed");
+  const [saveStatus, setSaveStatus] = useState<"pending" | "saving" | "confirmed" | "unknown" | "failed" | "expired" | "denied">("confirmed");
   const [joinToken, setJoinToken] = useState<string | null>(initialJoinToken);
   const [kidState, setKidState] = useState<KidState>({ status: "loading" });
 
@@ -112,13 +115,14 @@ export function App() {
     onExpired: () => sessionExpired(),
     isDenied: (err) => err instanceof ApiError && err.status === 403,
     isRejected: (err) => err instanceof ApiError && [400, 409, 422].includes(err.status),
-    isThrottled: (err) => err instanceof ApiError && err.status === 429,
     onState: setSaveStatus,
     onDenied: (err, deckId) => {
       setScreen({ name: "decks" });
       if (err instanceof Error && err.message.includes("device is no longer linked")) {
         setKidState({ status: "none" });
         setSessionState({ status: "none", notice: "This device is no longer linked. Ask an adult for a new link. Recent points may not have been saved." });
+      } else if (err instanceof Error && err.message.includes(PROFILE_GONE)) {
+        profileRemoved(" Recent points may not have been saved.");
       } else {
         if (deckId) forgetPrivateDeck(deckId);
         setImportNote({ kind: "error", text: "This deck is no longer available. Your most recent answers may not have been saved. Access changes can only be checked when connected; downloaded content may remain on this device." });
@@ -177,7 +181,6 @@ export function App() {
       if (token !== null) setJoinToken(token);
     };
     window.addEventListener("hashchange", onHash);
-    onHash(); // a link that arrived after the page loaded but before this listener was attached
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
@@ -321,6 +324,15 @@ export function App() {
     );
   }
 
+  /** The kid profile behind this session was deleted (from another tab or device): the session is over. */
+  function profileRemoved(extra = "") {
+    const profileId = profileIdRef.current;
+    if (profileId) {
+      setAccountState((a) => (a.status === "ready" ? { ...a, profiles: a.profiles.filter((p) => p.id !== profileId) } : a));
+    }
+    setSessionState({ status: "none", notice: `This profile is no longer available. Ask an adult to start a new session.${extra}` });
+  }
+
   function forgetPrivateDeck(deckId: string) {
     setAccountState((state) => state.status === "ready" ? { ...state, decks: state.decks.filter((deck) => deck.id !== deckId) } : state);
     setKidState((state) => state.status === "linked" ? { ...state, kid: { ...state.kid, decks: state.kid.decks.filter((deck) => deck.id !== deckId) } } : state);
@@ -331,6 +343,8 @@ export function App() {
     if (err instanceof Error && err.message.includes("device is no longer linked")) {
       setKidState({ status: "none" });
       setSessionState({ status: "none", notice: "This device is no longer linked. Ask an adult for a new link." });
+    } else if (err instanceof Error && err.message.includes(PROFILE_GONE)) {
+      profileRemoved();
     } else {
       if (err instanceof ApiError && err.status === 403) forgetPrivateDeck(deckId);
       setImportNote({ kind: "error", text: "This deck couldn't be opened. Check your connection or ask an adult. Access changes can only be checked when connected; downloaded content may remain on this device." });
@@ -381,7 +395,6 @@ export function App() {
       })
       .catch((err: Error) => {
         if (err instanceof ApiError && err.status === 401) update({ status: "expired", confirmedPoints: confirmedPointsRef.current });
-        else if (err instanceof ApiError && err.status === 429) update({ status: "error", kind: "waiting", message: err.message });
         else update({ status: "error", kind: err instanceof ApiError && [400, 409, 422].includes(err.status) ? "failed" : "unknown", message: err.message });
       });
   }
@@ -616,7 +629,7 @@ export function App() {
 
       {screen.name === "quiz" && (
         <>
-        <p className="save-status" role="status">{saveStatus === "confirmed" ? "Points saved" : saveStatus === "pending" || saveStatus === "saving" ? "Saving points…" : saveStatus === "unknown" ? "We couldn't confirm whether your latest points were saved" : saveStatus === "throttled" ? "Slow down a little: your latest points are waiting to be saved" : saveStatus === "failed" ? "Your latest points could not be saved" : "Your latest points may not have been saved"}</p>
+        <p className="save-status" role="status">{saveStatus === "confirmed" ? "Points saved" : saveStatus === "pending" || saveStatus === "saving" ? "Saving points…" : saveStatus === "unknown" ? "We couldn't confirm whether your latest points were saved" : saveStatus === "failed" ? "Your latest points could not be saved" : "Your latest points may not have been saved"}</p>
         <Quiz
           key={screen.run}
           deck={screen.deck}

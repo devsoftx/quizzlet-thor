@@ -8,25 +8,20 @@ score, a review of every card, and a button to retry only the ones you missed.
 Search decks by title or description, preview a deck before starting, and use
 the results screen to review answers or practice missed questions. The
 leaderboard is optional to view. A guest's nickname is public on the leaderboard
-when they earn points; use a nickname rather than a real name. A parent-managed
-profile is private on that board unless its adult enables visibility.
-
-Nicknames use letters from one alphabet and can't contain a blocked word
-(`server/names.ts`). To take a guest off the board afterwards:
-
-```bash
-vercel env run -e production -- node scripts/remove-player.mjs "<nickname>" --apply
-```
+when they earn points; use a nickname rather than a real name. A nickname
+belongs to the browser that first used it (for 30 days after its last session),
+so nobody else can add to its points; on another device, pick another nickname
+or ask a parent to set up a profile. A parent-managed profile is private on that
+board unless its adult enables visibility, and is shown with its emoji.
 
 Points are sent in batches while studying. If a connection is interrupted,
 the app may not know whether the latest batch was saved until it can retry;
 leaving or closing the tab can lose queued work. A current round's question
-position and answer history are not restored after a reload.
-
-The server keeps each session's streak itself and caps how fast a session can
-save answers (20 at once, then one per 1.5 seconds). A save over the cap is
-answered 429 and waits in the app until it fits. The server still takes the
-browser's word for which answers were right.
+position and answer history are not restored after a reload. The server keeps
+each session's streak itself and accepts answers no faster than a person can
+give them (a burst of 20, then one every 2 seconds, per session and per
+player), so a streak bonus can't be claimed and points can't be poured in by a
+script.
 
 ## Run it
 
@@ -40,29 +35,19 @@ Then open http://localhost:5173.
 | Command             | What it does                               |
 | ------------------- | ------------------------------------------ |
 | `npm run dev`       | Start the app with live reload             |
-| `npm test`          | Run the unit tests (also validates `decks/`); see below for the Redis ones |
+| `npm test`          | Run the unit tests (also validates `decks/`) |
 | `npm run test:e2e`  | Run the end-to-end tests in a real browser |
 | `npm run typecheck` | TypeScript check                           |
 | `npm run build`     | Build a static site into `dist/`           |
 
-### Tests that need Redis or PostgreSQL
+Three more checks run the production storage code against real, disposable
+services (the unit tests use in-memory stand-ins and an in-process Postgres):
 
-`server/store.test.ts` and `scripts/maintenance.test.ts` run the Redis code
-(the score script, rate limits, the maintenance scripts) against a real,
-throwaway Redis. `npm test` runs them when `redis-server` is installed and
-skips them otherwise; with Docker instead:
-
-```bash
-scripts/test-redis-store.sh
-```
-
-The account database code runs against PGlite (an in-process Postgres) in
-`npm test`. One more suite repeats it on a real PostgreSQL in Docker, with
-requests that truly overlap (this is what proves the per-account limits hold):
-
-```bash
-scripts/test-foundation-postgres.sh
-```
+| Command | What it checks | Needs |
+| ------- | -------------- | ----- |
+| `python3 scripts/test-redis-score.py` | The Redis Lua scripts: scoring, the pace limit, removed players, nickname claims, pruning | Docker, or `QUIZZLET_REDIS_LOCAL=1` with a local `redis-server` |
+| `scripts/test-foundation-postgres.sh` | The account SQL and the limit triggers, including parallel inserts at a limit | Docker |
+| `npm test -- server/store.redis.test.ts` | The Redis store against the in-memory one, step by step | A disposable Redis behind an Upstash-compatible REST endpoint (see the file) |
 
 ### End-to-end tests
 
@@ -94,15 +79,11 @@ and in any order.
 | `decks-and-files.e2e.ts`| Private decks (who sees them), study files and their limits            |
 | `errors.e2e.ts`         | No connection, server errors, refused saves, sessions ending          |
 | `api.e2e.ts`            | The API's rules: who may call what, input checks, counting a save once |
-| `security.e2e.ts`       | Response headers, framing, requests from other sites, odd cookies and bodies, limits |
 | `a11y.e2e.ts`           | Automated accessibility checks (axe-core, WCAG 2.2 AA) on every screen  |
 
 Bugs that were fixed have a test named after them (for example, a fast double
 tap skipping a card), so they can't quietly come back. On failure, Playwright
 keeps a trace and screenshot: `npm run test:e2e:report` opens them.
-
-Every test also fails if the page does something the content security policy
-doesn't allow (see [Security](#security)).
 
 ## Adding decks
 
@@ -182,8 +163,7 @@ A signed-in parent can:
 - **link a kid's own device**: each new profile gets an invitation link (one use,
   7 days). The kid opens it on their tablet or computer and that device studies
   as them, still with no email, password or account. The parent sees each linked
-  device under Kid profiles → Devices and can remove it or make a new link. A
-  device stays linked for 180 days, then needs a new link;
+  device under Kid profiles → Devices and can remove it or make a new link;
 - choose per profile whether the nickname appears on the public leaderboard
   (off by default; points still count privately);
 - keep **private decks** (My decks): upload YAML decks into the account, switch
@@ -191,22 +171,29 @@ A signed-in parent can:
   shared decks;
 - keep **private files** (My files): PDFs, Word (.docx), PNG, JPEG and WebP
   study material, up to 15 MB each (20 files, 50 MB per account), stored in a
-  private Vercel Blob store and opened only through the parent's sign-in;
+  private Vercel Blob store and opened only through the parent's sign-in. An
+  upload counts against those limits from the moment it starts, for 15 minutes
+  or until it is saved;
 - change settings (name, theme, card order) or delete the account, which also
   removes every profile, deck and file, and the profiles' leaderboard entries.
 
 ### Setup
 
 1. **Clerk:** add it from the Vercel Marketplace, which sets
-   `CLERK_SECRET_KEY` and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` for you (a
-   development instance works on `*.vercel.app`), then turn on Google in the
-   Clerk dashboard:
+   `CLERK_SECRET_KEY` and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` for you, then turn
+   on Google in the Clerk dashboard:
 
    ```bash
    vercel integration add clerk --billing-plan hobby_2025_08 --no-env-pull
    ```
 
    (Setting `VITE_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` yourself works too.)
+
+   A Clerk *development* instance works on `*.vercel.app` and is fine for trying
+   things out. **Use a Clerk production instance, on the site's own domain, for
+   the real site**: development instances are for testing and have relaxed
+   security settings. When you switch, put the production instance's host in the
+   Content-Security-Policy in `vercel.json` (see `docs/security/runbook.md`).
 2. **Database:** add Neon Postgres from the Vercel Marketplace (`DATABASE_URL`,
    production only), then create or update the tables (safe to re-run):
 
@@ -215,8 +202,10 @@ A signed-in parent can:
    vercel env run -e production -- npm run db:migrate
    ```
 
-   Run `npm run db:migrate` again **before** deploying a version that adds a
-   file to `db/migrations/`: the new code expects the new columns.
+   Run the migration again after every update that adds a file to
+   `db/migrations/`. Migrations use `DATABASE_URL_MIGRATIONS` when it's set, so
+   the running app can use a role that can't change the schema
+   (`docs/security/runbook.md` has the SQL for it).
 
 3. **Files:** create a private Blob store connected to production:
 
@@ -227,8 +216,26 @@ A signed-in parent can:
    This also rewrites `.env.local` with the Development variables; remove the
    Clerk keys from it if you want to keep the local sign-in stand-in.
 
+4. **Daily cleanup:** set `CRON_SECRET` to a long random value in the project's
+   environment variables. Vercel Cron calls `/api/cron` once a day with it; the
+   job trims old guest leaderboard entries and deletes uploads that were started
+   and never saved. Without the secret the job refuses to run.
+5. **Leaderboard switches (optional):** connect a Vercel Global Config store
+   (`GLOBAL_CONFIG`) with a `leaderboard` item to hide the leaderboard or block
+   guest nicknames without a deploy. `docs/security/runbook.md` shows the item.
+
 Without these, the site simply runs in guest-only mode (and My files says
 storage isn't set up).
+
+### Security
+
+`vercel.json` sets the response headers (the full Content-Security-Policy is in
+report-only mode until its reports have been checked). Every write to the API
+must come from the site itself and carry JSON. Security-relevant actions are
+logged as JSON lines with ids only, never tokens or nicknames.
+[`docs/security/`](docs/security) has the remediation plan and its status, the
+runbook (rotating secrets, cutting access, the leaderboard switches, the
+cleanup job, the log events) and the alert rules to add to a log tool.
 
 ### Local development
 
@@ -236,47 +243,19 @@ storage isn't set up).
 you in as a made-up parent id; use two different ids to try two separate
 parents. Accounts, decks and uploaded files are kept in memory.
 
-The made-up sign-in and the in-memory stores exist only on a developer's
-machine: never on Vercel, never when `NODE_ENV` is `production`, and the
-sign-in only with `QUIZZLET_DEV_AUTH=1` (the dev server sets it) and only for
-requests to `localhost`.
-
 Don't put production database URLs in `.env.local`: the dev server loads it.
-
-## Security
-
-A red-team review and what was done about it are in
-[`docs/red-remediation-plan.md`](docs/red-remediation-plan.md). In short:
-
-- **Response headers** come from [`vercel.json`](vercel.json); `npm run dev`
-  and `npm run preview` send the same ones. The page can't be framed by other
-  sites. The content security policy is **report-only** for now: the browser
-  logs what it would block, and the end-to-end tests fail on any report. Its
-  Clerk hosts are for a development instance (`*.clerk.accounts.dev`); for a
-  Clerk production instance add `clerk.<your-domain>` to `script-src` and
-  `connect-src`.
-- **Requests that change something** must come from this site (the `Origin`
-  header) and carry JSON.
-- **Rate limits** per IP address on the routes that need no sign-in
-  (`RATE_LIMITS` in `server/route.ts`), counted in Redis.
-- **Security events** (refused sign-ins, deletions, invitation links, refused
-  saves and uploads, unhandled errors) are written to the function logs as one
-  JSON line each, with ids and outcomes only (`server/log.ts`).
-- **Maintenance scripts** in `scripts/` only report what they would do unless
-  run with `--apply`: `remove-player.mjs`, and the one-off
-  `cleanup-orphan-players.mjs`, `cleanup-guest-names.mjs` and
-  `cleanup-orphan-blobs.mjs`.
 
 ## Project layout
 
 ```
 decks/                 your YAML decks
-api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files, invites, kid)
+api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files, invites, kid, cron, csp-report)
 server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store,
-                       request checks and rate limits (route.ts), nickname rules (names.ts), security log (log.ts)
+                       security log (log.ts), request guard (route.ts), operator switches (flags.ts)
 db/migrations/         SQL migrations (npm run db:migrate)
-scripts/               migrations, maintenance and cleanup scripts, service-backed test runners
-vercel.json            response headers (security headers, content policy)
+scripts/               migrations, the leaderboard removal tool, checks against real Redis and Postgres
+docs/security/         remediation plan, runbook, alert rules
+vercel.json            response headers, the daily cleanup schedule
 e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts
 src/deck.ts            YAML parsing, validation and shuffling
 src/library.ts         loads decks from decks/ and local storage, best scores

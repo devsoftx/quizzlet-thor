@@ -250,36 +250,3 @@ describe("an expired round", () => {
     expect(saver.pending).toBe(0);
   });
 });
-
-describe("the server asks to slow down", () => {
-  it("keeps the batch and sends the very same one again later", async () => {
-    const seen: Array<{ id: string; answers: boolean[] }> = [];
-    const states: string[] = [];
-    let busy = 2;
-    const saver = new ScoreSaver(async (answers, options) => {
-      seen.push({ id: options.batchId, answers: [...answers] });
-      if (busy-- > 0) throw Object.assign(new Error("slow down"), { status: 429 });
-      return { pointsEarned: 10, sessionPoints: 10, totalPoints: 10, leaderboard: null };
-    }, {
-      onSaved: () => {}, isExpired: () => false, onExpired: () => {},
-      isRejected: (err) => [400, 409].includes((err as { status?: number }).status ?? 0),
-      isThrottled: (err) => (err as { status?: number }).status === 429,
-      onState: (state) => states.push(state),
-    });
-    saver.newRound();
-    saver.add(true);
-    await settle();
-    expect(states.at(-1)).toBe("throttled");
-    expect(saver.pending).toBe(1); // not lost, not rejected
-
-    saver.add(false); // the next answer tries again: still too soon
-    await settle();
-    expect(states.at(-1)).toBe("throttled");
-    await saver.flush(); // and later it fits
-    expect(saver.pending).toBe(0);
-    expect(states.at(-1)).toBe("confirmed");
-    // The first batch went out three times unchanged, then the answer that queued up behind it.
-    expect(seen.slice(0, 3).map((s) => s.id)).toEqual([seen[0].id, seen[0].id, seen[0].id]);
-    expect(seen.map((s) => s.answers)).toEqual([[true], [true], [true], [false]]);
-  });
-});

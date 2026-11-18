@@ -111,7 +111,7 @@ export function KidLinkPanel({ profile, invite, devices, freshUrl, onNewLink, on
               <li key={d.id}>
                 <span>
                   <span aria-hidden="true">📱 </span>
-                  {d.label} <span className="muted">· linked {day(d.createdAt)} · last used {day(d.lastSeenAt)} · works until {day(d.expiresAt)}</span>
+                  {d.label} <span className="muted">· linked {day(d.createdAt)} · last used {day(d.lastSeenAt)}</span>
                 </span>
                 <button
                   type="button"

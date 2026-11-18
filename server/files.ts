@@ -6,18 +6,14 @@
 import { BlobNotFoundError, del, head, issueSignedToken, list, presignUrl } from "@vercel/blob";
 import { handleUploadPresigned, type HandleUploadPresignedBody } from "@vercel/blob/client";
 import { createHash } from "node:crypto";
-import { isLocalDev, type Env } from "./env.js";
 
 /** What may be uploaded to one path. */
 export interface UploadRule {
   contentType: string;
   maxBytes: number;
-  /** When the upload link must stop working (epoch ms), if sooner than the usual window. */
+  /** The upload URL must stop working by then (ms): when the path's reservation runs out. */
   validUntil?: number;
 }
-
-/** Decides what may go at a path, or null to refuse it. */
-export type UploadRuleFor = (pathname: string) => UploadRule | null | Promise<UploadRule | null>;
 
 export interface StoredBytes {
   bytes: Uint8Array;
@@ -31,7 +27,7 @@ export interface FileStore {
    * Answers the Blob SDK's request for a presigned upload URL. `rule` returns
    * what may go at the requested path, or null to refuse it.
    */
-  presignUpload(request: Request, body: unknown, rule: UploadRuleFor): Promise<unknown>;
+  presignUpload(request: Request, body: unknown, rule: (pathname: string) => UploadRule | null): Promise<unknown>;
   /** Local mode only: keep uploaded bytes in memory. */
   putLocal(pathname: string, data: StoredBytes): Promise<void>;
   /** Local mode only. */
@@ -40,6 +36,7 @@ export interface FileStore {
   head(pathname: string): Promise<{ size: number; contentType: string } | null>;
   /** Blob mode: a link that reads the file for a few minutes. */
   readUrl(pathname: string): Promise<string>;
+  /** Deleting a path that holds nothing is not an error. */
   delete(pathnames: string[]): Promise<void>;
   /** Removes everything under a folder (used when an account is deleted). */
   deletePrefix(prefix: string): Promise<void>;
@@ -125,7 +122,7 @@ const READ_WINDOW_MS = 5 * 60 * 1000;
 export class BlobFileStore implements FileStore {
   readonly mode = "blob" as const;
 
-  async presignUpload(request: Request, body: unknown, rule: UploadRuleFor) {
+  async presignUpload(request: Request, body: unknown, rule: (pathname: string) => UploadRule | null) {
     const event = body as HandleUploadPresignedBody | null;
     // We never ask Blob to call us back, so the only valid request is for an upload URL.
     if (event?.type !== "blob.generate-presigned-url") throw new UploadRefused("Unexpected upload request.");
@@ -135,9 +132,10 @@ export class BlobFileStore implements FileStore {
       // Only checks completion callbacks, which are refused above.
       webhookPublicKey: process.env.BLOB_WEBHOOK_PUBLIC_KEY ?? "unused",
       getSignedToken: async (pathname, _clientPayload, multipart) => {
-        const allowed = await rule(pathname);
+        const allowed = rule(pathname);
         if (!allowed || multipart) throw new UploadRefused("You can't upload to that location.");
-        const validUntil = Math.min(Date.now() + UPLOAD_WINDOW_MS, allowed.validUntil ?? Infinity);
+        // Never longer than the path's reservation: once that is over, nothing new can be put there.
+        const validUntil = Math.min(Date.now() + UPLOAD_WINDOW_MS, allowed.validUntil ?? Number.POSITIVE_INFINITY);
         const limits = { allowedContentTypes: [allowed.contentType], maximumSizeInBytes: allowed.maxBytes };
         const token = await issueSignedToken({ pathname, operations: ["put"], validUntil, ...limits });
         return { token, urlOptions: { ...limits, validUntil, allowOverwrite: false, addRandomSuffix: false } };
@@ -170,7 +168,18 @@ export class BlobFileStore implements FileStore {
   }
 
   async delete(pathnames: string[]) {
-    if (pathnames.length) await del(pathnames);
+    if (pathnames.length === 0) return;
+    try {
+      await del(pathnames);
+    } catch (err) {
+      if (!(err instanceof BlobNotFoundError)) throw err;
+      // One of them was already gone: delete the rest one at a time.
+      for (const pathname of pathnames) {
+        await del(pathname).catch((e: unknown) => {
+          if (!(e instanceof BlobNotFoundError)) throw e;
+        });
+      }
+    }
   }
 
   async deletePrefix(prefix: string) {
@@ -187,9 +196,9 @@ export class BlobFileStore implements FileStore {
 
 const globalState = globalThis as typeof globalThis & { __quizzletMemoryFiles?: MemoryFileStore };
 
-/** Blob when a store is connected; memory locally; null anywhere else without one. */
-export function getFileStore(env: Env = process.env): FileStore | null {
+/** Blob when a store is connected; memory locally; null on Vercel without one. */
+export function getFileStore(env: Record<string, string | undefined> = process.env): FileStore | null {
   if (env.BLOB_STORE_ID || env.BLOB_READ_WRITE_TOKEN) return new BlobFileStore();
-  if (!isLocalDev(env)) return null;
+  if (env.VERCEL) return null;
   return (globalState.__quizzletMemoryFiles ??= new MemoryFileStore());
 }
