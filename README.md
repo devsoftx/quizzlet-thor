@@ -112,6 +112,23 @@ the `typescript` package is TypeScript 6 and is there only for the linter.
 `npx tsc -v` shows which compiler runs. Once typescript-eslint supports
 TypeScript 7, `typescript` can go back to `^7` and the extra entry can go.
 
+### Continuous integration
+
+Every pull request, and every push to `main`, runs these checks on GitHub
+Actions (`.github/workflows/ci.yml`):
+
+| Check                          | Runs                                                        |
+| ------------------------------ | ----------------------------------------------------------- |
+| Lint                           | `npm run lint`                                              |
+| Typecheck                      | `npm run typecheck`                                         |
+| Unit tests                     | `npm test`                                                  |
+| Build                          | `npm run build`                                             |
+| Storage (PostgreSQL and Redis) | `scripts/test-foundation-postgres.sh` and `scripts/test-redis-score.py`, each on its own throwaway container |
+| End-to-end tests               | `npm run test:e2e`; a failed run keeps its report and traces for a week |
+
+No check needs a secret or reaches a real service. The two Redis checks that
+need an Upstash-compatible endpoint (in the table above) are not part of it.
+
 ## Adding decks
 
 Start from the template: use **Download template** in the app, or copy
@@ -303,6 +320,7 @@ scripts/               migrations, the leaderboard removal and cleanup tools, ch
 docs/security/         remediation plan, runbook, alert rules
 vercel.json            response headers, the daily cleanup schedule
 eslint.config.js       lint rules (npm run lint)
+.github/workflows/     the checks GitHub Actions runs on every pull request
 e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts
 src/deck.ts            YAML parsing, validation and shuffling
 src/library.ts         loads decks from decks/ and local storage, best scores
