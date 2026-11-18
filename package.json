@@ -10,6 +10,7 @@
     "test": "vitest run",
     "typecheck": "tsc -p src && tsc -p . && tsc -p e2e",
     "db:migrate": "node scripts/migrate.mjs",
+    "db:migrate:deploy": "node scripts/migrate.mjs --deploy",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report"

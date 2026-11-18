@@ -205,10 +205,21 @@ A signed-in parent can:
    vercel env run -e production -- npm run db:migrate
    ```
 
-   Run the migration again after every update that adds a file to
-   `db/migrations/`. Migrations use `DATABASE_URL_MIGRATIONS` when it's set, so
-   the running app can use a role that can't change the schema
-   (`docs/security/runbook.md` has the SQL for it).
+   After that, **every production deploy applies new migrations itself**.
+   `vercel.json`'s `buildCommand` runs `npm run db:migrate:deploy` once the app
+   has built. That step migrates only when `VERCEL_ENV` is `production`, so
+   preview and local builds skip it. If a migration fails, the build fails and
+   the site keeps running the previous deployment. Each file is applied in one
+   transaction, so a failed file changes nothing. Running `npm run db:migrate`
+   by hand at the same time is safe: a file is never applied twice.
+
+   A migration runs while the previous deployment is still serving, so write
+   it to work with both the old code and the new: add tables and columns first,
+   and remove old ones in a later deploy.
+
+   Migrations use `DATABASE_URL_MIGRATIONS` when it's set, so the running app
+   can use a role that can't change the schema (`docs/security/runbook.md` has
+   the SQL for it, and what that means for the build).
 
 3. **Files:** create a private Blob store connected to production:
 
@@ -262,7 +273,7 @@ decks/                 your YAML decks
 api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files, invites, kid, cron, csp-report)
 server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store,
                        security log (log.ts), request guard (route.ts), operator switches (flags.ts)
-db/migrations/         SQL migrations (npm run db:migrate)
+db/migrations/         SQL migrations (applied on each production deploy, or npm run db:migrate)
 scripts/               migrations, the leaderboard removal and cleanup tools, checks against real Redis and Postgres
 docs/security/         remediation plan, runbook, alert rules
 vercel.json            response headers, the daily cleanup schedule

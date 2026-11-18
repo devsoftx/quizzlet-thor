@@ -13,7 +13,7 @@ _not yet practised._
 |---|---|---|---|---|
 | `CLERK_SECRET_KEY` | Checking parent sign-ins, deleting sign-in accounts | Clerk dashboard | Update the Vercel env var, redeploy | Parents stay signed in; requests fail between rotation and redeploy |
 | `DATABASE_URL` | The running app's database connection (role `quizzlet_app`, see below) | Neon: reset the role's password | Update the Vercel env var, redeploy | Account features answer 500 until the redeploy |
-| `DATABASE_URL_MIGRATIONS` | `npm run db:migrate` only (owner role) | Neon: reset the owner role's password | Update it wherever migrations are run from | None for the running app |
+| `DATABASE_URL_MIGRATIONS` | Migrations only (owner role): the production build's migration step and `npm run db:migrate` | Neon: reset the owner role's password | Update the Vercel env var (Production), and anywhere else migrations are run from | None for the running app; production deploys fail at the migration step until it's updated |
 | `KV_REST_API_TOKEN` / `UPSTASH_REDIS_REST_TOKEN` | Sessions, scores, leaderboard | Upstash: reset the token | Update the Vercel env var, redeploy | Sessions and scores fail until the redeploy; stored data is kept |
 | `BLOB_READ_WRITE_TOKEN` | Private file storage | The Blob store's settings in Vercel | Update the Vercel env var, redeploy | Uploads and file links fail until the redeploy |
 | `CRON_SECRET` | Lets Vercel Cron call `/api/cron` | Generate a new random value (32+ characters) | Update the Vercel env var, redeploy | The daily cleanup is refused (401) until both match |
@@ -191,6 +191,14 @@ and triggers. Keep them apart:
 2. Put `quizzlet_app`'s connection string in the production `DATABASE_URL`.
 3. Keep the owner's connection string as `DATABASE_URL_MIGRATIONS`, available only where migrations are
    run. `npm run db:migrate` uses it when set.
+
+   Production deploys run migrations in the build (`npm run db:migrate:deploy`, from `vercel.json`), so the
+   build needs this variable as a Production env var. Vercel gives a project's env vars to its functions as
+   well as its build. The app never reads `DATABASE_URL_MIGRATIONS`, but the owner's connection string would
+   still be in every function's environment. If that's not acceptable, don't set it on Vercel: run migrations
+   from somewhere else, and take the migration step out of `vercel.json`'s `buildCommand`. The build would
+   otherwise migrate with `DATABASE_URL`, which the app's role can't do. Every deploy would then fail at that
+   step.
 4. After a migration that adds a table, grant the app's role access to it (extend the `grant` above).
 
 Related, from the plan (R13): give preview deployments their own Upstash database, Blob store and Neon
