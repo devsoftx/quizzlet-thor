@@ -26,6 +26,8 @@ export interface LeaderboardEntry {
   rank: number;
   name: string;
   points: number;
+  /** Only parent-managed kid profiles have one; a guest's nickname never does. */
+  emoji?: string;
 }
 
 export interface Leaderboard {
@@ -170,12 +172,16 @@ export const api = {
     await call("/api/session", { method: "DELETE" });
   },
 
-  /** Saves points for answers; `streakBefore` carries the streak over from the previous save. */
   /** The public leaderboard (no sign-in needed). */
   getLeaderboard(): Promise<Leaderboard> {
     return call<Leaderboard>("/api/leaderboard");
   },
 
+  /**
+   * Saves points for answers. The server keeps the streak itself: `streakBefore`
+   * only tells it when a new round starts over from zero, so the points match
+   * what the learner saw. Every save needs the session's tag and a batch id.
+   */
   submitScore(
     answers: boolean[],
     options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId?: string; deckId?: string; sessionTag?: string },

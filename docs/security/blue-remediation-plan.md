@@ -37,24 +37,111 @@ These controls are in place. Keep them as the work below goes in:
 
 ## Tracker
 
+"Code done" means the change and its tests are in the repository. "You" marks what is left outside the
+repository (dashboards, environment variables, a decision); each of those is described under
+[Implementation status](#implementation-status-18-november-2026) and in [runbook.md](runbook.md).
+
 | Item | Fixes | Title | Severity | Effort | Phase | Status |
 |---|---|---|---|---|---|---|
-| R1 | F2 | Stop deleted profiles reappearing on the public leaderboard | Medium | S | 0 | Not started |
-| R2 | F3, F7 | Structured security logging and a log drain | High | S–M | 0 | Not started |
-| R3 | F4 | Rate limits with Vercel Firewall | Medium | S | 0 | Not started |
-| R4 | F9 | Safe cookie parsing | Low | S | 0 | Not started |
-| R5 | F8, F13, F14 | Security headers, Origin check, Clerk production instance | Low | S | 0 | Not started |
-| R6 | F1 (partly) | Server-side streak and per-session score limits | Medium | M | 1 | Not started |
-| R7 | F5 | Upload reservations that count against the quota | Medium | M | 1 | Not started |
-| R8 | F6 | Prune guest leaderboard data | Low | S | 1 | Not started |
-| R9 | F10 | Enforce profile, deck and file limits in the database | Low | S | 1 | Not started |
-| R10 | F11 | Patch the vulnerable transitive `zod` | Low | S | 1 | Not started |
-| R11 | F1 | Server-checked answers | Medium | L | 2 | Not started |
-| R12 | F12 | Guest names owned by a browser | Low | M | 2 | Not started |
-| R13 | F15 | Least-privilege database role and secret scoping | Low | M | 2 | Not started |
-| R14 | F16 | Leaderboard kill switch and moderation | Low | S–M | 2 | Not started |
-| R15 | — | Detection rules on top of R2 | — | S | 2 | Not started |
-| R16 | — | Incident runbook: rotation and revocation | — | S | 2 | Not started |
+| R1 | F2 | Stop deleted profiles reappearing on the public leaderboard | Medium | S | 0 | Code done |
+| R2 | F3, F7 | Structured security logging and a log drain | High | S–M | 0 | Code done. You: log drain |
+| R3 | F4 | Rate limits with Vercel Firewall | Medium | S | 0 | Not started. You: Firewall rules |
+| R4 | F9 | Safe cookie parsing | Low | S | 0 | Code done |
+| R5 | F8, F13, F14 | Security headers, Origin check, Clerk production instance | Low | S | 0 | Code done (full CSP in report-only). You: Clerk instance, enforce the CSP |
+| R6 | F1 (partly) | Server-side streak and per-session score limits | Medium | M | 1 | Code done |
+| R7 | F5 | Upload reservations that count against the quota | Medium | M | 1 | Code done. You: migration, `CRON_SECRET` |
+| R8 | F6 | Prune guest leaderboard data | Low | S | 1 | Code done. You: `CRON_SECRET`, Upstash alert |
+| R9 | F10 | Enforce profile, deck and file limits in the database | Low | S | 1 | Code done. You: migration |
+| R10 | F11 | Patch the vulnerable transitive `zod` | Low | S | 1 | Done |
+| R11 | F1 | Server-checked answers | Medium | L | 2 | Not started: needs open question 5 |
+| R12 | F12 | Guest names owned by a browser | Low | M | 2 | Code done |
+| R13 | F15 | Least-privilege database role and secret scoping | Low | M | 2 | Code part done. You: the role, preview resources, access review |
+| R14 | F16 | Leaderboard kill switch and moderation | Low | S–M | 2 | Code done. You: Global Config store |
+| R15 | — | Detection rules on top of R2 | — | S | 2 | Rules written ([detections.yaml](detections.yaml)). You: add them to the log tool |
+| R16 | — | Incident runbook: rotation and revocation | — | S | 2 | Written ([runbook.md](runbook.md)). You: practise one rotation |
+
+## Implementation status (18 November 2026)
+
+### Before deploying
+
+1. **Run the migrations first** (`npm run db:migrate`): `004_file_reservations.sql` and
+   `005_account_limits.sql`. The new code needs the `file_reservations` table; the old code keeps working
+   with the new schema, so migrate, then deploy.
+2. **Set `CRON_SECRET`** (a long random value) in the project's environment variables. Without it the daily
+   cleanup (R7, R8) answers 503 and does nothing.
+3. Expect, at the moment of the deploy: sessions that a parent started for a kid before `accountId` was
+   stored are ended (as this plan accepted under R1), and a page that was open before the deploy keeps
+   saving points (it already sends a session tag and a batch id).
+
+### What was checked, and how
+
+| Check | Result |
+|---|---|
+| Unit tests (`npm test`) and type check | Pass: 217 tests (6 skipped: they need the services below) |
+| Redis Lua scripts on a real Redis 7 (`scripts/test-redis-score.py`, local mode) | Pass |
+| `RedisStore` through the Upstash client against a real Redis (`server/store.redis.test.ts`) | Pass: identical to the in-memory store. Run through a small local stand-in for Upstash's REST API, not against Upstash itself |
+| Account SQL and triggers on PostgreSQL 16, with parallel inserts (`server/accounts.pg.test.ts`) | Pass: 10 parallel creates at 19 profiles leave exactly 20; same for decks, started uploads and their byte total |
+| The least-privilege role in runbook.md on PostgreSQL 16 | Pass: every app statement works; `drop`, `create`, `alter`, `truncate` and replacing a trigger function are refused |
+| End-to-end suite in Chromium (`npm run test:e2e`) | 81 of 83 pass. The two that fail (`kid-device.e2e.ts`: "a new link replaces the old one", "'Not now' leaves the device unlinked…") fail the same way on the code before these changes, with the older Chromium build that was available for this run; run the suite once with the pinned browser to confirm |
+| `npm audit --omit=dev` | 0 vulnerabilities |
+
+**Not checked:** anything on Vercel itself. The headers, the cron schedule and the function settings in
+`vercel.json`, reading Global Config, Blob uploads signed for a reserved size, and the Neon HTTP driver
+running the new migrations have not run on a deployment. Try them on a preview deployment first.
+
+### Where the code differs from the text below
+
+- **R1.** The 403 for a parent-started session says "This profile is no longer available…" (a linked
+  device keeps its own message), and the app returns to the profile picker. The hidden marker also applies
+  to guest keys, so an entry removed by an operator (R14) doesn't come back.
+- **R2.** A session's kind is logged as `sessionKind`: the plan's field name, `kind`, is also the marker
+  that makes a line a security event, and one overwrote the other. Extra events: `score.limited`,
+  `session.name_taken`, `session.name_blocked`, `request.cross_site`, `csp.violation`, the cleanup's
+  events and `flags.error`. `auth.error` is logged instead of `auth.denied`, not in addition to it.
+- **R5.** The Origin check accepts the site's own origin (the host the browser addressed) as well as the
+  `authorizedParties` list, so a second custom domain keeps working. It runs in `withErrors`, before any
+  handler, rather than as a call inside each one. `frame-ancestors 'none'`, `base-uri 'self'`,
+  `object-src 'none'` and `X-Frame-Options: DENY` are **enforced** now, because a report-only policy
+  doesn't stop framing; the rest of the policy is report-only, with reports going to a new
+  `/api/csp-report` route that logs them. The Clerk host in it is the development-instance wildcard
+  (`*.clerk.accounts.dev`) until open question 1 is answered.
+- **R6.** The browser may *lower* the stored streak, never raise it: a new round sends `streakBefore: 0`,
+  so the saved points match what the learner saw, and a forged value earns nothing extra. `batchId` is
+  now required as well as `sessionTag`, and the old non-idempotent path (`addPoints`) is gone: it bypassed
+  the script entirely, so leaving it would have left the hole open. A refused batch is a 429 that the app
+  keeps and sends again.
+- **R7.** `file_reservations` has a `created_at` column, so the quota trigger can use the application's
+  clock. The quota (files plus live reservations, by count and bytes) is enforced by a trigger on the
+  insert, with the same account lock as R9. An account's expired reservations and their uploads are also
+  cleared when it next starts an upload, not only by the daily job. The daily job deletes nothing if the
+  database recognises none of the stored files (the signature of a wrong or empty database).
+- **R8.** Guests who never score are no longer written to `player-names` at all, and the job also drops
+  such names left by earlier versions.
+- **R9.** `scripts/migrate.mjs` now splits statements with a small parser, because the old split on `;`
+  at a line end would have cut the trigger functions apart.
+- **R12.** Ownership lasts 30 days from the nickname's last session and is renewed each time, so an
+  abandoned nickname frees up. A kid on a different device has to pick another nickname.
+- **R14.** One Global Config item, `leaderboard`, holds both `enabled` and `blockedNames`. A blocked entry
+  matches anywhere inside a nickname, ignoring case, spaces and punctuation. The removal script shows what
+  it would remove and needs `--yes` to do it.
+
+### Left for you
+
+- **R3:** create the Firewall rate-limit rules (the table is in runbook.md), in log-only mode first.
+- **R2:** set up a log drain and record the tool and retention in runbook.md. **R15:** add the rules there.
+- **R5:** answer open question 1; then put the production Clerk host in the report-only policy, watch
+  `csp.violation`, and enforce the policy (steps in runbook.md).
+- **R8:** an Upstash memory or usage alert.
+- **R11:** needs open question 5 (should decks imported only into the browser stop earning leaderboard
+  points?). Until then R6 bounds forged points to the pace limit.
+- **R13:** create the `quizzlet_app` role (SQL in runbook.md), separate preview resources, review access.
+- **R14:** connect a Global Config store with the `leaderboard` item. Until then the board is on and no
+  nickname is blocked.
+- **R16:** practise one rotation on a preview environment.
+
+Also found while testing, not part of this plan: `npm audit` (with dev dependencies) still reports
+high-severity advisories in the test and build tooling (`vite`, `vitest`, through `picomatch` and `fdir`).
+They don't ship to production.
 
 ---
 

@@ -5,6 +5,7 @@
 import {
   DEFAULT_SETTINGS,
   GRADE_BANDS,
+  LimitReached,
   MAX_PROFILES,
   normalizeSettings,
   PROFILE_COLORS,
@@ -16,6 +17,7 @@ import {
 import { defaultDeps, type Deps } from "./deps.js";
 import { accountFolder } from "./files.js";
 import { cleanName, error, json, NAME_MAX, readJson } from "./http.js";
+import { errorName, routeOf, securityEvent } from "./log.js";
 
 export interface AccountContext {
   userId: string;
@@ -30,10 +32,15 @@ export async function requireAccount(request: Request, deps: Deps): Promise<Acco
   let user = null;
   try {
     user = await auth.authenticate(request);
-  } catch {
-    user = null;
+  } catch (err) {
+    // The sign-in provider failed (not the visitor): answered like "signed out", but never silently.
+    securityEvent("auth.error", { route: routeOf(request), errorName: errorName(err) });
+    return error(401, "Please sign in.");
   }
-  if (!user) return error(401, "Please sign in.");
+  if (!user) {
+    securityEvent("auth.denied", { route: routeOf(request) });
+    return error(401, "Please sign in.");
+  }
   return { userId: user.userId, scope: accounts.forAccount(user.userId) };
 }
 
@@ -47,7 +54,9 @@ export async function ensureAccount(ctx: AccountContext, deps: Deps) {
   } catch {
     // keep the default
   }
-  return ctx.scope.ensure({ displayName });
+  const account = await ctx.scope.ensure({ displayName });
+  securityEvent("account.created", { accountId: ctx.userId });
+  return account;
 }
 
 const playerKeyForProfile = (id: string) => `p:${id}`;
@@ -114,6 +123,7 @@ export async function deleteMe(request: Request, deps: Deps = defaultDeps()): Pr
   if (deps.store) {
     for (const id of profileIds) await deps.store.removePlayer(playerKeyForProfile(id));
   }
+  securityEvent("account.deleted", { accountId: ctx.userId, deletedProfiles: profileIds.length });
   await deps.auth!.deleteUser(ctx.userId); // data first, so a failure here can be retried
   return json({ ok: true, deletedProfiles: profileIds.length });
 }
@@ -162,16 +172,25 @@ export async function createProfile(request: Request, deps: Deps = defaultDeps()
   const parsed = parseProfileInput((await readJson(request)) ?? {}, true);
   if (typeof parsed === "string") return error(400, parsed);
 
+  const tooMany = () => error(400, `You can have up to ${MAX_PROFILES} profiles.`);
   const existing = await ctx.scope.listProfiles();
-  if (existing.length >= MAX_PROFILES) return error(400, `You can have up to ${MAX_PROFILES} profiles.`);
+  if (existing.length >= MAX_PROFILES) return tooMany();
   const n = existing.length;
-  const profile = await ctx.scope.createProfile(deps.newId(), {
-    nickname: parsed.nickname!,
-    gradeBand: parsed.gradeBand ?? null,
-    color: parsed.color ?? PROFILE_COLORS[n % PROFILE_COLORS.length],
-    emoji: parsed.emoji ?? PROFILE_EMOJIS[n % PROFILE_EMOJIS.length],
-    showOnLeaderboard: parsed.showOnLeaderboard ?? false, // private unless the parent opts in
-  });
+  let profile: KidProfile;
+  try {
+    profile = await ctx.scope.createProfile(deps.newId(), {
+      nickname: parsed.nickname!,
+      gradeBand: parsed.gradeBand ?? null,
+      color: parsed.color ?? PROFILE_COLORS[n % PROFILE_COLORS.length],
+      emoji: parsed.emoji ?? PROFILE_EMOJIS[n % PROFILE_EMOJIS.length],
+      showOnLeaderboard: parsed.showOnLeaderboard ?? false, // private unless the parent opts in
+    });
+  } catch (err) {
+    // The database enforces the limit too: parallel requests can pass the check above together.
+    if (err instanceof LimitReached) return tooMany();
+    throw err;
+  }
+  securityEvent("profile.created", { accountId: ctx.userId, profileId: profile.id, listed: profile.showOnLeaderboard });
   return json({ profile }, 201);
 }
 
@@ -183,7 +202,10 @@ export async function updateProfile(request: Request, deps: Deps = defaultDeps()
 
   const profile: KidProfile | null = await ctx.scope.updateProfile(idParam(request), parsed);
   if (!profile) return error(404, "Profile not found.");
-  await deps.store?.syncPlayer(playerKeyForProfile(profile.id), profile.nickname, profile.showOnLeaderboard);
+  await deps.store?.syncPlayer(playerKeyForProfile(profile.id), profile.nickname, profile.showOnLeaderboard, profile.emoji);
+  if (parsed.showOnLeaderboard !== undefined) {
+    securityEvent("profile.visibility", { accountId: ctx.userId, profileId: profile.id, listed: profile.showOnLeaderboard });
+  }
   return json({ profile });
 }
 
@@ -193,5 +215,6 @@ export async function deleteProfile(request: Request, deps: Deps = defaultDeps()
   const id = idParam(request);
   if (!(await ctx.scope.deleteProfile(id))) return error(404, "Profile not found.");
   await deps.store?.removePlayer(playerKeyForProfile(id));
+  securityEvent("profile.deleted", { accountId: ctx.userId, profileId: id });
   return json({ ok: true });
 }

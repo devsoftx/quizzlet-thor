@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   createProfile,
@@ -12,8 +12,9 @@ import {
 import { MemoryAccounts } from "./accounts.js";
 import { DevAuthenticator, authorizedParties } from "./auth.js";
 import type { Deps } from "./deps.js";
-import { cleanName, getLeaderboard, startSession, submitScore } from "./handlers.js";
+import { cleanName, getLeaderboard, startSession } from "./handlers.js";
 import { MemoryStore } from "./store.js";
+import { playing, score } from "./test-support.js";
 
 const BASE = "https://quizzlet.test";
 
@@ -50,8 +51,6 @@ function req(
     body: init.body === undefined ? undefined : JSON.stringify(init.body),
   });
 }
-
-const cookieFrom = (res: Response) => res.headers.get("set-cookie")!.split(";")[0];
 
 async function newProfile(deps: Deps, user: string, body: Record<string, unknown>) {
   const res = await createProfile(req("/api/profiles", { method: "POST", body, user }), deps);
@@ -152,22 +151,38 @@ describe("kid sessions and the leaderboard", () => {
 
     const start = await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps);
     expect(start.status).toBe(201);
+    const who = await playing(start);
     expect(await start.json()).toMatchObject({ name: "Nova7", profileId: kid.id });
-    const cookie = cookieFrom(start);
+    const board = async () => (await getLeaderboard(req("/api/leaderboard", { cookie: who.cookie }), deps)).json();
 
     // Hidden by default: points count, but the board doesn't show the kid.
-    const first = await (await submitScore(req("/api/score", { method: "POST", cookie, body: { answers: [true] } }), deps)).json();
-    expect(first).toMatchObject({ pointsEarned: 10, totalPoints: 10, leaderboard: { top: [], you: null } });
+    const first = await (await score(deps, who, { answers: [true] })).json();
+    expect(first).toMatchObject({ pointsEarned: 10, totalPoints: 10 });
+    expect(await board()).toEqual({ top: [], you: null });
 
-    // Parent opts in: the kid appears with their whole total.
+    // Parent opts in: the kid appears with their whole total, and their emoji (a guest's row never has one).
     await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: true } }), deps);
-    const board = await (await getLeaderboard(req("/api/leaderboard", { cookie }), deps)).json();
-    expect(board.top).toEqual([{ rank: 1, name: "Nova7", points: 10 }]);
+    expect((await board()).top).toEqual([{ rank: 1, name: "Nova7", points: 10, emoji: "🦊" }]);
 
     // Parent opts out mid-session: later points still don't put the kid back on the board.
     await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body: { showOnLeaderboard: false } }), deps);
-    const later = await (await submitScore(req("/api/score", { method: "POST", cookie, body: { answers: [true] } }), deps)).json();
-    expect(later).toMatchObject({ totalPoints: 20, leaderboard: { top: [] } });
+    const later = await (await score(deps, who, { answers: [true], streakBefore: 0 })).json();
+    expect(later).toMatchObject({ totalPoints: 20 });
+    expect((await board()).top).toEqual([]);
+  });
+
+  it("marks kid profiles with their emoji, so a guest with the same nickname can't pass as them", async () => {
+    const { deps } = setup();
+    const kid = await newProfile(deps, "ana", { nickname: "Nova7", showOnLeaderboard: true, emoji: "🚀" });
+    const asKid = await playing(await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps));
+    const asGuest = await playing(await startSession(req("/api/session", { method: "POST", body: { name: "Nova7" } }), deps));
+    await score(deps, asKid, { answers: [true, true] });
+    await score(deps, asGuest, { answers: [true] });
+    const board = await (await getLeaderboard(req("/api/leaderboard"), deps)).json();
+    expect(board.top).toEqual([
+      { rank: 1, name: "Nova7", points: 20, emoji: "🚀" },
+      { rank: 2, name: "Nova7", points: 10 },
+    ]);
   });
 
   it("keeps guest names and profile keys apart", () => {
@@ -179,8 +194,8 @@ describe("deleting an account", () => {
   it("removes profiles, leaderboard entries and the sign-in", async () => {
     const { deps, auth } = setup();
     const kid = await newProfile(deps, "ana", { nickname: "Nova7", showOnLeaderboard: true });
-    const cookie = cookieFrom(await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps));
-    await submitScore(req("/api/score", { method: "POST", cookie, body: { answers: [true, true] } }), deps);
+    const who = await playing(await startSession(req("/api/session", { method: "POST", user: "ana", body: { profileId: kid.id } }), deps));
+    await score(deps, who, { answers: [true, true] });
     expect((await (await getLeaderboard(req("/api/leaderboard"), deps)).json()).top).toHaveLength(1);
 
     expect((await deleteMe(req("/api/me", { method: "DELETE", user: "ana", body: {} }), deps)).status).toBe(400);
@@ -211,11 +226,25 @@ describe("sign-in configuration", () => {
 
 describe("route guard", () => {
   // Every Vercel Function must be listed here, so a new route can't skip the sign-in check by accident.
-  const PUBLIC = ["kid.ts", "leaderboard.ts", "score.ts", "session.ts"]; // kid.ts: invitation token or linked-device cookie; session.ts: sign-in for profile sessions
+  // kid.ts: invitation token or linked-device cookie; session.ts: sign-in for profile sessions;
+  // csp-report.ts: browsers' policy-violation reports (logged, nothing else).
+  const PUBLIC = ["csp-report.ts", "kid.ts", "leaderboard.ts", "score.ts", "session.ts"];
   const SIGNED_IN = ["decks.ts", "files.ts", "invites.ts", "me.ts", "profiles.ts"];
+  const CRON_SECRET = ["cron.ts"]; // only the scheduler, with its bearer token
+
+  const apiDir = new URL("../api/", import.meta.url);
+  const files = readdirSync(apiDir).filter((f) => f.endsWith(".ts")).sort();
 
   it("classifies every api/ route", () => {
-    const files = readdirSync(new URL("../api/", import.meta.url)).filter((f) => f.endsWith(".ts")).sort();
-    expect(files).toEqual([...PUBLIC, ...SIGNED_IN].sort());
+    expect(files).toEqual([...PUBLIC, ...SIGNED_IN, ...CRON_SECRET].sort());
+  });
+
+  it("sends every exported method through withErrors (cross-site check and error logging)", () => {
+    for (const file of files) {
+      const source = readFileSync(new URL(file, apiDir), "utf8");
+      const exported = source.match(/^export const \w+ = .*$/gm) ?? [];
+      expect(exported.length, file).toBeGreaterThan(0);
+      for (const line of exported) expect(line, file).toMatch(/^export const (GET|POST|PUT|PATCH|DELETE) = withErrors\("\/api\/[a-z-]+", /);
+    }
   });
 });

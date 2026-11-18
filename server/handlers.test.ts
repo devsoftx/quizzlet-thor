@@ -6,11 +6,13 @@ import {
   endSession,
   getLeaderboard,
   getSession,
+  GUEST_COOKIE,
   SESSION_COOKIE,
   startSession,
   submitScore,
 } from "./handlers.js";
-import { getStore, MemoryStore } from "./store.js";
+import { getStore, MemoryStore, PACE_BURST, PACE_MS_PER_ANSWER } from "./store.js";
+import { cookieNamed, playing, score, type Playing } from "./test-support.js";
 
 const BASE = "https://quizzlet.test";
 
@@ -39,6 +41,16 @@ async function login(deps: Deps, name: string) {
   expect(res.status).toBe(201);
   return cookieFrom(res);
 }
+
+/** Starts a guest session; `browser` is the cookie jar of a browser that has played before. */
+async function play(deps: Deps, name: string, browser = ""): Promise<Playing> {
+  const res = await startSession(req("/api/session", { method: "POST", body: { name }, cookie: browser || undefined }), deps);
+  expect(res.status).toBe(201);
+  return playing(res);
+}
+
+const board = async (deps: Deps, cookie?: string) => (await getLeaderboard(req("/api/leaderboard", { cookie }), deps)).json();
+const sessionPoints = async (deps: Deps, who: Playing) => (await (await getSession(req("/api/session", { cookie: who.cookie }), deps)).json()).points;
 
 describe("points", () => {
   it("gives 10 per correct answer and +5 from the third in a row", () => {
@@ -70,7 +82,7 @@ describe("sessions", () => {
     const { deps } = setup();
     const res = await startSession(req("/api/session", { method: "POST", body: { name: "Ana" } }), deps);
     expect(res.status).toBe(201);
-    const cookie = res.headers.get("set-cookie")!;
+    const cookie = res.headers.getSetCookie().find((c) => c.startsWith(`${SESSION_COOKIE}=`))!;
     expect(cookie).toContain(`${SESSION_COOKIE}=id-1`);
     expect(cookie).toContain("Max-Age=3600");
     expect(cookie).toContain("HttpOnly");
@@ -82,10 +94,36 @@ describe("sessions", () => {
   it("leaves out Secure on plain http (local dev)", async () => {
     const { deps } = setup();
     const res = await startSession(
-      new Request("http://localhost:5173/api/session", { method: "POST", body: JSON.stringify({ name: "Ana" }) }),
+      new Request("http://localhost:5173/api/session", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name: "Ana" }),
+      }),
       deps,
     );
+    expect(res.status).toBe(201);
     expect(res.headers.get("set-cookie")).not.toContain("Secure");
+  });
+
+  it("answers a malformed session cookie like no cookie at all, not with an error", async () => {
+    const { deps } = setup();
+    const res = await getSession(req("/api/session", { cookie: `${SESSION_COOKIE}=%E0%A4%A` }), deps);
+    expect(res.status).toBe(200);
+    expect(await res.json()).toBeNull();
+    const scored = await submitScore(req("/api/score", { method: "POST", cookie: `${SESSION_COOKIE}=%E0%A4%A`, body: { answers: [true] } }), deps);
+    expect(scored.status).toBe(401);
+  });
+
+  it("only reads a JSON body: a form posted as text/plain starts nothing", async () => {
+    const { deps } = setup();
+    for (const type of ["text/plain", "application/x-www-form-urlencoded", "multipart/form-data"]) {
+      const res = await startSession(
+        new Request(`${BASE}/api/session`, { method: "POST", headers: { "content-type": type }, body: JSON.stringify({ name: "Ana" }) }),
+        deps,
+      );
+      expect(res.status, type).toBe(400);
+      expect(res.headers.get("set-cookie")).toBeNull();
+    }
   });
 
   it("rejects a bad name", async () => {
@@ -136,71 +174,226 @@ describe("sessions", () => {
 describe("scores and leaderboard", () => {
   it("needs an active session", async () => {
     const { deps } = setup();
-    const res = await submitScore(req("/api/score", { method: "POST", body: { answers: [true] } }), deps);
+    const res = await score(deps, { cookie: "", sessionTag: "none" }, { answers: [true] });
     expect(res.status).toBe(401);
   });
 
   it("validates the answers list", async () => {
     const { deps } = setup();
-    const cookie = await login(deps, "Ana");
+    const ana = await play(deps, "Ana");
     for (const answers of [[], ["yes"], "true", new Array(201).fill(true)]) {
-      const res = await submitScore(req("/api/score", { method: "POST", body: { answers }, cookie }), deps);
-      expect(res.status).toBe(400);
+      expect((await score(deps, ana, { answers })).status).toBe(400);
     }
+  });
+
+  it("needs the session's tag and a batch id on every save", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    const raw = (body: Record<string, unknown>) => submitScore(req("/api/score", { method: "POST", cookie: ana.cookie, body }), deps);
+    expect((await raw({ answers: [true], batchId: "b1" })).status).toBe(400); // no session tag (an out-of-date page)
+    expect((await raw({ answers: [true], sessionTag: ana.sessionTag })).status).toBe(400); // no batch id
+    expect((await raw({ answers: [true], sessionTag: ana.sessionTag, batchId: "bad id!" })).status).toBe(400);
+    expect(await sessionPoints(deps, ana)).toBe(0);
+    expect((await raw({ answers: [true], sessionTag: ana.sessionTag, batchId: "b1" })).status).toBe(200);
+    expect(await sessionPoints(deps, ana)).toBe(10);
   });
 
   it("saves a round in pieces with the same points as all at once", async () => {
     const { deps } = setup();
-    const cookie = await login(deps, "Ana");
-    const piece = async (body: Record<string, unknown>) =>
-      (await submitScore(req("/api/score", { method: "POST", body, cookie }), deps)).json();
+    const ana = await play(deps, "Ana");
+    const piece = async (body: Record<string, unknown>) => (await score(deps, ana, body)).json();
 
     // true, true (20) then true with the streak carried over (10 + 5 bonus): 35, like [true, true, true].
-    expect(await piece({ answers: [true, true], streakBefore: 0, leaderboard: false })).toMatchObject({
-      pointsEarned: 20,
-      sessionPoints: 20,
-      leaderboard: null,
-    });
-    expect(await piece({ answers: [true], streakBefore: 2, leaderboard: false })).toMatchObject({ pointsEarned: 15, sessionPoints: 35 });
+    expect(await piece({ answers: [true, true], streakBefore: 0 })).toMatchObject({ pointsEarned: 20, sessionPoints: 20, leaderboard: null });
+    expect(await piece({ answers: [true], streakBefore: 2 })).toMatchObject({ pointsEarned: 15, sessionPoints: 35 });
     expect(scoreRound([true, true, true]).points).toBe(35);
 
-    // Nothing left to send: an empty list may ask for the totals and leaderboard.
-    expect(await piece({ answers: [], leaderboard: true })).toMatchObject({
-      pointsEarned: 0,
-      sessionPoints: 35,
-      totalPoints: 35,
-      leaderboard: { top: [{ name: "Ana", points: 35 }] },
-    });
+    // Nothing left to send: an empty list may ask for the totals.
+    expect(await piece({ answers: [], leaderboard: true })).toMatchObject({ pointsEarned: 0, sessionPoints: 35, totalPoints: 35 });
+    expect((await board(deps)).top).toEqual([{ rank: 1, name: "Ana", points: 35 }]);
 
     for (const streakBefore of [-1, 1.5, "2", 201]) {
-      const res = await submitScore(req("/api/score", { method: "POST", body: { answers: [true], streakBefore }, cookie }), deps);
-      expect(res.status).toBe(400);
+      expect((await score(deps, ana, { answers: [true], streakBefore })).status).toBe(400);
     }
   });
 
   it("adds points and ranks students by total points across sessions", async () => {
     const { deps } = setup();
-    const ana = await login(deps, "Ana");
-    const ben = await login(deps, "Ben");
+    const ana = await play(deps, "Ana");
+    const ben = await play(deps, "Ben");
 
-    const first = await submitScore(req("/api/score", { method: "POST", body: { answers: [true, true, true] }, cookie: ana }), deps);
-    expect(await first.json()).toMatchObject({ pointsEarned: 35, sessionPoints: 35, totalPoints: 35 });
+    expect(await (await score(deps, ana, { answers: [true, true, true] })).json()).toMatchObject({ pointsEarned: 35, sessionPoints: 35, totalPoints: 35 });
+    await score(deps, ben, { answers: [true, false] });
 
-    await submitScore(req("/api/score", { method: "POST", body: { answers: [true, false] }, cookie: ben }), deps);
+    // A new session in the same browser with the same name (any case) adds to the same total.
+    const ana2 = await play(deps, "ana", ana.cookie);
+    expect(await (await score(deps, ana2, { answers: [true] })).json()).toMatchObject({ pointsEarned: 10, sessionPoints: 10, totalPoints: 45 });
 
-    // A new session with the same name (any case) adds to the same total.
-    const ana2 = await login(deps, "ana");
-    const res = await submitScore(req("/api/score", { method: "POST", body: { answers: [true] }, cookie: ana2 }), deps);
-    const body = await res.json();
-    expect(body).toMatchObject({ pointsEarned: 10, sessionPoints: 10, totalPoints: 45 });
-    expect(body.leaderboard.top).toEqual([
+    const seen = await board(deps, ana2.cookie);
+    expect(seen.top).toEqual([
       { rank: 1, name: "ana", points: 45 },
       { rank: 2, name: "Ben", points: 10 },
     ]);
-    expect(body.leaderboard.you).toEqual({ rank: 1, name: "ana", points: 45 });
+    expect(seen.you).toEqual({ rank: 1, name: "ana", points: 45 });
+    expect((await board(deps, ben.cookie)).you).toEqual({ rank: 2, name: "Ben", points: 10 });
+  });
 
-    const board = await getLeaderboard(req("/api/leaderboard", { cookie: ben }), deps);
-    expect((await board.json()).you).toEqual({ rank: 2, name: "Ben", points: 10 });
+  it("keeps a guest who never scored out of the stored names and off the board", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    await score(deps, ana, { answers: [false, false] });
+    expect(await board(deps, ana.cookie)).toEqual({ top: [], you: null });
+  });
+});
+
+describe("the server keeps the streak (the browser can't claim one)", () => {
+  it("gives a forged streakBefore no bonus", async () => {
+    const { deps } = setup();
+    const honest = await play(deps, "Honest");
+    const forger = await play(deps, "Forger");
+    const fair = await (await score(deps, honest, { answers: [true] })).json();
+    const forged = await (await score(deps, forger, { answers: [true], streakBefore: 200 })).json();
+    expect(forged.pointsEarned).toBe(fair.pointsEarned);
+    expect(forged).toMatchObject({ pointsEarned: 10, sessionPoints: 10 });
+  });
+
+  it("carries the real streak over even when the browser says nothing", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    await score(deps, ana, { answers: [true, true] });
+    expect(await (await score(deps, ana, { answers: [true] })).json()).toMatchObject({ pointsEarned: 15 }); // third in a row
+  });
+
+  it("lets a new round start over from zero, but never raises the streak", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    await score(deps, ana, { answers: [true, true, true] }); // streak 3
+    expect(await (await score(deps, ana, { answers: [true], streakBefore: 0 })).json()).toMatchObject({ pointsEarned: 10 }); // new round
+    expect(await (await score(deps, ana, { answers: [true], streakBefore: 50 })).json()).toMatchObject({ pointsEarned: 10 }); // really on 1
+    expect(await (await score(deps, ana, { answers: [true], streakBefore: 2 })).json()).toMatchObject({ pointsEarned: 15 }); // and now on 2
+  });
+
+  it("a wrong answer ends the stored streak", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    await score(deps, ana, { answers: [true, true, true, false] });
+    expect(await (await score(deps, ana, { answers: [true], streakBefore: 3 })).json()).toMatchObject({ pointsEarned: 10 });
+  });
+});
+
+describe("pace limit", () => {
+  it("refuses answers that arrive faster than a person can give them, and saves nothing", async () => {
+    const { deps, advance } = setup();
+    const ana = await play(deps, "Ana");
+    const burst = new Array(PACE_BURST).fill(false);
+    expect((await score(deps, ana, { answers: burst })).status).toBe(200);
+
+    const tooFast = await score(deps, ana, { answers: [true], batchId: "fast" });
+    expect(tooFast.status).toBe(429);
+    expect(await sessionPoints(deps, ana)).toBe(0);
+    expect((await board(deps)).top).toEqual([]);
+
+    // The same batch goes through once time has caught up (one answer per 2 seconds).
+    advance(PACE_MS_PER_ANSWER);
+    expect((await score(deps, ana, { answers: [true], batchId: "fast" })).status).toBe(200);
+    expect((await score(deps, ana, { answers: [true] })).status).toBe(429);
+    expect(await sessionPoints(deps, ana)).toBe(10);
+  });
+
+  it("holds the review's forged-points run to the pace limit", async () => {
+    // The review minted 60,000 points with 20 requests of 200 "correct" answers and streakBefore: 200.
+    const { deps } = setup();
+    const forger = await play(deps, "Forger");
+    const statuses: number[] = [];
+    for (let i = 0; i < 20; i++) {
+      statuses.push((await score(deps, forger, { answers: new Array(200).fill(true), streakBefore: 200 })).status);
+    }
+    expect(statuses.every((s) => s === 429)).toBe(true);
+    expect(await sessionPoints(deps, forger)).toBe(0);
+    // What is allowed right away is the burst, scored from a real streak of zero.
+    const allowed = await (await score(deps, forger, { answers: new Array(PACE_BURST).fill(true), streakBefore: 200 })).json();
+    expect(allowed.pointsEarned).toBe(scoreRound(new Array(PACE_BURST).fill(true)).points);
+  });
+
+  it("always answers a request for the totals", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    await score(deps, ana, { answers: new Array(PACE_BURST).fill(true) });
+    expect((await score(deps, ana, { answers: [], leaderboard: true })).status).toBe(200);
+  });
+});
+
+describe("guest nicknames belong to one browser", () => {
+  it("gives the browser a long-lived HttpOnly id and refuses the name to another browser", async () => {
+    const { deps } = setup();
+    const first = await startSession(req("/api/session", { method: "POST", body: { name: "Ana" } }), deps);
+    const guest = first.headers.getSetCookie().find((c) => c.startsWith(`${GUEST_COOKIE}=`))!;
+    expect(guest).toMatch(new RegExp(`^${GUEST_COOKIE}=[A-Za-z0-9_-]{43}; Path=/; Max-Age=2592000; HttpOnly; SameSite=Lax; Secure$`));
+
+    // Another browser (no cookie, or a different one) can't take over the row, in any letter case.
+    for (const cookie of [undefined, `${GUEST_COOKIE}=${"x".repeat(43)}`, `${GUEST_COOKIE}=not-a-secret`]) {
+      const other = await startSession(req("/api/session", { method: "POST", body: { name: "ANA" }, cookie }), deps);
+      expect(other.status).toBe(409);
+      expect(await other.json()).toEqual({ error: "That nickname is taken. Please pick another one." });
+      expect(other.headers.get("set-cookie")).toBeNull();
+    }
+
+    // The same browser keeps its name and its id.
+    const again = await startSession(req("/api/session", { method: "POST", body: { name: "ana" }, cookie: cookieNamed(first, GUEST_COOKIE) }), deps);
+    expect(again.status).toBe(201);
+    expect(cookieNamed(again, GUEST_COOKIE)).toBe(cookieNamed(first, GUEST_COOKIE));
+  });
+
+  it("frees a nickname 30 days after its browser last used it", async () => {
+    const { deps, advance } = setup();
+    await play(deps, "Ana");
+    advance(29 * 24 * 60 * 60 * 1000);
+    expect((await startSession(req("/api/session", { method: "POST", body: { name: "Ana" } }), deps)).status).toBe(409);
+    advance(2 * 24 * 60 * 60 * 1000);
+    expect((await startSession(req("/api/session", { method: "POST", body: { name: "Ana" } }), deps)).status).toBe(201);
+  });
+
+  it("two browsers can't add to the same leaderboard row", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    await score(deps, ana, { answers: [true] });
+    expect((await startSession(req("/api/session", { method: "POST", body: { name: "Ana" } }), deps)).status).toBe(409);
+    expect((await board(deps)).top).toEqual([{ rank: 1, name: "Ana", points: 10 }]);
+  });
+});
+
+describe("leaderboard switch and blocked nicknames", () => {
+  it("shows an empty board while it's switched off, and still saves points", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    await score(deps, ana, { answers: [true] });
+    deps.flags = async () => ({ enabled: false, blockedNames: [] });
+    expect(await board(deps, ana.cookie)).toEqual({ top: [], you: null });
+    expect(await (await score(deps, ana, { answers: [true] })).json()).toMatchObject({ sessionPoints: 20, totalPoints: 20 });
+    deps.flags = async () => ({ enabled: true, blockedNames: [] });
+    expect((await board(deps)).top).toEqual([{ rank: 1, name: "Ana", points: 20 }]);
+  });
+
+  it("refuses a guest nickname that contains a blocked entry", async () => {
+    const { deps } = setup();
+    deps.flags = async () => ({ enabled: true, blockedNames: ["badword"] });
+    for (const name of ["badword", "BadWord 7", "x-B.a.d w'o-rd-x"]) {
+      const res = await startSession(req("/api/session", { method: "POST", body: { name } }), deps);
+      expect(res.status, name).toBe(400);
+      expect(await res.json()).toEqual({ error: "Please choose a different nickname." });
+    }
+    expect((await startSession(req("/api/session", { method: "POST", body: { name: "Good name" } }), deps)).status).toBe(201);
+  });
+
+  it("keeps a removed nickname off the board even if it's played again", async () => {
+    const { deps } = setup();
+    const ana = await play(deps, "Ana");
+    await score(deps, ana, { answers: [true] });
+    await deps.store!.removePlayer("ana"); // what scripts/leaderboard-remove.mjs does
+    expect((await board(deps)).top).toEqual([]);
+    const back = await play(deps, "Ana");
+    expect(await (await score(deps, back, { answers: [true, true] })).json()).toMatchObject({ pointsEarned: 20, sessionPoints: 20 });
+    expect(await board(deps, back.cookie)).toEqual({ top: [], you: null });
   });
 });
 
@@ -221,44 +414,46 @@ describe("storage", () => {
 describe("idempotent score batches", () => {
   it("credits an identical concurrent replay once and rejects conflicting payloads", async () => {
     const { deps } = setup();
-    const cookie = await login(deps, "Explorer");
-    const send = (answers: boolean[]) => submitScore(req("/api/score", {
-      method: "POST", cookie, body: { batchId: "batch-one", answers, streakBefore: 0, leaderboard: false },
-    }), deps);
+    const who = await play(deps, "Explorer");
+    const send = (answers: boolean[]) => score(deps, who, { batchId: "batch-one", answers, streakBefore: 0 });
     const [first, replay] = await Promise.all([send([true]), send([true])]);
     expect(first.status).toBe(200);
     expect(replay.status).toBe(200);
     expect(await first.json()).toEqual(await replay.json());
     expect((await send([false])).status).toBe(409);
-    expect(await (await getSession(req("/api/session", { cookie }), deps)).json()).toMatchObject({ points: 10 });
+    expect(await sessionPoints(deps, who)).toBe(10);
+  });
+
+  it("replays the original receipt, with the points it earned at the time", async () => {
+    const { deps } = setup();
+    const who = await play(deps, "Explorer");
+    await score(deps, who, { answers: [true, true] });
+    const body = { batchId: "third", answers: [true] };
+    const first = await (await score(deps, who, body)).json();
+    expect(first).toMatchObject({ pointsEarned: 15, sessionPoints: 35 });
+    await score(deps, who, { answers: [false] }); // the streak is gone now
+    expect(await (await score(deps, who, body)).json()).toEqual(first);
+    expect(await sessionPoints(deps, who)).toBe(35);
   });
 });
 
 describe("score batch outcomes", () => {
-  it("keeps an acknowledged score when the optional leaderboard is unavailable", async () => {
-    const { deps } = setup();
-    const cookie = await login(deps, "Explorer");
-    deps.store!.leaderboard = async () => { throw new Error("board unavailable"); };
-    const res = await submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: "b1", answers: [true], leaderboard: true } }), deps);
-    expect(res.status).toBe(200);
-    expect(await res.json()).toMatchObject({ pointsEarned: 10, sessionPoints: 10, leaderboard: null });
-  });
   it("returns an identical receipt even when the public board changes", async () => {
     const { deps } = setup();
-    const cookie = await login(deps, "Explorer");
+    const who = await play(deps, "Explorer");
     const body = { batchId: "with-board", answers: [true], leaderboard: true };
-    const first = await (await submitScore(req("/api/score", { method: "POST", cookie, body }), deps)).json();
-    const other = await login(deps, "Other");
-    await submitScore(req("/api/score", { method: "POST", cookie: other, body: { answers: [true] } }), deps);
-    const replay = await (await submitScore(req("/api/score", { method: "POST", cookie, body }), deps)).json();
+    const first = await (await score(deps, who, body)).json();
+    const other = await play(deps, "Other");
+    await score(deps, other, { answers: [true] });
+    const replay = await (await score(deps, who, body)).json();
     expect(first).toEqual(replay);
     expect(first.leaderboard).toBeNull();
   });
   it("rejects a new batch after session expiry without scoring", async () => {
     const { deps, advance } = setup();
-    const cookie = await login(deps, "Explorer");
+    const who = await play(deps, "Explorer");
     advance(3600 * 1000);
-    expect((await submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: "late", answers: [true], leaderboard: false } }), deps)).status).toBe(401);
+    expect((await score(deps, who, { batchId: "late", answers: [true] })).status).toBe(401);
     expect((await deps.store!.leaderboard(10)).top).toEqual([]);
   });
 });
@@ -266,20 +461,18 @@ describe("score batch outcomes", () => {
 describe("score session binding", () => {
   it("rejects an old session batch sent with a different session cookie", async () => {
     const { deps } = setup();
-    const first = await startSession(req("/api/session", { method: "POST", body: { name: "Alpha" } }), deps);
-    const firstInfo = await first.json();
-    const second = await startSession(req("/api/session", { method: "POST", body: { name: "Beta" } }), deps);
-    const secondCookie = cookieFrom(second);
-    const response = await submitScore(req("/api/score", { method: "POST", cookie: secondCookie, body: { batchId: "old-batch", sessionTag: firstInfo.sessionTag, answers: [true], leaderboard: false } }), deps);
+    const first = await play(deps, "Alpha");
+    const second = await play(deps, "Beta");
+    const response = await score(deps, { cookie: second.cookie, sessionTag: first.sessionTag }, { batchId: "old-batch", answers: [true] });
     expect(response.status).toBe(409);
-    expect(await (await getSession(req("/api/session", { cookie: secondCookie }), deps)).json()).toMatchObject({ points: 0 });
+    expect(await sessionPoints(deps, second)).toBe(0);
   });
 });
 
 describe("post-commit failure recovery", () => {
   it("returns the original receipt after the response is lost following a commit", async () => {
     const { deps } = setup();
-    const cookie = await login(deps, "Explorer");
+    const who = await play(deps, "Explorer");
     const store = deps.store!;
     const save = store.addScoreBatch.bind(store);
     let lost = true;
@@ -288,9 +481,9 @@ describe("post-commit failure recovery", () => {
       if (lost) { lost = false; throw new Error("connection lost after commit"); }
       return receipt;
     };
-    const send = () => submitScore(req("/api/score", { method: "POST", cookie, body: { batchId: "lost-response", answers: [true], leaderboard: false } }), deps);
+    const send = () => score(deps, who, { batchId: "lost-response", answers: [true] });
     await expect(send()).rejects.toThrow("connection lost after commit");
     expect(await (await send()).json()).toMatchObject({ pointsEarned: 10, sessionPoints: 10, totalPoints: 10 });
-    expect(await (await getSession(req("/api/session", { cookie }), deps)).json()).toMatchObject({ points: 10 });
+    expect(await sessionPoints(deps, who)).toBe(10);
   });
 });

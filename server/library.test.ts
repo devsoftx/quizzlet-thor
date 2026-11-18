@@ -21,6 +21,7 @@ import {
   postFiles,
   putFile,
   updateDeck,
+  UPLOAD_RESERVATION_MS,
 } from "./library-handlers.js";
 import { MemoryStore } from "./store.js";
 
@@ -267,19 +268,120 @@ describe("isolation between accounts", () => {
     const deps = setup(fakeBlob);
     const sign = (user: string, pathname: string) =>
       postFiles(req("/api/files?action=sign", { method: "POST", user, body: { type: "blob.generate-presigned-url", payload: { pathname, multipart: false, clientPayload: null } } }), deps);
+    const start = async (user: string, name: string, size: number) =>
+      (await (await postFiles(req("/api/files?action=start", { method: "POST", user, body: { name, size } }), deps)).json()).pathname as string;
 
-    const own = `${accountFolder("dev_parent-a")}uploads/abc-123/notes.pdf`;
+    // A started upload: signed for its own path, its type, and the size that was declared (not the 15 MB maximum).
+    const own = await start("parent-a", "notes.pdf", 4321);
     expect((await sign("parent-a", own)).status).toBe(200);
-    expect(seen.at(-1)!.allowed).toEqual({ contentType: "application/pdf", maxBytes: MAX_FILE_BYTES });
+    expect(seen.at(-1)!.allowed).toEqual({ contentType: "application/pdf", maxBytes: 4321 });
 
+    // A well-formed path in the parent's own folder that was never started is refused.
+    const neverStarted = `${accountFolder("dev_parent-a")}uploads/abc-123/notes.pdf`;
+    expect((await sign("parent-a", neverStarted)).status).toBe(403);
+
+    const theirs = await start("parent-b", "notes.pdf", 100);
     for (const pathname of [
       own, // someone else asking for A's path
       `${accountFolder("dev_parent-b")}uploads/abc-123/../../${accountFolder("dev_parent-a")}x.pdf`,
-      `${accountFolder("dev_parent-b")}uploads/abc-123/page.html`,
-      `${accountFolder("dev_parent-b")}other/abc-123/notes.pdf`,
+      theirs.replace(/notes\.pdf$/, "page.html"),
+      theirs.replace("/uploads/", "/other/"),
     ]) {
       expect((await sign("parent-b", pathname)).status).toBe(403);
     }
+    expect((await sign("parent-b", theirs)).status).toBe(200);
+
+    // The reservation runs out after 15 minutes: no more upload URLs for it.
+    const base = deps.now();
+    deps.now = () => base + UPLOAD_RESERVATION_MS;
+    expect((await sign("parent-a", own)).status).toBe(403);
+  });
+});
+
+describe("started uploads count against the quota (reservations)", () => {
+  const start = (deps: Deps, user: string, name: string, size: number) =>
+    postFiles(req("/api/files?action=start", { method: "POST", user, body: { name, size } }), deps);
+  const put = (deps: Deps, user: string, pathname: string, bytes: Uint8Array<ArrayBuffer>) =>
+    putFile(req(`/api/files?pathname=${encodeURIComponent(pathname)}`, { method: "PUT", user, raw: bytes }), deps);
+  const confirm = (deps: Deps, user: string, pathname: string, name: string) =>
+    postFiles(req("/api/files?action=confirm", { method: "POST", user, body: { pathname, name } }), deps);
+  const later = (deps: Deps, ms: number) => {
+    const at = deps.now() + ms;
+    deps.now = () => at;
+  };
+
+  it("refuses more uploads than the file limit, even when none is ever confirmed", async () => {
+    const deps = setup();
+    for (let i = 0; i < MAX_FILES; i++) expect((await start(deps, "ana", `f${i}.pdf`, 100)).status).toBe(200);
+    const over = await start(deps, "ana", "one-more.pdf", 100);
+    expect(over.status).toBe(400);
+    expect((await over.json()).error).toContain(`up to ${MAX_FILES} files`);
+    expect((await start(deps, "ben", "mine.pdf", 100)).status).toBe(200); // another account is unaffected
+  });
+
+  it("refuses started uploads that would go over the storage total", async () => {
+    const deps = setup();
+    for (let i = 0; i < Math.floor(MAX_TOTAL_FILE_BYTES / MAX_FILE_BYTES); i++) {
+      expect((await start(deps, "ana", `big${i}.pdf`, MAX_FILE_BYTES)).status).toBe(200);
+    }
+    const over = await start(deps, "ana", "over.pdf", MAX_FILE_BYTES);
+    expect(over.status).toBe(400);
+    expect((await over.json()).error).toContain("file storage");
+    expect((await start(deps, "ana", "small.pdf", 1024)).status).toBe(200); // what's left still fits
+  });
+
+  it("counts confirmed files and started uploads together", async () => {
+    const deps = setup();
+    for (let i = 0; i < MAX_FILES - 1; i++) expect((await upload(deps, "ana", `f${i}.pdf`, pdf())).status).toBe(201);
+    expect((await start(deps, "ana", "last.pdf", 100)).status).toBe(200);
+    expect((await start(deps, "ana", "over.pdf", 100)).status).toBe(400);
+  });
+
+  it("stops counting an upload once its 15 minutes are up", async () => {
+    const deps = setup();
+    for (let i = 0; i < MAX_FILES; i++) await start(deps, "ana", `f${i}.pdf`, 100);
+    later(deps, UPLOAD_RESERVATION_MS - 1);
+    expect((await start(deps, "ana", "still-full.pdf", 100)).status).toBe(400);
+    later(deps, 1);
+    expect((await start(deps, "ana", "room-again.pdf", 100)).status).toBe(200);
+  });
+
+  it("only takes bytes for a started upload, and no more than it declared", async () => {
+    const deps = setup();
+    const neverStarted = `${accountFolder("dev_ana")}uploads/abc-123/notes.pdf`;
+    expect((await put(deps, "ana", neverStarted, pdf(10))).status).toBe(403);
+
+    const { pathname } = await (await start(deps, "ana", "a.pdf", 10)).json();
+    expect((await put(deps, "ana", pathname, pdf(11))).status).toBe(400);
+    expect((await put(deps, "ana", pathname, pdf(10))).status).toBe(200);
+    expect((await confirm(deps, "ana", pathname, "a.pdf")).status).toBe(201);
+    // Confirming again (a retry) returns the same record.
+    expect((await confirm(deps, "ana", pathname, "a.pdf")).status).toBe(200);
+  });
+
+  it("won't save an upload confirmed after its time ran out, and removes what was sent", async () => {
+    const deps = setup();
+    const { pathname } = await (await start(deps, "ana", "slow.pdf", 10)).json();
+    await put(deps, "ana", pathname, pdf(10));
+    later(deps, UPLOAD_RESERVATION_MS);
+    const late = await confirm(deps, "ana", pathname, "slow.pdf");
+    expect(late.status).toBe(400);
+    expect((await late.json()).error).toBe("That upload took too long. Please try again.");
+    expect((deps.files as MemoryFileStore).paths()).toEqual([]);
+    expect((await (await getFiles(req("/api/files", { user: "ana" }), deps)).json()).usage).toEqual({ count: 0, bytes: 0 });
+  });
+
+  it("clears out an abandoned upload the next time the parent starts one", async () => {
+    const deps = setup();
+    const abandoned = (await (await start(deps, "ana", "abandoned.pdf", 10)).json()).pathname as string;
+    await put(deps, "ana", abandoned, pdf(10));
+    const kept = await upload(deps, "ana", "kept.pdf", pdf());
+    expect(kept.status).toBe(201);
+    later(deps, UPLOAD_RESERVATION_MS);
+    expect((await start(deps, "ana", "next.pdf", 10)).status).toBe(200);
+    const paths = (deps.files as MemoryFileStore).paths();
+    expect(paths).not.toContain(abandoned);
+    expect(paths).toHaveLength(1); // the confirmed file is untouched
   });
 });
 

@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
+import { loadEnv, type Plugin, type ViteDevServer } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 /**
@@ -88,4 +89,9 @@ export default defineConfig({
   // just that one to the browser alongside the usual VITE_ variables.
   envPrefix: ["VITE_", "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY"],
   server: { port: 5173 },
+  test: {
+    // The server writes security events as JSON lines on console.info; tests
+    // that check them capture the log themselves (server/test-support.ts).
+    onConsoleLog: (line) => !line.startsWith('{"') || !line.includes('"kind":"security"'),
+  },
 });

@@ -8,13 +8,19 @@ score, a review of every card, and a button to retry only the ones you missed.
 Search decks by title or description, preview a deck before starting, and use
 the results screen to review answers or practice missed questions. The
 leaderboard is optional to view. A guest's nickname is public on the leaderboard
-when they earn points; use a nickname rather than a real name. A parent-managed
-profile is private on that board unless its adult enables visibility.
+when they earn points; use a nickname rather than a real name. A nickname
+belongs to the browser that first used it (for 30 days after its last session),
+so nobody else can add to its points; on another device, pick another nickname
+or ask a parent to set up a profile. A parent-managed profile is private on that
+board unless its adult enables visibility, and is shown with its emoji.
 
 Points are sent in batches while studying. If a connection is interrupted,
 the app may not know whether the latest batch was saved until it can retry;
 leaving or closing the tab can lose queued work. A current round's question
-position and answer history are not restored after a reload.
+position and answer history are not restored after a reload. The server keeps
+each session's streak itself and accepts answers no faster than a person can
+give them (a burst of 20, then one every 2 seconds), so a streak bonus can't be
+claimed and points can't be poured in by a script.
 
 ## Run it
 
@@ -32,6 +38,15 @@ Then open http://localhost:5173.
 | `npm run test:e2e`  | Run the end-to-end tests in a real browser |
 | `npm run typecheck` | TypeScript check                           |
 | `npm run build`     | Build a static site into `dist/`           |
+
+Three more checks run the production storage code against real, disposable
+services (the unit tests use in-memory stand-ins and an in-process Postgres):
+
+| Command | What it checks | Needs |
+| ------- | -------------- | ----- |
+| `python3 scripts/test-redis-score.py` | The Redis Lua scripts: scoring, the pace limit, removed players, nickname claims, pruning | Docker, or `QUIZZLET_REDIS_LOCAL=1` with a local `redis-server` |
+| `scripts/test-foundation-postgres.sh` | The account SQL and the limit triggers, including parallel inserts at a limit | Docker |
+| `npm test -- server/store.redis.test.ts` | The Redis store against the in-memory one, step by step | A disposable Redis behind an Upstash-compatible REST endpoint (see the file) |
 
 ### End-to-end tests
 
@@ -155,22 +170,29 @@ A signed-in parent can:
   shared decks;
 - keep **private files** (My files): PDFs, Word (.docx), PNG, JPEG and WebP
   study material, up to 15 MB each (20 files, 50 MB per account), stored in a
-  private Vercel Blob store and opened only through the parent's sign-in;
+  private Vercel Blob store and opened only through the parent's sign-in. An
+  upload counts against those limits from the moment it starts, for 15 minutes
+  or until it is saved;
 - change settings (name, theme, card order) or delete the account, which also
   removes every profile, deck and file, and the profiles' leaderboard entries.
 
 ### Setup
 
 1. **Clerk:** add it from the Vercel Marketplace, which sets
-   `CLERK_SECRET_KEY` and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` for you (a
-   development instance works on `*.vercel.app`), then turn on Google in the
-   Clerk dashboard:
+   `CLERK_SECRET_KEY` and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` for you, then turn
+   on Google in the Clerk dashboard:
 
    ```bash
    vercel integration add clerk --billing-plan hobby_2025_08 --no-env-pull
    ```
 
    (Setting `VITE_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` yourself works too.)
+
+   A Clerk *development* instance works on `*.vercel.app` and is fine for trying
+   things out. **Use a Clerk production instance, on the site's own domain, for
+   the real site**: development instances are for testing and have relaxed
+   security settings. When you switch, put the production instance's host in the
+   Content-Security-Policy in `vercel.json` (see `docs/security/runbook.md`).
 2. **Database:** add Neon Postgres from the Vercel Marketplace (`DATABASE_URL`,
    production only), then create or update the tables (safe to re-run):
 
@@ -178,6 +200,11 @@ A signed-in parent can:
    vercel integration add neon --billing-plan free_v3 --meta region=iad1 -e production --no-env-pull
    vercel env run -e production -- npm run db:migrate
    ```
+
+   Run the migration again after every update that adds a file to
+   `db/migrations/`. Migrations use `DATABASE_URL_MIGRATIONS` when it's set, so
+   the running app can use a role that can't change the schema
+   (`docs/security/runbook.md` has the SQL for it).
 
 3. **Files:** create a private Blob store connected to production:
 
@@ -188,8 +215,26 @@ A signed-in parent can:
    This also rewrites `.env.local` with the Development variables; remove the
    Clerk keys from it if you want to keep the local sign-in stand-in.
 
+4. **Daily cleanup:** set `CRON_SECRET` to a long random value in the project's
+   environment variables. Vercel Cron calls `/api/cron` once a day with it; the
+   job trims old guest leaderboard entries and deletes uploads that were never
+   saved. Without the secret the job refuses to run.
+5. **Leaderboard switches (optional):** connect a Vercel Global Config store
+   (`GLOBAL_CONFIG`) with a `leaderboard` item to hide the leaderboard or block
+   guest nicknames without a deploy. `docs/security/runbook.md` shows the item.
+
 Without these, the site simply runs in guest-only mode (and My files says
 storage isn't set up).
+
+### Security
+
+`vercel.json` sets the response headers (the full Content-Security-Policy is in
+report-only mode until its reports have been checked). Every write to the API
+must come from the site itself and carry JSON. Security-relevant actions are
+logged as JSON lines with ids only, never tokens or nicknames.
+[`docs/security/`](docs/security) has the remediation plan and its status, the
+runbook (rotating secrets, cutting access, the leaderboard switches, the
+cleanup job, the log events) and the alert rules to add to a log tool.
 
 ### Local development
 
@@ -203,9 +248,13 @@ Don't put production database URLs in `.env.local`: the dev server loads it.
 
 ```
 decks/                 your YAML decks
-api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files, invites, kid)
-server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store
+api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files, invites, kid, cron, csp-report)
+server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store,
+                       security log (log.ts), request guard (route.ts), operator switches (flags.ts)
 db/migrations/         SQL migrations (npm run db:migrate)
+scripts/               migrations, the leaderboard removal tool, checks against real Redis and Postgres
+docs/security/         remediation plan, runbook, alert rules
+vercel.json            response headers, the daily cleanup schedule
 e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts
 src/deck.ts            YAML parsing, validation and shuffling
 src/library.ts         loads decks from decks/ and local storage, best scores

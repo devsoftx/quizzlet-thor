@@ -19,6 +19,7 @@ import {
 import { profilePoints, requireAccount } from "./account-handlers.js";
 import { defaultDeps, type Deps } from "./deps.js";
 import { cookie, error, json, readCookie, readJson } from "./http.js";
+import { securityEvent } from "./log.js";
 
 export const KID_COOKIE = "qz_kid";
 const DEVICE_DAYS = 180;
@@ -79,6 +80,11 @@ export async function kidProfile(request: Request, deps: Deps): Promise<KidProfi
   return deps.accounts!.forAccount(device.accountId).getProfile(device.profileId);
 }
 
+/** Logs a device that was just unlinked from its own side (`by`: the kid, or a new link replacing it). */
+function unlinked(device: (LinkTarget & { id: string }) | null, by: "kid" | "replaced") {
+  if (device) securityEvent("device.unlinked", { accountId: device.accountId, profileId: device.profileId, deviceId: device.id, by });
+}
+
 async function devicesFor(accounts: AccountsDb, target: LinkTarget) {
   return (await accounts.forAccount(target.accountId).listDevices()).filter((d) => d.profileId === target.profileId);
 }
@@ -110,6 +116,7 @@ export async function createInvite(request: Request, deps: Deps = defaultDeps())
   const token = newSecret();
   const now = deps.now();
   const invite = await ctx.scope.createInvite(profile.id, fingerprint(token), iso(now), iso(now + INVITE_DAYS * DAY_MS));
+  securityEvent("invite.created", { accountId: ctx.userId, profileId: profile.id });
   return json({ token, invite }, 201);
 }
 
@@ -120,11 +127,16 @@ export async function deleteLink(request: Request, deps: Deps = defaultDeps()): 
   const params = new URL(request.url).searchParams;
   const deviceId = params.get("deviceId");
   if (deviceId) {
-    return (await ctx.scope.deleteDevice(deviceId)) ? json({ ok: true }) : error(404, "Device not found.");
+    const device = await ctx.scope.deleteDevice(deviceId);
+    if (!device) return error(404, "Device not found.");
+    securityEvent("device.unlinked", { accountId: ctx.userId, profileId: device.profileId, deviceId: device.id, by: "parent" });
+    return json({ ok: true });
   }
   const profile = await ctx.scope.getProfile(params.get("profileId") ?? "");
   if (!profile) return error(404, "Profile not found.");
-  await ctx.scope.cancelInvites(profile.id);
+  if (await ctx.scope.cancelInvites(profile.id)) {
+    securityEvent("invite.cancelled", { accountId: ctx.userId, profileId: profile.id });
+  }
   return json({ ok: true });
 }
 
@@ -152,13 +164,18 @@ export async function postKid(request: Request, deps: Deps = defaultDeps()): Pro
   const accounts = deps.accounts ?? null;
   if (!accounts) return error(503, "Kid links aren't set up yet.");
   const body = (await readJson(request)) ?? {};
-  if (!isSecret(body.token)) return error(404, LINK_GONE);
+  const action = body.action === "peek" || body.action === "join" ? body.action : "other";
+  const miss = () => {
+    securityEvent("invite.miss", { action });
+    return error(404, LINK_GONE);
+  };
+  if (!isSecret(body.token)) return miss();
   const tokenHash = fingerprint(body.token);
   const now = iso(deps.now());
 
   const open = await accounts.findInvite(tokenHash, now);
   const profile = open ? await accounts.forAccount(open.accountId).getProfile(open.profileId) : null;
-  if (!open || !profile) return error(404, LINK_GONE);
+  if (!open || !profile) return miss();
 
   if (body.action === "peek") return json({ profile: card(profile), expiresAt: open.expiresAt });
   if (body.action !== "join") return error(400, "Unknown action.");
@@ -168,15 +185,17 @@ export async function postKid(request: Request, deps: Deps = defaultDeps()): Pro
   }
   // A device studies as one kid at a time: joining replaces any earlier link here.
   const previous = readCookie(request, KID_COOKIE);
-  if (isSecret(previous)) await accounts.removeDevice(fingerprint(previous));
+  if (isSecret(previous)) unlinked(await accounts.removeDevice(fingerprint(previous)), "replaced");
 
   const secret = newSecret();
+  const deviceId = deps.newId();
   const linked = await accounts.redeemInvite(tokenHash, now, {
-    id: deps.newId(),
+    id: deviceId,
     tokenHash: fingerprint(secret),
     label: deviceLabel(request.headers.get("user-agent")),
   });
-  if (!linked) return error(404, LINK_GONE);
+  if (!linked) return miss();
+  securityEvent("device.linked", { accountId: linked.accountId, profileId: linked.profileId, deviceId });
   return json({ profile: card(profile) }, 201, {
     "set-cookie": cookie(request, KID_COOKIE, secret, DEVICE_DAYS * 24 * 60 * 60),
   });
@@ -185,6 +204,6 @@ export async function postKid(request: Request, deps: Deps = defaultDeps()): Pro
 /** DELETE: this device stops being linked (the kid or parent tapped "remove this device"). */
 export async function deleteKid(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   const secret = readCookie(request, KID_COOKIE);
-  if (isSecret(secret) && deps.accounts) await deps.accounts.removeDevice(fingerprint(secret));
+  if (isSecret(secret) && deps.accounts) unlinked(await deps.accounts.removeDevice(fingerprint(secret)), "kid");
   return json({ ok: true }, 200, { "set-cookie": cookie(request, KID_COOKIE, "", 0) });
 }
