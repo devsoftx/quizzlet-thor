@@ -9,6 +9,11 @@ function Row({ entry, isYou }: { entry: LeaderboardEntry; isYou: boolean }) {
         {MEDALS[entry.rank - 1] ?? entry.rank}
       </span>
       <span className="leaderboard__name">
+        {entry.emoji && (
+          <span className="leaderboard__emoji" title="Kid profile" aria-hidden="true">
+            {entry.emoji}
+          </span>
+        )}
         {entry.name}
         {isYou && <span className="tag leaderboard__you">You</span>}
       </span>

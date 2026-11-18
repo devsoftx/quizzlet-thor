@@ -29,6 +29,9 @@ import { SessionBar } from "./components/SessionBar";
 import { Settings } from "./components/Settings";
 import { Welcome } from "./components/Welcome";
 
+/** Part of the server's answer when a session's kid profile has been deleted. */
+const PROFILE_GONE = "profile is no longer available";
+
 type SessionState =
   | { status: "loading" }
   | { status: "none"; notice?: string }
@@ -118,6 +121,8 @@ export function App() {
       if (err instanceof Error && err.message.includes("device is no longer linked")) {
         setKidState({ status: "none" });
         setSessionState({ status: "none", notice: "This device is no longer linked. Ask an adult for a new link. Recent points may not have been saved." });
+      } else if (err instanceof Error && err.message.includes(PROFILE_GONE)) {
+        profileRemoved(" Recent points may not have been saved.");
       } else {
         if (deckId) forgetPrivateDeck(deckId);
         setImportNote({ kind: "error", text: "This deck is no longer available. Your most recent answers may not have been saved. Access changes can only be checked when connected; downloaded content may remain on this device." });
@@ -319,6 +324,15 @@ export function App() {
     );
   }
 
+  /** The kid profile behind this session was deleted (from another tab or device): the session is over. */
+  function profileRemoved(extra = "") {
+    const profileId = profileIdRef.current;
+    if (profileId) {
+      setAccountState((a) => (a.status === "ready" ? { ...a, profiles: a.profiles.filter((p) => p.id !== profileId) } : a));
+    }
+    setSessionState({ status: "none", notice: `This profile is no longer available. Ask an adult to start a new session.${extra}` });
+  }
+
   function forgetPrivateDeck(deckId: string) {
     setAccountState((state) => state.status === "ready" ? { ...state, decks: state.decks.filter((deck) => deck.id !== deckId) } : state);
     setKidState((state) => state.status === "linked" ? { ...state, kid: { ...state.kid, decks: state.kid.decks.filter((deck) => deck.id !== deckId) } } : state);
@@ -329,6 +343,8 @@ export function App() {
     if (err instanceof Error && err.message.includes("device is no longer linked")) {
       setKidState({ status: "none" });
       setSessionState({ status: "none", notice: "This device is no longer linked. Ask an adult for a new link." });
+    } else if (err instanceof Error && err.message.includes(PROFILE_GONE)) {
+      profileRemoved();
     } else {
       if (err instanceof ApiError && err.status === 403) forgetPrivateDeck(deckId);
       setImportNote({ kind: "error", text: "This deck couldn't be opened. Check your connection or ask an adult. Access changes can only be checked when connected; downloaded content may remain on this device." });

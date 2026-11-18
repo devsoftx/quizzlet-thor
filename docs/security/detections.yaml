@@ -1,0 +1,106 @@
+# Alert rules for the security log (plan item R15).
+#
+# These are written in a Sigma-like shape for a log tool fed by a Vercel log
+# drain: `event` and the fields beside it come from the application's security
+# log (server/log.ts; the full list is in runbook.md), `proxy.*` from Vercel's
+# request log. Adjust the syntax to the team's tool. The thresholds are starting
+# points: tune them after the first week of real traffic.
+#
+# None of these is deployed anywhere by the repository; add them in the log tool
+# once the drain exists.
+
+title: Score minting burst
+description: One session earning more than a fast, perfect player could. The server caps a guest at about 27,000 points an hour, across sessions.
+logsource: { product: vercel }
+detection:
+  sel: { event: score.saved }
+  condition: sel | sum(points) by sessionHash > 5000   # timeframe: 1h
+level: medium
+---
+title: Answers refused for arriving too fast
+description: The pace limit (one answer per 2 seconds after a burst of 20) only trips for scripted clients.
+detection:
+  sel: { event: score.limited }
+  condition: sel | count() by sessionHash > 5           # timeframe: 10m
+level: medium
+---
+title: Guest session or name flooding
+detection:
+  sel: { proxy.path|startswith: /api/session, proxy.method: POST, proxy.statusCode: 201 }
+  condition: sel | count() by proxy.clientIp > 60       # timeframe: 10m
+level: medium
+---
+title: Probing for other players' nicknames
+description: Many refused nicknames from one address.
+detection:
+  sel: { event: session.name_taken }
+  condition: sel | count() by proxy.clientIp > 30       # timeframe: 10m
+level: low
+---
+title: Kid invite probing
+detection:
+  sel: { event: invite.miss }
+  condition: sel | count() by proxy.clientIp > 20       # timeframe: 10m
+level: medium
+---
+title: Upload signing without confirm
+description: Upload URLs requested but files never recorded. Each account is limited to its quota, so this shows wasted storage more than risk.
+detection:
+  sign: { event: file.sign }
+  confirm: { event: file.confirmed }
+  condition: count(sign) by accountId - count(confirm) by accountId > 5   # timeframe: 1h
+level: low
+---
+title: Uploads refused
+detection:
+  sel: { event: [file.sign.refused, file.rejected] }
+  condition: sel | count() by accountId > 20            # timeframe: 1h
+level: low
+---
+title: Account deletion or sign-in failure spike
+detection:
+  del: { event: account.deleted }
+  err: { event: auth.error }
+  denied: { event: auth.denied }
+  condition: del or err or (denied | count() by proxy.clientIp > 50)      # timeframe: 10m
+level: high
+# auth.error should page someone: it usually means the Clerk configuration broke, not an attack.
+---
+title: Writes arriving from another site
+description: The browser said the request came from a different origin; the API refused it (403).
+detection:
+  sel: { event: request.cross_site }
+  condition: sel | count() > 10                         # timeframe: 10m
+level: medium
+---
+title: Unexpected server errors
+detection:
+  sel: { event: request.error }
+  condition: sel | count() by route > 10                # timeframe: 10m
+level: high
+---
+title: Daily cleanup failed or was refused
+description: cron.error names the task that failed; cron.denied is a call without the right CRON_SECRET.
+detection:
+  sel: { event: [cron.error, cron.denied] }
+  condition: sel | count() > 0                          # timeframe: 24h
+level: high
+---
+title: Unusually many abandoned uploads
+description: Uploads started and never saved, removed by the daily cleanup. A large number means someone is filling storage on purpose.
+detection:
+  sel: { event: file.orphan.deleted }
+  condition: sel | sum(deleted) > 200                   # timeframe: 24h
+level: medium
+---
+title: Daily cleanup did not run
+detection:
+  sel: { event: leaderboard.pruned }
+  condition: sel | count() == 0                         # timeframe: 26h
+level: medium
+---
+title: Leaderboard switches unreadable
+detection:
+  sel: { event: flags.error }
+  condition: sel | count() > 5                          # timeframe: 10m
+level: low

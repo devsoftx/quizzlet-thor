@@ -11,6 +11,8 @@ import { createHash } from "node:crypto";
 export interface UploadRule {
   contentType: string;
   maxBytes: number;
+  /** The upload URL must stop working by then (ms): when the path's reservation runs out. */
+  validUntil?: number;
 }
 
 export interface StoredBytes {
@@ -34,6 +36,7 @@ export interface FileStore {
   head(pathname: string): Promise<{ size: number; contentType: string } | null>;
   /** Blob mode: a link that reads the file for a few minutes. */
   readUrl(pathname: string): Promise<string>;
+  /** Deleting a path that holds nothing is not an error. */
   delete(pathnames: string[]): Promise<void>;
   /** Removes everything under a folder (used when an account is deleted). */
   deletePrefix(prefix: string): Promise<void>;
@@ -131,7 +134,8 @@ export class BlobFileStore implements FileStore {
       getSignedToken: async (pathname, _clientPayload, multipart) => {
         const allowed = rule(pathname);
         if (!allowed || multipart) throw new UploadRefused("You can't upload to that location.");
-        const validUntil = Date.now() + UPLOAD_WINDOW_MS;
+        // Never longer than the path's reservation: once that is over, nothing new can be put there.
+        const validUntil = Math.min(Date.now() + UPLOAD_WINDOW_MS, allowed.validUntil ?? Number.POSITIVE_INFINITY);
         const limits = { allowedContentTypes: [allowed.contentType], maximumSizeInBytes: allowed.maxBytes };
         const token = await issueSignedToken({ pathname, operations: ["put"], validUntil, ...limits });
         return { token, urlOptions: { ...limits, validUntil, allowOverwrite: false, addRandomSuffix: false } };
@@ -164,7 +168,18 @@ export class BlobFileStore implements FileStore {
   }
 
   async delete(pathnames: string[]) {
-    if (pathnames.length) await del(pathnames);
+    if (pathnames.length === 0) return;
+    try {
+      await del(pathnames);
+    } catch (err) {
+      if (!(err instanceof BlobNotFoundError)) throw err;
+      // One of them was already gone: delete the rest one at a time.
+      for (const pathname of pathnames) {
+        await del(pathname).catch((e: unknown) => {
+          if (!(e instanceof BlobNotFoundError)) throw e;
+        });
+      }
+    }
   }
 
   async deletePrefix(prefix: string) {

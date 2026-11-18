@@ -5,7 +5,7 @@ dist
 # Source study guides (third-party material, kept local only)
 docs/*
 !docs/red-remediation-plan.md
-!docs/blue-remediation-plan.md
+!docs/security/
 .vercel
 .env*
 build/

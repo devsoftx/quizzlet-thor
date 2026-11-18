@@ -6,6 +6,7 @@ import { parseDeck, titleFromFileName } from "../src/deck.js";
 import {
   FILE_TYPES,
   fileTypeFor,
+  LimitReached,
   MAX_DECK_BYTES,
   MAX_DECKS,
   MAX_FILE_BYTES,
@@ -20,6 +21,17 @@ import { ensureAccount, requireAccount, type AccountContext } from "./account-ha
 import { defaultDeps, type Deps } from "./deps.js";
 import { parseUploadPath, UploadRefused, uploadPath, type FileStore } from "./files.js";
 import { error, json, readJson } from "./http.js";
+import { securityEvent } from "./log.js";
+
+/** How long a started upload holds its place in the quota before it must be confirmed. */
+export const UPLOAD_RESERVATION_MS = 15 * 60 * 1000;
+/**
+ * An upload whose reservation ran out this long ago can no longer be saved by
+ * any request still in flight, so what was sent for it may be deleted.
+ */
+export const ABANDONED_AFTER_MS = 60 * 1000;
+/** How many of an account's abandoned uploads one request clears away. */
+const ABANDONED_PER_REQUEST = 200;
 
 const TITLE_MAX = 80;
 const DESCRIPTION_MAX = 300;
@@ -27,6 +39,11 @@ const FILE_NAME_MAX = 120;
 
 const params = (request: Request) => new URL(request.url).searchParams;
 const mb = (bytes: number) => `${Math.round(bytes / (1024 * 1024))} MB`;
+const iso = (ms: number) => new Date(ms).toISOString();
+
+const TOO_MANY_DECKS = `You can keep up to ${MAX_DECKS} decks.`;
+const TOO_MANY_FILES = `You can keep up to ${MAX_FILES} files. Delete one to make room.`;
+const STORAGE_FULL = `That would go over your ${mb(MAX_TOTAL_FILE_BYTES)} of file storage. Delete a file to make room.`;
 
 /** Trimmed single-line text without control characters, or null if empty/too long. */
 function cleanText(raw: unknown, max: number): string | null {
@@ -64,7 +81,7 @@ export async function createDeck(request: Request, deps: Deps = defaultDeps()): 
   if (new TextEncoder().encode(yaml).byteLength > MAX_DECK_BYTES) {
     return error(400, `That deck is too big (up to ${MAX_DECK_BYTES / 1024} KB).`);
   }
-  if ((await ctx.scope.listDecks()).length >= MAX_DECKS) return error(400, `You can keep up to ${MAX_DECKS} decks.`);
+  if ((await ctx.scope.listDecks()).length >= MAX_DECKS) return error(400, TOO_MANY_DECKS);
 
   const fileName = typeof body.fileName === "string" ? body.fileName : "deck.yaml";
   const parsed = parseDeck(yaml, titleFromFileName(fileName));
@@ -74,16 +91,24 @@ export async function createDeck(request: Request, deps: Deps = defaultDeps()): 
   const profileIds = await parseProfileIds(body.profileIds ?? null, ctx.scope);
   if (typeof profileIds === "string") return error(400, profileIds);
 
-  const deck = await ctx.scope.createDeck(deps.newId(), {
-    title: cleanText(parsed.deck.title, TITLE_MAX) ?? titleFromFileName(fileName).slice(0, TITLE_MAX),
-    description: cleanText(parsed.deck.description, DESCRIPTION_MAX),
-    cardCount: parsed.deck.cards.length,
-    yaml,
-    // A saved deck is on until the parent turns it off; the file's own
-    // `enabled` flag is for the shared decks/ folder.
-    enabled: true,
-    profileIds,
-  });
+  let deck;
+  try {
+    deck = await ctx.scope.createDeck(deps.newId(), {
+      title: cleanText(parsed.deck.title, TITLE_MAX) ?? titleFromFileName(fileName).slice(0, TITLE_MAX),
+      description: cleanText(parsed.deck.description, DESCRIPTION_MAX),
+      cardCount: parsed.deck.cards.length,
+      yaml,
+      // A saved deck is on until the parent turns it off; the file's own
+      // `enabled` flag is for the shared decks/ folder.
+      enabled: true,
+      profileIds,
+    });
+  } catch (err) {
+    // The database enforces the limit too: parallel requests can pass the check above together.
+    if (err instanceof LimitReached) return error(400, TOO_MANY_DECKS);
+    throw err;
+  }
+  securityEvent("deck.created", { accountId: ctx.userId, deckId: deck.id });
   return json({ deck }, 201);
 }
 
@@ -115,9 +140,10 @@ export async function updateDeck(request: Request, deps: Deps = defaultDeps()): 
 export async function deleteDeck(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   const ctx = await requireAccount(request, deps);
   if (ctx instanceof Response) return ctx;
-  return (await ctx.scope.deleteDeck(params(request).get("id") ?? ""))
-    ? json({ ok: true })
-    : error(404, "Deck not found.");
+  const id = params(request).get("id") ?? "";
+  if (!(await ctx.scope.deleteDeck(id))) return error(404, "Deck not found.");
+  securityEvent("deck.deleted", { accountId: ctx.userId, deckId: id });
+  return json({ ok: true });
 }
 
 // --------------------------------------------------------------- /api/files
@@ -137,16 +163,6 @@ const publicFile = ({ pathname: _pathname, ...file }: StoredFile): AccountFile =
 
 function usageOf(files: StoredFile[]) {
   return { count: files.length, bytes: files.reduce((sum, f) => sum + f.size, 0) };
-}
-
-/** Why `size` more bytes can't be added, or null if they fit. */
-function quotaProblem(files: StoredFile[], size: number): string | null {
-  const usage = usageOf(files);
-  if (usage.count >= MAX_FILES) return `You can keep up to ${MAX_FILES} files. Delete one to make room.`;
-  if (usage.bytes + size > MAX_TOTAL_FILE_BYTES) {
-    return `That would go over your ${mb(MAX_TOTAL_FILE_BYTES)} of file storage. Delete a file to make room.`;
-  }
-  return null;
 }
 
 /** The upload rule for a path in this account's folder, or null. */
@@ -190,8 +206,11 @@ export async function getFiles(request: Request, deps: Deps = defaultDeps()): Pr
 }
 
 /**
- * POST ?action=start {name, size}: reserve a path for a new upload.
- * POST ?action=sign: the Blob SDK asking for a presigned upload URL (blob mode).
+ * POST ?action=start {name, size}: reserve a path for a new upload. The
+ * reservation counts against the quota (files and bytes) for 15 minutes, or
+ * until the upload is confirmed.
+ * POST ?action=sign: the Blob SDK asking for a presigned upload URL (blob mode);
+ * only a reserved path is signed, for at most the size that was reserved.
  * POST ?action=confirm {pathname, name}: check what was uploaded and record it.
  */
 export async function postFiles(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
@@ -200,35 +219,56 @@ export async function postFiles(request: Request, deps: Deps = defaultDeps()): P
   await ensureAccount(ctx, deps);
   const action = params(request).get("action");
   const body = await readJson(request);
+  const now = iso(deps.now());
+  const accountId = ctx.userId;
 
   if (action === "start") {
     const name = cleanText(body?.name, FILE_NAME_MAX);
     const contentType = name ? fileTypeFor(name) : null;
     if (!name || !contentType) return error(400, "Upload a PDF, Word (.docx), PNG, JPEG or WebP file.");
-    const size = body?.size;
-    if (typeof size !== "number" || !Number.isFinite(size) || size <= 0) return error(400, "That file is empty.");
+    const size = typeof body?.size === "number" && Number.isFinite(body.size) ? Math.ceil(body.size) : 0;
+    if (size <= 0) return error(400, "That file is empty.");
     if (size > MAX_FILE_BYTES) return error(400, `Files can be up to ${mb(MAX_FILE_BYTES)}.`);
-    const problem = quotaProblem(await ctx.scope.listFiles(), size);
-    if (problem) return error(400, problem);
+
+    // Uploads this account started earlier and never saved: their reservations are on record as
+    // expired, so what was sent for them goes. (Best effort; the daily cleanup does the same and
+    // then drops the records.)
+    const abandoned = await ctx.scope.expiredUploads(iso(deps.now() - ABANDONED_AFTER_MS), ABANDONED_PER_REQUEST);
+    if (abandoned.length) await ctx.files.delete(abandoned).catch(() => undefined);
 
     const extension = FILE_TYPES[contentType].extensions[0];
-    const pathname = uploadPath(ctx.userId, deps.newId(), name, extension);
+    const fileId = deps.newId();
+    const pathname = uploadPath(ctx.userId, fileId, name, extension);
+    try {
+      await ctx.scope.reserveUpload(pathname, size, now, iso(deps.now() + UPLOAD_RESERVATION_MS));
+    } catch (err) {
+      if (!(err instanceof LimitReached)) throw err;
+      securityEvent("file.rejected", { accountId, fileId, bytes: size, reason: `quota:${err.kind}` });
+      return error(400, err.kind === "storage" ? STORAGE_FULL : TOO_MANY_FILES);
+    }
     return json({ pathname, contentType, uploadMode: ctx.files.mode });
   }
 
   if (action === "sign") {
     if (ctx.files.mode !== "blob") return error(400, "Uploads go through /api/files in local mode.");
-    const files = await ctx.scope.listFiles();
+    const reserved = new Map((await ctx.scope.listReservations(now)).map((r) => [r.pathname, r]));
+    let reason = "request";
+    let signed: { fileId: string; bytes: number } | null = null;
     try {
       const result = await ctx.files.presignUpload(request, body, (pathname) => {
-        if (quotaProblem(files, 0)) return null;
         const rule = ruleFor(ctx.userId, pathname);
-        return rule ? { contentType: rule.contentType, maxBytes: rule.maxBytes } : null;
+        const reservation = reserved.get(pathname);
+        reason = !rule ? "path" : "reservation";
+        if (!rule || !reservation) return null;
+        signed = { fileId: rule.fileId, bytes: Math.min(rule.maxBytes, reservation.declaredBytes) };
+        return { contentType: rule.contentType, maxBytes: signed.bytes, validUntil: Date.parse(reservation.expiresAt) };
       });
+      securityEvent("file.sign", { accountId, ...(signed ?? {}) });
       return json(result);
     } catch (err) {
-      if (err instanceof UploadRefused) return error(403, err.message);
-      throw err;
+      if (!(err instanceof UploadRefused)) throw err;
+      securityEvent("file.sign.refused", { accountId, reason });
+      return error(403, err.message);
     }
   }
 
@@ -238,27 +278,48 @@ export async function postFiles(request: Request, deps: Deps = defaultDeps()): P
     const name = cleanText(body?.name, FILE_NAME_MAX);
     if (!rule || !name || fileTypeFor(name) !== rule.contentType) return error(400, "That upload can't be saved.");
 
-    const files = await ctx.scope.listFiles();
-    const already = files.find((f) => f.pathname === pathname);
+    const saved = async () => (await ctx.scope.listFiles()).find((f) => f.pathname === pathname);
+    const already = await saved();
     if (already) return json({ file: publicFile(already) });
 
+    const refused = (reason: string, message: string, bytes: number | null = null) => {
+      securityEvent("file.rejected", { accountId, fileId: rule.fileId, bytes, reason });
+      return error(400, message);
+    };
+    /**
+     * No live reservation (any more). Either another request for the same upload saved it a moment
+     * ago, or its time ran out. Nothing is deleted here: an expired reservation stays on record,
+     * and the cleanup deletes what was uploaded for it.
+     */
+    const noReservation = async (uploaded: boolean) => {
+      const file = await saved();
+      if (file) return json({ file: publicFile(file) });
+      return refused("reservation", uploaded ? "That upload took too long. Please try again." : "That upload can't be saved.");
+    };
+
+    const reservation = (await ctx.scope.listReservations(now)).find((r) => r.pathname === pathname);
     const stored = await ctx.files.head(pathname);
+    if (!reservation) return noReservation(stored !== null);
     if (!stored) return error(400, "The upload didn't finish. Please try again.");
-    // Re-check what actually arrived; remove it if it breaks the rules.
+    // Re-check what actually arrived. While the reservation is live nothing is recorded for this
+    // path, so an upload that breaks the rules is removed right away.
     const problem =
-      stored.size > rule.maxBytes
-        ? `Files can be up to ${mb(MAX_FILE_BYTES)}.`
+      stored.size > Math.min(rule.maxBytes, reservation.declaredBytes)
+        ? (["size", "That file is bigger than the one you picked. Please try again."] as const)
         : stored.contentType.split(";")[0].trim() !== rule.contentType
-          ? "That file type isn't allowed."
-          : quotaProblem(files, stored.size);
+          ? (["type", "That file type isn't allowed."] as const)
+          : null;
     if (problem) {
       await ctx.files.delete([pathname]);
-      return error(400, problem);
+      return refused(problem[0], problem[1], stored.size);
     }
     try {
-      const file = await ctx.scope.createFile(rule.fileId, { pathname, name, contentType: rule.contentType, size: stored.size });
+      const file = await ctx.scope.saveUpload(rule.fileId, { pathname, name, contentType: rule.contentType, size: stored.size }, now);
+      if (!file) return noReservation(true);
+      securityEvent("file.confirmed", { accountId, fileId: file.id, bytes: file.size });
       return json({ file: publicFile(file) }, 201);
-    } catch {
+    } catch (err) {
+      if (err instanceof LimitReached) return refused("quota:files", TOO_MANY_FILES, stored.size);
       return error(400, "That upload can't be saved."); // e.g. a reused file id
     }
   }
@@ -266,16 +327,19 @@ export async function postFiles(request: Request, deps: Deps = defaultDeps()): P
   return error(400, "Unknown action.");
 }
 
-/** PUT ?pathname=…: local mode only, the browser sends the file's bytes here. */
+/** PUT ?pathname=…: local mode only, the browser sends the file's bytes here (to a reserved path). */
 export async function putFile(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   const ctx = await requireFiles(request, deps);
   if (ctx instanceof Response) return ctx;
   if (ctx.files.mode !== "local") return error(400, "Upload straight to Blob storage.");
   const pathname = params(request).get("pathname") ?? "";
   const rule = ruleFor(ctx.userId, pathname);
-  if (!rule) return error(403, "You can't upload to that location.");
+  const reservation = rule ? (await ctx.scope.listReservations(iso(deps.now()))).find((r) => r.pathname === pathname) : undefined;
+  if (!rule || !reservation) return error(403, "You can't upload to that location.");
   const bytes = new Uint8Array(await request.arrayBuffer());
-  if (bytes.byteLength === 0 || bytes.byteLength > rule.maxBytes) return error(400, `Files can be up to ${mb(MAX_FILE_BYTES)}.`);
+  if (bytes.byteLength === 0 || bytes.byteLength > Math.min(rule.maxBytes, reservation.declaredBytes)) {
+    return error(400, `Files can be up to ${mb(MAX_FILE_BYTES)}, and no bigger than the file you picked.`);
+  }
   await ctx.files.putLocal(pathname, { bytes, contentType: rule.contentType });
   return json({ ok: true });
 }
@@ -287,5 +351,6 @@ export async function deleteFile(request: Request, deps: Deps = defaultDeps()): 
   const file = await ctx.scope.deleteFile(params(request).get("id") ?? "");
   if (!file) return error(404, "File not found.");
   await ctx.files.delete([file.pathname]);
+  securityEvent("file.deleted", { accountId: ctx.userId, fileId: file.id });
   return json({ ok: true });
 }
