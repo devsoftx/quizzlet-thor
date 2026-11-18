@@ -17,6 +17,7 @@ import {
   type KidProfile,
   type ProfileInput,
 } from "../src/account-shared.js";
+import { isLocalDev, type Env } from "./env.js";
 
 export * from "../src/account-shared.js";
 
@@ -113,8 +114,8 @@ export interface AccountScope {
   cancelInvites(profileId: string): Promise<boolean>;
   /** Invitations that are still unused and unexpired at `now`. */
   listInvites(now: string): Promise<KidInvite[]>;
-  /** Oldest first. */
-  listDevices(): Promise<KidDevice[]>;
+  /** Devices whose link is still valid at `now`, oldest first. */
+  listDevices(now: string): Promise<KidDevice[]>;
   /** Returns the unlinked device, or null if it isn't this account's. */
   deleteDevice(id: string): Promise<KidDevice | null>;
 }
@@ -129,6 +130,8 @@ export interface NewDevice {
   id: string;
   tokenHash: string;
   label: string;
+  /** The link stops working at this time; the parent then makes a new one. */
+  expiresAt: string;
 }
 
 /** Last-seen times are refreshed at most this often. */
@@ -145,7 +148,7 @@ export interface AccountsDb {
   findInvite(tokenHash: string, now: string): Promise<(LinkTarget & { expiresAt: string }) | null>;
   /** Uses up an open invitation and links a device, in one step; null if it's no longer open. */
   redeemInvite(tokenHash: string, now: string, device: NewDevice): Promise<LinkTarget | null>;
-  /** A linked device by its secret's fingerprint (refreshing when it was last seen). */
+  /** A linked device by its secret's fingerprint (refreshing when it was last seen); null once its link has expired. */
   findDevice(tokenHash: string, now: string): Promise<(LinkTarget & { id: string }) | null>;
   /** A kid's device unlinking itself; returns what was unlinked. */
   removeDevice(tokenHash: string): Promise<(LinkTarget & { id: string }) | null>;
@@ -216,7 +219,7 @@ export class MemoryAccounts implements AccountsDb {
 
   async findDevice(tokenHash: string, now: string) {
     const dev = [...this.state.devices.values()].find((d) => d.tokenHash === tokenHash);
-    if (!dev) return null;
+    if (!dev || dev.expiresAt <= now) return null;
     if (Date.parse(now) - Date.parse(dev.lastSeenAt) >= SEEN_EVERY_MS) dev.lastSeenAt = now;
     return { id: dev.id, accountId: dev.accountId, profileId: dev.profileId };
   }
@@ -350,17 +353,17 @@ export class MemoryAccounts implements AccountsDb {
           .map((inv) => ({ profileId: inv.profileId, expiresAt: inv.expiresAt }))
           .sort((a, b) => a.profileId.localeCompare(b.profileId));
       },
-      async listDevices() {
+      async listDevices(now) {
         return [...state.devices.values()]
-          .filter(mine)
-          .map(({ id, profileId, label, createdAt, lastSeenAt }) => ({ id, profileId, label, createdAt, lastSeenAt }))
+          .filter((d) => mine(d) && d.expiresAt > now)
+          .map(({ id, profileId, label, createdAt, lastSeenAt, expiresAt }) => ({ id, profileId, label, createdAt, lastSeenAt, expiresAt }))
           .sort(byCreated);
       },
       async deleteDevice(id) {
         const dev = state.devices.get(id);
         if (!dev || !mine(dev)) return null;
         state.devices.delete(id);
-        return { id: dev.id, profileId: dev.profileId, label: dev.label, createdAt: dev.createdAt, lastSeenAt: dev.lastSeenAt };
+        return { id: dev.id, profileId: dev.profileId, label: dev.label, createdAt: dev.createdAt, lastSeenAt: dev.lastSeenAt, expiresAt: dev.expiresAt };
       },
 
       async listDecks() {
@@ -508,6 +511,7 @@ const toDevice = (r: Row): KidDevice => ({
   label: String(r.label),
   createdAt: iso(r.created_at),
   lastSeenAt: iso(r.last_seen_at),
+  expiresAt: iso(r.expires_at),
 });
 
 export class PostgresAccounts implements AccountsDb {
@@ -529,8 +533,8 @@ export class PostgresAccounts implements AccountsDb {
         where token_hash = ${tokenHash} and used_at is null and expires_at > ${now}::timestamptz
         returning account_id, profile_id
       )
-      insert into kid_devices (id, token_hash, account_id, profile_id, label, created_at, last_seen_at)
-      select ${device.id}, ${device.tokenHash}, account_id, profile_id, ${device.label}, ${now}::timestamptz, ${now}::timestamptz
+      insert into kid_devices (id, token_hash, account_id, profile_id, label, created_at, last_seen_at, expires_at)
+      select ${device.id}, ${device.tokenHash}, account_id, profile_id, ${device.label}, ${now}::timestamptz, ${now}::timestamptz, ${device.expiresAt}::timestamptz
       from used
       returning account_id, profile_id`;
     const r = rows[0];
@@ -539,7 +543,8 @@ export class PostgresAccounts implements AccountsDb {
 
   async findDevice(tokenHash: string, now: string) {
     const rows = await this.sql`
-      select id, account_id, profile_id, last_seen_at from kid_devices where token_hash = ${tokenHash}`;
+      select id, account_id, profile_id, last_seen_at from kid_devices
+      where token_hash = ${tokenHash} and expires_at > ${now}::timestamptz`;
     const r = rows[0];
     if (!r) return null;
     if (Date.parse(now) - Date.parse(iso(r.last_seen_at)) >= SEEN_EVERY_MS) {
@@ -766,8 +771,11 @@ export class PostgresAccounts implements AccountsDb {
           order by profile_id`;
         return rows.map((r) => ({ profileId: String(r.profile_id), expiresAt: iso(r.expires_at) }));
       },
-      async listDevices() {
-        const rows = await sql`select * from kid_devices where account_id = ${accountId} order by created_at, id`;
+      async listDevices(now) {
+        const rows = await sql`
+          select * from kid_devices
+          where account_id = ${accountId} and expires_at > ${now}::timestamptz
+          order by created_at, id`;
         return rows.map(toDevice);
       },
       async deleteDevice(id) {
@@ -782,9 +790,9 @@ export class PostgresAccounts implements AccountsDb {
 
 const globalState = globalThis as typeof globalThis & { __quizzletMemoryAccounts?: MemoryAccounts };
 
-/** Postgres when DATABASE_URL is set; memory locally; null on Vercel without a database. */
-export function getAccountsDb(env: Record<string, string | undefined> = process.env): AccountsDb | null {
+/** Postgres when DATABASE_URL is set; memory locally; null anywhere else without a database. */
+export function getAccountsDb(env: Env = process.env): AccountsDb | null {
   if (env.DATABASE_URL) return new PostgresAccounts(neon(env.DATABASE_URL));
-  if (env.VERCEL) return null;
+  if (!isLocalDev(env)) return null;
   return (globalState.__quizzletMemoryAccounts ??= new MemoryAccounts());
 }

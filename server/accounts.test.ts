@@ -9,14 +9,15 @@ import {
   updateMe,
   updateProfile,
 } from "./account-handlers.js";
-import { MemoryAccounts } from "./accounts.js";
-import { DevAuthenticator, authorizedParties } from "./auth.js";
+import { getAccountsDb, MemoryAccounts } from "./accounts.js";
+import { DevAuthenticator, authorizedParties, getAuthenticator, isLoopbackHost } from "./auth.js";
 import type { Deps } from "./deps.js";
+import { getFileStore } from "./files.js";
 import { cleanName, getLeaderboard, startSession } from "./handlers.js";
-import { MemoryStore } from "./store.js";
+import { getStore, MemoryStore } from "./store.js";
 import { playing, score } from "./test-support.js";
 
-const BASE = "https://quizzlet.test";
+const BASE = "https://localhost";
 
 class TestAuth extends DevAuthenticator {
   deleted: string[] = [];
@@ -109,6 +110,25 @@ describe("kid profiles", () => {
       const res = await createProfile(req("/api/profiles", { method: "POST", user: "ana", body }), deps);
       expect(res.status).toBe(400);
     }
+  });
+
+  it("holds kid nicknames and the parent's name to the built-in nickname rules", async () => {
+    const { deps } = setup();
+    const create = (nickname: string) => createProfile(req("/api/profiles", { method: "POST", user: "ana", body: { nickname } }), deps);
+    const blocked = await create("Sh1thead");
+    expect(blocked.status).toBe(400);
+    expect(await blocked.json()).toEqual({ error: "Please choose a different nickname." });
+    const lookalike = await create("\u0410na"); // a Cyrillic А
+    expect(lookalike.status).toBe(400);
+    expect(await lookalike.json()).toEqual({ error: "Please use letters from one alphabet in your nickname." });
+
+    const kid = await newProfile(deps, "ana", { nickname: "Nova7" });
+    const rename = await updateProfile(req(`/api/profiles?id=${kid.id}`, { method: "PATCH", user: "ana", body: { nickname: "Sh1thead" } }), deps);
+    expect(rename.status).toBe(400);
+    const me = await updateMe(req("/api/me", { method: "PATCH", user: "ana", body: { displayName: "Sh1thead" } }), deps);
+    expect(me.status).toBe(400);
+    expect(await me.json()).toEqual({ error: "Please choose a different name." });
+    expect((await (await listProfiles(req("/api/profiles", { user: "ana" }), deps)).json()).profiles).toMatchObject([{ nickname: "Nova7" }]);
   });
 
   it("caps profiles per account", async () => {
@@ -238,11 +258,53 @@ describe("sign-in configuration", () => {
     expect(authorizedParties({})).toContain("http://localhost:5173");
   });
 
-  it("only uses the dev stand-in off Vercel", async () => {
-    const { getAuthenticator } = await import("./auth.js");
-    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1" })).toBeInstanceOf(DevAuthenticator);
-    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1", VERCEL: "1" })).toBeNull();
-    expect(getAuthenticator({})).toBeNull();
+  it("only uses the dev stand-in locally: off Vercel, not a production build, and switched on", () => {
+    for (const VERCEL of [undefined, "1"]) {
+      for (const NODE_ENV of [undefined, "development", "test", "production"]) {
+        for (const QUIZZLET_DEV_AUTH of [undefined, "0", "1"]) {
+          const allowed = !VERCEL && NODE_ENV !== "production" && QUIZZLET_DEV_AUTH === "1";
+          const auth = getAuthenticator({ VERCEL, NODE_ENV, QUIZZLET_DEV_AUTH });
+          expect(auth instanceof DevAuthenticator, `VERCEL=${VERCEL} NODE_ENV=${NODE_ENV} QUIZZLET_DEV_AUTH=${QUIZZLET_DEV_AUTH}`).toBe(allowed);
+          if (!allowed) expect(auth).toBeNull();
+        }
+      }
+    }
+    // Clerk, when configured, always wins over the stand-in.
+    expect(getAuthenticator({ QUIZZLET_DEV_AUTH: "1", CLERK_SECRET_KEY: "sk_test_x" })).not.toBeInstanceOf(DevAuthenticator);
+  });
+
+  it("the dev stand-in only answers requests addressed to this machine", async () => {
+    const auth = new DevAuthenticator();
+    const as = (url: string) => auth.authenticate(new Request(url, { headers: { [DevAuthenticator.HEADER]: "ana" } }));
+    for (const url of ["http://localhost:5173/api/me", "http://127.0.0.1:5173/api/me", "http://[::1]:5173/api/me", "http://app.localhost/api/me"]) {
+      expect(await as(url), url).toEqual({ userId: "dev_ana" });
+    }
+    for (const url of ["https://quizzlet.example/api/me", "http://192.168.1.20:5173/api/me", "http://localhost.evil.example/api/me", "http://127.0.0.1.evil.example/api/me"]) {
+      expect(await as(url), url).toBeNull();
+    }
+    expect(isLoopbackHost("LOCALHOST")).toBe(true);
+    expect(isLoopbackHost("notlocalhost")).toBe(false);
+  });
+
+  it("a made-up parent header from another host is not a sign-in", async () => {
+    const { deps } = setup();
+    const res = await getMe(new Request("https://quizzlet.example/api/me", { headers: { [DevAuthenticator.HEADER]: "ana" } }), deps);
+    expect(res.status).toBe(401);
+  });
+
+  it("never falls back to the in-memory stores on Vercel or in a production build", () => {
+    const stores = { score: getStore, accounts: getAccountsDb, files: getFileStore };
+    for (const [name, get] of Object.entries(stores)) {
+      for (const VERCEL of [undefined, "1"]) {
+        for (const NODE_ENV of [undefined, "development", "test", "production"]) {
+          const local = !VERCEL && NODE_ENV !== "production";
+          expect(get({ VERCEL, NODE_ENV }) !== null, `${name} VERCEL=${VERCEL} NODE_ENV=${NODE_ENV}`).toBe(local);
+        }
+      }
+    }
+    // Real services are used wherever they are configured.
+    expect(getStore({ NODE_ENV: "production", KV_REST_API_URL: "https://x.upstash.io", KV_REST_API_TOKEN: "t" })).not.toBeNull();
+    expect(getFileStore({ NODE_ENV: "production", BLOB_READ_WRITE_TOKEN: "t" })).not.toBeNull();
   });
 });
 

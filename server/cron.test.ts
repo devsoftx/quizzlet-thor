@@ -9,7 +9,7 @@ import { postFiles, putFile, UPLOAD_RESERVATION_MS } from "./library-handlers.js
 import { MemoryStore, type Session } from "./store.js";
 import { captureLog } from "./test-support.js";
 
-const BASE = "https://quizzlet.test";
+const BASE = "https://localhost";
 const SECRET = "cron-secret-for-tests";
 const HOUR = 60 * 60 * 1000;
 

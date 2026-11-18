@@ -5,7 +5,8 @@ import { requireAccount } from "./account-handlers.js";
 import { defaultDeps, type Deps } from "./deps.js";
 import { DEFAULT_FLAGS, isBlockedName } from "./flags.js";
 import { kidDevice, kidProfile } from "./kid-handlers.js";
-import { cleanName, cookie, error, json, NAME_MAX, readCookie, readJson } from "./http.js";
+import { cookie, error, json, readCookie, readJson } from "./http.js";
+import { checkName, nameProblemMessage } from "./names.js";
 import { securityEvent, sessionHash } from "./log.js";
 import { GUEST_NAME_DAYS, SESSION_TTL_SECONDS, type Session } from "./store.js";
 
@@ -158,10 +159,13 @@ export async function startSession(request: Request, deps: Deps = defaultDeps())
     };
   } else {
     kind = "guest";
-    const name = cleanName(body?.name);
-    if (!name) {
-      return error(400, `Please enter a nickname (up to ${NAME_MAX} letters, numbers or spaces).`);
+    // The built-in rules first (allowed characters, one alphabet, the word list), then the operator's list.
+    const checked = checkName(body?.name);
+    if (!checked.ok) {
+      if (checked.problem === "blocked") securityEvent("session.name_blocked", {});
+      return error(400, nameProblemMessage(checked.problem));
     }
+    const name = checked.name;
     if (isBlockedName(name, await flagsFor(deps))) {
       securityEvent("session.name_blocked", {});
       return error(400, "Please choose a different nickname.");

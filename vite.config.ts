@@ -1,7 +1,46 @@
+import { readFileSync } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { loadEnv, type Plugin, type ViteDevServer } from "vite";
+import { loadEnv, type Connect, type Plugin, type ViteDevServer } from "vite";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+/**
+ * Sends the response headers from vercel.json (the security headers) locally
+ * too, so `npm run dev`, `npm run preview` and the end-to-end tests see what
+ * production sends. In dev only, scripts may also be inline: Vite's React
+ * refresh needs that, and the production build has no inline script.
+ */
+function vercelHeaders(): Plugin {
+  const rules = (JSON.parse(readFileSync(new URL("./vercel.json", import.meta.url), "utf8")).headers ?? []) as HeaderRule[];
+  const compiled = rules.map((rule) => ({ test: new RegExp(`^${rule.source}$`), headers: rule.headers }));
+
+  const middleware = (dev: boolean): Connect.NextHandleFunction => (req, res, next) => {
+    const pathname = new URL(req.url ?? "/", "http://localhost").pathname;
+    for (const rule of compiled) {
+      if (!rule.test.test(pathname)) continue;
+      for (const { key, value } of rule.headers) {
+        const reportOnly = key.toLowerCase() === "content-security-policy-report-only";
+        res.setHeader(key, dev && reportOnly ? value.replace("script-src 'self'", "script-src 'self' 'unsafe-inline'") : value);
+      }
+    }
+    next();
+  };
+
+  return {
+    name: "vercel-headers",
+    configureServer(server) {
+      server.middlewares.use(middleware(true));
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(middleware(false));
+    },
+  };
+}
 
 /**
  * Serves the Vercel Functions in /api during `npm run dev`, so the app works
@@ -84,7 +123,7 @@ function vercelFunctionsDev(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), vercelFunctionsDev()],
+  plugins: [react(), vercelHeaders(), vercelFunctionsDev()],
   // Clerk's Vercel integration names the (public) key NEXT_PUBLIC_…; expose
   // just that one to the browser alongside the usual VITE_ variables.
   envPrefix: ["VITE_", "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY"],

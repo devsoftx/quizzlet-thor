@@ -16,7 +16,7 @@ const request = (path: string, options: { body?: unknown; user?: string; cookie?
   const headers = new Headers({ "content-type": "application/json" });
   if (options.user) headers.set(DevAuthenticator.HEADER, options.user);
   if (options.cookie) headers.set("cookie", options.cookie);
-  return new Request(`https://test.invalid${path}`, { method: options.method ?? "POST", headers, body: options.body === undefined ? undefined : JSON.stringify(options.body) });
+  return new Request(`https://localhost${path}`, { method: options.method ?? "POST", headers, body: options.body === undefined ? undefined : JSON.stringify(options.body) });
 };
 const cookie = (response: Response) => response.headers.get("set-cookie")!.split(";")[0];
 const tagOf = async (response: Response) => ((await response.clone().json()) as { sessionTag: string }).sessionTag;

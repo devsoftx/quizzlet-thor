@@ -33,7 +33,7 @@ export async function playing(res: Response, extraCookies = ""): Promise<Playing
 let batches = 0;
 
 /** POST /api/score the way the app does: with the session tag and a fresh batch id (unless one is given). */
-export function score(deps: Deps, who: Playing, body: Record<string, unknown>, base = "https://quizzlet.test"): Promise<Response> {
+export function score(deps: Deps, who: Playing, body: Record<string, unknown>, base = "https://localhost"): Promise<Response> {
   const request = new Request(`${base}/api/score`, {
     method: "POST",
     headers: { "content-type": "application/json", cookie: who.cookie },

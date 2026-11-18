@@ -181,6 +181,7 @@ export function App() {
       if (token !== null) setJoinToken(token);
     };
     window.addEventListener("hashchange", onHash);
+    onHash(); // a link that arrived after the page loaded but before this listener was attached
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 

@@ -26,7 +26,7 @@ import {
 } from "./library-handlers.js";
 import { MemoryStore } from "./store.js";
 
-const BASE = "https://quizzlet.test";
+const BASE = "https://localhost";
 
 class TestAuth extends DevAuthenticator {
   override async deleteUser() {}

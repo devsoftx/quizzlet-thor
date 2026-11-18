@@ -15,7 +15,7 @@ import { withErrors } from "./route.js";
 import { MemoryStore, PACE_BURST } from "./store.js";
 import { captureLog, cookieNamed, playing, score } from "./test-support.js";
 
-const BASE = "https://quizzlet.test";
+const BASE = "https://localhost";
 const DECK = "title: Planets\nenabled: true\ncards:\n  - question: Largest?\n    options: [Jupiter, Mars]\n    answer: Jupiter\n";
 
 function setup(files: FileStore = new MemoryFileStore()) {
