@@ -37,11 +37,8 @@ export function watchPageErrors(page: Page): string[] {
   return errors;
 }
 
-/** A unique nickname or id: letters and digits only, at most 24 characters. */
-export function unique(prefix: string): string {
-  const tail = `${Date.now().toString(36).slice(-4)}${Math.random().toString(36).slice(2, 8)}`;
-  return `${prefix}${tail}`.slice(0, 24);
-}
+// A unique nickname, id or title that the app's nickname rules always accept (see unique.ts).
+export { unique } from "./unique";
 
 // ------------------------------------------------------------------ Decks
 
