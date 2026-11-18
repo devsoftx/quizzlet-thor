@@ -4,7 +4,8 @@ dist
 *.local
 
 # Source study guides (third-party material, kept local only)
-docs/
+docs/*
+!docs/red-remediation-plan.md
 .vercel
 .env*
 
