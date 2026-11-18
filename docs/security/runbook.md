@@ -53,8 +53,9 @@ then add the item:
 - **Block a nickname:** add an entry to `blockedNames`. A guest nickname that *contains* an entry is
   refused, ignoring case, spaces and punctuation (`"badword"` also blocks `Bad-Word 7`), so keep entries
   specific. Kid profile nicknames are chosen by a signed-in parent and aren't checked against this list.
-  A short built-in list (`server/names.ts`) is always on, for guests and kid profiles alike, and needs
-  no Global Config; it also refuses a nickname that mixes letters from two alphabets.
+  A built-in list of English and Spanish swearing and slurs (`server/names.ts`) is always on, for guests
+  and kid profiles alike, and needs no Global Config; it also refuses a nickname that mixes letters from
+  two alphabets.
 - **Remove an entry** (a bad name, a forged score). First look, then remove:
 
   ```bash

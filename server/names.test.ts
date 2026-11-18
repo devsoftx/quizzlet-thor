@@ -66,6 +66,147 @@ describe("nicknames", () => {
     }
   });
 
+  it("rejects English slurs", () => {
+    for (const name of [
+      "n1gger",
+      "xXniggaXx",
+      "faggot",
+      "Fags",
+      "Spic",
+      "Chinks",
+      "Kike",
+      "wetback",
+      "Beaners",
+      "towelhead",
+      "Raghead 7",
+      "redskin",
+      "Darkie",
+      "Gooks",
+      "Wop",
+      "Kraut",
+      "Squaw",
+      "Injun",
+      "Pikey",
+      "Muzzie",
+      "Dyke",
+      "lesbo",
+      "Tranny",
+      "shemale",
+      "Spaz",
+      "mongoloid",
+      "Retarded",
+      "Sieg Heil",
+      "White Power 88",
+    ]) {
+      expect(problem(name), name).toBe("blocked");
+    }
+  });
+
+  it("rejects Spanish swearing and slurs, with or without accents", () => {
+    for (const name of [
+      "Pendeja",
+      "Hijueputa",
+      "hijo de puta",
+      "HDP",
+      "CTM",
+      "Conchetumare",
+      "Malparido",
+      "Gonorrea",
+      "Maricón",
+      "MARICONES",
+      "Marica",
+      "Joto",
+      "Trolo",
+      "Tortillera",
+      "Puuuta",
+      "P3rr4",
+      "Putita",
+      "Zorra",
+      "Cabrona",
+      "Cabrones",
+      "Pelotudo",
+      "Boludo",
+      "Weón",
+      "Huevón",
+      "Güevón",
+      "Gilipollas",
+      "Polla",
+      "Chupaverga",
+      "Mamaguevo",
+      "Culero",
+      "Chingada",
+      "Jódete",
+      "Sudaca",
+      "Negrata",
+      "Mayate",
+      "Mongólico",
+      "Retrasado",
+      "Subnormal",
+      "Violador",
+      "Pedófilo",
+      "Prostituta",
+      "Mátate",
+      "xXmierdaXx",
+    ]) {
+      expect(problem(name), name).toBe("blocked");
+    }
+  });
+
+  it("keeps ordinary Spanish and Latin American names and words working", () => {
+    for (const name of [
+      "Concha",
+      "Conchita",
+      "Cabrera",
+      "Culebra",
+      "Culiacán",
+      "Mamani",
+      "Quispe",
+      "Maricela",
+      "Maricruz",
+      "Mariquita",
+      "Mariposa",
+      "Mama Vergara",
+      "Perro",
+      "Perrita",
+      "Pera",
+      "Zorro",
+      "Zorrilla",
+      "Pollo",
+      "Negra",
+      "Negrito",
+      "Jota",
+      "Jotaro",
+      "Mayte",
+      "Venecia",
+      "Violeta",
+      "Pelota",
+      "Pichu Lady",
+      "Pichardo",
+      "Pichai",
+      "Pamela Chu",
+      "Chu Pamela",
+      "Penélope",
+      "Penne Pasta",
+      "Pingu",
+      "Huevito",
+      "Pajarito",
+      "Ojeda",
+      "Cono Sur",
+      "Panchito",
+      "Chucho",
+    ]) {
+      expect(hasBuiltInBlockedWord(name), name).toBe(false);
+      expect(problem(name), name).toBeNull();
+    }
+  });
+
+  it("keeps ordinary English names working next to the slurs they resemble", () => {
+    for (const name of ["Fred Skinner", "Craig Headley", "Ashe Malone", "Pollack", "Van Dijk", "Dykstra", "Spike", "Spicy", "Kiki", "Cooney", "Darko", "Woody", "Dagobert", "Krauss", "Squall", "Ragnar", "Shemar", "Jaap", "Beanie"]) {
+      expect(hasBuiltInBlockedWord(name), name).toBe(false);
+      expect(problem(name), name).toBeNull();
+    }
+  });
+
   it("explains each problem", () => {
     expect(nameProblemMessage("invalid")).toBe("Please enter a nickname (up to 24 letters, numbers or spaces).");
     expect(nameProblemMessage("invalid", "name")).toBe("Please enter a name (up to 24 letters, numbers or spaces).");
