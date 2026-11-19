@@ -103,6 +103,11 @@ export const es: Messages = {
     sessionLength: "Tu sesión de estudio dura 60 minutos.",
   },
 
+  footer: {
+    madeWith: "Hecho con amor {heart} en Prince Frederick, MD por {author}",
+    opensInNewTab: "(se abre en una pestaña nueva)",
+  },
+
   sessionBar: {
     label: "Tu sesión",
     pointsTitle: "Puntos ganados en esta sesión",

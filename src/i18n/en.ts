@@ -100,6 +100,11 @@ export const en = {
     sessionLength: "Your study session lasts 60 minutes.",
   },
 
+  footer: {
+    madeWith: "Made with Love {heart} in Prince Frederick, MD by {author}",
+    opensInNewTab: "(opens in a new tab)",
+  },
+
   sessionBar: {
     label: "Your session",
     pointsTitle: "Points earned this session",
