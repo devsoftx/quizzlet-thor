@@ -105,3 +105,21 @@ describe("server messages in Spanish", () => {
     await expect(api.getLeaderboard()).rejects.toThrow("No se puede conectar con el servidor. Revisa tu conexión a internet.");
   });
 });
+
+describe("the main page's footer", () => {
+  it("credits its maker with a heart and a link, in either language", async () => {
+    render(<App />);
+    const footer = (await screen.findByText(/Made with Love/)).closest("footer")!;
+    expect(footer.textContent).toBe("Made with Love  in Prince Frederick, MD by FR.COM (opens in a new tab)");
+    expect(footer.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    const link = within(footer).getByRole("link", { name: "FR.COM (opens in a new tab)" });
+    expect(link.getAttribute("href")).toBe("https://fabriciorojas.com");
+    expect(link.getAttribute("target")).toBe("_blank");
+    expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+
+    fireEvent.click(screen.getByRole("button", { name: "Español" }));
+    expect((await screen.findByText(/Hecho con amor/)).closest("footer")!.textContent).toBe(
+      "Hecho con amor  en Prince Frederick, MD por FR.COM (se abre en una pestaña nueva)",
+    );
+  });
+});

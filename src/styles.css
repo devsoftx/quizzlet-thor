@@ -1710,3 +1710,12 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .lang-switch__option[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 .lang-switch__option:focus-visible { outline-offset: -3px; }
 .tag--language { background: var(--surface-2); color: var(--text); }
+
+/* Credit line at the bottom of the main page. */
+.site-footer { padding: 20px 0 4px; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; text-align: center; }
+.site-footer a { color: var(--accent-strong); font-weight: 700; text-underline-offset: 3px; }
+.site-footer__heart { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; color: #c62839; }
+:root[data-theme="dark"] .site-footer__heart { color: #ff8a9a; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .site-footer__heart { color: #ff8a9a; }
+}

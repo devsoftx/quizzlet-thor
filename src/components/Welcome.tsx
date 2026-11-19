@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useI18n } from "../i18n";
 import { LeaderboardPanel } from "./LeaderboardPanel";
+import { SiteFooter } from "./SiteFooter";
 
 interface Props {
   notice?: string;
@@ -57,6 +58,7 @@ export function Welcome({ notice, onStart, parentSignIn }: Props) {
       </div>
       {/* The public leaderboard, no sign-in needed. */}
       <LeaderboardPanel />
+      <SiteFooter />
     </div>
   );
 }
