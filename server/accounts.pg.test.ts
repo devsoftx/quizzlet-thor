@@ -16,6 +16,7 @@ import {
   MemoryAccounts,
   PostgresAccounts,
   type AccountsDb,
+  type AttemptInput,
 } from "./accounts.js";
 
 let pg: PGlite;
@@ -272,6 +273,62 @@ describe("Postgres accounts (PGlite)", () => {
       pg.query("insert into deck_assignments (account_id, deck_id, profile_id) values ('fk-b', 'fk-deck', 'fk-kid')"),
     ).rejects.toThrow();
   });
+
+  // A kid's answers for the Progress page: stored once per batch, read back newest first, gone with the profile.
+  for (const [name, make] of [["Postgres", () => new PostgresAccounts(sqlFor(pg))], ["memory", () => new MemoryAccounts()]] as const) {
+    it(`stores, lists and prunes a kid's answers in the ${name} store`, async () => {
+      const db = make();
+      const mine = db.forAccount(`att-${name}-a`);
+      const theirs = db.forAccount(`att-${name}-b`);
+      await mine.ensure({ displayName: "A" });
+      await theirs.ensure({ displayName: "B" });
+      const profile = { nickname: "K", gradeBand: null, color: "#4255ff", emoji: "🦊", showOnLeaderboard: false };
+      const kid = `att-${name}-kid`;
+      await mine.createProfile(kid, profile);
+      await theirs.createProfile(`att-${name}-other`, profile);
+
+      const attempt = (question: string, picks: number[], extra: Partial<AttemptInput> = {}): AttemptInput => ({
+        deckKey: "bundled:planets.yaml",
+        deckTitle: "Planets",
+        cardKey: "0123456789abcdef",
+        question,
+        difficulty: "hard",
+        ms: 4321,
+        picks,
+        answerIndex: 0,
+        optionCount: 4,
+        retry: false,
+        correct: picks.at(-1) === 0,
+        ...extra,
+      });
+      const T1 = "2026-11-10T10:00:00.000Z";
+      const T2 = "2026-11-12T10:00:00.000Z";
+      expect(await mine.recordAttempts(kid, "batch-1", [attempt("Q1?", [2, 0]), attempt("Q2?", [3], { retry: true, difficulty: "easy" })], T1)).toBe(2);
+      // The same batch again (a retry after a lost response) adds nothing.
+      expect(await mine.recordAttempts(kid, "batch-1", [attempt("Q1?", [2, 0]), attempt("Q2?", [3])], T1)).toBe(0);
+      expect(await mine.recordAttempts(kid, "batch-2", [attempt("Q3?", [0])], T2)).toBe(1);
+
+      const listed = await mine.listAttempts(kid, "2026-11-01T00:00:00.000Z", 10);
+      expect(listed.map((a) => [a.question, a.correct, a.picks, a.retry, a.difficulty, a.answeredAt])).toEqual([
+        ["Q3?", true, [0], false, "hard", T2],
+        ["Q2?", false, [3], true, "easy", T1],
+        ["Q1?", true, [2, 0], false, "hard", T1],
+      ]);
+      expect(listed[0]).toMatchObject({ deckKey: "bundled:planets.yaml", deckTitle: "Planets", cardKey: "0123456789abcdef", ms: 4321, answerIndex: 0, optionCount: 4 });
+      expect((await mine.listAttempts(kid, "2026-11-11T00:00:00.000Z", 10)).map((a) => a.question)).toEqual(["Q3?"]);
+      expect((await mine.listAttempts(kid, "2026-11-01T00:00:00.000Z", 1)).map((a) => a.question)).toEqual(["Q3?"]);
+
+      // Another account can't read them, nor store answers for a profile that isn't its own.
+      expect(await theirs.listAttempts(kid, "2026-11-01T00:00:00.000Z", 10)).toEqual([]);
+      await expect(theirs.recordAttempts(kid, "batch-x", [attempt("Q?", [0])], T2)).rejects.toThrow();
+
+      // The daily cleanup drops old answers; deleting the profile drops the rest.
+      expect(await db.pruneAttempts("2026-11-11T00:00:00.000Z")).toBeGreaterThanOrEqual(2);
+      expect((await mine.listAttempts(kid, "2026-11-01T00:00:00.000Z", 10)).map((a) => a.question)).toEqual(["Q3?"]);
+      await mine.deleteProfile(kid);
+      expect(await mine.listAttempts(kid, "2026-11-01T00:00:00.000Z", 10)).toEqual([]);
+    });
+  }
 
   // The limits are enforced where the row is inserted (triggers), not only by the handlers' checks.
   for (const [name, make] of [["Postgres", () => new PostgresAccounts(sqlFor(pg))], ["memory", () => new MemoryAccounts()]] as const) {

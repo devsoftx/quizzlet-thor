@@ -6,6 +6,7 @@ import type { Page } from "@playwright/test";
 import {
   answer,
   asParent,
+  deckYaml,
   expect,
   importDeck,
   newDevice,
@@ -14,6 +15,7 @@ import {
   signInParent,
   startDeck,
   startGuest,
+  studyAsKid,
   test,
   unique,
 } from "./support";
@@ -90,6 +92,23 @@ test.describe("accessibility", () => {
     await page.getByRole("button", { name: "← Back" }).click();
     await page.getByRole("button", { name: "Settings" }).click();
     await expectAccessible(page, "settings");
+  });
+
+  test("the Progress page with a kid's answers, in light and dark", async ({ page, request }) => {
+    const parent = asParent(request, unique("parent-"));
+    const kid = await parent.createProfile(unique("Kid"));
+    const deck = unique("Axe progress ");
+    await parent.createDeck(deck, null, deckYaml(deck));
+    await signInParent(page, parent.headers["x-dev-user"]);
+    await studyAsKid(page, kid.nickname, deck, [["Venus", "Mercury"], ["Jupiter"]]);
+    await page.getByRole("button", { name: "← Decks" }).click();
+    await page.getByRole("button", { name: "Switch profile" }).click();
+    await page.getByRole("button", { name: "Progress" }).click();
+    await expect(page.locator(".stat-tile", { hasText: "Cards answered" })).toContainText("2");
+    for (const summary of await page.getByText("Show as a table").all()) await summary.click();
+    await expectAccessible(page, "the Progress page");
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expectAccessible(page, "the Progress page (dark)");
   });
 
   test("kid screens: the invitation and the kid's home", async ({ browser, request }) => {

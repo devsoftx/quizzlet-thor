@@ -1,8 +1,9 @@
 # Quizzlet ⚡
 
 A small personal flashcard app. Decks are YAML files of multiple-choice
-questions. Pick an answer and the card flips over to show whether you got it
-right, the correct answer and an optional explanation. At the end you get a
+questions. Choose an answer (you can change your mind), check it, and the card
+flips over to show whether you got it right, the correct answer and an optional
+explanation. At the end you get a
 score, a review of every card, and a button to retry only the ones you missed.
 
 Search decks by title or description, preview a deck before starting, and use
@@ -113,6 +114,7 @@ and in any order.
 | `quiz.e2e.ts`           | Studying: feedback, points and streak bonus, results, retry, keyboard   |
 | `library.e2e.ts`        | Importing, searching and filtering decks; broken or hidden decks; template |
 | `parent.e2e.ts`         | Sign-in, kid profiles and links, settings, deleting the account, privacy |
+| `progress.e2e.ts`       | The Progress page: a kid's answers by difficulty, retries, changed answers, filters, other parents kept out |
 | `kid-device.e2e.ts`     | Invitation links, studying on a kid's own device, removing a device    |
 | `decks-and-files.e2e.ts`| Private decks (who sees them), study files and their limits            |
 | `errors.e2e.ts`         | No connection, server errors, refused saves, sessions ending          |
@@ -243,6 +245,7 @@ language: en                      # optional, the language the cards are in (en,
 enabled: true                     # required to show the deck (true / false)
 shuffle: true                     # shuffle card order (default: true)
 shuffleOptions: true              # shuffle the options on each card (default: true)
+difficulty: medium                # optional: easy, medium or hard, for cards that don't say (default: medium)
 
 cards:
   - question: Who is Thor's father?
@@ -253,6 +256,7 @@ cards:
       - Heimdall
     answer: Odin                  # must match one of the options
     explanation: Odin, the All-Father, rules Asgard.   # optional
+    difficulty: easy              # optional: easy, medium or hard
 
   - question: How many realms are there?
     options: [7, 9, 12]           # short list syntax works too
@@ -270,6 +274,10 @@ Rules:
 - `answer` is the **text** of the correct option (matched exactly, or
   ignoring upper/lower case).
 - Numbers are fine as options (`[7, 9, 12]`); they're treated as text.
+- `difficulty` is `easy`, `medium` or `hard` (on a card, or on the deck for
+  every card that doesn't say), judged for the deck's own audience. A card
+  without one counts as `medium`. It's what the Progress page groups answers
+  by. Every card in `decks/` has one.
 - Wrap text in quotes if it contains a `:` followed by a space, or starts with
   a special character like `*`, `&`, `!`, `[` or `{`.
 
@@ -277,7 +285,8 @@ Rules:
 
 | Key                          | Action               |
 | ---------------------------- | -------------------- |
-| `1`–`9` or `A`–`J`           | Pick an answer       |
+| `1`–`9` or `A`–`J`           | Choose an answer     |
+| `Enter` or `Space`           | Check the chosen answer |
 | `Enter`, `Space` or `→`      | Next card (once flipped) |
 
 ## Parent & teacher accounts
@@ -306,8 +315,34 @@ A signed-in parent can:
   private Vercel Blob store and opened only through the parent's sign-in. An
   upload counts against those limits from the moment it starts, for 15 minutes
   or until it is saved;
+- see each kid's **Progress**: cards answered right and wrong, retries on the
+  missed ones, time per card, answers changed before checking (a heat map), a
+  learning profile (spider chart) and where the mistakes are (Pareto chart), by
+  difficulty (easy, medium, hard), for the last 7, 30, 90 or 180 days and per
+  deck. Every chart has its numbers as a table too;
 - change settings (name, theme, card order) or delete the account, which also
   removes every profile, deck and file, and the profiles' leaderboard entries.
+
+### What the Progress page records
+
+Only a kid profile's answers are recorded (studying on the parent's device or
+on the kid's linked device); a guest's answers are only ever right or wrong
+points. For each card answered, the app sends along with its points: the deck
+and its title, the card (a fingerprint, and the question shortened to 200
+characters), its difficulty, whether it was right, the answers picked before
+checking (by their position in the deck file), the seconds on screen (time in
+another tab doesn't count, and anything over ten minutes counts as ten), and
+whether it was a "practice the missed ones" round. Nothing else: no free text
+from the kid.
+
+The answers are kept for 180 days (the daily cleanup deletes older ones) and go
+at once when the profile or the account is deleted. Details that don't add up
+are refused and logged, and never cost the kid their points.
+
+A card's **retries** count the times it came back after it was first answered
+wrong, in a "practice the missed ones" round or a fresh round, until it was
+answered right. **Time per card** runs from the card appearing to the answer
+being checked.
 
 ### Setup
 
@@ -361,8 +396,9 @@ A signed-in parent can:
 
 4. **Daily cleanup:** set `CRON_SECRET` to a long random value in the project's
    environment variables. Vercel Cron calls `/api/cron` once a day with it; the
-   job trims old guest leaderboard entries and deletes uploads that were started
-   and never saved. Without the secret the job refuses to run.
+   job trims old guest leaderboard entries, deletes uploads that were started
+   and never saved, and deletes kids' Progress answers older than 180 days.
+   Without the secret the job refuses to run.
 5. **Leaderboard switches (optional):** connect a Vercel Global Config store
    (`GLOBAL_CONFIG`) with a `leaderboard` item to hide the leaderboard or block
    guest nicknames without a deploy. `docs/security/runbook.md` shows the item.
@@ -399,7 +435,7 @@ Don't put production database URLs in `.env.local`: the dev server loads it.
 
 ```
 decks/                 your YAML decks
-api/                   Vercel Functions (session, score, leaderboard, me, profiles, decks, files, invites, kid, cron, csp-report)
+api/                   Vercel Functions (session, score, leaderboard, me, profiles, progress, decks, files, invites, kid, cron, csp-report)
 server/                API handlers, sign-in (auth.ts), accounts database, file storage (files.ts), Redis store,
                        security log (log.ts), request guard (route.ts), operator switches (flags.ts)
 db/migrations/         SQL migrations (applied on each production deploy, or npm run db:migrate)
@@ -410,8 +446,11 @@ eslint.config.js       lint rules (npm run lint)
 .github/workflows/     the checks GitHub Actions runs on every pull request (ci.yml), the production deploy (deploy.yml)
 e2e/                   end-to-end tests (Playwright); helpers in e2e/support.ts
 src/deck.ts            YAML parsing, validation and shuffling
+src/attempts.ts        one answered card's details (shared with the server), what /api/progress returns
+src/progress.ts        the Progress page's numbers: right/wrong, retries, time, changed answers, learning profile, Pareto
 src/library.ts         loads decks from decks/ and local storage, best scores
 src/i18n/              languages: the English and Spanish messages, the language switch's store, server messages in Spanish
-src/components/        DeckList, Quiz, FlipCard, Results, parent screens (profiles, My decks, My files, settings)
+src/components/        DeckList, Quiz, FlipCard, Results, parent screens (profiles, My decks, My files, Progress, settings),
+                       charts.tsx (the Progress page's charts, without a chart library)
 src/styles.css         all styling (light and dark mode)
 ```

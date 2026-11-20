@@ -20,6 +20,7 @@ const NOT_SHOWN = new Set([
   "The scheduled cleanup isn't set up yet (CRON_SECRET).",
   "Uploads go through /api/files in local mode.",
   "Upload straight to Blob storage.",
+  "days must be one of 7.", // the Progress page only offers the allowed periods
 ]);
 
 /** A template literal's ${…} parts, filled with values like the real ones. */

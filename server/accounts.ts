@@ -17,6 +17,7 @@ import {
   type KidProfile,
   type ProfileInput,
 } from "../src/account-shared.js";
+import type { AttemptDetail, StoredAttempt } from "../src/attempts.js";
 import { isLocalDev, type Env } from "./env.js";
 
 export * from "../src/account-shared.js";
@@ -118,7 +119,19 @@ export interface AccountScope {
   listDevices(now: string): Promise<KidDevice[]>;
   /** Returns the unlinked device, or null if it isn't this account's. */
   deleteDevice(id: string): Promise<KidDevice | null>;
+
+  /**
+   * Stores a batch of one kid profile's answers, all at `answeredAt`. A batch
+   * stored before (the same id, sent again) isn't stored twice. Returns how
+   * many answers were new. Throws if the profile isn't this account's.
+   */
+  recordAttempts(profileId: string, batchId: string, attempts: AttemptInput[], answeredAt: string): Promise<number>;
+  /** The profile's answers from `since` on, newest first, at most `limit`. */
+  listAttempts(profileId: string, since: string, limit: number): Promise<StoredAttempt[]>;
 }
+
+/** One answer to store: its details and whether it was right. */
+export type AttemptInput = AttemptDetail & { correct: boolean };
 
 /** Where a kid link points: one profile in one account. */
 export interface LinkTarget {
@@ -159,6 +172,8 @@ export interface AccountsDb {
   expiredReservations(before: string, limit: number): Promise<string[]>;
   /** Drops those reservation records, once what was uploaded there has been deleted; returns how many. */
   forgetReservations(pathnames: string[], before: string): Promise<number>;
+  /** Deletes kids' answers from before `before` (the Progress page keeps a limited history); returns how many. */
+  pruneAttempts(before: string): Promise<number>;
 }
 
 const nowIso = () => new Date().toISOString();
@@ -177,6 +192,8 @@ interface MemoryState {
   invites: Map<string, LinkTarget & { createdAt: string; expiresAt: string; usedAt: string | null }>;
   /** device id -> device */
   devices: Map<string, KidDevice & LinkTarget & { tokenHash: string }>;
+  /** Kids' answers, in the order they were stored. */
+  attempts: Array<StoredAttempt & LinkTarget & { batchId: string; position: number }>;
 }
 
 /** Oldest first, ties by id (the Postgres version orders the same way). */
@@ -193,6 +210,7 @@ export class MemoryAccounts implements AccountsDb {
       reservations: new Map(),
       invites: new Map(),
       devices: new Map(),
+      attempts: [],
     },
   ) {}
 
@@ -242,6 +260,13 @@ export class MemoryAccounts implements AccountsDb {
       .sort((a, b) => a.expiresAt.localeCompare(b.expiresAt) || a.pathname.localeCompare(b.pathname))
       .slice(0, limit)
       .map((r) => r.pathname);
+  }
+
+  async pruneAttempts(before: string) {
+    const kept = this.state.attempts.filter((a) => a.answeredAt >= before);
+    const removed = this.state.attempts.length - kept.length;
+    this.state.attempts = kept;
+    return removed;
   }
 
   async forgetReservations(pathnames: string[], before: string) {
@@ -302,6 +327,7 @@ export class MemoryAccounts implements AccountsDb {
         state.files.delete(accountId);
         for (const [pathname, r] of state.reservations) if (r.accountId === accountId) state.reservations.delete(pathname);
         dropLinks(mine);
+        state.attempts = state.attempts.filter((a) => !mine(a));
         return ids;
       },
       async listProfiles() {
@@ -329,7 +355,28 @@ export class MemoryAccounts implements AccountsDb {
           if (d.profileIds) d.profileIds = d.profileIds.filter((p) => p !== id);
         }
         dropLinks((l) => mine(l) && l.profileId === id);
+        state.attempts = state.attempts.filter((a) => !(mine(a) && a.profileId === id));
         return true;
+      },
+
+      async recordAttempts(profileId, batchId, attempts, answeredAt) {
+        if (!own().has(profileId)) throw new Error("Profile not found.");
+        let added = 0;
+        attempts.forEach((attempt, position) => {
+          const seen = state.attempts.some((a) => a.profileId === profileId && a.batchId === batchId && a.position === position);
+          if (seen) return;
+          state.attempts.push({ ...copy(attempt), answeredAt, accountId, profileId, batchId, position });
+          added++;
+        });
+        return added;
+      },
+      async listAttempts(profileId, since, limit) {
+        return state.attempts
+          .map((a, order) => ({ a, order }))
+          .filter(({ a }) => mine(a) && a.profileId === profileId && a.answeredAt >= since)
+          .sort((x, y) => y.a.answeredAt.localeCompare(x.a.answeredAt) || y.order - x.order)
+          .slice(0, limit)
+          .map(({ a: { accountId: _a, profileId: _p, batchId: _b, position: _n, ...attempt } }) => copy(attempt));
       },
 
       async createInvite(profileId, tokenHash, createdAt, expiresAt) {
@@ -506,6 +553,21 @@ async function limited<T>(query: Promise<T>): Promise<T> {
   }
 }
 
+const toAttempt = (r: Row): StoredAttempt => ({
+  deckKey: String(r.deck_key),
+  deckTitle: String(r.deck_title),
+  cardKey: String(r.card_key),
+  question: String(r.question),
+  difficulty: r.difficulty as StoredAttempt["difficulty"],
+  correct: Boolean(r.correct),
+  retry: Boolean(r.retry),
+  ms: Number(r.response_ms),
+  picks: (r.picks as unknown[]).map(Number),
+  answerIndex: Number(r.answer_index),
+  optionCount: Number(r.option_count),
+  answeredAt: iso(r.answered_at),
+});
+
 const toDevice = (r: Row): KidDevice => ({
   id: String(r.id),
   profileId: String(r.profile_id),
@@ -568,6 +630,11 @@ export class PostgresAccounts implements AccountsDb {
       order by r.expires_at, r.pathname
       limit ${limit}`;
     return rows.map((r) => String(r.pathname));
+  }
+
+  async pruneAttempts(before: string) {
+    const rows = await this.sql`delete from study_attempts where answered_at < ${before}::timestamptz returning id`;
+    return rows.length;
   }
 
   async forgetReservations(pathnames: string[], before: string) {
@@ -782,6 +849,31 @@ export class PostgresAccounts implements AccountsDb {
       async deleteDevice(id) {
         const rows = await sql`delete from kid_devices where account_id = ${accountId} and id = ${id} returning *`;
         return rows[0] ? toDevice(rows[0]) : null;
+      },
+
+      async recordAttempts(profileId, batchId, attempts, answeredAt) {
+        if (attempts.length === 0) return 0;
+        // One statement for the batch; the foreign key refuses a profile from another account.
+        const rows = await sql`
+          insert into study_attempts (account_id, profile_id, batch_id, position, deck_key, deck_title, card_key, question,
+            difficulty, correct, retry, response_ms, picks, answer_index, option_count, answered_at)
+          select ${accountId}, ${profileId}, ${batchId}, (a.ordinality - 1)::smallint, a.value->>'deckKey', a.value->>'deckTitle',
+            a.value->>'cardKey', a.value->>'question', a.value->>'difficulty', (a.value->>'correct')::boolean,
+            (a.value->>'retry')::boolean, (a.value->>'ms')::integer,
+            array(select jsonb_array_elements_text(a.value->'picks')::smallint),
+            (a.value->>'answerIndex')::smallint, (a.value->>'optionCount')::smallint, ${answeredAt}::timestamptz
+          from jsonb_array_elements(${JSON.stringify(attempts)}::jsonb) with ordinality as a(value, ordinality)
+          on conflict (profile_id, batch_id, position) do nothing
+          returning id`;
+        return rows.length;
+      },
+      async listAttempts(profileId, since, limit) {
+        const rows = await sql`
+          select * from study_attempts
+          where account_id = ${accountId} and profile_id = ${profileId} and answered_at >= ${since}::timestamptz
+          order by answered_at desc, id desc
+          limit ${limit}`;
+        return rows.map(toAttempt);
       },
     };
   }

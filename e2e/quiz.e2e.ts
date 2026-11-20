@@ -1,6 +1,7 @@
 // Studying a deck: preview, answers and feedback, points, results, retrying.
 import {
   answer,
+  checkButton,
   expect,
   importDeck,
   nextCard,
@@ -107,18 +108,37 @@ test.describe("studying a deck", () => {
     await expect(page.getByRole("heading", { name: "Explore decks" })).toBeVisible();
   });
 
-  test("works with the keyboard: number or letter keys answer, Enter moves on", async ({ page }) => {
+  test("works with the keyboard: number or letter keys choose, Enter checks, then moves on", async ({ page }) => {
     await startDeck(page, deck);
-    await page.keyboard.press("1"); // Mercury
+    await page.keyboard.press("2"); // Venus…
+    await expect(page.locator(".options").getByRole("button", { name: "Venus", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await page.keyboard.press("1"); // …no, Mercury
+    await expect(page.locator(".options").getByRole("button", { name: "Venus", exact: true })).toHaveAttribute("aria-pressed", "false");
+    await expect(page.locator(".field-feedback")).toHaveCount(0); // nothing is final until it's checked
+    await page.keyboard.press("Enter");
     await expect(page.locator(".field-feedback")).toContainText("That's right");
     await page.keyboard.press("Enter");
     await expect(page.getByLabel("Progress")).toContainText("2 / 4");
     await page.keyboard.press("b"); // Mars
+    await page.keyboard.press("Enter");
     await expect(page.locator(".field-feedback")).toContainText("That's right");
     await page.keyboard.press("ArrowRight");
     await expect(page.getByLabel("Progress")).toContainText("3 / 4");
     await page.keyboard.press("9"); // no 9th option: nothing happens
+    await page.keyboard.press("Enter"); // and nothing to check
     await expect(page.locator(".field-feedback")).toHaveCount(0);
+    await expect(checkButton(page)).toBeDisabled();
+  });
+
+  test("an answer can be changed until it's checked", async ({ page }) => {
+    await startDeck(page, deck);
+    await expect(checkButton(page)).toBeDisabled();
+    await page.locator(".options").getByRole("button", { name: "Venus", exact: true }).click();
+    await page.locator(".options").getByRole("button", { name: "Mercury", exact: true }).click();
+    await expect(page.locator(".options .option.is-selected")).toHaveText(/Mercury/);
+    await checkButton(page).click();
+    await expect(page.locator(".field-feedback")).toContainText("✓ That's right");
+    await expect.poll(async () => (await serverSession(page))?.points).toBe(10);
   });
 
   test("the leaderboard shows the guest, marked as You, after earning points", async ({ page }) => {
@@ -164,8 +184,9 @@ test.describe("regressions while studying", () => {
     await expect(page.getByRole("heading", { name: "Which planet is known as the Red Planet?" })).toBeVisible();
   });
 
-  test("a fast double tap on an answer counts it once", async ({ page }) => {
-    await page.locator(".options").getByRole("button", { name: "Mercury", exact: true }).evaluate((button: HTMLButtonElement) => {
+  test("a fast double tap on Check answer counts the answer once", async ({ page }) => {
+    await page.locator(".options").getByRole("button", { name: "Mercury", exact: true }).click();
+    await checkButton(page).evaluate((button: HTMLButtonElement) => {
       button.click();
       button.click();
     });

@@ -3,6 +3,14 @@ import { deckMessagesEn, type DeckMessages } from "./deck-messages.js";
 
 export type { DeckMessages };
 
+/** How hard a card is for the deck's audience. Authors set it per card or for the whole deck. */
+export const DIFFICULTIES = ["easy", "medium", "hard"] as const;
+export type Difficulty = (typeof DIFFICULTIES)[number];
+/** What a card without a difficulty (on itself or on its deck) counts as. */
+export const DEFAULT_DIFFICULTY: Difficulty = "medium";
+
+export const isDifficulty = (value: unknown): value is Difficulty => DIFFICULTIES.includes(value as Difficulty);
+
 /** One multiple-choice flashcard. */
 export interface Card {
   question: string;
@@ -12,6 +20,8 @@ export interface Card {
   explanation?: string;
   /** Per-card override of the deck's `shuffleOptions`. */
   shuffleOptions?: boolean;
+  /** Per-card override of the deck's `difficulty`. */
+  difficulty?: Difficulty;
 }
 
 export interface Deck {
@@ -31,8 +41,27 @@ export interface Deck {
   shuffle: boolean;
   /** Shuffle the options inside each card (default: true). */
   shuffleOptions: boolean;
+  /** The difficulty of cards that don't set their own. */
+  difficulty?: Difficulty;
   cards: Card[];
 }
+
+/** A card's difficulty: its own, else its deck's, else medium. */
+export function cardDifficulty(card: Card, deck?: Pick<Deck, "difficulty">): Difficulty {
+  return card.difficulty ?? deck?.difficulty ?? DEFAULT_DIFFICULTY;
+}
+
+/**
+ * Reads a `difficulty` value: undefined when it isn't there, null when it isn't
+ * one of the three words (upper/lower case doesn't matter).
+ */
+function parseDifficulty(raw: unknown): Difficulty | null | undefined {
+  if (raw === undefined || raw === null) return undefined;
+  const word = typeof raw === "string" ? raw.trim().toLowerCase() : "";
+  return isDifficulty(word) ? word : null;
+}
+
+const shown = (raw: unknown) => (typeof raw === "string" ? raw : JSON.stringify(raw));
 
 export type ParseResult =
   | { ok: true; deck: Deck }
@@ -126,6 +155,12 @@ function parseCard(raw: unknown, index: number, errors: string[], messages: Deck
   const explanation = toText(raw.explanation);
   if (explanation) card.explanation = explanation;
   if (typeof raw.shuffleOptions === "boolean") card.shuffleOptions = raw.shuffleOptions;
+  const difficulty = parseDifficulty(raw.difficulty);
+  if (difficulty === null) {
+    errors.push(messages.difficultyInvalid(where, shown(raw.difficulty)));
+    return null;
+  }
+  if (difficulty) card.difficulty = difficulty;
   return card;
 }
 
@@ -171,6 +206,8 @@ export function parseDeck(source: string, fallbackTitle: string, messages: DeckM
   }
   const language = parseLanguage(root.language);
   if (language === null) errors.push(messages.languageInvalid(typeof root.language === "string" ? root.language : JSON.stringify(root.language)));
+  const difficulty = parseDifficulty(root.difficulty);
+  if (difficulty === null) errors.push(messages.difficultyInvalid(null, shown(root.difficulty)));
 
   if (!Array.isArray(root.cards)) {
     errors.push(messages.needsCards);
@@ -194,6 +231,7 @@ export function parseDeck(source: string, fallbackTitle: string, messages: DeckM
       enabled: enabled.value,
       shuffle: optionalBool(root.shuffle, true),
       shuffleOptions: optionalBool(root.shuffleOptions, true),
+      ...(difficulty ? { difficulty } : {}),
       cards,
     },
   };

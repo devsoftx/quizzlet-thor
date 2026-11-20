@@ -12,6 +12,12 @@ vi.mock("./library", async (original) => {
   return { ...actual, loadBundledDecks: () => [{ id: "bundled:test", fileName: "test.yaml", source: "bundled", ok: true, deck: { title: "Space test", enabled: true, shuffle: false, shuffleOptions: false, cards: [{ question: "Our star?", options: ["Sun", "Moon"], answer: "Sun" }, { question: "Our planet?", options: ["Earth", "Mars"], answer: "Earth" }] } }] };
 });
 
+/** Chooses an answer and checks it, as a learner does: tap an option, then "Check answer". */
+function answer(option: string) {
+  fireEvent.click(screen.getByRole("button", { name: option }));
+  fireEvent.click(screen.getByRole("button", { name: /check answer/i }));
+}
+
 function session(ms = 10000, profileId: string | null = null): SessionInfo {
   return { name: "Nova", points: 0, deadline: Date.now() + ms, profileId, sessionTag: "session-one" };
 }
@@ -42,11 +48,11 @@ describe("session expiry in the learner journey", () => {
     render(<App />);
     fireEvent.click(await screen.findByRole("button", { name: "Study Space test" }));
     fireEvent.click(await screen.findByRole("button", { name: /start practice/i }));
-    fireEvent.click(screen.getByRole("button", { name: "Sun" }));
+    answer("Sun");
     await waitFor(() => expect(api.submitScore).toHaveBeenCalledTimes(1));
     fireEvent.click(screen.getByRole("button", { name: /next question/i }));
     await screen.findByText(/your latest points may not have been saved/i, {}, { timeout: 4000 });
-    fireEvent.click(screen.getByRole("button", { name: "Earth" }));
+    answer("Earth");
     fireEvent.click(screen.getByRole("button", { name: /see results/i }));
     expect(await screen.findByText(/10 points.*confirmed/i)).toBeTruthy();
     expect(api.submitScore).toHaveBeenCalledTimes(1);
@@ -106,7 +112,7 @@ describe("score recovery in the learner journey", () => {
     render(<App />);
     fireEvent.click(await screen.findByRole("button", { name: "Study Space test" }));
     fireEvent.click(await screen.findByRole("button", { name: /start practice/i }));
-    fireEvent.click(screen.getByRole("button", { name: "Sun" }));
+    answer("Sun");
     expect(await screen.findByText(/couldn't confirm whether your latest points were saved/i)).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: /decks/i }));
     fireEvent.click(await screen.findByRole("button", { name: /retry saving/i }));
@@ -121,7 +127,7 @@ describe("score recovery in the learner journey", () => {
     render(<App />);
     fireEvent.click(await screen.findByRole("button", { name: "Study Space test" }));
     fireEvent.click(await screen.findByRole("button", { name: /start practice/i }));
-    fireEvent.click(screen.getByRole("button", { name: "Sun" }));
+    answer("Sun");
     expect(await screen.findByText(/this device is no longer linked/i)).toBeTruthy();
     expect(screen.queryByText("Our star?")).toBeNull();
     expect(screen.getByLabelText(/your nickname/i)).toBeTruthy();
@@ -143,10 +149,12 @@ describe("automated learner accessibility checks", () => {
     fireEvent.click(screen.getByRole("button", { name: "Study Space test" }));
     fireEvent.click(await screen.findByRole("button", { name: /start practice/i }));
     await check();
-    fireEvent.click(screen.getByRole("button", { name: "Sun" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sun" })); // chosen, not checked yet
+    await check();
+    fireEvent.click(screen.getByRole("button", { name: /check answer/i }));
     await check();
     fireEvent.click(screen.getByRole("button", { name: /next question/i }));
-    fireEvent.click(screen.getByRole("button", { name: "Earth" }));
+    answer("Earth");
     fireEvent.click(screen.getByRole("button", { name: /see results/i }));
     await screen.findByText(/2 of 2 correct/i);
     await check();
@@ -158,12 +166,12 @@ describe("guest review and retry", () => {
     render(<App />);
     fireEvent.click(await screen.findByRole("button", { name: "Study Space test" }));
     fireEvent.click(await screen.findByRole("button", { name: /start practice/i }));
-    fireEvent.click(screen.getByRole("button", { name: "Moon" }));
+    answer("Moon");
     expect(screen.getByText(/not quite/i)).toBeTruthy();
     expect(screen.getByText(/the answer is/i).textContent).toContain("Sun");
     expect(document.querySelector(".explanation")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /next question/i }));
-    fireEvent.click(screen.getByRole("button", { name: "Earth" }));
+    answer("Earth");
     fireEvent.click(screen.getByRole("button", { name: /see results/i }));
     expect(await screen.findByRole("heading", { name: /1 of 2 correct/i })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Review" })).toBeTruthy();
@@ -179,11 +187,11 @@ describe("keyboard focus through the learning flow", () => {
     fireEvent.click(await screen.findByRole("button", { name: "Study Space test" }));
     fireEvent.click(await screen.findByRole("button", { name: /start practice/i }));
     expect(document.activeElement).toBe(screen.getByRole("heading", { name: "Our star?" }));
-    fireEvent.click(screen.getByRole("button", { name: "Moon" }));
+    answer("Moon");
     expect(document.activeElement?.textContent).toContain("Not quite");
     fireEvent.click(screen.getByRole("button", { name: /next question/i }));
     expect(document.activeElement).toBe(screen.getByRole("heading", { name: "Our planet?" }));
-    fireEvent.click(screen.getByRole("button", { name: "Earth" }));
+    answer("Earth");
     fireEvent.click(screen.getByRole("button", { name: /see results/i }));
     expect(document.activeElement).toBe(await screen.findByRole("heading", { name: /1 of 2 correct/i }));
   });
@@ -200,5 +208,41 @@ describe("focus when navigating between screens", () => {
     fireEvent.click(screen.getByRole("button", { name: /back to decks/i }));
     await screen.findByRole("heading", { name: "Explore decks" });
     expect(document.activeElement).toBe(screen.getByRole("heading", { name: "Explore decks" }));
+  });
+});
+
+describe("answer details for a parent's Progress page", () => {
+  it("records the answers tried before checking, with the time taken, for a kid profile", async () => {
+    vi.mocked(api.getSession).mockResolvedValue(session(10000, "kid-1"));
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: "Study Space test" }));
+    fireEvent.click(await screen.findByRole("button", { name: /start practice/i }));
+    expect(screen.getByRole("button", { name: /check answer/i }).hasAttribute("disabled")).toBe(true);
+
+    // Choosing isn't answering: the learner can change their mind.
+    fireEvent.click(screen.getByRole("button", { name: "Moon" }));
+    expect(screen.getByRole("button", { name: "Moon" }).getAttribute("aria-pressed")).toBe("true");
+    fireEvent.click(screen.getByRole("button", { name: "Sun" }));
+    expect(screen.getByRole("button", { name: "Moon" }).getAttribute("aria-pressed")).toBe("false");
+    expect(api.submitScore).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: /check answer/i }));
+    expect(screen.getByText(/that's right/i)).toBeTruthy();
+    await waitFor(() => expect(api.submitScore).toHaveBeenCalledTimes(1));
+    const [answers, options] = vi.mocked(api.submitScore).mock.calls[0];
+    expect(answers).toEqual([true]);
+    expect(options.details).toEqual([
+      expect.objectContaining({ deckKey: "bundled:test", deckTitle: "Space test", question: "Our star?", difficulty: "medium", picks: [1, 0], answerIndex: 0, optionCount: 2, retry: false }),
+    ]);
+    expect(options.details?.[0].ms).toBeGreaterThanOrEqual(0);
+  });
+
+  it("sends a guest's answers as right or wrong only", async () => {
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: "Study Space test" }));
+    fireEvent.click(await screen.findByRole("button", { name: /start practice/i }));
+    answer("Sun");
+    await waitFor(() => expect(api.submitScore).toHaveBeenCalledTimes(1));
+    expect(vi.mocked(api.submitScore).mock.calls[0][1].details).toBeUndefined();
   });
 });

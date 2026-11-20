@@ -27,6 +27,7 @@ import { MyDecks } from "./components/MyDecks";
 import { MyFiles } from "./components/MyFiles";
 import { ParentHome } from "./components/ParentHome";
 import { ProfilesManager } from "./components/ProfilesManager";
+import { Progress } from "./components/Progress";
 import { Quiz, type AnswerRecord } from "./components/Quiz";
 import { Results } from "./components/Results";
 import { SessionBar } from "./components/SessionBar";
@@ -80,6 +81,7 @@ type Screen =
   | { name: "settings" }
   | { name: "my-decks" }
   | { name: "my-files" }
+  | { name: "progress" }
   | { name: "quiz"; deckId: string; deck: Deck; cards: Card[]; isRetry: boolean; run: number }
   | {
       name: "results";
@@ -99,7 +101,7 @@ const initialJoinToken = takeInviteToken();
 type KidState = { status: "loading" } | { status: "none" } | { status: "linked"; kid: KidHomeInfo };
 
 /** Screens that belong to a signed-in parent (not a kid's study session). */
-const PARENT_SCREENS = new Set<Screen["name"]>(["profiles", "settings", "my-decks", "my-files"]);
+const PARENT_SCREENS = new Set<Screen["name"]>(["profiles", "settings", "my-decks", "my-files", "progress"]);
 
 export function App() {
   const { language, t } = useI18n();
@@ -526,6 +528,13 @@ export function App() {
       </Page>
     );
   }
+  if (ready && screen.name === "progress") {
+    return (
+      <Page>
+        <Progress profiles={ready.profiles} onBack={() => setScreen({ name: "decks" })} />
+      </Page>
+    );
+  }
   if (ready && screen.name === "profiles") {
     return (
       <Page>
@@ -580,6 +589,7 @@ export function App() {
             onPick={startProfileSession}
             onManage={() => setScreen({ name: "profiles" })}
             onDecks={() => setScreen({ name: "my-decks" })}
+            onProgress={() => setScreen({ name: "progress" })}
             onFiles={() => setScreen({ name: "my-files" })}
             onSettings={() => setScreen({ name: "settings" })}
             onSignOut={signOut}
@@ -660,13 +670,15 @@ export function App() {
         <p className="save-status" role="status">{saveStatus === "confirmed" ? t.app.saveStatus.confirmed : saveStatus === "pending" || saveStatus === "saving" ? t.app.saveStatus.saving : saveStatus === "unknown" ? t.app.saveStatus.unknown : saveStatus === "failed" ? t.app.saveStatus.failed : t.app.saveStatus.other}</p>
         <Quiz
           key={screen.run}
+          deckId={screen.deckId}
           deck={screen.deck}
           cards={screen.cards}
           isRetry={screen.isRetry}
           onFinish={(results) =>
             finishQuiz(screen.deckId, screen.deck, screen.isRetry, screen.run, results)
           }
-          onAnswer={(correct) => saver.add(correct)}
+          // A kid profile's answers also go, with their details, to the parent's Progress page; a guest's are only right or wrong.
+          onAnswer={(correct, detail) => saver.add(correct, session?.profileId ? detail : undefined)}
           onExit={() => {
             void savePending(); // answers are already on their way; make sure none wait
             setScreen({ name: "decks" });

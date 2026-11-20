@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Card, Deck } from "../deck";
+import { capPicks, cardKey, MAX_ANSWER_MS, MAX_DECK_TITLE_CHARS, shortQuestion, type AttemptDetail } from "../attempts";
+import { cardDifficulty, type Card, type Deck } from "../deck";
 import { useI18n } from "../i18n";
 import { pointsForAnswer } from "../points";
 import { FlipCard } from "./FlipCard";
@@ -13,16 +14,60 @@ export interface AnswerRecord {
   /** Correct answers in a row, including this one. */
   streak: number;
   bonus: boolean;
+  /** What a parent's Progress page learns from this answer (sent only for kid profiles). */
+  detail: AttemptDetail;
 }
 
 interface Props {
+  /** The deck's id in the library ("bundled:…", "account:…", "imported:…"). */
+  deckId: string;
   deck: Deck;
   cards: Card[];
   isRetry: boolean;
   onFinish: (results: AnswerRecord[]) => void;
   onExit: () => void;
   /** Called once per answered card, so its points can be saved right away. */
-  onAnswer?: (correct: boolean) => void;
+  onAnswer?: (correct: boolean, detail: AttemptDetail) => void;
+}
+
+/** The card as the deck file has it: options in the author's order, not shuffled. */
+function deckCard(deck: Deck, card: Card): Card {
+  return deck.cards.find((c) => c.question === card.question && c.answer === card.answer) ?? card;
+}
+
+/**
+ * Time a card has been on screen, leaving out time the page was hidden (another
+ * tab, a locked tablet), so stepping away doesn't read as a slow answer.
+ */
+function useCardClock(index: number) {
+  const startedAtRef = useRef(0);
+  const hiddenMsRef = useRef(0);
+  const hiddenSinceRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    startedAtRef.current = performance.now();
+    hiddenMsRef.current = 0;
+    hiddenSinceRef.current = document.visibilityState === "hidden" ? startedAtRef.current : null;
+  }, [index]);
+
+  useEffect(() => {
+    function onVisibility() {
+      const now = performance.now();
+      if (document.visibilityState === "hidden") hiddenSinceRef.current ??= now;
+      else if (hiddenSinceRef.current !== null) {
+        hiddenMsRef.current += now - hiddenSinceRef.current;
+        hiddenSinceRef.current = null;
+      }
+    }
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
+  return useCallback(() => {
+    const now = performance.now();
+    const hidden = hiddenMsRef.current + (hiddenSinceRef.current === null ? 0 : now - hiddenSinceRef.current);
+    return Math.min(MAX_ANSWER_MS, Math.max(0, Math.round(now - startedAtRef.current - hidden)));
+  }, []);
 }
 
 function isTypingTarget(target: EventTarget | null): boolean {
@@ -32,12 +77,17 @@ function isTypingTarget(target: EventTarget | null): boolean {
   );
 }
 
-export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props) {
+export function Quiz({ deckId, deck, cards, isRetry, onFinish, onExit, onAnswer }: Props) {
   const { t } = useI18n();
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState<AnswerRecord[]>([]);
+  /** The answer chosen on this card but not checked yet. */
+  const [selected, setSelected] = useState<string | null>(null);
+  /** Every answer chosen on this card, in order (changing your mind is part of learning). */
+  const picksRef = useRef<string[]>([]);
   /** The last card answered, so a fast double tap can't answer (or score) a card twice. */
   const answeredRef = useRef(-1);
+  const elapsed = useCardClock(index);
 
   const card = cards[index];
   const current = results[index];
@@ -46,19 +96,42 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
   const score = results.filter((r) => r.correct).length;
   const points = results.reduce((sum, r) => sum + r.points, 0);
 
-  const pick = useCallback(
+  /** Chooses an answer; nothing is final until it's checked. */
+  const choose = useCallback(
     (option: string) => {
       if (results.length > index || answeredRef.current >= index) return; // already answered
-      answeredRef.current = index;
-      const correct = option === card.answer;
-      onAnswer?.(correct);
-      setResults((prev) => {
-        const earned = pointsForAnswer(correct, prev.at(-1)?.streak ?? 0);
-        return [...prev, { card, picked: option, correct, ...earned }];
-      });
+      if (picksRef.current.at(-1) !== option) picksRef.current.push(option);
+      setSelected(option);
     },
-    [card, index, results.length, onAnswer],
+    [index, results.length],
   );
+
+  /** Checks the chosen answer: the card flips and its points are saved. */
+  const submit = useCallback(() => {
+    if (selected === null || results.length > index || answeredRef.current >= index) return;
+    answeredRef.current = index;
+    const option = selected;
+    const correct = option === card.answer;
+    const original = deckCard(deck, card);
+    const position = (o: string) => Math.max(0, original.options.indexOf(o));
+    const detail: AttemptDetail = {
+      deckKey: deckId,
+      deckTitle: deck.title.slice(0, MAX_DECK_TITLE_CHARS),
+      cardKey: cardKey(card),
+      question: shortQuestion(card.question),
+      difficulty: cardDifficulty(original, deck),
+      ms: elapsed(),
+      picks: capPicks(picksRef.current.map(position)),
+      answerIndex: position(card.answer),
+      optionCount: original.options.length,
+      retry: isRetry,
+    };
+    onAnswer?.(correct, detail);
+    setResults((prev) => {
+      const earned = pointsForAnswer(correct, prev.at(-1)?.streak ?? 0);
+      return [...prev, { card, picked: option, correct, ...earned, detail }];
+    });
+  }, [card, deck, deckId, elapsed, index, isRetry, onAnswer, results.length, selected]);
 
   /** Set once the round is handed over, so a double tap on the last card can't finish it twice. */
   const finishedRef = useRef(false);
@@ -73,15 +146,21 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
     }
     // Only move on from *this* card: a second tap before the screen updates
     // must not skip the next card (which would leave the quiz stuck).
+    picksRef.current = [];
+    setSelected(null);
     setIndex((i) => (i === index ? i + 1 : i));
   }, [index, isLast, onFinish, results]);
 
-  // Keyboard: 1–9 (or A–J) picks an option; → / Enter / Space continues.
+  // Keyboard: 1–9 (or A–J) chooses an option, Enter / Space checks it; → / Enter / Space continues.
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.metaKey || e.ctrlKey || e.altKey || isTypingTarget(e.target)) return;
       // Character shortcuts are active only while the question itself has focus.
       if (!(e.target instanceof HTMLElement) || !e.target.closest(".question-sheet")) return;
+
+      // When a button has focus, let Enter/Space activate it natively.
+      const onButton = e.target instanceof HTMLButtonElement;
+      const confirmKey = !onButton && (e.key === "Enter" || e.key === " ");
 
       if (picked === null) {
         const key = e.key.toLowerCase();
@@ -90,21 +169,22 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
         else if (/^[a-j]$/.test(key)) i = key.charCodeAt(0) - 97;
         if (i >= 0 && i < card.options.length) {
           e.preventDefault();
-          pick(card.options[i]);
+          choose(card.options[i]);
+        } else if (confirmKey && selected !== null) {
+          e.preventDefault();
+          submit();
         }
         return;
       }
 
-      // When a button has focus, let Enter/Space activate it natively.
-      const onButton = e.target instanceof HTMLButtonElement;
-      if (e.key === "ArrowRight" || (!onButton && (e.key === "Enter" || e.key === " "))) {
+      if (e.key === "ArrowRight" || confirmKey) {
         e.preventDefault();
         next();
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [card, picked, pick, next]);
+  }, [card, picked, selected, choose, submit, next]);
 
   const progress = ((index + (picked ? 1 : 0)) / cards.length) * 100;
 
@@ -147,9 +227,11 @@ export function Quiz({ deck, cards, isRetry, onFinish, onExit, onAnswer }: Props
         card={card}
         lang={deck.language}
         picked={picked}
+        selected={selected}
         earned={current ? { points: current.points, streak: current.streak, bonus: current.bonus } : null}
         isLast={isLast}
-        onPick={pick}
+        onChoose={choose}
+        onSubmit={submit}
         onNext={next}
       />
     </div>

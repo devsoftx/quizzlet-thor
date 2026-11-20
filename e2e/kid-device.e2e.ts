@@ -174,6 +174,7 @@ test.describe("kid's own device", () => {
 
     await page.getByRole("button", { name: /^Next question/ }).click();
     await page.locator(".options").getByRole("button", { name: "Mars", exact: true }).click();
+    await page.getByRole("button", { name: "Check answer" }).click();
     await expect(page.getByText(/This device is no longer linked\. Ask an adult for a new link\./)).toBeVisible();
     await expect(page.getByRole("heading", { name: "Ready to explore?" })).toBeVisible();
     expect(errors).toEqual([]);

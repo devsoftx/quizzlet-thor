@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildSession, parseDeck, titleFromFileName } from "./deck";
+import { buildSession, cardDifficulty, parseDeck, titleFromFileName } from "./deck";
 import { deckMessagesEs } from "./deck-messages";
 import { deckProblems, filterDecks, isVisible, loadAllBundledDecks, loadBundledDecks, type DeckEntry } from "./library";
 import template from "../public/deck-template.yaml?raw";
@@ -13,6 +13,8 @@ describe("deck template", () => {
     expect(result.deck.enabled).toBe(true);
     expect(result.deck.cards.some((c) => c.explanation)).toBe(true);
     expect(result.deck.cards.some((c) => c.shuffleOptions === false)).toBe(true);
+    expect(result.deck.difficulty).toBe("medium");
+    expect(result.deck.cards.some((c) => c.difficulty === "easy")).toBe(true);
   });
 
   it("has a Spanish version that is the same kind of deck, in Spanish", () => {
@@ -26,6 +28,7 @@ describe("deck template", () => {
     expect(spanish.deck.cards.map((c) => c.options.length)).toEqual(english.deck.cards.map((c) => c.options.length));
     expect(spanish.deck.cards.some((c) => c.explanation)).toBe(true);
     expect(spanish.deck.cards.some((c) => c.shuffleOptions === false)).toBe(true);
+    expect(spanish.deck.cards.map((c) => c.difficulty)).toEqual(english.deck.cards.map((c) => c.difficulty));
   });
 });
 
@@ -317,5 +320,44 @@ describe("deck problems in Spanish", () => {
     // Nothing wrong here, so the server checked something else: keep its words.
     const fine = "enabled: true\ncards:\n  - question: Q\n    options: [A, B]\n    answer: A\n";
     expect(deckProblems("x.yaml", fine, ["Too big."], deckMessagesEs)).toEqual(["Too big."]);
+  });
+});
+
+describe("difficulty", () => {
+  const deck = (head: string, card = "") =>
+    parseDeck(`${head}\nenabled: true\ncards:\n  - question: Q1?\n    options: [A, B]\n    answer: A\n${card}  - question: Q2?\n    options: [A, B]\n    answer: B\n`, "x");
+
+  it("takes a card's own level, else the deck's, else medium", () => {
+    const own = deck("difficulty: hard", "    difficulty: Easy\n");
+    expect(own.ok).toBe(true);
+    if (!own.ok) return;
+    expect(own.deck.difficulty).toBe("hard");
+    expect(own.deck.cards.map((c) => cardDifficulty(c, own.deck))).toEqual(["easy", "hard"]);
+
+    const none = deck("title: Plain");
+    if (!none.ok) throw new Error("expected a deck");
+    expect(none.deck).not.toHaveProperty("difficulty");
+    expect(none.deck.cards[0]).not.toHaveProperty("difficulty");
+    expect(none.deck.cards.map((c) => cardDifficulty(c, none.deck))).toEqual(["medium", "medium"]);
+  });
+
+  it("rejects a level that isn't easy, medium or hard, on the deck or a card", () => {
+    expect(deck("difficulty: tricky")).toMatchObject({ ok: false, errors: ['"difficulty" must be easy, medium or hard (got "tricky").'] });
+    expect(deck("title: T", "    difficulty: 3\n")).toMatchObject({
+      ok: false,
+      errors: ['Card 1 ("Q1?"): "difficulty" must be easy, medium or hard (got "3").'],
+    });
+    expect(parseDeck("difficulty: dura\nenabled: true\ncards:\n  - question: Q\n    options: [A, B]\n    answer: A\n", "x", deckMessagesEs)).toMatchObject({
+      ok: false,
+      errors: ['"difficulty" debe ser easy, medium o hard (se encontró "dura").'],
+    });
+  });
+
+  it("labels every card of the bundled decks", () => {
+    for (const entry of loadBundledDecks()) {
+      if (!entry.ok) continue;
+      const unlabeled = entry.deck.cards.filter((c) => !c.difficulty && !entry.deck.difficulty).map((c) => c.question.slice(0, 40));
+      expect(unlabeled, entry.fileName).toEqual([]);
+    }
   });
 });

@@ -12,50 +12,60 @@ cards:
   - question: Which fatal disease, also called hydrophobia, is spread by animal bites and causes frothing at the mouth?
     options: [ Malaria, Rabies, Tetanus, Measles ]
     answer: Rabies
+    difficulty: easy
 
   - question: Which dinosaur was the largest two-legged predator in North America during the Late Cretaceous period?
     options: [ Tyrannosaurus rex, Velociraptor, Stegosaurus, Triceratops ]
     answer: Tyrannosaurus rex
     explanation: Stegosaurus and Triceratops were plant-eaters.
+    difficulty: easy
 
   - question: Which organ of the circulatory system pumps blood throughout the body?
     options: [ Lungs, Liver, Kidneys, Heart ]
     answer: Heart
+    difficulty: easy
 
   - question: Salmonella and E. coli are examples of which one-celled organisms?
     options: [ Viruses, Fungi, Bacteria, Algae ]
     answer: Bacteria
     explanation: Viruses are not made of cells at all.
+    difficulty: medium
 
   - question: Which organ of the digestive system connects the stomach to the colon?
     options: [ Esophagus, Small intestine, Liver, Appendix ]
     answer: Small intestine
     explanation: The esophagus connects your mouth to your stomach.
+    difficulty: hard
 
   - question: What are mammals that carry their young in pouches called?
     options: [ Marsupials, Reptiles, Amphibians, Rodents ]
     answer: Marsupials
     explanation: Kangaroos, koalas and opossums are marsupials.
+    difficulty: easy
 
   - question: How many bones are in the adult human skeleton?
     options: [ "106", "150", "206", "306" ]
     answer: "206"
     explanation: Babies are born with around 300 bones; many fuse together as they grow.
     shuffleOptions: false
+    difficulty: medium
 
   - question: The Jurassic period, when dinosaurs ruled, is the middle part of which era?
     options: [ Paleozoic Era, Cenozoic Era, Mesozoic Era, Precambrian ]
     answer: Mesozoic Era
     explanation: "The Mesozoic has three periods: Triassic, Jurassic and Cretaceous."
+    difficulty: medium
 
   - question: What is the largest planet in the Solar System?
     options: [ Saturn, Jupiter, Neptune, Earth ]
     answer: Jupiter
+    difficulty: easy
 
   - question: Which moon of Jupiter is considered a candidate for having life beyond Earth?
     options: [ Europa, Io, Phobos, Titan ]
     answer: Europa
     explanation: Io is Jupiter's volcanic moon. Phobos orbits Mars and Titan orbits Saturn.
+    difficulty: medium
 
   - question: About how often does Halley's Comet come back into view from Earth?
     options:
@@ -66,6 +76,7 @@ cards:
     answer: About every 75 years
     explanation: It was last seen in 1986 and is expected back in 2061.
     shuffleOptions: false
+    difficulty: hard
 
   - question: About how fast does light travel in a vacuum?
     options:
@@ -76,67 +87,82 @@ cards:
     answer: About 300,000 km per second
     explanation: Exactly 299,792,458 meters per second. (The study guide prints 299,492,458 — that's a typo.) Sunlight takes about 8 minutes to reach Earth.
     shuffleOptions: false
+    difficulty: medium
 
   - question: What is the powerful explosion of a star called?
     options: [ Black hole, Supernova, Nebula, Solar eclipse ]
     answer: Supernova
     explanation: Some supernovas happen when a white dwarf star gains too much material and runaway fusion blows it apart.
+    difficulty: easy
 
   - question: Which metal's high malleability and resistance to corrosion make it prized for coins and jewelry?
     options: [ Gold, Iron, Copper, Aluminum ]
     answer: Gold
     explanation: Malleable means it can be hammered into thin sheets without breaking.
+    difficulty: medium
 
   - question: Which property, symbolized by the Greek letter rho (ρ), is the ratio of mass to volume?
     options: [ Velocity, Pressure, Temperature, Density ]
     answer: Density
+    difficulty: medium
 
   - question: Which laboratory device uses natural gas to create a controlled flame?
     options: [ Beaker, Test tube, Bunsen burner, Microscope ]
     answer: Bunsen burner
+    difficulty: medium
 
   - question: Who designed the first periodic table of the elements?
     options: [ Marie Curie, Dmitri Mendeleev, John Dalton, Antoine Lavoisier ]
     answer: Dmitri Mendeleev
+    difficulty: medium
 
   - question: Fluorine, chlorine, bromine and iodine belong to which group of the periodic table?
     options: [ Halogens, Noble gases, Alkali metals, Metalloids ]
     answer: Halogens
+    difficulty: medium
 
   - question: Which element has atomic number 6 and the symbol C, and forms the basis of organic chemistry?
     options: [ Calcium, Chlorine, Copper, Carbon ]
     answer: Carbon
     explanation: Calcium is Ca, chlorine is Cl and copper is Cu.
+    difficulty: easy
 
   - question: What are the smallest square elements of a raster computer image called?
     options: [ Bytes, Vectors, Pixels, Fonts ]
     answer: Pixels
     explanation: '"Pixel" is short for "picture element."'
+    difficulty: easy
 
   - question: Which field of computer science lets machines perform tasks associated with human intelligence?
     options: [ Cybersecurity, Artificial intelligence, Databases, Networking ]
     answer: Artificial intelligence
+    difficulty: easy
 
   - question: Which tall clouds can cause severe thunderstorms and tornadoes?
     options: [ Cumulonimbus, Cirrus, Stratus, Altocumulus ]
     answer: Cumulonimbus
+    difficulty: hard
 
   - question: What fast-moving air currents do airplanes ride to shorten long flights?
     options: [ Trade winds, Monsoons, Sea breezes, Jet streams ]
     answer: Jet streams
+    difficulty: medium
 
   - question: Which form of carbon is the hardest naturally occurring mineral?
     options: [ Graphite, Quartz, Diamond, Coal ]
     answer: Diamond
     explanation: Graphite, the "lead" in pencils, is also pure carbon but very soft. Different forms of one element are called allotropes.
+    difficulty: easy
 
   - question: What are giant ocean waves caused by water displaced in an earthquake or other seismic event?
     options: [ Hurricanes, Tsunamis, Tides, Rip currents ]
     answer: Tsunamis
+    difficulty: medium
 
   - question: What is a chain or cluster of islands, such as Hawaii or the Galápagos, called?
     options: [ Archipelago, Peninsula, Isthmus, Delta ]
     answer: Archipelago
+    difficulty: medium
 
   - question: What usually causes earthquakes?
     options:
@@ -145,15 +171,18 @@ cards:
       - Ocean tides
       - Movement of tectonic plates
     answer: Movement of tectonic plates
+    difficulty: easy
 
   - question: Which solid form of precipitation falls from the sky as soft crystals of ice?
     options: [ Hail, Sleet, Snow, Dew ]
     answer: Snow
     explanation: Hail falls as hard balls of ice, and dew isn't precipitation at all.
+    difficulty: easy
 
   - question: What are openings in a planet's surface that let ash and lava escape called?
     options: [ Geysers, Volcanoes, Canyons, Glaciers ]
     answer: Volcanoes
+    difficulty: medium
 
   - question: Why are most plant leaves flat?
     options:
@@ -163,39 +192,48 @@ cards:
       - To help the plant stay warm
     answer: To absorb as much sunlight as possible
     explanation: Leaves use sunlight to make food through photosynthesis.
+    difficulty: medium
 
   - question: What is a step-by-step procedure that is guaranteed to solve a problem called?
     options: [ Hypothesis, Equation, Theorem, Algorithm ]
     answer: Algorithm
+    difficulty: medium
 
   - question: What do you call a triangle whose three sides all have different lengths?
     options: [ Isosceles, Equilateral, Scalene, Rhombus ]
     answer: Scalene
     explanation: "Equilateral: all three sides equal. Isosceles: two sides equal. A rhombus has four sides."
+    difficulty: medium
 
   - question: Pi (π) is approximately equal to which number?
     options: [ "1.41", "2.72", "3.14", "9.81" ]
     answer: "3.14"
     explanation: "Pi is a transcendental number: its digits go on forever without a repeating pattern."
     shuffleOptions: false
+    difficulty: easy
 
   - question: Which formula gives the area of a circle with radius r?
     options: [ π × r², 2 × π × r, π × d, 4 × r ]
     answer: π × r²
     explanation: 2 × π × r (which equals π × d) gives the circumference — the distance around the circle.
+    difficulty: medium
 
   - question: What is the process by which the unstable nucleus of an atom releases energy?
     options: [ Photosynthesis, Evaporation, Magnetism, Radioactivity ]
     answer: Radioactivity
+    difficulty: medium
 
   - question: Which force resists motion between two surfaces that are touching?
     options: [ Gravity, Magnetism, Friction, Buoyancy ]
     answer: Friction
+    difficulty: easy
 
   - question: What is any object that produces a magnetic field called?
     options: [ Battery, Magnet, Conductor, Insulator ]
     answer: Magnet
+    difficulty: medium
 
   - question: What is the rate of change of an object's velocity called?
     options: [ Acceleration, Speed, Momentum, Mass ]
     answer: Acceleration
+    difficulty: medium
