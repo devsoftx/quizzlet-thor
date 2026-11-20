@@ -42,6 +42,15 @@ so an English question on a Spanish screen is still read in English. A deck
 whose language isn't the app's shows it in the deck list, and once decks come
 in more than one language the list can be filtered by it.
 
+**Every deck in `decks/` has a Spanish translation** in [`decks/es/`](decks/es),
+under the same file name. When the app is in Spanish it shows each deck's
+Spanish version; in English, the original. Switching the language switches the
+decks too (a round already started keeps its language). A unit test checks that
+each translation matches its original card for card: same number of cards and
+options, and the right answer in the same place, so a translation can't change
+which option is correct. Decks a parent uploads or a guest imports are shown as
+written; to offer one in Spanish, add a Spanish copy with `language: es`.
+
 To change or add wording, edit [`src/i18n/en.ts`](src/i18n/en.ts) and
 [`src/i18n/es.ts`](src/i18n/es.ts): TypeScript fails the build if the Spanish
 catalog misses a message or takes different values. A new message from the
@@ -210,7 +219,10 @@ commented deck that shows every option.
 There are two ways to add a deck:
 
 1. **Drop a `.yaml` / `.yml` file into the [`decks/`](decks) folder.** It shows
-   up in the app right away while `npm run dev` is running.
+   up in the app right away while `npm run dev` is running. Add its Spanish
+   translation as `decks/es/<same file name>` (with `language: es`, the cards in
+   the same order and each answer in the same position); the tests fail until
+   every deck has one.
 2. **Import it in the browser** with the *Import YAML…* button (or drag the file
    onto the page). Imported decks are saved in your browser's local storage.
 

@@ -1,0 +1,140 @@
+# Preguntas de práctica del Science Bee 2026, para 2.º a 4.º grado — preguntas 31 a 60 de 91.
+# Source: docs/2026_Science_Bee_Practice_Questions_Grades_2_to_4.docx
+# El texto de las preguntas proviene del documento; las opciones incorrectas se agregaron para la opción múltiple.
+# Traducción al español de decks/science-bee-practice-2.yaml.
+
+title: Science Bee Práctica · Parte 2
+description: "Preguntas de práctica para 2.º a 4.º grado, 31–60 (de 91). Para leer en voz alta: la pista más fácil va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Este órgano tiene en su interior cuatro espacios llamados cavidades. Unas válvulas hacen que la sangre se mueva en la dirección correcta, y sus fuertes músculos se contraen una y otra vez. Nombra este órgano que late en tu pecho y bombea la sangre por todo tu cuerpo.
+    options: [ Pulmones, Corazón, Cerebro, Estómago ]
+    answer: Corazón
+
+  - question: El aire cálido y húmedo que sube ayuda a que crezcan estas tormentas. Sus nubes pueden traer lluvias fuertes y granizo, y algunas de las más fuertes pueden producir tornados. Nombra estas tormentas con relámpagos brillantes y fuertes truenos.
+    options: [ Tormentas eléctricas, Ventiscas, Tormentas de arena, Niebla ]
+    answer: Tormentas eléctricas
+
+  - question: Los elementos con propiedades parecidas aparecen juntos en las columnas de esta tabla. Sus casillas muestran los nombres, símbolos y números de sustancias como el oxígeno, el hierro y el oro. Nombra esta tabla que organiza todos los elementos químicos en filas y columnas.
+    options: [ Cuadro de Punnett, Red alimentaria, Tabla de multiplicar, Tabla periódica ]
+    answer: Tabla periódica
+
+  - question: Estas bacterias pueden vivir en las tortugas que se tienen como mascotas y en otros reptiles sin que los animales parezcan enfermos. También pueden llegar a los alimentos y causar cólicos estomacales y diarrea. Nombra estas bacterias que causan intoxicación alimentaria, a menudo relacionadas con huevos crudos y pollo mal cocido, cuyo nombre empieza con «sal».
+    options: [ E. coli, Streptococcus, Salmonella, Lactobacillus ]
+    answer: Salmonella
+
+  - question: Estas islas se formaron cuando una placa oceánica en movimiento pasó sobre un punto caliente. Están en el océano Pacífico e incluyen Maui, Oahu y la Isla Grande. Nombra esta cadena de islas que forma el estado número cincuenta de los Estados Unidos.
+    options:
+      - Islas Galápagos
+      - Islas de Hawái
+      - Islas Aleutianas
+      - Cayos de Florida
+    answer: Islas de Hawái
+
+  - question: Este científico dejó espacios vacíos para elementos que todavía no se habían descubierto. Predijo correctamente algunas de sus propiedades y ordenó los elementos conocidos según patrones en su comportamiento. Nombra a este científico ruso famoso por crear una de las primeras tablas periódicas, cuyo apellido empieza con M.
+    options: [ Dmitri Mendeleev, Marie Curie, Isaac Newton, Antoine Lavoisier ]
+    answer: Dmitri Mendeleev
+
+  - question: Unos pedacitos diminutos llamados plaquetas ayudan a este líquido a formar coágulos que detienen el sangrado. Sus glóbulos rojos transportan oxígeno, mientras que sus glóbulos blancos ayudan a combatir los gérmenes. Nombra este líquido rojo que tu corazón bombea por todo tu cuerpo.
+    options: [ Agua, Saliva, Sudor, Sangre ]
+    answer: Sangre
+
+  - question: Este proceso transporta el calor moviendo el material que lo lleva. En una olla con agua, el agua más caliente puede subir mientras el agua más fría baja para ocupar su lugar. Nombra esta transferencia de calor mediante el movimiento de líquidos o gases, que a menudo se ve como una corriente que sube y baja.
+    options: [ Conducción, Radiación, Convección, Evaporación ]
+    answer: Convección
+    explanation: La conducción transmite el calor por contacto; la radiación lo transmite a través del espacio, como la luz del Sol.
+
+  - question: La gravedad de su planeta estira y aprieta esta luna, lo que ayuda a calentar su interior. Su superficie helada y agrietada podría cubrir un océano profundo donde los científicos se preguntan si podría existir vida. Nombra esta luna helada de Júpiter cuyo nombre empieza con «Euro».
+    options: [ Ío, Europa, Ganimedes, Titán ]
+    answer: Europa
+
+  - question: Muchos tipos inofensivos de esta bacteria viven normalmente en nuestros intestinos. Algunos tipos dañinos pueden llegar a los alimentos o al agua, como la carne de res que no está bien cocida. Nombra estas bacterias cuyo nombre abreviado empieza con la letra E, seguida de «coli».
+    options: [ E. coli, Salmonella, Streptococcus, Listeria ]
+    answer: E. coli
+    explanation: Es la abreviatura de Escherichia coli.
+
+  - question: Mar adentro, estas olas pueden ser tan bajas que los barcos casi no las notan. Pueden volverse mucho más altas cerca de la costa después de que un terremoto mueve de repente el fondo del océano. Nombra estas poderosas olas del océano que pueden inundar una costa, cuyo nombre empieza con T.
+    options: [ Mareas, Tifones, Corrientes de resaca, Tsunamis ]
+    answer: Tsunamis
+
+  - question: Este científico descubrió que el uranio podía dejar una marca en una placa fotográfica cubierta, incluso en la oscuridad. Compartió un Premio Nobel con Marie y Pierre Curie, y una unidad para medir la radiactividad lleva su nombre. Nombra a este científico francés que descubrió la radiactividad natural, cuyo nombre de pila era Henri.
+    options: [ Marie Curie, Albert Einstein, Henri Becquerel, Louis Pasteur ]
+    answer: Henri Becquerel
+
+  - question: Las plantas con flores se extendieron durante este período de la historia de la Tierra. El tiranosaurio rex y el tricerátops vivieron cerca de su final, cuando un asteroide gigante chocó contra la Tierra. Nombra este último período de la era de los dinosaurios, que vino después del Jurásico.
+    options: [ Período Jurásico, Período Cretácico, Período Triásico, Edad de Hielo ]
+    answer: Período Cretácico
+
+  - question: Los ángulos interiores de esta figura plana suman 180 grados. Algunos ejemplos tienen tres lados iguales, mientras que otros tienen dos lados iguales o ninguno. Nombra esta figura con tres lados rectos y tres esquinas.
+    options: [ Triángulo, Cuadrado, Círculo, Pentágono ]
+    answer: Triángulo
+
+  - question: Este campo ayuda a los científicos a crear nuevos medicamentos y plásticos. Incluye el estudio de los combustibles, los azúcares y muchas moléculas que se encuentran en los seres vivos. Nombra esta rama de la química que estudia los compuestos del carbono y que a menudo se menciona junto con la palabra «inorgánica».
+    options: [ Química inorgánica, Física, Geología, Química orgánica ]
+    answer: Química orgánica
+
+  - question: Cada casilla de este diagrama muestra una posible combinación de genes de dos padres. Los científicos ponen las posibles versiones de los genes en su parte superior y en un costado para predecir las probabilidades de que los descendientes tengan ciertos rasgos. Nombra este esquema de genética con forma de cuadrado que lleva el nombre del científico Reginald Punnett.
+    options: [ Tabla periódica, Diagrama de Venn, Cuadro de Punnett, Red alimentaria ]
+    answer: Cuadro de Punnett
+
+  - question: Puedes dibujar esta figura manteniendo tenso un lazo de hilo alrededor de dos alfileres fijos. Los planetas siguen trayectorias con esta forma, y tiene un eje largo y un eje corto. Nombra esta curva ovalada que parece un círculo estirado.
+    options: [ Círculo, Elipse, Cuadrado, Espiral ]
+    answer: Elipse
+
+  - question: El aceite en las piezas móviles de las máquinas puede reducir esta fuerza. Ayuda a que los zapatos se agarren al piso y frena un libro que se desliza sobre una mesa. Nombra esta fuerza de roce que te calienta las manos cuando las frotas una contra la otra.
+    options: [ Fricción, Gravedad, Magnetismo, Flotabilidad ]
+    answer: Fricción
+
+  - question: Las crías de este grupo de animales nacen muy pequeñitas y necesitan mucho más tiempo para desarrollarse. Muchos de sus miembros viven en Australia, y sus crías toman leche mientras crecen pegadas a su madre. Nombra este grupo de mamíferos que a menudo llevan a sus crías en una bolsa, como los canguros y los koalas.
+    options: [ Reptiles, Roedores, Primates, Marsupiales ]
+    answer: Marsupiales
+
+  - question: Los átomos de este elemento pueden unirse en láminas, cadenas o formas cristalinas resistentes. El diamante y el grafito están hechos de él, y se encuentra en las moléculas de todos los seres vivos. Nombra este elemento de símbolo C, que también está en el dióxido de carbono.
+    options: [ Calcio, Cloro, Carbono, Cobre ]
+    answer: Carbono
+    explanation: El calcio es Ca, el cloro es Cl y el cobre es Cu.
+
+  - question: Un día en este planeta dura solo unas diez horas. Está formado principalmente por gas y tiene lunas llamadas Ío, Europa y Ganimedes. Nombra el planeta más grande de nuestro sistema solar, conocido por su Gran Mancha Roja.
+    options: [ Saturno, Júpiter, Neptuno, Marte ]
+    answer: Júpiter
+
+  - question: Una capa resbaladiza protege a este órgano del ácido que hay en su interior. Sus músculos revuelven la comida, y sus jugos digestivos ayudan a descomponerla en partes más pequeñas. Nombra este órgano de tu barriga que guarda la comida y la recibe después de que la tragas.
+    options: [ Estómago, Hígado, Pulmones, Riñones ]
+    answer: Estómago
+
+  - question: Esta propiedad ayuda a explicar por qué un cubo pequeño de metal puede tener más masa que una esponja grande. También ayuda a explicar por qué el aceite flota en el agua, y compara la masa con el espacio que ocupa algo. Nombra esta propiedad que se obtiene al dividir la masa entre el volumen.
+    options: [ Volumen, Peso, Temperatura, Densidad ]
+    answer: Densidad
+
+  - question: Los científicos usan instrumentos llamados sismómetros para registrar estos fenómenos. A menudo ocurren cuando las rocas se deslizan de repente a lo largo de una falla y envían ondas a través de la Tierra. Nombra estos fenómenos que hacen temblar el suelo y pueden derribar edificios.
+    options: [ Erupciones volcánicas, Deslizamientos de tierra, Terremotos, Tornados ]
+    answer: Terremotos
+
+  - question: El nombre de este animal significa «dedo alado». Fue un reptil prehistórico con mandíbulas con dientes y alas sostenidas por dedos muy largos. Nombra este antiguo reptil volador, cuyo nombre se usa a menudo de forma imprecisa para referirse a los pterosaurios y empieza con el sonido «te-ro».
+    options: [ Arqueoptérix, Pterodáctilo, Plesiosaurio, Velocirraptor ]
+    answer: Pterodáctilo
+
+  - question: Los programadores de computadoras pueden representar uno de estos con un diagrama de flujo. Da pasos claros en un orden y puede indicarte que repitas un paso o que tomes una decisión. Nombra este conjunto de instrucciones paso a paso para resolver un problema.
+    options: [ Algoritmo, Diagrama de flujo, Hipótesis, Hoja de cálculo ]
+    answer: Algoritmo
+    explanation: Un diagrama de flujo es una forma de dibujar un algoritmo.
+
+  - question: A esta velocidad, algo podría dar más de siete vueltas a la Tierra en un segundo. En el espacio vacío, es de unos 300,000 kilómetros por segundo, y la luz del Sol tarda unos ocho minutos en llegar a la Tierra. Nombra esta velocidad que describe qué tan rápido viaja la luz.
+    options: [ Velocidad del sonido, Velocidad de escape, Velocidad del viento, Velocidad de la luz ]
+    answer: Velocidad de la luz
+
+  - question: Los científicos usan la vida media para describir qué tan rápido ocurre este proceso en una muestra grande. Durante este proceso, los átomos inestables emiten partículas o energía, y el uranio es uno de los materiales en los que ocurre. Nombra este proceso en el que los átomos emiten radiación, también llamado desintegración radiactiva.
+    options: [ Fotosíntesis, Magnetismo, Radiactividad, Evaporación ]
+    answer: Radiactividad
+
+  - question: Un virus causa esta enfermedad al atacar el cerebro y los nervios. Los mamíferos infectados, como los murciélagos y los mapaches, pueden transmitirla con su saliva, y los animales enfermos pueden babear mucho. Nombra esta enfermedad que las personas pueden contraer por la mordedura de un animal infectado, y de la que a veces se dice que hace que el animal eche espuma por la boca.
+    options: [ Malaria, Rabia, Varicela, Gripe ]
+    answer: Rabia
+
+  - question: Algunas de estas formaciones tienen laderas anchas y suaves, mientras que otras forman conos empinados. Pueden crecer a medida que se acumulan capas de roca fundida y ceniza alrededor de una abertura en la corteza terrestre. Nombra estas formaciones, a menudo montañas, que arrojan lava y ceniza.
+    options: [ Volcanes, Glaciares, Cañones, Géiseres ]
+    answer: Volcanes

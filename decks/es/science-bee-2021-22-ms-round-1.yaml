@@ -1,0 +1,167 @@
+# Science Bee 2021–22 (secundaria) · Ronda 1 — 32 preguntas.
+# Source: docs/2021-2022-MS-Science-Bee-Round-1.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se agregaron para la opción múltiple.
+# Traducción al español de decks/science-bee-2021-22-ms-round-1.yaml.
+
+title: Science Bee 2021–22 (secundaria) · Ronda 1
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: No es Acuario, pero una lluvia de meteoros que lleva el nombre de esta constelación es producida por el cometa Halley. Una figura de esta constelación está formada por las estrellas Alnitak, Alnilam y Mintaka, y las estrellas más brillantes de esta constelación son Rigel y Betelgeuse. Para ganar el punto, ¿un cazador mitológico da nombre a qué constelación con un famoso cinturón?
+    options: [ Orión, Perseo, Tauro, Géminis ]
+    answer: Orión
+
+  - question: Esta molécula se copia rápidamente en la técnica de laboratorio PCR, y la enzima helicasa separa esta molécula antes de que una polimerasa la replique. Esta molécula contiene adenina, citosina, guanina y timina. Nombra esta estructura de doble hélice que contiene la información genética.
+    options: [ ARN, ATP, Proteína, ADN ]
+    answer: ADN
+    explanation: Son las siglas de ácido desoxirribonucleico.
+
+  - question: El efecto de calentamiento de este fenómeno natural ha aumentado la biodiversidad de zonas como Nantucket. La corriente de las Antillas se une a este fenómeno en la intersección del estrecho de Florida. Nombra esta corriente oceánica cálida que se origina en el sur de EE. UU. y avanza a lo largo de la costa este a través del Atlántico Norte.
+    options:
+      - Corriente del Labrador
+      - Corriente de California
+      - Corriente del Golfo
+      - Corriente de Kuroshio
+    answer: Corriente del Golfo
+
+  - question: Se planteó la hipótesis de que estos animales eran ejemplares juveniles del Torosaurus. Las dos especies de estos animales eran horridus y prorsus, y al principio se pensó que estos animales eran un tipo extinto de bisonte. Para ganar el punto, ¿el Tyrannosaurus rex probablemente era el principal depredador de qué dinosaurios, que quizá se defendían con sus tres cuernos?
+    options: [ Estegosaurio, Tricerátops, Anquilosaurio, Parasaurolofo ]
+    answer: Tricerátops
+
+  - question: Dos de estas partículas se comportan como un bosón en un par de Cooper, y estas partículas dan nombre al sabor de neutrino más estable. Estas partículas, que son leptones estables, tienen antipartículas llamadas positrones, y estas partículas son los cuantos y portadores de la fuerza electromagnética. Nombra estas partículas con carga negativa que orbitan el núcleo de un átomo.
+    options: [ Electrones, Protones, Neutrones, Quarks ]
+    answer: Electrones
+
+  - question: Esta magnitud es proporcional a la temperatura, pero inversamente proporcional a la presión, según la ley combinada de los gases. Esta magnitud tiene un valor de 22.4 para un mol de un gas ideal. Nombra esta magnitud que describe el espacio que ocupa una sustancia y que suele expresarse en litros.
+    options: [ Presión, Densidad, Masa, Volumen ]
+    answer: Volumen
+
+  - question: Los niveles elevados de ácidos grasos libres son un factor de riesgo de la resistencia a esta hormona. El glucagón se opone al efecto de esta hormona, y esta hormona es liberada por las células beta de los islotes de Langerhans del páncreas. Nombra esta hormona que participa en la regulación del azúcar en la sangre y que suelen usar las personas con diabetes tipo 1.
+    options: [ Glucagón, Cortisol, Insulina, Adrenalina ]
+    answer: Insulina
+
+  - question: AFFF y CAFS (siglas en inglés) son compuestos que se usan para esta tarea y que suelen presentarse en forma de espuma. Los dispositivos portátiles que se usan para esta tarea suelen contener CO2 comprimido y polvo seco ABC. Para ganar el punto, ¿en qué tarea se usan extintores y agua, y suelen realizarla los equipos de emergencia con una manguera?
+    options: [ Búsqueda y rescate, Combate de incendios, Control de inundaciones, Primeros auxilios ]
+    answer: Combate de incendios
+    explanation: "También se acepta: apagar o extinguir incendios."
+
+  - question: Estos dispositivos pueden incluir un componente que bloquea la luz llamado coronógrafo, y unos manifestantes en Mauna Kea intentan impedir que se construya uno de estos dispositivos «de Treinta Metros». Para ganar el punto, ¿el administrador de la NASA James Webb da nombre a qué tipo de dispositivos, el más famoso de los cuales lleva el nombre de Edwin Hubble?
+    options: [ Telescopios, Microscopios, Sondas espaciales, Sismógrafos ]
+    answer: Telescopios
+
+  - question: Este desierto es el supuesto hogar de un «gusano de la muerte», que podría ser la boa de arena tártara. Este desierto se formó por la sombra orográfica de la meseta del Tíbet, y es el hábitat nativo del camello bactriano. Para ganar el punto, ¿China construyó una «Muralla Verde» para contener qué gran desierto asiático que cubre el sur de Mongolia?
+    options: [ Desierto del Sahara, Desierto de Thar, Desierto de Arabia, Desierto de Gobi ]
+    answer: Desierto de Gobi
+
+  - question: Un procedimiento conocido como CABG (por sus siglas en inglés) se usa para eliminar obstrucciones en estas estructuras. La mayoría de estas estructuras transportan sangre oxigenada, y la más grande de estas estructuras es la aorta. Para ganar el punto, ¿el pulso de una persona se puede detectar al palpar qué vasos sanguíneos que llevan la sangre desde el corazón?
+    options: [ Venas, Capilares, Arterias, Vasos linfáticos ]
+    answer: Arterias
+
+  - question: Una clase específica de estos compuestos lleva el nombre de Gilbert Lewis. La definición de Bronsted-Lowry de estos compuestos se basa en la donación de iones de hidrógeno en solución. La forma acética de estos compuestos se encuentra en el vinagre. Nombra estos compuestos que tienen un pH menor que 7, en contraste con las bases.
+    options: [ Sales, Ácidos, Álcalis, Alcoholes ]
+    answer: Ácidos
+
+  - question: El proceso Bessemer elimina las impurezas de la forma de este elemento llamada «arrabio». Junto con el cobalto y el níquel, este elemento es ferromagnético por naturaleza, y este elemento se oxida para formar un compuesto rojo llamado herrumbre. Nombra este metal de transición con símbolo Fe que forma una aleación con el carbono para producir acero.
+    options: [ Hierro, Cobre, Níquel, Aluminio ]
+    answer: Hierro
+
+  - question: El genoma de este organismo se secuenció por completo en 2000, y la mutación de ojos blancos de este organismo se estudia a menudo en las clases de introducción a la biología. Thomas Hunt Morgan usó este organismo para estudiar la herencia y los rasgos ligados al sexo. Nombra este insecto común y organismo modelo.
+    options: [ Mosca doméstica, Abeja melífera, Mosquito, Mosca de la fruta ]
+    answer: Mosca de la fruta
+    explanation: "Nombre científico: Drosophila melanogaster."
+
+  - question: La versión fuerte de este concepto se refuta con el argumento de la habitación china. Una prueba para este concepto, que evalúa si es imposible distinguirlo de una conversación humana, lleva el nombre de Alan Turing. Nombra este concepto que se refiere a la capacidad de una computadora de pensar como un cerebro humano.
+    options:
+      - Realidad virtual
+      - Computación cuántica
+      - Inteligencia artificial
+      - Computación en la nube
+    answer: Inteligencia artificial
+
+  - question: El uso de este material debe reducirse a la mitad para 2030 para cumplir los criterios del Acuerdo de París. Satélites como el Sentinel-5P vigilan las emisiones de dióxido de azufre de este material, y entre las variedades de este material están el lignito y la antracita. Nombra esta fuente de combustible compuesta principalmente de carbono sólido.
+    options: [ Petróleo, Carbón, Gas natural, Uranio ]
+    answer: Carbón
+
+  - question: La desensibilización y reprocesamiento por movimientos oculares es una terapia desarrollada para este trastorno, que antes se conocía como «neurosis de guerra». Las escenas retrospectivas (flashbacks) y las pesadillas recurrentes son síntomas característicos de este trastorno. Nombra este trastorno psicológico causado por vivir sucesos terribles, que se asocia comúnmente con los soldados.
+    options: [ TEPT, TOC, TDAH, Trastorno bipolar ]
+    answer: TEPT
+    explanation: Son las siglas de trastorno de estrés postraumático.
+
+  - question: Los tipos primarios de estos compuestos se oxidan a aldehídos y ácidos carboxílicos, mientras que los tipos secundarios se oxidan a cetonas. Estos compuestos se caracterizan por la presencia de un grupo hidroxilo. Para ganar el punto, ¿el metanol y el etanol son los miembros más simples de qué clase de compuestos presentes en la cerveza y los licores?
+    options: [ Aldehídos, Cetonas, Éteres, Alcoholes ]
+    answer: Alcoholes
+
+  - question: Estas células están recubiertas por una vaina de mielina, que les permite transmitir rápidamente potenciales de acción. Estas células se dividen en tipos «sensoriales» y «motores», y están separadas entre sí por sinapsis. Nombra estas células nerviosas que transmiten señales, las unidades básicas del sistema nervioso.
+    options: [ Células gliales, Células musculares, Neuronas, Células epiteliales ]
+    answer: Neuronas
+    explanation: "También se acepta: células nerviosas."
+
+  - question: El tipo de colapso del núcleo de estos eventos ocurre cuando las estrellas acumulan núcleos de hierro extremadamente masivos. Se pueden ver reacciones térmicas descontroladas en la forma tipo 1a de estos eventos, que ocurre cuando una enana blanca supera el límite de Chandrasekhar. Nombra estas explosiones estelares extraordinariamente grandes.
+    options:
+      - Erupciones solares
+      - Supernovas
+      - Eyecciones de masa coronal
+      - Nebulosas planetarias
+    answer: Supernovas
+
+  - question: Estas expresiones se clasifican como analíticas porque son una serie de potencias finita. El teorema fundamental del álgebra establece que cada una de estas expresiones de grado n con coeficientes complejos tiene n raíces complejas. Nombra estas expresiones que contienen coeficientes y variables, como x al cuadrado menos uno.
+    options:
+      - Polinomios
+      - Logaritmos
+      - Funciones exponenciales
+      - Funciones trigonométricas
+    answer: Polinomios
+
+  - question: Esta entidad «flota» sobre una capa inferior cuando está sujeta a la isostasia. Los elementos más abundantes en peso de esta capa son el oxígeno y el silicio. El límite entre esta capa de la Tierra y el manto se conoce como discontinuidad de Moho. Nombra esta capa más externa de la Tierra.
+    options: [ Manto, Núcleo externo, Núcleo interno, Corteza ]
+    answer: Corteza
+
+  - question: Un artículo de este científico propuso un nuevo cálculo del desplazamiento cuadrático medio de las partículas. Ese artículo sobre el movimiento browniano y otro sobre la equivalencia entre masa y energía fueron la mitad del «Annus Mirabilis» de este hombre en 1905. Nombra a este científico que, ese mismo año, publicó explicaciones del efecto fotoeléctrico y de la relatividad especial.
+    options: [ Max Planck, Niels Bohr, Albert Einstein, Ernest Rutherford ]
+    answer: Albert Einstein
+
+  - question: A diferencia de la suma, esta operación no es conmutativa para las matrices en general. El uso de esta operación numerosas veces sobre un mismo número se llama potenciación. Para ganar el punto, ¿qué operación, que a menudo se considera una forma de suma repetida, da 6 cuando se aplica a 2 y 3?
+    options: [ Suma, Multiplicación, División, Potenciación ]
+    answer: Multiplicación
+
+  - question: La grasa se almacena en la capa subcutánea de este órgano que forma el sistema tegumentario. Unas glándulas exocrinas secretan una sustancia aceitosa llamada sebo para lubricar este órgano, que es el más grande del cuerpo humano. Para ganar el punto, ¿la dermis y la epidermis son capas de qué órgano afectado por el eccema y el acné?
+    options: [ Piel, Hígado, Pulmón, Riñón ]
+    answer: Piel
+
+  - question: La forma rotatoria de este proceso se usa para purificar sustancias. Este proceso explica por qué el sudor enfría el cuerpo, y se forman depósitos de sal cuando ocurre en agua salada. Cuando este proceso ocurre a bajas presiones o a altas temperaturas, se llama ebullición. Nombra este proceso en el que un líquido se convierte en gas.
+    options: [ Condensación, Sublimación, Fusión, Evaporación ]
+    answer: Evaporación
+    explanation: "También se acepta: vaporización."
+
+  - question: Uno de estos dispositivos tenía el nombre en clave D1 y se desplegó en Flers-Courcelette, en Francia. El tipo soviético T-34 de estos dispositivos se desplegó por primera vez contra los invasores alemanes en la Segunda Guerra Mundial. La batalla de El Alamein marcó el debut de uno de estos dispositivos con una torreta de cañón totalmente giratoria. Para ganar el punto, ¿el M4 Sherman era un tipo de qué vehículos militares fuertemente blindados?
+    options: [ Jeeps, Semiorugas, Tanques, Submarinos ]
+    answer: Tanques
+
+  - question: Una forma de este elemento lleva el nombre de Buckminster Fuller, mientras que otra forma de este elemento ocupa el primer lugar en la escala de dureza de Mohs. El grafito es una forma de este elemento, que junto con el oxígeno y el hidrógeno forma las moléculas de glucosa. Nombra este elemento, la base fundamental de las moléculas orgánicas y de la vida.
+    options: [ Silicio, Carbono, Nitrógeno, Azufre ]
+    answer: Carbono
+
+  - question: Mary Anning recolectó estos objetos en Lyme Regis. Entre los tipos de estos objetos están los coprolitos, y un conjunto de estos objetos forma a «Sue» en el Museo Field de Chicago. Para ganar el punto, ¿el iguanodonte y el diplodoco se identificaron tras descubrir qué objetos que desentierran los paleontólogos?
+    options: [ Fósiles, Artefactos, Minerales, Meteoritos ]
+    answer: Fósiles
+
+  - question: Un anillo sin nombre de este planeta es paralelo a la órbita de su luna Galatea. Los objetos en resonancia 1:2 con este planeta se conocen como «twotinos», y una tormenta giratoria en este planeta se conoce como la Gran Mancha Oscura. Para ganar el punto, ¿Tritón es una luna de qué planeta del sistema solar, el más alejado del Sol?
+    options: [ Urano, Saturno, Júpiter, Neptuno ]
+    answer: Neptuno
+
+  - question: La estimación más antigua de esta magnitud dependía de estimaciones indirectas del número de partículas de látex. Jean Perrin definió esta constante, que se representa con N mayúscula, como el número de átomos en 16 gramos de oxígeno. Nombra esta constante, de aproximadamente 6 por 10 elevado a la 23, que es igual al número de partículas en un mol.
+    options:
+      - Constante de Planck
+      - Constante de Boltzmann
+      - Constante de Avogadro
+      - Constante de Faraday
+    answer: Constante de Avogadro
+    explanation: "También se acepta: número de Avogadro."
+
+  - question: El producto de la dimensión lineal por la velocidad del flujo se divide entre esta magnitud para obtener el número de Reynolds. La forma cinemática de esta magnitud es igual a su forma dinámica dividida entre la densidad del fluido. Nombra esta magnitud, una medida de la resistencia interna de un fluido a fluir.
+    options: [ Densidad, Viscosidad, Tensión superficial, Flotabilidad ]
+    answer: Viscosidad

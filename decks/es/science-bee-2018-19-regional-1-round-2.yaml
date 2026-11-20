@@ -1,0 +1,167 @@
+# Science Bee 2018–19 · Regional 1 · Ronda 2 — 32 preguntas.
+# Source: docs/2018-2019-EMS-SB-2-Set-1.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se añadieron para la opción múltiple.
+# Traducción al español de decks/science-bee-2018-19-regional-1-round-2.yaml.
+
+title: Science Bee 2018–19 · Regional 1 · Ronda 2
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Cuando este fenómeno se presenta en frecuencias diferentes, la diferencia se percibe como una pulsación. Como este fenómeno no puede viajar en el vacío, no existe en el espacio exterior. Mach 1 es la velocidad de este fenómeno, una onda longitudinal cuya intensidad se mide en decibeles. Nombra este fenómeno que causa los estampidos sónicos.
+    options: [ Sonido, Luz, Calor, Electricidad ]
+    answer: Sonido
+
+  - question: Este planeta fue el objetivo del programa Viking, que reveló la existencia del “terreno caótico”. En este planeta se encuentra el Olympus Mons, un volcán de más del doble de altura que el monte Everest. En 2011, la NASA hizo aterrizar el rover Curiosity en este planeta para buscar rastros de agua antigua. Nombra este 4.º planeta desde el Sol, cuyo suelo rico en hierro le da a su superficie un color rojo.
+    options: [ Venus, Mercurio, Júpiter, Marte ]
+    answer: Marte
+    explanation: Curiosity se lanzó en noviembre de 2011 y aterrizó en Marte en agosto de 2012.
+
+  - question: Los minerales argiláceos se definen como los que contienen este material, entre cuyos minerales están la clorita y la esmectita. Este material está en la parte más baja de la escala de Wentworth, ya que es más fino que todos los demás materiales, incluido el limo. La terracota se hace refinando este material. Nombra este material natural que, en la alfarería, a menudo se esmalta y se cuece en un horno.
+    options: [ Limo, Arena, Arcilla, Grava ]
+    answer: Arcilla
+
+  - question: Los detonadores de Alfred Nobel usaban un fulminato de este elemento. Las amalgamas son aleaciones que contienen este metal, cuyas variaciones de altura dentro de un tubo se usaron para medir la presión del aire en el primer barómetro. La FDA recomienda que los niños pequeños y las mujeres embarazadas eviten comer pez espada debido a sus altos niveles de este metal tóxico. Nombra este metal líquido de símbolo Hg.
+    options: [ Plomo, Mercurio, Cadmio, Cromo ]
+    answer: Mercurio
+
+  - question: La velocidad de estas sustancias se puede medir con su número de recambio, y son “homogéneas” si están en la misma fase que los reactivos. El hierro actúa como una de estas sustancias en el proceso de Haber-Bosch. Las enzimas son ejemplos biológicos de estos compuestos que reducen la energía de activación de una reacción. Nombra estos compuestos que aceleran una reacción sin consumirse.
+    options: [ Catalizadores, Inhibidores, Soluciones amortiguadoras, Agentes oxidantes ]
+    answer: Catalizadores
+
+  - question: Si estas estructuras no tienen pecíolo, se llaman sésiles. La vía C4 limita la fijación del carbono a las células de la vaina del haz de estas estructuras, aunque la mayoría de las demás plantas usan el mesófilo en empalizada y el mesófilo esponjoso que hay en ellas. Una cutícula cerosa cubre estas estructuras, que intercambian gases a través de poros llamados estomas. Estos sitios principales de la fotosíntesis cambian de color y caen debido a los cambios de estación. Nombra estas estructuras planas de las plantas.
+    options: [ Raíces, Tubérculos, Rizomas, Hojas ]
+    answer: Hojas
+
+  - question: Los cables con valores distintos de cero de esta magnitud producen un campo magnético. La misma cantidad de esta magnitud debe entrar y salir de un nodo, según la ley de Kirchhoff para esta magnitud. Según la ley de Ohm, el voltaje dividido entre la resistencia es igual a esta magnitud. Esta magnitud se simboliza con I y se mide en amperes. Nombra esta magnitud que mide el flujo de carga eléctrica por segundo y que puede ser alterna o continua.
+    options: [ Voltaje, Resistencia eléctrica, Corriente eléctrica, Capacitancia ]
+    answer: Corriente eléctrica
+
+  - question: Para dos sustancias, la mezcla con el valor más bajo de esta temperatura se llama eutéctica. Ciertas sustancias se cristalizan al alcanzar esta temperatura. Una propiedad de esta temperatura para una sustancia es que disminuye cuando se le agrega otra sustancia. Para el agua, esta temperatura, a la que se convierte en hielo, es de 0 grados Celsius. Nombra esta temperatura a la que una sustancia pasa de sólido a líquido.
+    options: [ Punto de ebullición, Punto de fusión, Punto de rocío, Punto crítico ]
+    answer: Punto de fusión
+    explanation: "También se acepta: punto de congelación."
+
+  - question: Este científico da nombre a una conjetura sobre cómo empaquetar esferas aprovechando al máximo el espacio. No es Newton, pero la segunda ley de este científico establece que un objeto barre áreas iguales en tiempos iguales. Este astrónomo trabajó bajo la dirección de Tycho Brahe y propuso que los planetas se mueven en elipses en su libro Epítome de la astronomía copernicana. Nombra este astrónomo alemán del siglo XVII que da nombre a tres leyes del movimiento planetario.
+    options:
+      - Johannes Kepler
+      - Tycho Brahe
+      - Galileo Galilei
+      - Nicolás Copérnico
+    answer: Johannes Kepler
+
+  - question: El ácido láctico se transporta desde los músculos hasta este órgano para producir glucosa en el ciclo de Cori. El ligamento falciforme divide este órgano en los lóbulos izquierdo y derecho. Este órgano, el órgano interno más grande del cuerpo, produce un líquido digestivo que se almacena en la vesícula biliar. El consumo excesivo de alcohol puede causar cirrosis, o cicatrización, de este órgano. Nombra este órgano que produce la bilis, desintoxica la sangre y se inflama en la hepatitis.
+    options: [ Páncreas, Bazo, Vesícula biliar, Hígado ]
+    answer: Hígado
+
+  - question: Una cantidad de gas igual a una de estas unidades, a temperatura y presión estándar, ocupa un volumen de 22.4 litros. Esta unidad del SI equivale al número de átomos que hay en 12 gramos de carbono 12. El número de Avogadro relaciona una de estas unidades con 6.022 por 10 elevado a la 23 moléculas o átomos. Nombra esta unidad de química que en inglés se llama “mole”, igual que el topo, un pequeño mamífero excavador.
+    options: [ Gramo, Litro, Mol, Kelvin ]
+    answer: Mol
+
+  - question: El Museo Nacional de Historia Estadounidense del Smithsonian exhibió hasta 1998 uno gigante de estos dispositivos, que llevaba el nombre de Jean Foucault, quien fue el primero en usar este dispositivo para demostrar la rotación de la Tierra. La variedad doble de este dispositivo presenta un movimiento caótico. En 1656, Christiaan Huygens inventó un reloj que medía el tiempo con este dispositivo. Nombra este dispositivo, una masa suspendida que se usa en los relojes de pie.
+    options: [ Reloj de sol, Péndulo, Reloj de arena, Diapasón ]
+    answer: Péndulo
+
+  - question: Este órgano tiene glándulas sebáceas que secretan un líquido, y el vitiligo afecta a este órgano. La vitamina D se sintetiza cuando la luz UV llega a este órgano. Un tipo de cáncer de esta estructura se conoce como melanoma. La capa externa de esta estructura es la epidermis, y este es el órgano más grande del cuerpo. Nombra esta capa protectora que cubre el cuerpo y que se daña con las quemaduras solares.
+    options: [ Piel, Hígado, Músculo, Hueso ]
+    answer: Piel
+
+  - question: Robert Mulliken ideó un método para calcular esta magnitud que toma la media aritmética de la primera energía de ionización y la afinidad electrónica. Los enlaces polares se forman cuando la diferencia de esta magnitud entre los elementos enlazados es mayor que 0.8. Linus Pauling desarrolló la idea de esta magnitud y le dio al flúor el valor más alto. Nombra esta magnitud que representa la tendencia de un átomo a atraer electrones.
+    options:
+      - Energía de ionización
+      - Radio atómico
+      - Carácter metálico
+      - Electronegatividad
+    answer: Electronegatividad
+
+  - question: Unos medicamentos llamados estatinas bloquean la síntesis de esta molécula por la HMG-CoA reductasa. La estructura de cuatro anillos de esta molécula le ayuda a regular la fluidez de la membrana. Esta molécula es transportada por el cuerpo por las HDL y las LDL, a menudo llamadas sus tipos “bueno” y “malo”. Sus niveles altos pueden causar aterosclerosis, o endurecimiento de las arterias. Las enfermedades cardiovasculares se han relacionado con niveles altos, para ganar el punto, ¿de qué sustancia cerosa parecida a la grasa?
+    options: [ Glucógeno, Hemoglobina, Colesterol, Queratina ]
+    answer: Colesterol
+
+  - question: En este lugar hay nódulos de manganeso, acumulaciones de hierro y roca que suelen encontrarse en las llanuras abisales. Las capas de roca polarizada con cargas alternas en este lugar sirven como evidencia de la inversión de los polos magnéticos de la Tierra. Esta región se ensancha debido a la expansión que lleva su nombre, la cual explica la deriva continental. Nombra este lugar, el fondo de los océanos de la Tierra.
+    options: [ Corteza continental, Fondo oceánico, Manto, Núcleo externo ]
+    answer: Fondo oceánico
+    explanation: "También se acepta: lecho marino, fondo marino."
+
+  - question: Estas estructuras pueden tener zonas claras y oscuras alternadas llamadas ojivas, que se forman como parte de su movimiento estacional. Los fiordos se crean cuando estos objetos cortan el lecho rocoso. Los icebergs se separan de estas masas más grandes en un proceso llamado desprendimiento. Nombra estas grandes masas de hielo en movimiento.
+    options: [ Glaciares, Permafrost, Campos de nieve, Lagos congelados ]
+    answer: Glaciares
+
+  - question: En un efecto que lleva el nombre de este dispositivo, la gravedad hace que la luz se curve. Una fórmula que describe estos objetos se simplifica cuando estos dispositivos son muy gruesos o muy delgados. Esa fórmula contiene términos para dos radios, el grosor y la distancia focal. Estos objetos producen imágenes reales y virtuales según sean cóncavos o convexos. Nombra estos dispositivos ópticos que enfocan la luz en un solo punto.
+    options: [ Prismas, Redes de difracción, Filtros polarizadores, Lentes ]
+    answer: Lentes
+
+  - question: El problema 48 del papiro Rhind calcula el área de un campo con esta forma, mientras que el libro 3 de los Elementos de Euclides y la Séptima carta de Platón explican las propiedades de esta forma. El teorema de Lindemann-Weierstrass hizo imposible la tarea de obtener la cuadratura de esta forma. La sagita es un segmento de recta trazado entre el punto medio de una cuerda y el arco de esta forma. Nombra esta forma cuya área es pi multiplicado por su radio al cuadrado.
+    options: [ Triángulos, Hexágonos, Círculos, Cuadrados ]
+    answer: Círculos
+
+  - question: La energía de esta reacción se puede medir con un calorímetro de bomba. Entre los tipos de esta reacción están la lenta sin llama y la espontánea. Esta reacción exotérmica produce dióxido de carbono y agua a partir de oxígeno y un hidrocarburo que sirve como carburante, y ocurre comúnmente en los motores diésel. Nombra esta reacción de hacer explotar cosas que suele producir llamas.
+    options: [ Neutralización, Combustión, Fermentación, Electrólisis ]
+    answer: Combustión
+
+  - question: El exceso de proteínas en la orina de una persona en este estado puede indicar preeclampsia. La biopsia de vellosidades coriónicas y la amniocentesis se usan para detectar trastornos genéticos durante este estado. A las personas en este estado se les receta ácido fólico para prevenir defectos del tubo neural, y también pueden visitar a un obstetra para hacerse un ultrasonido. Nombra este estado que dura alrededor de 9 meses y termina con el parto.
+    options: [ Embarazo, Menopausia, Pubertad, Infancia ]
+    answer: Embarazo
+    explanation: "También se acepta: gestación."
+
+  - question: Estas estructuras pueden formarse a partir de zonas desmineralizadas conocidas como lesiones incipientes. No tiene que ver con un traumatismo, pero en una cirugía se usan gutapercha y una corona para rellenar una de estas estructuras cuando es profunda. Una de estas estructuras sin tratar puede requerir un tratamiento de conducto. La acumulación de placa puede causar la formación de estas estructuras en el esmalte. Nombra estos agujeros que se forman por el deterioro de los dientes y que los dentistas rellenan.
+    options: [ Aftas, Herpes labial, Depósitos de sarro, Caries ]
+    answer: Caries
+    explanation: "También se acepta: cavidades dentales."
+
+  - question: La energía de estos objetos podría capturarse, en teoría, con una esfera de Dyson. Entre los límites a la formación de estos objetos están el límite de Tolman-Oppenheimer-Volkoff y el límite de Chandrasekhar. Los extremadamente densos están formados por neutrones, y estos objetos se representan en un diagrama de Hertzsprung-Russell. Algunos de ellos explotan en supernovas muy luminosas cuando mueren. Nombra estas esferas astrales de gas ardiente, entre las que está el Sol.
+    options: [ Planetas, Nebulosas, Estrellas, Galaxias ]
+    answer: Estrellas
+
+  - question: La edafología es el estudio de esta sustancia, cuyo perfil está formado por los horizontes O, A, B, C y R. Junto con polvo y rocas, el regolito está formado por esta sustancia. La desertificación provoca la pérdida de nutrientes de este material. La arcilla, el limo y la arena forman esta sustancia, que se forma a partir del lecho rocoso. “Tierra” es el nombre común, para ganar el punto, ¿de qué sustancia en la que crecen las plantas?
+    options: [ Lecho rocoso, Suelo, Granito, Magma ]
+    answer: Suelo
+
+  - question: Duchenne y Becker dan nombre a una distrofia de este tejido, que funciona mediante el deslizamiento de filamentos de miosina y actina. Una forma de este tejido tiene una unidad estructural conocida como sarcómero. Este tejido tiene tipos liso y cardíaco, mientras que su tipo esquelético se une al hueso mediante tendones. El ácido láctico se secreta en este tejido durante el ejercicio. Nombra este tejido que forma los deltoides, el trapecio y los bíceps.
+    options:
+      - Tejido muscular
+      - Tejido nervioso
+      - Tejido conectivo
+      - Tejido epitelial
+    answer: Tejido muscular
+
+  - question: La población de helechos de Norteamérica aumentó más de un 70% después de este evento. La erupción de los traps del Decán pudo haber contribuido a este evento. Una capa global de iridio y el cráter de Chicxulub, en Yucatán, están relacionados con este evento, al que sobrevivieron los ancestros de las aves. Nombra este evento de hace 65 millones de años que vio el fin de especies como el tricerátops y el tiranosaurio.
+    options:
+      - Extinción del Pérmico-Triásico
+      - Extinción del Ordovícico-Silúrico
+      - Extinción del Devónico tardío
+      - Extinción del Cretácico-Paleógeno
+    answer: Extinción del Cretácico-Paleógeno
+    explanation: "También llamada extinción K-Pg o K-T: la extinción de los dinosaurios (no avianos)."
+
+  - question: Este elemento se consume en el ciclo CNO de fusión nuclear en las estrellas. Las interacciones que llevan el nombre de este elemento mantienen unidas las hebras del ADN. Entre los isótopos de este elemento están el tritio y el deuterio. Las interacciones entre este elemento y elementos como el nitrógeno y el oxígeno causan los “enlaces” que llevan el nombre de este elemento. El pH significa “potencial de este elemento”. Nombra este elemento, el más ligero, con número atómico 1 y símbolo H.
+    options: [ Helio, Litio, Hidrógeno, Sodio ]
+    answer: Hidrógeno
+
+  - question: El comportamiento de estas sustancias se rige por un conjunto de relaciones llamadas ecuaciones de Navier-Stokes. En estas sustancias, un cambio de velocidad se debe a un cambio opuesto de presión, según la ley de Bernoulli. Cuando una de estas sustancias tiene una viscosidad alta, tiende a resistirse al movimiento. El oobleck y el champú son dos ejemplos de la forma no newtoniana de este tipo de sustancia. Nombra este tipo de sustancia sin forma fija, como el aceite y el agua.
+    options: [ Sólidos, Fluidos, Cristales, Cuerpos rígidos ]
+    answer: Fluidos
+
+  - question: Un hueso sesamoideo agrandado le da a este animal un seudopulgar que puede ayudarle a alimentarse. El nombre científico de este animal, Ailuropoda melanoleuca, lo identifica erróneamente como un gato blanco y negro. Este animal pertenece al orden Carnivora, pero su dieta es casi exclusivamente de bambú. Identifica este animal en peligro de extinción, considerado hoy un pariente lejano de los osos, originario de las montañas del centro de China.
+    options: [ Panda gigante, Oso malayo, Koala, Leopardo de las nieves ]
+    answer: Panda gigante
+
+  - question: Este proceso puede ocurrir de forma crónica en el síndrome de Kleine-Levin. La cataplejía es un síntoma común asociado a una enfermedad en la que este proceso ocurre de repente. La liberación de melatonina provoca el inicio de este proceso, y la apnea ocurre cuando la respiración se interrumpe durante este proceso. Este proceso puede ocurrir sin aviso en las personas que padecen narcolepsia. Nombra este proceso durante el cual soñamos.
+    options: [ Digestión, Hipnosis, Meditación, Sueño ]
+    answer: Sueño
+
+  - question: En 1979, Jimmy Carter instaló 32 de estos dispositivos en la Casa Blanca, que fueron retirados en 1986 por Ronald Reagan. Las recientes tormentas de polvo en Marte cubrieron estos dispositivos del rover Opportunity. Estos dispositivos generan electricidad mediante el efecto fotovoltaico y representan el 1.3% de la energía mundial. Nombra estos dispositivos que convierten la luz del Sol en energía aprovechable.
+    options:
+      - Aerogeneradores
+      - Celdas de combustible
+      - Paneles solares
+      - Generadores termoeléctricos
+    answer: Paneles solares
+    explanation: "También se acepta: celdas solares, celdas fotovoltaicas."
+
+  - question: Urbain Le Verrier planteó la hipótesis de que las irregularidades en la órbita de este planeta se debían a un planeta aún no descubierto al que llamó Vulcano. La sonda MESSENGER orbitó este planeta durante 4 años antes de entrar en la fase final de su misión y estrellarse contra su superficie. Este planeta completa una órbita alrededor del Sol cada 88 días, menos de la mitad del tiempo que tarda Venus en hacer lo mismo. Nombra este planeta, el más cercano al Sol.
+    options: [ Venus, Mercurio, Marte, Tierra ]
+    answer: Mercurio

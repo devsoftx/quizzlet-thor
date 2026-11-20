@@ -1,0 +1,185 @@
+# National History Bee 2026-27 — “Términos para seguir estudiando” del Red Set.
+# La guía solo enumera estos términos; las pistas se escribieron para este mazo.
+# Source: docs/2026-27-Red-Set-History-Study-Guide (2).pdf
+# Traducción al español de decks/history-bee-red-set-terms.yaml.
+
+title: History Bee · Términos del Red Set
+description: Los 30 “términos para seguir estudiando” de la guía de historia del Red Set 2026-27.
+language: es
+enabled: false
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: ¿Qué organización de derechos civiles, fundada en 1909 con W. E. B. Du Bois entre sus fundadores, combatió la segregación en casos judiciales como Brown contra la Junta de Educación?
+    options:
+      - ACLU
+      - NAACP
+      - Cruz Roja
+      - Conferencia Sur de Liderazgo Cristiano
+    answer: NAACP
+    explanation: NAACP es la sigla en inglés de National Association for the Advancement of Colored People (Asociación Nacional para el Progreso de las Personas de Color).
+
+  - question: ¿Qué dinastía china unificó China por primera vez en el 221 a. C., bajo un emperador que fue enterrado con el Ejército de Terracota?
+    options: [ Dinastía Qin, Dinastía Han, Dinastía Ming, Dinastía Tang ]
+    answer: Dinastía Qin
+    explanation: Se cree que el nombre “China” viene de Qin (que se pronuncia “chin”).
+
+  - question: ¿Qué inventor alemán construyó una imprenta de tipos móviles de metal hacia 1450 e imprimió una famosa Biblia?
+    options:
+      - Martín Lutero
+      - Galileo Galilei
+      - Leonardo da Vinci
+      - Johannes Gutenberg
+    answer: Johannes Gutenberg
+
+  - question: ¿Qué imperio gobernó gran parte de la India entre los siglos XVI y XIX y construyó el Taj Mahal?
+    options: [ Imperio otomano, Imperio maurya, Imperio mogol, Imperio mongol ]
+    answer: Imperio mogol
+
+  - question: ¿Qué presidente de Estados Unidos visitó China en 1972 y es el único presidente que ha renunciado, tras el escándalo Watergate?
+    options: [ Gerald Ford, Richard Nixon, Lyndon B. Johnson, Jimmy Carter ]
+    answer: Richard Nixon
+
+  - question: ¿Qué imperio gobernó Carlomagno, coronado emperador de los romanos en el año 800 d. C.?
+    options:
+      - Imperio carolingio
+      - Imperio bizantino
+      - Imperio otomano
+      - Imperio mongol
+    answer: Imperio carolingio
+    explanation: “Carolingio” viene de Carolus, la forma latina de Carlos.
+
+  - question: ¿Qué autor británico, que fue piloto de caza en la Segunda Guerra Mundial, escribió Charlie y la fábrica de chocolate y Matilda?
+    options: [ J. R. R. Tolkien, C. S. Lewis, Beatrix Potter, Roald Dahl ]
+    answer: Roald Dahl
+
+  - question: ¿En qué ciudad fue asesinado el presidente John F. Kennedy en noviembre de 1963?
+    options: [ Houston, Chicago, Dallas, Washington D. C. ]
+    answer: Dallas
+
+  - question: ¿Cómo se llamaban los combatientes armados que luchaban entre sí o contra animales salvajes para entretener al público en el Coliseo de la antigua Roma?
+    options: [ Centuriones, Gladiadores, Senadores, Caballeros ]
+    answer: Gladiadores
+
+  - question: ¿Cómo se llamaba el movimiento para acabar con la esclavitud, apoyado por personas como Frederick Douglass y Harriet Tubman?
+    options: [ Abolicionismo, Prohibición, Sufragio, Aislacionismo ]
+    answer: Abolicionismo
+    explanation: El sufragio es el derecho a votar; la Prohibición fue la época en que se prohibió el alcohol.
+
+  - question: ¿Qué naturalista inglés visitó las islas Galápagos a bordo del HMS Beagle y escribió El origen de las especies?
+    options: [ Isaac Newton, Gregor Mendel, Louis Pasteur, Charles Darwin ]
+    answer: Charles Darwin
+
+  - question: ¿Qué dinastía china (1368–1644) construyó la mayor parte de la Gran Muralla que se conserva hoy y la Ciudad Prohibida de Pekín?
+    options: [ Dinastía Qin, Dinastía Han, Dinastía Ming, Dinastía Qing ]
+    answer: Dinastía Ming
+
+  - question: ¿Qué guerra (1861–1865) se libró entre la Unión y la Confederación?
+    options:
+      - Guerra de Independencia de Estados Unidos
+      - Guerra de Secesión
+      - Guerra de 1812
+      - Guerra hispano-estadounidense
+    answer: Guerra de Secesión
+
+  - question: En su discurso del “Día de la infamia”, el presidente Franklin D. Roosevelt pidió al Congreso declarar la guerra tras un ataque sorpresa el 7 de diciembre de 1941. ¿Dónde fue el ataque?
+    options: [ Pearl Harbor, Isla Midway, Normandía, Hiroshima ]
+    answer: Pearl Harbor
+
+  - question: ¿Qué capital se construyó sobre la capital azteca Tenochtitlan, en el lecho de un lago seco que hace que se hunda lentamente?
+    options: [ Lima, Bogotá, Ciudad de Guatemala, Ciudad de México ]
+    answer: Ciudad de México
+
+  - question: ¿Quién fue el presidente de la Corte Suprema de Estados Unidos que más tiempo ocupó el cargo, cuya decisión en Marbury contra Madison (1803) estableció el control judicial de constitucionalidad?
+    options: [ John Jay, Earl Warren, John Marshall, Thurgood Marshall ]
+    answer: John Marshall
+    explanation: El control judicial de constitucionalidad es el poder de los tribunales para anular las leyes que violan la Constitución. Thurgood Marshall fue el primer juez afroamericano de la Corte Suprema.
+
+  - question: ¿Qué religión, la más grande del mundo por número de seguidores, se basa en la vida y las enseñanzas de Jesús?
+    options: [ Islam, Cristianismo, Judaísmo, Budismo ]
+    answer: Cristianismo
+
+  - question: ¿Qué científica británica pasó décadas estudiando chimpancés salvajes en Gombe, Tanzania?
+    options: [ Jane Goodall, Dian Fossey, Rachel Carson, Marie Curie ]
+    answer: Jane Goodall
+    explanation: Dian Fossey estudió a los gorilas de montaña en Ruanda.
+
+  - question: ¿Con qué guerra (1775–1783) las Trece Colonias obtuvieron su independencia de Gran Bretaña?
+    options:
+      - Guerra de 1812
+      - Guerra franco-india
+      - Guerra de Secesión
+      - Guerra de Independencia de Estados Unidos
+    answer: Guerra de Independencia de Estados Unidos
+
+  - question: ¿Cómo se llamaban las naves espaciales reutilizables de la NASA, que volaron de 1981 a 2011, despegaban como cohetes y aterrizaban como aviones?
+    options:
+      - Cápsulas Apolo
+      - Cohetes Saturno V
+      - Transbordadores espaciales
+      - Satélites Sputnik
+    answer: Transbordadores espaciales
+    explanation: Los cinco transbordadores que volaron al espacio fueron el Columbia, el Challenger, el Discovery, el Atlantis y el Endeavour.
+
+  - question: ¿Quién dirigió a los bolcheviques en la Revolución rusa de 1917 y se convirtió en el primer líder del Estado soviético?
+    options: [ Iósif Stalin, Vladímir Lenin, Nicolás II, León Trotski ]
+    answer: Vladímir Lenin
+    explanation: Nicolás II fue el último zar, derrocado en 1917.
+
+  - question: ¿Qué larga serie de guerras (1337–1453) entre Inglaterra y Francia incluyó la batalla de Azincourt y a Juana de Arco?
+    options:
+      - Guerra de los Cien Años
+      - Guerra de las Dos Rosas
+      - Guerra de los Treinta Años
+      - Las Cruzadas
+    answer: Guerra de los Cien Años
+    explanation: A pesar de su nombre, duró 116 años.
+
+  - question: ¿Qué documento, redactado en Filadelfia en 1787, estableció los tres poderes del gobierno de Estados Unidos y comienza con “We the People” (“Nosotros, el pueblo”)?
+    options:
+      - Declaración de Independencia
+      - Carta de Derechos
+      - Artículos de la Confederación
+      - Constitución de Estados Unidos
+    answer: Constitución de Estados Unidos
+
+  - question: En la leyenda griega, ¿quién se fue de Esparta con el príncipe troyano Paris y así dio inicio a la guerra de Troya?
+    options: [ Cleopatra, Penélope, Helena de Troya, Atenea ]
+    answer: Helena de Troya
+    explanation: La llaman “el rostro que lanzó mil naves”.
+
+  - question: ¿Cómo se llama la idea, defendida por Nicolás Copérnico, de que la Tierra y los demás planetas giran alrededor del Sol?
+    options: [ Geocentrismo, Heliocentrismo, Relatividad, Evolución ]
+    answer: Heliocentrismo
+    explanation: “Helios” significa “Sol” en griego. El geocentrismo es la idea más antigua de que todo gira alrededor de la Tierra.
+
+  - question: ¿Qué poderosa familia real de Austria gobernó el Sacro Imperio Romano Germánico durante siglos y también gobernó España en los siglos XVI y XVII?
+    options: [ Los Habsburgo, Los Tudor, Los Románov, Los Borbones ]
+    answer: Los Habsburgo
+    explanation: En España también se les conoce como la Casa de Austria o los Austrias.
+
+  - question: ¿Qué colonia fundaron los Padres Peregrinos en 1620 después de cruzar el Atlántico en el Mayflower?
+    options:
+      - Jamestown
+      - Colonia de Roanoke
+      - Colonia de la bahía de Massachusetts
+      - Colonia de Plymouth
+    answer: Colonia de Plymouth
+
+  - question: ¿Qué movimiento artístico, iniciado en Francia en la década de 1870 por pintores como Claude Monet, captaba la luz y el color con pinceladas rápidas?
+    options: [ Cubismo, Surrealismo, Impresionismo, Barroco ]
+    answer: Impresionismo
+    explanation: Debe su nombre al cuadro de Monet Impresión, sol naciente.
+
+  - question: ¿Cómo se llamó el violento periodo de la Revolución francesa (1793–1794), encabezado por Maximilien Robespierre, en el que miles de personas fueron ejecutadas en la guillotina?
+    options:
+      - Los Cien Días
+      - Reinado del Terror
+      - Revolución Gloriosa
+      - Toma de la Bastilla
+    answer: Reinado del Terror
+
+  - question: ¿Qué artista e inventor italiano del Renacimiento pintó la Mona Lisa y La última cena?
+    options: [ Leonardo da Vinci, Miguel Ángel, Rafael, Donatello ]
+    answer: Leonardo da Vinci

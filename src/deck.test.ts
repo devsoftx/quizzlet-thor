@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildSession, parseDeck, titleFromFileName } from "./deck";
 import { deckMessagesEs } from "./deck-messages";
-import { deckProblems, filterDecks, isVisible, loadBundledDecks, type DeckEntry } from "./library";
+import { deckProblems, filterDecks, isVisible, loadAllBundledDecks, loadBundledDecks, type DeckEntry } from "./library";
 import template from "../public/deck-template.yaml?raw";
 import templateEs from "../public/deck-template.es.yaml?raw";
 
@@ -171,7 +171,8 @@ describe("buildSession", () => {
 });
 
 describe("bundled decks in /decks", () => {
-  const decks = loadBundledDecks();
+  // Originals and their translations (decks/es/…).
+  const decks = loadAllBundledDecks();
 
   it("finds at least one deck", () => {
     expect(decks.length).toBeGreaterThan(0);
@@ -182,6 +183,51 @@ describe("bundled decks in /decks", () => {
       expect(entry.ok ? [] : entry.errors).toEqual([]);
     });
   }
+});
+
+describe("Spanish translations in /decks/es", () => {
+  const all = loadAllBundledDecks();
+  const originals = new Map(all.filter((d) => !d.fileName.includes("/")).map((d) => [d.fileName, d]));
+  const translations = all.filter((d) => d.fileName.startsWith("es/"));
+
+  it("translates every deck", () => {
+    const missing = [...originals.keys()].filter((name) => !translations.some((t) => t.fileName === `es/${name}`));
+    expect(missing).toEqual([]);
+  });
+
+  for (const entry of translations) {
+    it(`${entry.fileName} matches its original card for card`, () => {
+      const original = originals.get(entry.fileName.slice("es/".length));
+      expect(original, "a translation needs an original with the same file name").toBeDefined();
+      if (!entry.ok || !original?.ok) return; // reported by the validity test above
+      const [es, en] = [entry.deck, original.deck];
+      expect(es.language).toBe("es");
+      expect({ enabled: es.enabled, shuffle: es.shuffle, shuffleOptions: es.shuffleOptions }).toEqual({
+        enabled: en.enabled,
+        shuffle: en.shuffle,
+        shuffleOptions: en.shuffleOptions,
+      });
+      expect(es.cards).toHaveLength(en.cards.length);
+      es.cards.forEach((card, i) => {
+        const source = en.cards[i];
+        const where = `card ${i + 1}`;
+        expect(card.options, where).toHaveLength(source.options.length);
+        // The right answer sits in the same place, so a translation can't change which option is correct.
+        expect(card.options.indexOf(card.answer), where).toBe(source.options.indexOf(source.answer));
+        expect(Boolean(card.explanation), where).toBe(Boolean(source.explanation));
+        expect(card.shuffleOptions, where).toBe(source.shuffleOptions);
+        expect(card.question, where).not.toBe(source.question);
+      });
+    });
+  }
+
+  it("shows each deck in Spanish when the app is in Spanish, and as written in English", () => {
+    const english = loadBundledDecks();
+    const spanish = loadBundledDecks(undefined, "es");
+    expect(spanish.map((d) => d.id.replace("bundled:es/", "bundled:")).sort()).toEqual(english.map((d) => d.id).sort());
+    for (const d of spanish) if (d.ok) expect(d.deck.language, d.fileName).toBe("es");
+    for (const d of english) if (d.ok) expect(d.deck.language, d.fileName).toBe("en");
+  });
 });
 
 describe("titleFromFileName", () => {

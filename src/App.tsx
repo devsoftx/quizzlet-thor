@@ -102,9 +102,10 @@ type KidState = { status: "loading" } | { status: "none" } | { status: "linked";
 const PARENT_SCREENS = new Set<Screen["name"]>(["profiles", "settings", "my-decks", "my-files"]);
 
 export function App() {
-  const { t } = useI18n();
-  // Decks are read again when the language changes, so their problems are described in it.
-  const bundledDecks = useMemo(() => loadBundledDecks(t.deck), [t]);
+  const { language, t } = useI18n();
+  // Decks are read again when the language changes: shown in it where they have
+  // a translation (decks/es/), and with their problems described in it.
+  const bundledDecks = useMemo(() => loadBundledDecks(t.deck, language), [t, language]);
   const [importedFiles, setImportedFiles] = useState<StoredDeck[]>(loadImportedTexts);
   const imported = useMemo(() => importedFiles.map((d) => importedEntry(d, t.deck)), [importedFiles, t]);
   const [bestScores, setBestScores] = useState(loadBestScores);

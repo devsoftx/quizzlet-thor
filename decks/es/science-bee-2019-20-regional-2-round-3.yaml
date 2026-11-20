@@ -1,0 +1,168 @@
+# Science Bee 2019–20 · Regional 2 · Ronda 3 — 32 preguntas.
+# Source: docs/2019-2020-MS-S-Bee-Round-3-Set-2.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se añadieron para la opción múltiple.
+# Traducción al español de decks/science-bee-2019-20-regional-2-round-3.yaml.
+
+title: Science Bee 2019–20 · Regional 2 · Ronda 3
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Para un resorte, esta magnitud está dada por un medio de la constante del resorte multiplicado por el desplazamiento al cuadrado. Esta magnitud para un objeto puede calcularse como el cuadrado de la cantidad de movimiento del objeto entre el doble de su masa, pero normalmente se calcula como un medio de la masa multiplicado por el cuadrado de la velocidad del objeto. La energía total es igual a la energía potencial más esta forma de energía. Nombra esta energía del movimiento.
+    options:
+      - Energía cinética
+      - Energía térmica
+      - Energía química
+      - Energía nuclear
+    answer: Energía cinética
+    explanation: "Nota: en realidad, ½kx² es la energía potencial de un resorte, no su energía cinética."
+
+  - question: Este proceso se mide indirectamente para los fotones calculando la atenuación y suponiendo que procesos como la reflexión, la emisión y la dispersión no ocurren al usar la ley de Beer. Un átomo puede realizar este proceso con un fotón al elevar el nivel de energía de un electrón. Nombra esta capacidad, definida químicamente, de chupar otra sustancia, como cuando las esponjas se empapan de agua, que no debe confundirse con la adsorción.
+    options: [ Adsorción, Emisión, Difusión, Absorción ]
+    answer: Absorción
+    explanation: La absorción incorpora una sustancia hacia el interior; la adsorción la retiene en una superficie.
+
+  - question: Estas células pueden dar origen a células de amplificación transitoria. Entre las variedades menos potentes de esta clase de células están las identificadas como hematopoyéticas y pluripotentes. Este tipo de célula biológica a veces se confunde con las células progenitoras, que son más específicas. Nombra estas células capaces de diferenciarse en otras células y de dividirse aparentemente sin límite, cuya variedad embrionaria ha sido objeto de debate ético.
+    options: [ Gametos, Neuronas, Células madre, Células musculares ]
+    answer: Células madre
+
+  - question: La constante que lleva el nombre de este estado se calcula con la ley de acción de masas y se denota con una K mayúscula. El principio de Le Chatelier describe cómo este estado puede desplazarse al agregar producto o reactivo. Este estado describe una reacción cuyas velocidades directa e inversa son iguales. Nombra este término general que describe un sistema que está balanceado.
+    options:
+      - Estado de transición
+      - Equilibrio químico
+      - Sobresaturación
+      - Punto crítico
+    answer: Equilibrio químico
+
+  - question: 496 y 8128 son dos ejemplos de estos números, de los cuales se conocen 51 en total, que corresponden a los 51 números primos de Mersenne conocidos. “Deficiente” y “abundante” son adjetivos para los números que no son de este tipo. Como 1, 2, 4, 7 y 14 son divisores de 28 y suman 28, el 28 es un número de este tipo. Para ganar el punto, ¿de qué tipo de número, igual a la suma de sus divisores propios, es el seis el ejemplo más pequeño?
+    options:
+      - Números perfectos
+      - Números primos
+      - Números abundantes
+      - Números de Fibonacci
+    answer: Números perfectos
+
+  - question: Uno de los ejemplos más antiguos de estas estructuras es el de Arkadiko, en Micenas. C.T. Loscher diseñó una de las primeras variantes atirantadas de estas estructuras, mientras que sus variedades de arco y de viga existen desde antes de nuestra era. El Akashi Kaikyo es la más larga de estas estructuras que usan un diseño colgante. Nombra estas estructuras que unen dos puntos para salvar obstáculos como ríos, valles y carreteras.
+    options: [ Presas, Torres, Diques, Puentes ]
+    answer: Puentes
+
+  - question: Entre los ejemplos de estos objetos están Juan de Fuca y Nazca. Vine, Matthews y Morley predijeron que estos objetos contribuían a la expansión del fondo oceánico. Transformante, divergente y convergente son tres tipos de límites entre estos objetos, que pueden formar montañas y causar terremotos. Para ganar el punto, ¿qué grandes secciones de la corteza terrestre causan la deriva continental?
+    options: [ Plumas del manto, Fosas oceánicas, Placas tectónicas, Arcos volcánicos ]
+    answer: Placas tectónicas
+
+  - question: El Gigante de Crannell Creek se consideraba el mayor ejemplar de esta clasificación, uno de cuyos miembros lleva el nombre del general Sherman y se encuentra en el condado de Tulare, California. Un ejemplo clásico de gimnosperma que entra en esta amplia clasificación es la conífera. Nombra esta amplia clasificación de plantas que están amenazadas por la deforestación.
+    options: [ Helechos, Árboles, Musgos, Pastos ]
+    answer: Árboles
+    explanation: El General Sherman es una secuoya gigante, el árbol más grande por volumen.
+
+  - question: El demonio de Maxwell es un experimento mental en el que este valor disminuye. Esta magnitud es igual a la constante de Boltzmann multiplicada por el logaritmo natural del número de microestados de un sistema. La tercera ley de la termodinámica establece que este valor es cero para un cristal perfecto en el cero absoluto, mientras que la segunda ley establece que este valor para un sistema cerrado siempre debe aumentar. Nombra esta medida del desorden de un sistema.
+    options: [ Entropía, Entalpía, Energía libre de Gibbs, Energía interna ]
+    answer: Entropía
+
+  - question: El exceso de líquido sinovial en esta estructura se llama coloquialmente “agua en” esta articulación. Los ligamentos colateral medial y cruzado anterior de esta articulación son difíciles de sanar si se rompen. La superficie de esta articulación, la más grande del cuerpo humano, está protegida por la rótula. Esta articulación conecta la tibia y el peroné con el hueso fémur. Nombra esta articulación que dobla la pierna.
+    options: [ Codo, Cadera, Tobillo, Rodilla ]
+    answer: Rodilla
+
+  - question: COBE y WMAP son dos ejemplos satelitales de este dispositivo que usan microondas. Un reflector Cassegrain y una placa correctora de Schmidt forman un potente tipo de este dispositivo. El 30 de marzo de 2021 es la fecha de lanzamiento de uno de estos dispositivos, que lleva el nombre de James Webb y está diseñado para reemplazar al que lleva el nombre de Edwin Hubble. Nombra este tipo de dispositivo que se usa para observar las estrellas.
+    options:
+      - Sondas espaciales
+      - Estaciones espaciales
+      - Telescopios espaciales
+      - Vehículos exploradores planetarios
+    answer: Telescopios espaciales
+    explanation: En realidad, el telescopio espacial James Webb se lanzó el 25 de diciembre de 2021.
+
+  - question: Una forma de esta interacción puede detectarse con la prueba del bromo. Esta interacción contiene un enlace sigma y un enlace pi. Los alquenos se caracterizan por tener este tipo de interacción, mientras que los compuestos saturados no la tienen. El átomo de carbono del dióxido de carbono forma dos enlaces de este tipo, uno con cada átomo de oxígeno. Nombra este enlace covalente en el que se comparten cuatro electrones, en contraste con el simple y el triple.
+    options: [ Enlace simple, Enlace doble, Enlace triple, Puente de hidrógeno ]
+    answer: Enlace doble
+
+  - question: El nombre científico de esta clasificación de aves es Trochilidae. La especie de ave más pequeña pertenece a esta clasificación de aves de origen americano, que son las únicas aves capaces de mantenerse suspendidas en el aire y de volar hacia atrás. Nombra estas aves que usan el pico para beber el néctar de las flores y cuyo rápido aleteo, de 79 kilómetros por hora, produce el zumbido que les da su nombre en inglés.
+    options: [ Colibríes, Vencejos, Pinzones, Pájaros carpinteros ]
+    answer: Colibríes
+
+  - question: Una posible alternativa a una hipótesis muy aceptada sobre este evento se apoya en las gigantescas coladas de lava de los traps del Decán. La capa de iridio metálico en el límite K-Pg aporta pruebas a la hipótesis de Alvarez sobre cómo ocurrió este evento, que también se apoya en el gigantesco cráter de Chicxulub. Nombra este evento, ocurrido hace unos 66 millones de años, que acabó con una clase de reptiles gigantes.
+    options:
+      - Extinción del Pérmico–Triásico
+      - Extinción del Triásico–Jurásico
+      - Extinción del Devónico tardío
+      - Extinción del Cretácico–Paleógeno
+    answer: Extinción del Cretácico–Paleógeno
+    explanation: También se llama extinción K–Pg o K–T; acabó con los dinosaurios no avianos.
+
+  - question: Este científico descubrió la racemización en experimentos con ácido tartárico. Este científico desarrolló el uso de un frasco con cuello de cisne para refutar la generación espontánea de gérmenes en los procesos de fermentación. Este creador de las vacunas contra la rabia y el ántrax inventó un proceso en el que se usa calor moderado para eliminar patógenos. Nombra a este científico que da nombre a un proceso que se usa para mantener la leche higiénica.
+    options: [ Robert Koch, Edward Jenner, Louis Pasteur, Joseph Lister ]
+    answer: Louis Pasteur
+
+  - question: Este es el elemento más grande que forma un dímero natural. El potasio y este otro elemento se encuentran en un desinfectante común, la solución de Lugol. Los iones de este elemento reaccionan con H+ y peróxido de hidrógeno en una reacción reloj que lleva su nombre. Las deficiencias de este elemento causan un agrandamiento de la glándula tiroides conocido como bocio. Nombra este elemento de número atómico cincuenta y tres y símbolo químico I.
+    options: [ Bromo, Yodo, Cloro, Flúor ]
+    answer: Yodo
+
+  - question: Este objeto tiene una gran formación llamada abultamiento de Tharsis. Las primeras naves espaciales en aterrizar en este objeto fueron la Viking 1 y la Viking 2. La montaña más alta del sistema solar, el Olympus Mons, se encuentra en este planeta. Este planeta, explorado por Curiosity, tiene dos lunas que giran a su alrededor, Fobos y Deimos. Nombra este planeta de color rojo hierro, el cuarto más lejano del Sol.
+    options: [ Marte, Venus, Mercurio, Júpiter ]
+    answer: Marte
+
+  - question: Las inversiones en geometría proyectiva transforman un tipo generalizado de estos objetos en otro tipo general. La ecuación “r igual a coseno de theta” describe esta figura en coordenadas polares, mientras que su ecuación general en coordenadas cartesianas es x menos h al cuadrado más y menos k al cuadrado igual a r al cuadrado. Nombra esta figura bidimensional formada por los puntos que equidistan de un punto dado.
+    options: [ Elipse, Parábola, Hipérbola, Circunferencia ]
+    answer: Circunferencia
+
+  - question: Martin Beijerinck dio nombre a estas entidades al llamarlas “fluido vivo contagioso”. Una enfermedad originada en Wuhan empezó a propagarse en 2020 debido al tipo “corona” de esta clase de patógenos. Los que toman su genoma de ARN y lo transcriben a ADN para insertarlo en un huésped forman parte de la clase “retro-” de estos patógenos. Nombra estos patógenos, de los que se discute si están vivos o no, entre los que están la influenza y el VIH.
+    options: [ Bacterias, Priones, Virus, Protozoarios ]
+    answer: Virus
+
+  - question: Una regla de Fermi sobre las transiciones de un sistema cuántico a un continuo se describe con una expresión equivalente a este adjetivo. Los números de Fibonacci se acercan a una razón descrita por este adjetivo, que puede expresarse como la cantidad uno más la raíz cuadrada de cinco, todo entre 2. Nombra este adjetivo de seis letras que describe los objetos que han sido recubiertos con el elemento de símbolo químico Au.
+    options: [ Plateado, Dorado, Bronceado, Cobreado ]
+    answer: Dorado
+
+  - question: La razón entre esta magnitud y la carga se usa en una forma de espectrometría que lleva su nombre. Los valores distintos de cero de esta magnitud en los bosones W y Z se deben a la ruptura de simetría en el campo de Higgs. Entre las partículas que se cree que tienen un valor de cero para esta magnitud están los gluones y los fotones. Einstein relacionó la energía con esta magnitud multiplicada por la velocidad de la luz al cuadrado. Nombra esta magnitud que se mide en kilogramos.
+    options: [ Masa, Peso, Carga, Espín ]
+    answer: Masa
+
+  - question: Este símbolo se usa para escribir comentarios en Matlab. Este símbolo representa la aritmética modular en lenguajes como Python. La diferencia entre el valor medido y el valor esperado, dividida entre el valor esperado y multiplicada por cien, da un error que lleva el nombre de este símbolo; esto también puede usarse en química para determinar el rendimiento, donde 100 es el rendimiento perfecto. Nombra este símbolo, una línea diagonal con un círculo a cada lado.
+    options: [ Signo numeral, Y comercial, Signo de división, Signo de porcentaje ]
+    answer: Signo de porcentaje
+
+  - question: El trabajo de Ronald Ross identificó el vector de esta enfermedad, que, según descubrió la premio Nobel Tu Youyou, puede tratarse con artemisinina. Esta enfermedad es causada por miembros de la familia Plasmodium. Las personas heterocigotas para la anemia de células falciformes son resistentes a esta enfermedad. Nombra esta enfermedad transmitida por mosquitos cuyo nombre viene de la expresión italiana que significa “mal aire”.
+    options: [ Dengue, Fiebre amarilla, Malaria, Fiebre del Nilo Occidental ]
+    answer: Malaria
+
+  - question: En la prueba de dureza Vickers, este mineral se usa para hacer las marcas. Un material parecido a la goma que recubre este mineral se llama nyf y le da un aspecto de crestas. En la escala de dureza de Mohs, este mineral está justo por encima del corindón. El grafito puede convertirse en este mineral a alta presión. Nombra este mineral, el más duro de la escala de Mohs, una valiosa gema hecha de carbono.
+    options: [ Corindón, Diamante, Topacio, Cuarzo ]
+    answer: Diamante
+
+  - question: La capacidad de dos sustancias para formar uno de estos sistemas se caracteriza por su miscibilidad. A diferencia de los coloides, estos sistemas se forman a partir de dos sustancias en la misma fase. Los ejemplos de estos sistemas en los que interviene el agua se llaman “acuosos”. Nombra estas mezclas homogéneas de un soluto disuelto en un solvente.
+    options: [ Soluciones, Coloides, Suspensiones, Compuestos ]
+    answer: Soluciones
+
+  - question: La negación de esta condición, a pesar de las pruebas de que existe, se llama síndrome de Anton-Babinski. Esta condición da nombre en parte a un trastorno que tienen quienes no pasan la prueba de Ishihara. Esta condición puede ser provocada por la degeneración macular relacionada con la edad. Un daño en el quiasma óptico puede causar esta condición. Nombra esta condición de pérdida casi total o total de la visión.
+    options: [ Sordera, Miopía, Parálisis, Ceguera ]
+    answer: Ceguera
+    explanation: "También se acepta: ceguera cromática."
+
+  - question: Norman Borlaug ayudó a varios países a lograr la seguridad en el abastecimiento de este bien gracias a sus avances en agronomía. La Revolución Verde ayudó a aumentar la producción mundial de este bien general. Thomas Malthus pensaba que la población superaría la producción de este bien, lo que llevaría a una trampa poblacional. Nombra este bien, que puede caracterizarse por sus macronutrientes y micronutrientes, y que es necesario para prevenir el hambre.
+    options: [ Agua potable, Combustible, Alimentos, Medicamentos ]
+    answer: Alimentos
+
+  - question: En los fluidos en rotación, este fenómeno es del tipo planetario o de Rossby. Los solitones son un tipo de este fenómeno, modelado matemáticamente, que mantiene su forma al propagarse. La variedad longitudinal de este fenómeno puede propagarse a través de un resorte. Nombra estos fenómenos cuya variedad oceánica puede propagarse hasta las playas.
+    options: [ Corrientes, Ondas, Turbulencia, Remolinos ]
+    answer: Ondas
+
+  - question: La fuente más común de este elemento es la casiterita, que contiene su óxido. La aleación llamada peltre tiene alrededor de 90% de este elemento y del 5 al 10% de antimonio. El plomo y este elemento forman la aleación metálica fusible llamada soldadura blanda. En inglés, a las latas de aluminio a menudo se les llama erróneamente por el nombre de este elemento. Nombra este elemento de número atómico cincuenta y símbolo químico Sn.
+    options: [ Estaño, Plomo, Zinc, Aluminio ]
+    answer: Estaño
+
+  - question: El principal árbol del que se extrae este material es la especie sudamericana Hevea brasiliensis. La vulcanización es una técnica para reforzar los enlaces cruzados de este material. Este material se extrae en forma de látex mediante el “sangrado” de los árboles que llevan su nombre. Nombra este material elástico y pegajoso que se extrae de un árbol que lleva su nombre y se usa para fabricar productos como los borradores.
+    options: [ Resina, Corcho, Ámbar, Caucho natural ]
+    answer: Caucho natural
+    explanation: "También se acepta: goma elástica (en inglés, India rubber)."
+
+  - question: La pasta nuclear es un tipo de materia degenerada que se cree que existe en la corteza de estas estrellas. Estas estrellas están por encima del límite de Chandrasekhar y por debajo del límite de Tolman-Oppenheimer-Volkoff, lo que las hace más grandes que las enanas blancas. Nombra este tipo de estrella superdensa, que lleva el nombre del componente sin carga eléctrica de los núcleos atómicos que la forma.
+    options: [ Enanas blancas, Agujeros negros, Estrellas de neutrones, Gigantes rojas ]
+    answer: Estrellas de neutrones
+
+  - question: Por ser pioneros en técnicas criogénicas con este dispositivo, tres científicos ganaron el Premio Nobel de Química de 2017. Este dispositivo puede usar técnicas de barrido y de transmisión cuando aprovecha la naturaleza ondulatoria del electrón. Robert Hooke y Antonie van Leeuwenhoek fueron pioneros en el uso de lentes de vidrio para lograr aumento en este dispositivo. Nombra este instrumento científico que se usa para ampliar muestras diminutas.
+    options: [ Telescopios, Microscopios, Espectrómetros, Centrífugas ]
+    answer: Microscopios
+    explanation: El premio de 2017 reconoció la criomicroscopía electrónica.

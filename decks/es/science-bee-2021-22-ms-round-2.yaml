@@ -1,0 +1,165 @@
+# Science Bee 2021–22 (secundaria) · Ronda 2 — 32 preguntas.
+# Source: docs/Science-Bee-Round-2.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se agregaron para la opción múltiple.
+# Traducción al español de decks/science-bee-2021-22-ms-round-2.yaml.
+
+title: Science Bee 2021–22 (secundaria) · Ronda 2
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: La segunda parte de este proceso comienza cuando una molécula de dióxido de carbono se combina con la RuBP para formar un intermediario de alta energía. Los árboles caducifolios, como los abedules y los arces, realizan este proceso usando un organelo conocido como cloroplasto. Para ganar el punto, ¿las moléculas de clorofila absorben luz en qué proceso en el que las plantas usan la energía de la luz para producir azúcares?
+    options:
+      - Fotosíntesis
+      - Respiración celular
+      - Transpiración
+      - Fermentación
+    answer: Fotosíntesis
+
+  - question: Estos objetos se forman a partir de estrellas precursoras que superan el límite de Tolman-Oppenheimer-Volkoff. La variedad de Reissner-Nordstrom de estos objetos no rota, y se predice que uno de estos objetos se desvanecerá, según lo describe la radiación de Hawking. Nombra estas regiones de gravedad supermasiva de las que la luz no puede escapar.
+    options: [ Estrellas de neutrones, Enanas blancas, Gigantes rojas, Agujeros negros ]
+    answer: Agujeros negros
+
+  - question: Este hombre inventó un detonador a base de fulminato de mercurio para reducir la necesidad de mechas. Este dueño del fabricante de armas Bofors desarrolló el uso de la nitroglicerina como ingrediente activo de los explosivos. Nombra a este químico sueco, inventor de la dinamita, que da su nombre a unos premios anuales que se otorgan en literatura, paz y ciencia.
+    options:
+      - Svante Arrhenius
+      - Jöns Jacob Berzelius
+      - Alfred Nobel
+      - Carl Wilhelm Scheele
+    answer: Alfred Nobel
+
+  - question: Una gráfica de volcán muestra cómo se unen estas sustancias según el principio de Sabatier. El número de sitios activos del tipo heterogéneo de estas sustancias disminuye por «envenenamiento», y estas sustancias ofrecen una vía de reacción alternativa al estabilizar el estado de transición y reducir la energía de activación. Nombra estas sustancias que aceleran las reacciones químicas.
+    options: [ Inhibidores, Catalizadores, Reactivos, Solventes ]
+    answer: Catalizadores
+
+  - question: Cuando se enfría hasta el punto lambda, este elemento forma una película superfluida de Rollin que parece trepar fuera de su recipiente. Las partículas alfa son los núcleos de este elemento, que es el segundo más abundante del universo. Para ganar el punto, ¿dos átomos de hidrógeno se combinan para formar qué gas noble, el más ligero, que hace flotar los globos?
+    options: [ Helio, Hidrógeno, Neón, Argón ]
+    answer: Helio
+
+  - question: Esta función aparece tres veces en la fórmula de las combinaciones, y se estima mediante la aproximación de Stirling. Esta función aplicada a 3 da 6, y aplicada a 4 da 24. Para ganar el punto, ¿qué función, definida como el producto de todos los enteros positivos menores o iguales que n, se representa con un signo de exclamación?
+    options: [ Logaritmo, Raíz cuadrada, Valor absoluto, Factorial ]
+    answer: Factorial
+
+  - question: La estructura semipermeable de este organelo permite que las moléculas más pequeñas pasen sin ayuda, por ósmosis o por difusión. Tanto las células procariotas como las eucariotas contienen este organelo en forma de bicapa de fosfolípidos. Nombra este organelo, el límite de la célula que protege a los organelos internos.
+    options: [ Pared celular, Envoltura nuclear, Membrana celular, Citoesqueleto ]
+    answer: Membrana celular
+    explanation: También se llama membrana plasmática.
+
+  - question: Una variante «de árbol» de este animal es nativa de Nueva Guinea, y esa variedad es el único macrópodo verdaderamente arborícola. Osphranter es un género que incluye a estos animales, y ese género contiene la especie roja de este gran mamífero. Nombra este marsupial australiano, pariente del ualabí, un animal más pequeño.
+    options: [ Koala, Canguro, Wómbat, Demonio de Tasmania ]
+    answer: Canguro
+
+  - question: La atmósfera de este planeta está compuesta por nubes extremadamente densas formadas principalmente por ácido sulfúrico. Esa atmósfera tan densa atrapa los gases de efecto invernadero, lo que le da a este planeta la temperatura de superficie más alta del sistema solar. Identifica este segundo planeta desde el Sol, al que a veces se le llama «el gemelo de la Tierra».
+    options: [ Venus, Mercurio, Marte, Júpiter ]
+    answer: Venus
+
+  - question: El elemento recién descubierto oganesón se considera parte de este grupo. Los miembros de este grupo se caracterizan por tener su capa externa completa de electrones de valencia, por lo que es menos probable que participen en una reacción química. Nombra este grupo de elementos que contiene al helio, el neón y el argón.
+    options: [ Halógenos, Metales alcalinos, Metales alcalinotérreos, Gases nobles ]
+    answer: Gases nobles
+    explanation: "También se acepta: gases inertes, aerógenos."
+
+  - question: Los quechuas usaban el árbol de la cinchona para combatir esta enfermedad. Un brote de esta enfermedad llevó a la fundación de los CDC, y esta enfermedad prácticamente desapareció de EE. UU. con la introducción del DDT. Para ganar el punto, ¿los soldados estadounidenses en el Pacífico Sur contrajeron qué enfermedad, transmitida por mosquitos, cuyo nombre significa «mal aire»?
+    options: [ Tuberculosis, Cólera, Malaria, Influenza ]
+    answer: Malaria
+
+  - question: Entre los predecesores de estas entidades estaba Wingdings. Más tarde se introdujo un conjunto de estas entidades, al que se agregan nuevas constantemente mediante el estándar Unicode, y una cara con lágrimas de alegría es la más popular de estas entidades. Nombra estos pictogramas que se usan mucho en los mensajes de texto y que incluyen una gran variedad de expresiones faciales y objetos.
+    options: [ GIF, Emojis, Hashtags, Memes ]
+    answer: Emojis
+
+  - question: William Jenney construyó algunas de estas estructuras con el método del «esqueleto de Chicago», que emplea muros cortina sobre una estructura de acero. Entre los primeros ejemplos de estos edificios están uno nombrado en honor a la Equitable Life, en Nueva York, y el de Louis Sullivan nombrado en honor a Ellis Wainwright, en San Luis. Para ganar el punto, ¿la invención del ascensor de seguridad permitió en la década de 1890 un auge de qué edificios de oficinas muy altos?
+    options: [ Rascacielos, Puentes colgantes, Catedrales, Almacenes ]
+    answer: Rascacielos
+
+  - question: Una desigualdad que lleva el nombre de esta figura se invierte en el espacio de Minkowski. La intersección de las alturas de esta figura se conoce como su ortocentro, y su área puede calcularse con la fórmula de Herón. Los ángulos de cualquier ejemplo de este polígono suman 180 grados en el espacio euclidiano. Nombra este polígono de tres lados.
+    options: [ Cuadrado, Pentágono, Trapecio, Triángulo ]
+    answer: Triángulo
+
+  - question: El caso más mortífero de este fenómeno afectó a las ciudades de Daulatpur y Saturia, en Bangladés. Estos fenómenos, que pueden formarse a partir de superceldas, se miden según su intensidad en la escala Fujita. Para ganar el punto, ¿las trombas marinas son versiones acuáticas de qué devastadores desastres naturales formados por columnas de aire en rotación?
+    options: [ Ventiscas, Tsunamis, Tornados, Inundaciones repentinas ]
+    answer: Tornados
+    explanation: "También se acepta: mangas de viento."
+
+  - question: La edafología es el campo científico que estudia la formación de este material, que se agrupa en capas llamadas horizontes. Además de agua y gases, este material se compone principalmente de arena, limo y arcilla. Identifica esta mezcla de material orgánico, rica en nutrientes, que se usa para plantar flores y cultivos.
+    options: [ Roca madre, Suelo, Grava, Piedra caliza ]
+    answer: Suelo
+
+  - question: Argelia construyó una presa que lleva el nombre de este color para frenar el sobrepastoreo, y los ingenieros de varios países africanos construyen una Gran Muralla de este color para contener el desierto del Sahara. Junto con el rojo, este color da nombre a un tipo de daltonismo que es más frecuente en los hombres. Nombra este color que identifica a un tipo de berilo conocido como esmeralda.
+    options: [ Verde, Azul, Amarillo, Morado ]
+    answer: Verde
+
+  - question: La primera descripción de esta técnica en la antigua India se encontró en el Manuscrito Bower, que también mencionaba a Sushruta, el «padre de [este procedimiento]». El papiro Edwin Smith describe procedimientos de esta práctica en el antiguo Egipto, incluido el uso de suturas. Nombra esta técnica médica invasiva que usa instrumentos para tratar la afección de un paciente.
+    options: [ Vacunación, Medicina herbal, Fisioterapia, Cirugía ]
+    answer: Cirugía
+
+  - question: Esta sustancia provoca disentería en quienes la producen cuando se elabora a partir de un subproducto de los pulgones. El bajo contenido de humedad de esta sustancia la hace inhóspita para los microorganismos, por lo que es el único alimento conocido que nunca se echa a perder. Para ganar el punto, ¿qué endulzante natural, producido con enzimas del estómago y almacenado en panales hexagonales de cera, elaboran las abejas a partir del néctar?
+    options: [ Jalea real, Jarabe de arce, Miel, Melaza ]
+    answer: Miel
+
+  - question: Estos biomas son el ambiente principal donde vive el rebeco europeo, una cabra-antílope. La pica es un pariente cercano del conejo que vive en estos biomas, donde también hay camélidos sudamericanos como los guanacos y las vicuñas. Para ganar el punto, ¿la vida vegetal suele detenerse por encima del límite de las nieves en qué biomas de gran altitud, que incluyen el Himalaya?
+    options: [ Sabanas, Montañas, Selvas tropicales, Humedales ]
+    answer: Montañas
+    explanation: "También se acepta: regiones alpinas, tierras altas."
+
+  - question: Se cree que las plumas de esta región causan los puntos calientes volcánicos. La parte superior, muy dúctil, de esta región se conoce como astenosfera, y la conducción en las partes semilíquidas de esta región causa el movimiento de las placas tectónicas. Nombra esta región de la Tierra ubicada entre el núcleo interno y la corteza.
+    options: [ Manto, Corteza, Núcleo interno, Hidrosfera ]
+    answer: Manto
+    explanation: El manto se encuentra entre el núcleo externo y la corteza.
+
+  - question: Entre las variedades actuales de estos animales están el piche llorón y el pichiciego menor. En el sur de Estados Unidos, la variedad de nueve bandas de estos animales siempre da a luz cuatrillizos idénticos, y esa especie es el principal vector de la lepra. Nombra estos mamíferos acorazados, algunos de los cuales pueden enrollarse como una bola cuando se asustan.
+    options: [ Osos hormigueros, Perezosos, Zarigüeyas, Armadillos ]
+    answer: Armadillos
+
+  - question: Jim Lovell y otros dos tripulantes fueron los primeros en ver directamente la mitad de este objeto. El mar de la Tranquilidad, en este objeto, se visitó por primera vez cuando Michael Collins se quedó en órbita mientras sus dos compañeros usaban un módulo conocido como el Águila. Para ganar el punto, ¿en 1969 Buzz Aldrin y Neil Armstrong se convirtieron en las dos primeras personas en llegar a qué cuerpo celeste?
+    options: [ Marte, Venus, La Luna, Mercurio ]
+    answer: La Luna
+    explanation: "También se acepta: Luna."
+
+  - question: Este compuesto puede sintetizarse artificialmente a partir de dimetilurea y ácido malónico. Junto con la teofilina, este compuesto se usa a menudo como tratamiento para la apnea del sueño, y este estimulante es un alcaloide y antagonista de la adenosina que se usa comúnmente para evitar la somnolencia. Nombra este estimulante presente en el té y el café.
+    options: [ Nicotina, Cafeína, Efedrina, Taurina ]
+    answer: Cafeína
+
+  - question: Una posible prueba de esta tecnología se conoce como el incidente Vela. Entre las pruebas de esta tecnología están Buda Sonriente y Castle Bravo, y la presencia de estas armas en Cuba desencadenó una crisis diplomática en 1962. Nombra esta arma militar que usa una reacción de fisión para crear una explosión.
+    options:
+      - Armas nucleares
+      - Armas químicas
+      - Armas biológicas
+      - Bombas incendiarias
+    answer: Armas nucleares
+    explanation: "También se acepta: bombas nucleares, bombas atómicas."
+
+  - question: La conjetura de Kepler trata sobre el empaquetamiento de estas figuras en el espacio tridimensional, y la suma de los ángulos de un triángulo sobre esta forma supera los 180 grados. El área de la superficie de uno de estos objetos es 4 pi r al cuadrado. Nombra esta forma 3D con un volumen de cuatro tercios pi r al cubo, de la que son ejemplos objetos como las canicas y los globos terráqueos.
+    options: [ Cubo, Cilindro, Cono, Esfera ]
+    answer: Esfera
+
+  - question: La unidad más grande de esta medida es el yotta, aunque se ha propuesto el bronto. Este componente de la computadora se complementa con formas secundarias, como tarjetas, discos duros externos y la nube. Identifica este componente de la computadora que existe en los tipos de acceso aleatorio y de solo lectura.
+    options: [ Procesador, Tarjeta gráfica, Memoria, Placa madre ]
+    answer: Memoria
+
+  - question: La unidad más grande de esta medida es el yotta, aunque se ha propuesto el bronto. Este componente de la computadora se complementa con formas secundarias, como tarjetas, discos duros externos y la nube. Identifica este componente de la computadora que existe en los tipos de acceso aleatorio y de solo lectura.
+    options: [ Procesador, Memoria, Fuente de poder, Tarjeta de sonido ]
+    answer: Memoria
+
+  - question: Los líquenes están formados por un hongo y uno de estos organismos que viven en una relación simbiótica. La forestación oceánica consiste en cultivar estos organismos en masa, y los rápidos agotamientos de oxígeno en las poblaciones de estos organismos se conocen como «floraciones», que llevan su nombre. Para ganar el punto, ¿las cianobacterias y el sargazo son tipos de qué organismos protistas marinos, a menudo verdes, que flotan en el agua?
+    options: [ Algas, Hongos, Musgos, Amebas ]
+    answer: Algas
+    explanation: "También se acepta: algas marinas."
+
+  - question: El virus vaccinia se usa para inocular contra esta enfermedad, que en otro tiempo se recolectaba de las manos de las ordeñadoras. Las fuerzas británicas y estadounidenses usaron esta enfermedad como arma biológica mediante mantas contaminadas, y Edward Jenner produjo las primeras vacunas del mundo para prevenir esta enfermedad. Nombra esta enfermedad causada por los virus Variola, que fue erradicada en la década de 1970.
+    options: [ Varicela, Sarampión, Polio, Viruela ]
+    answer: Viruela
+
+  - question: Esta fuerza se puede hallar tomando el producto de su dirección por el producto escalar del vector unitario y el tensor de esfuerzos de Cauchy. Para una rampa con un ángulo de inclinación theta, la magnitud de esta fuerza es igual a mg coseno de theta. Esta fuerza impide que un libro colocado sobre una mesa se hunda a través de ella. Nombra esta fuerza producida por una superficie de contacto, perpendicular a esa superficie.
+    options: [ Fricción, Tensión, Fuerza normal, Fuerza de empuje ]
+    answer: Fuerza normal
+
+  - question: Esta tarea suele usar arcilla en la técnica K-Ar. Otra técnica para esta tarea usa el circón para calcular una cadena de desintegración uranio-torio-plomo, y otro método para esta tarea usa los isótopos 12 y 14 del carbono. Nombra este proceso que usa la desintegración radiactiva para determinar la edad de un objeto.
+    options:
+      - Dendrocronología
+      - Datación radiométrica
+      - Estratigrafía
+      - Datación paleomagnética
+    answer: Datación radiométrica
+    explanation: "También se acepta: datación por carbono, datación por uranio-plomo."

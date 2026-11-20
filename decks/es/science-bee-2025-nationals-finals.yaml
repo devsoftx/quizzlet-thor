@@ -1,0 +1,211 @@
+# Science Bee 2025 Nacional · Final (secundaria) — 33 preguntas.
+# Source: docs/2025-EMS-NATIONALS-SCI-MS-ROUND-F.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se agregaron para la opción múltiple.
+# Traducción al español de decks/science-bee-2025-nationals-finals.yaml.
+
+title: Science Bee 2025 Nacional · Final (secundaria)
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Charles Walcott documentó este evento mediante fósiles del esquisto de Burgess, entre ellos Anomalocaris y Pikaia. La «fauna de pequeñas conchas» precedió a este evento, en el que aparecieron por primera vez los trilobites y los cordados. Simon Conway Morris estudió la rápida diversificación de planes corporales de este periodo, que incluyó el desarrollo de conchas duras y exoesqueletos. Nombra esta radiación evolutiva en la que aparecieron la mayoría de los filos modernos, hace unos 541 millones de años.
+    options:
+      - Explosión cámbrica
+      - Radiación ordovícica
+      - Explosión de Avalon
+      - Gran Mortandad
+    answer: Explosión cámbrica
+    explanation: "También se acepta: radiación cámbrica, diversificación cámbrica."
+
+  - question: Este diagrama incluye una parte llamada «franja de inestabilidad», y la misión Gaia de la Agencia Espacial Europea reveló que este diagrama tiene un hueco cerca de las enanas M. Este diagrama incluye una banda destacada que lo atraviesa en diagonal, llamada «secuencia principal», y en este diagrama las enanas blancas aparecen hacia la parte inferior, mientras que las supergigantes aparecen hacia la parte superior. Identifica este diagrama que lleva el nombre de un científico danés y uno estadounidense, un diagrama de dispersión que muestra la relación entre la luminosidad y la temperatura de las estrellas.
+    options:
+      - Diagrama de Hubble
+      - Diagrama de Feynman
+      - Diagrama de Minkowski
+      - Diagrama de Hertzsprung-Russell
+    answer: Diagrama de Hertzsprung-Russell
+    explanation: "También se acepta: diagrama HR."
+
+  - question: Un periodo de pocas observaciones de manchas solares entre 1796 y 1820 lleva el nombre de este hombre y es similar al mínimo de Maunder. Junto con la ley de Proust, el enunciado pionero que hizo este hombre de la ley de las proporciones múltiples dio origen al estudio de la estequiometría. Este científico publicó una ley que establece que la presión total de una mezcla de gases es igual a la suma de las presiones de los gases individuales. Nombra a este científico inglés, pionero de la teoría atómica moderna, que sostuvo que los elementos estaban formados por átomos, los cuales podían formar compuestos.
+    options: [ Joseph Priestley, Humphry Davy, John Dalton, Henry Cavendish ]
+    answer: John Dalton
+
+  - question: Esta enfermedad es causada por una mutación genética del gen HEXA en el cromosoma 15, que provoca la acumulación del gangliósido GM2 dentro de las células. Los casos de esta enfermedad de inicio infantil se caracterizan por la aparición de una mancha rojo cereza en la retina. Esta enfermedad es inusualmente común en las comunidades franco-canadienses, cajún y judías asquenazíes. Nombra esta enfermedad que causa la destrucción de los nervios del cerebro y de la médula espinal, y que lleva el nombre de dos médicos, uno británico y otro estadounidense.
+    options:
+      - Enfermedad de Huntington
+      - Enfermedad de Tay-Sachs
+      - Fibrosis quística
+      - Fenilcetonuria
+    answer: Enfermedad de Tay-Sachs
+
+  - question: Los valores altos de un índice desarrollado por Robert Carlson indican esta condición. Los efectos negativos de esta condición se pueden aliviar en parte con un tubo de Olszewski, que hace circular el agua anóxica. Esta condición suele ocurrir cuando los nitratos y fosfatos de los fertilizantes son arrastrados a un cuerpo de agua, lo que provoca su forma cultural. Identifica este término que designa la acumulación excesiva de nutrientes en un cuerpo de agua, que a menudo se asocia con las floraciones de algas.
+    options: [ Eutrofización, Acidificación, Biomagnificación, Salinización ]
+    answer: Eutrofización
+
+  - question: Este objeto astronómico tiene accidentes como el cañón Messina Chasmata y el escarpe Rousillon Rupes, nombrados en honor a ciudades de Francia e Italia. Este objeto astronómico también tiene un cráter llamado Gertrude, y fue descubierto por William Herschel junto con Oberón. Esta luna es la más pequeña del sistema solar exterior que es, a la vez, la luna más grande de su planeta. Con el nombre de un personaje de Sueño de una noche de verano, ¿cuál es, por los puntos, esta luna, la más grande de Urano?
+    options: [ Titán, Ariel, Umbriel, Titania ]
+    answer: Titania
+    explanation: No debe confundirse con Titán, la luna más grande de Saturno.
+
+  - question: El teorema de Steiner relaciona esta magnitud respecto de un eje paralelo a otro, y para una varilla delgada que gira alrededor de uno de sus extremos, este valor es un tercio de la masa por la longitud al cuadrado. Su unidad del SI es el kilogramo-metro cuadrado, y describe la resistencia de un objeto a la aceleración angular. El teorema de los ejes perpendiculares permite calcular esta propiedad para objetos planos sumando las contribuciones respecto de distintos ejes. Nombra este análogo rotacional de la masa que determina la inercia rotacional de un objeto.
+    options: [ Momento angular, Torque, Momento de inercia, Velocidad angular ]
+    answer: Momento de inercia
+
+  - question: Una de estas cosas en forma canónica se transforma mediante el lema de transición de Foata. Estas cosas se pueden representar con la notación de dos líneas de Cauchy o con la notación de palabra de una línea, que es más compacta. Se pueden generar ejemplos aleatorios de estas cosas cuando una secuencia se mezcla con el barajado de Fisher-Yates. Para un conjunto de n elementos distintos, hay exactamente «n factorial» de estas cosas. Nombra estos reordenamientos de un conjunto, en los que la posición de cada elemento puede cambiar.
+    options: [ Combinaciones, Permutaciones, Particiones, Subconjuntos ]
+    answer: Permutaciones
+
+  - question: Los valores distintos de cero de esta propiedad provocan dispersión dentro del medio, lo que viola uno de los supuestos de la ley de Beer-Lambert. Los valores altos de esta propiedad se relacionan con profundidades de Secchi bajas, que se determinan observando el punto en el que un disco blanco y negro deja de verse con claridad. Los movimientos cuesta abajo de agua cargada de sedimentos forman las corrientes que llevan el nombre de esta propiedad. Nombra esta propiedad que describe el grado de opacidad de una muestra de agua.
+    options: [ Turbidez, Salinidad, Viscosidad, Alcalinidad ]
+    answer: Turbidez
+
+  - question: El sistema de reputación de este sitio web se construyó con Dapper, un micro-ORM desarrollado por el cocreador de este sitio. El editor de este sitio, basado en Markdown, usa PageDown, una biblioteca derivada de Markdown. Los usuarios con suficiente reputación pueden marcar publicaciones de este sitio como duplicadas, o editar preguntas etiquetadas con tecnologías como «python» o «java». Nombra este sitio web de preguntas y respuestas donde los programadores suelen depurar código, un sitio que lleva el nombre de un tipo de error de software.
+    options: [ GitHub, Quora, Reddit, Stack Overflow ]
+    answer: Stack Overflow
+
+  - question: Un gen que ayuda a sobrevivir en ambientes con poco oxígeno, y que hoy se encuentra en los tibetanos, probablemente provino de estas personas. Los restos de estas personas en la cueva kárstica de Baishiya mostraron que usaban herramientas hechas de asta. Estas personas reciben su nombre de la cueva siberiana donde se encontraron por primera vez, y su ADN aparece con mayor frecuencia en los genomas de los pueblos melanesios. Nombra esta especie humana extinta, pariente de los neandertales y del Homo sapiens.
+    options: [ Neandertales, Homo floresiensis, Denisovanos, Homo erectus ]
+    answer: Denisovanos
+
+  - question: El mecanismo de Colgate-Petschek explica cómo los fotones de estos eventos escapan de regiones de alta densidad. Estos eventos, detectados por primera vez por los satélites Vela que buscaban pruebas nucleares, se dividen en las categorías «largos» y «cortos», según duren más o menos de dos segundos. La fusión de estrellas de neutrones puede desencadenar estos eventos, que son los fenómenos electromagnéticos más energéticos que se conocen. Nombra estos destellos breves pero intensos de radiación de alta energía que vienen del espacio profundo.
+    options:
+      - Ráfagas rápidas de radio
+      - Brotes de rayos gamma
+      - Erupciones solares
+      - Eyecciones de masa coronal
+    answer: Brotes de rayos gamma
+    explanation: "También se acepta: GRB."
+
+  - question: Este método fue inventado por Kary Mullis y Michael Smith, quienes ganaron el Premio Nobel de Química de 1993 por su creación. Este método se puede realizar con un termociclador, y la desnaturalización térmica de la molécula termoestable Taq es su primer paso. Este método se usó junto con la transcripción inversa para hacer pruebas de COVID-19, y también se usa en la ciencia forense para obtener huellas genéticas. Nombra este método que permite replicar rápidamente muestras de ADN.
+    options:
+      - Reacción en cadena de la polimerasa
+      - Electroforesis en gel
+      - Secuenciación de Sanger
+      - Transferencia de Southern
+    answer: Reacción en cadena de la polimerasa
+    explanation: "También se acepta: PCR."
+
+  - question: Este médico se hizo famoso por tratar a gladiadores y describió el nervio laríngeo recurrente al disecar cerdos. Su teoría de los cuatro humores dominó la medicina occidental durante más de mil años, y afirmó erróneamente que la sangre se producía en el hígado. Su obra «Sobre los procedimientos anatómicos» describía la práctica de la vivisección, y fue el médico personal de Marco Aurelio. Nombra a este influyente médico griego cuyas teorías perduraron hasta Vesalio.
+    options: [ Avicena, Dioscórides, Andrés Vesalio, Galeno ]
+    answer: Galeno
+    explanation: "También se acepta: Aelius Galenus."
+
+  - question: Una unidad llamada «mil» o milésima, equivalente a 1/1000 de esta unidad, se usa para ajustar las miras de las armas de fuego. Un pseudovector que mide cuántas de estas unidades se recorren por segundo se representa con la letra griega omega minúscula. Una revolución completa mide 2 pi de estas unidades. Una de estas unidades equivale aproximadamente a 57.3 grados. Nombra esta unidad para medir ángulos, que se obtiene de un arco cuya longitud es igual a la mitad del diámetro de un círculo, y que se usa a menudo en trigonometría.
+    options: [ Grado, Gradián, Radián, Estereorradián ]
+    answer: Radián
+
+  - question: Varias especies de este género se reclasificaron tras un análisis genético del ARNr 16S. Estas bacterias grampositivas producen bacteriocinas y convierten el piruvato en lactato mediante fermentación. Los miembros de este género se usan para producir yogur y kimchi, y dominan el microbioma vaginal, donde mantienen un pH ácido. La FDA clasifica a estos organismos con forma de bastón como «generalmente considerados seguros». Nombra estas bacterias probióticas que producen ácido láctico y ayudan a conservar los alimentos.
+    options: [ Escherichia, Lactobacillus, Salmonella, Streptomyces ]
+    answer: Lactobacillus
+
+  - question: Kepler predijo este fenómeno en 1639 usando las Tablas rudolfinas. Este fenómeno se observó en 2004 y 2012 para perfeccionar técnicas que se usan para encontrar exoplanetas, y ocurre en pares separados por ocho años durante diciembre, seguidos de un intervalo de más de un siglo. Este fenómeno fue observado en 1769 por James Cook desde Tahití para determinar la longitud. Nombra este fenómeno en el que el segundo planeta del sistema solar pasa entre la Tierra y el Sol, y se ve sobre este último.
+    options:
+      - Tránsito de Venus
+      - Tránsito de Mercurio
+      - Eclipse solar anular
+      - Ocultación lunar de Venus
+    answer: Tránsito de Venus
+
+  - question: Este biólogo tomó una cita de Charles Darwin para titular la colección de ensayos El capellán del diablo. Este biólogo usó la analogía del agua que fluye para explicar cómo los genes se propagan en una población en el libro El río del Edén. Este biólogo acuñó el término «meme» para describir las formas en que los comportamientos pueden replicarse y propagarse a lo largo de generaciones. Nombra a este biólogo evolutivo británico y divulgador científico que escribió El gen egoísta y El espejismo de Dios.
+    options:
+      - Stephen Jay Gould
+      - E. O. Wilson
+      - J. B. S. Haldane
+      - Richard Dawkins
+    answer: Richard Dawkins
+
+  - question: El líquido que se produce dentro de estas glándulas es una mezcla compleja de lípidos, entre ellos triglicéridos, ésteres de cera, escualeno y ácidos grasos libres. La hiperactividad de estas glándulas es un factor importante en el desarrollo del acné vulgar. Estas glándulas secretan una sustancia que lubrica la piel y el cabello, lo que evita la resequedad y los protege de factores ambientales. Ubicadas principalmente en la dermis y asociadas a los folículos pilosos, ¿cuáles son, por los puntos, estas glándulas holocrinas que producen sebo?
+    options:
+      - Glándulas sudoríparas ecrinas
+      - Glándulas lagrimales
+      - Glándulas sebáceas
+      - Glándulas salivales
+    answer: Glándulas sebáceas
+    explanation: "También se acepta: glándulas de grasa."
+
+  - question: La función zeta de Riemann y el polilogaritmo aparecen en una ecuación de estado ideal que lleva el nombre de este hombre. Este hombre desarrolló una teoría para partículas que no siguen la estadística de Fermi-Dirac, la cual, en la estadística cuántica, explica por qué la luz láser es coherente. Paul Dirac acuñó un término para las partículas subatómicas con espín entero que hace referencia al nombre de este hombre. Nombra a este físico indio que, junto con Albert Einstein, da nombre a un estado de la materia que se produce a bajas temperaturas, llamado condensado.
+    options:
+      - C. V. Raman
+      - Satyendra Nath Bose
+      - Meghnad Saha
+      - Subrahmanyan Chandrasekhar
+    answer: Satyendra Nath Bose
+    explanation: Las partículas llamadas bosones llevan su nombre.
+
+  - question: Las células que producen esta sustancia en el sistema nervioso central se llaman oligodendrocitos, mientras que en el sistema nervioso periférico lo hacen las células de Schwann. En la esclerosis múltiple, el sistema inmunitario ataca esta sustancia, lo que provoca inflamación y daño en las fibras nerviosas. Cuando varias capas de membranas ricas en esta sustancia envuelven el axón, se forma la vaina que lleva su nombre. Nombra esta sustancia grasa que aísla las fibras nerviosas y aumenta la velocidad y la eficiencia de los impulsos eléctricos.
+    options: [ Mielina, Queratina, Colágeno, Melanina ]
+    answer: Mielina
+
+  - question: Cuando el gas etileno reacciona con este elemento, se forma un compuesto que se usaba como aditivo en la gasolina que contenía agentes antidetonantes de plomo. Un agente para el control de plagas que contiene este elemento y un grupo metilo también es responsable del agotamiento de la capa de ozono, y su producción ha sido limitada por el Protocolo de Montreal. Usado como retardante de fuego y nombrado por su olor penetrante, nombra, por los puntos, este elemento de color marrón rojizo que es un halógeno y es líquido a temperatura y presión estándar.
+    options: [ Yodo, Flúor, Astato, Bromo ]
+    answer: Bromo
+
+  - question: Roger Wolcott Sperry recibió el Premio Nobel de Medicina por su trabajo sobre este procedimiento. Este procedimiento es la causa más común del síndrome de la mano ajena, en el que las extremidades de un paciente se mueven sin intención consciente. Este procedimiento suele realizarse solo en casos graves de epilepsia, para evitar que las convulsiones se extiendan por todo el cerebro. Nombra este procedimiento en el que se corta el cuerpo calloso, lo que separa los hemisferios izquierdo y derecho del cerebro.
+    options: [ Lobotomía, Trepanación, Cirugía de cerebro dividido, Talamotomía ]
+    answer: Cirugía de cerebro dividido
+    explanation: También se llama callosotomía.
+
+  - question: Esta magnitud puede deformar ciertos líquidos en el efecto Moisés. Esta magnitud vectorial participa en un producto vectorial con la velocidad de una partícula en la ley de la fuerza de Lorentz. Esta magnitud es uniforme en ciertas regiones cuando la crea una bobina de Helmholtz. Una versión inducida de esta magnitud se opone a la versión original de esta magnitud, según la ley de Lenz. Una corriente eléctrica genera esta magnitud, que se puede calcular con la ley de Biot-Savart. ¿Qué campo vectorial se puede medir en teslas?
+    options:
+      - Campo eléctrico
+      - Campo magnético
+      - Flujo magnético
+      - Campo gravitacional
+    answer: Campo magnético
+    explanation: "También se acepta: campo B, campo H."
+
+  - question: Esta magnitud se puede calcular en función de dos valores del radio para interfaces curvas en la ecuación de Kelvin. La razón de saturación, que es la razón entre dos formas de esta magnitud para una gota de solución y para agua pura con una superficie plana, aparece en la ecuación de Kohler en meteorología. Ejemplos de esta magnitud se multiplican por una fracción molar en la ley de Raoult. Nombra esta magnitud que mide la fuerza ejercida por unidad de área por un gas que está en equilibrio con un sólido o un líquido de la misma sustancia.
+    options:
+      - Presión de vapor
+      - Presión parcial
+      - Presión osmótica
+      - Presión hidrostática
+    answer: Presión de vapor
+
+  - question: Este tipo de interacción consiste en una partícula grande con carga positiva y una partícula pequeña con carga negativa, y tiene una carga positiva baja, según las reglas de Fajans. Los compuestos con esta interacción pierden su estructura de red cristalina al experimentar solvatación en disolventes como el agua. Esta interacción se presenta en sales como el cloruro de sodio, en las que dos átomos tienen una gran diferencia de electronegatividad. Identifica este tipo de enlace químico, que se contrasta con el enlace covalente.
+    options: [ Enlace covalente, Enlace metálico, Puente de hidrógeno, Enlace iónico ]
+    answer: Enlace iónico
+
+  - question: Algunos de estos organismos producen alquenos de cadena larga, que son indicadores de la presencia de hielo marino, e isoprenoides altamente ramificados. Una estructura llamada rafe libera mucílago, lo que permite a estos organismos «deslizarse». Dos órdenes de estos organismos son Pennales y Centrales. El ácido silícico se usa para formar la pared celular de estos organismos, que generalmente tiene dos tecas y se llama frústula. Nombra estos organismos unicelulares, un tipo de algas conocidas como «joyas del mar».
+    options: [ Dinoflagelados, Euglenoides, Diatomeas, Foraminíferos ]
+    answer: Diatomeas
+
+  - question: El tipo AuviQ de estos dispositivos usa un mecanismo impulsado por CO2 en lugar de un resorte. En 2022, Mylan tuvo que pagar 250 millones de dólares para resolver una demanda por precios abusivos relacionada con estos dispositivos. Antes de usarlos, hay que quitar un seguro, normalmente azul, para poder desbloquear la punta naranja del otro extremo de estos dispositivos. Al autoadministrárselos, los pacientes los mueven con fuerza hacia el muslo para asegurar una aplicación intramuscular. Identifica estos dispositivos médicos que se usan para inyectar epinefrina y tratar la anafilaxia.
+    options: [ Plumas de insulina, EpiPens, Inhaladores para el asma, Nebulizadores ]
+    answer: EpiPens
+    explanation: "También se acepta: autoinyectores de epinefrina (adrenalina)."
+
+  - question: El método Linz-Donawitz reemplazó el uso de este proceso, que incluía un procedimiento llamado el «soplado» y que a menudo va precedido inmediatamente del pudelado. Este proceso se mejoró al agregar spiegeleisen, una aleación que contiene manganeso, una modificación creada por Robert Forester Mushet. Cuando se usa un revestimiento refractario, este proceso puede llamarse proceso Gilchrist-Thomas. Capaz de usar la oxidación para eliminar impurezas, nombra, por los puntos, este proceso que se usa para convertir el arrabio en acero.
+    options:
+      - Proceso Bessemer
+      - Proceso Hall-Héroult
+      - Proceso Haber
+      - Proceso Solvay
+    answer: Proceso Bessemer
+
+  - question: Este fenómeno suele canalizarse a través de pasos de montaña como los de Newhall y Cajon. Este fenómeno es un tipo de viento catabático que se origina en un área de alta presión de la Gran Cuenca, y también puede llevar la fiebre del valle a zonas más pobladas. Estos vientos, que suelen ocurrir en otoño, también se conocen como vientos Diablo cuando soplan cerca de la bahía de San Francisco. Nombra estos vientos que a menudo propagan incendios forestales en el sur de California.
+    options: [ Vientos chinook, Vientos mistral, Vientos siroco, Vientos de Santa Ana ]
+    answer: Vientos de Santa Ana
+
+  - question: El ununennio es un miembro hipotético de este grupo, cuyos miembros suelen almacenarse en aceite para evitar reacciones con el aire. Este grupo incluye al rubidio, así como al elemento más reactivo de la tabla periódica, el cesio. Este grupo se destaca porque todos sus miembros pueden formar un catión con carga +1, y entre sus miembros más pesados está el francio. Junto con el hidrógeno forman el grupo 1 de la tabla periódica; ¿cuáles son, por los puntos, estos metales muy reactivos que incluyen al litio y al potasio?
+    options:
+      - Metales alcalinotérreos
+      - Metales de transición
+      - Metales alcalinos
+      - Lantánidos
+    answer: Metales alcalinos
+
+  - question: Si la razón entre dos números reales a y b es uno de estos números, se dice que son inconmensurables. Estos números incluyen todos los números trascendentes, y se contrastan con un conjunto que suele denotarse con una «Q mayúscula». La raíz cuadrada de 2 es probablemente el primer miembro conocido de este conjunto de números. Nombra este subconjunto de los números reales que incluye el número de Euler y pi, que no se pueden expresar como razón de enteros y cuyos decimales siguen infinitamente sin una secuencia que se repita.
+    options:
+      - Números racionales
+      - Números irracionales
+      - Números imaginarios
+      - Números enteros
+    answer: Números irracionales
+
+  - question: Este investigador criticó el modelo «localizacionista» en el libro Sobre la afasia, en el que acuñó el término «agnosia» para la dificultad para procesar información sensorial. Este investigador propuso usar cocaína para tratar la adicción a la morfina y envió a su paciente Emma Eckstein a una desastrosa cirugía nasal para tratar la «histeria». Este investigador propuso que el inconsciente estaba compuesto por el yo, el superyó y el ello. Nombra a este neurólogo y psicólogo austriaco, el padre del psicoanálisis.
+    options: [ Sigmund Freud, Carl Jung, Alfred Adler, Josef Breuer ]
+    answer: Sigmund Freud

@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { loadEnv, type Connect, type Plugin, type ViteDevServer } from "vite";
 import { defineConfig } from "vitest/config";
@@ -61,12 +61,11 @@ function vercelFunctionsDev(): Plugin {
     const route = url.pathname.replace(/^\/api\//, "").replace(/\/$/, "");
     if (!/^[a-z0-9-]+$/.test(route)) return false;
 
-    let mod: Record<string, unknown>;
-    try {
-      mod = await server.ssrLoadModule(`/api/${route}.ts`);
-    } catch {
-      return false; // no such function
-    }
+    // An unknown route is a plain 404. Check for the file first: asking Vite to
+    // load a missing one logs a loading error. A function that exists but fails
+    // to load is a real error, so it isn't caught here (the request gets a 500).
+    if (!existsSync(new URL(`./api/${route}.ts`, import.meta.url))) return false;
+    const mod: Record<string, unknown> = await server.ssrLoadModule(`/api/${route}.ts`);
     const method = req.method ?? "GET";
     const handler = mod[method];
     if (typeof handler !== "function") {
