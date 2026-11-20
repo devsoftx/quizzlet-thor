@@ -1,0 +1,181 @@
+# Science Bee 2026 Nacional · Ronda final (6.º a 8.º) — 33 preguntas.
+# Source: docs/2026-NATIONALS-SCI-8-6-ROUND-F.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se agregaron para la opción múltiple.
+# Traducción al español de decks/science-bee-2026-nationals-final-round.yaml.
+
+title: Science Bee 2026 Nacional · Ronda final (6.º a 8.º)
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Una neoplasia maligna de este órgano en mujeres jóvenes se llama tumor sólido pseudopapilar. El líquido que libera este órgano incluye las enzimas digestivas tripsinógeno y amilasa, y ese líquido sale de este órgano cuando el quimo entra en el duodeno. Los cálculos biliares que bloquean el conducto colédoco, o el alcoholismo, pueden causar la inflamación de este órgano, que libera células endocrinas en los islotes de Langerhans. Nombra este órgano que libera glucagón e insulina para controlar el nivel de azúcar en la sangre.
+    options: [ Páncreas, Bazo, Estómago, Tiroides ]
+    answer: Páncreas
+
+  - question: Este elemento se usa en los estudios MAG3 de los riñones, y también en gammagrafías óseas para resaltar fracturas que no se ven en las radiografías. Este elemento se forma de manera natural cuando ocurre captura de neutrones en minerales de molibdeno, y su nombre refleja que fue el primer elemento artificial que se produjo ampliamente. Nombra este elemento, el radiactivo más ligero, con número atómico 43.
+    options: [ Prometio, Renio, Rutenio, Tecnecio ]
+    answer: Tecnecio
+
+  - question: Este evento causó el último avance de la capa de hielo Laurentina después de la oscilación de Allerod. Un porcentaje importante de la megafauna murió durante este evento, que probablemente fue causado por el pulso de agua de deshielo 1A. Este evento causó el declive de la cultura Clovis, y el pseudoarqueólogo Graham Hancock afirma que este evento destruyó la Atlántida. Conocido por una «hipótesis del impacto» que lleva su nombre, ¿cuál es, por los puntos, este regreso a condiciones parecidas a las de la Edad de Hielo antes de la Revolución Agrícola?
+    options:
+      - Dryas antiguo
+      - Pequeña Edad de Hielo
+      - Dryas reciente
+      - Último Máximo Glacial
+    answer: Dryas reciente
+
+  - question: Estas proteínas se disponen como dímeros cabeza-cola en un motivo de «apretón de manos», y proporcionan un potencial electrostático que mantiene unida la fibra de 30 nanómetros. Estas proteínas pueden promover la actividad transcripcional mediante la acetilación de la lisina, y ocho de estas proteínas forman un octámero en el centro del nucleosoma en los eucariotas. Nombra estas proteínas alrededor de las cuales se enrolla el ADN para formar el complejo llamado cromatina.
+    options: [ Helicasas, Histonas, Cohesinas, Polimerasas ]
+    answer: Histonas
+
+  - question: El valor de esta magnitud corresponde a la intensidad de las llamadas «líneas prohibidas» en las regiones H II. Se requieren ciertos rangos de masa y de esta magnitud para que ocurran supernovas de inestabilidad de pares. Las estrellas de Población I se distinguen de las de Población II por tener valores más altos de esta magnitud, mientras que las estrellas de Población III, que se formaron muy temprano, tienen un valor de cero en esta magnitud. Indica esta magnitud que expresa la proporción de elementos distintos del helio o el hidrógeno que hay en una estrella.
+    options: [ Metalicidad, Luminosidad, Temperatura superficial, Gravedad superficial ]
+    answer: Metalicidad
+    explanation: Los astrónomos llaman «metal» a todo elemento más pesado que el helio.
+
+  - question: Esta empresa desarrolló un motor criogénico llamado BE-3, que se probó en Van Horn. Esta empresa desarrolló un diseño de dos etapas para su familia de vehículos de lanzamiento New Glenn. Esta empresa lanzó una misión tripulada con un vehículo New Shepard que cruzó la línea de Kármán, con lo que entró al espacio. Asociada con Sierra Space para desarrollar la estación espacial Orbital Reef, ¿cuál es, por los puntos, esta empresa de tecnología espacial fundada por Jeff Bezos?
+    options: [ SpaceX, Virgin Galactic, Rocket Lab, Blue Origin ]
+    answer: Blue Origin
+
+  - question: Durante este proceso, la polimerización de FtsZ y la formación del «anillo Z» desencadenan la formación de nuevo material de la pared celular. Las levaduras S. pombe presentan este proceso de forma inusual, mientras que, en otros eucariotas, este proceso solo ocurre en las mitocondrias y los cloroplastos. Las células que pasan por este proceso tienen una fase de elongación en la que las dos mitades de la célula quedan divididas por un septo. Nombra este proceso reproductivo que usan las bacterias, en el que una célula madre se divide en dos células hijas idénticas.
+    options: [ Gemación, Conjugación, Fisión binaria, Esporulación ]
+    answer: Fisión binaria
+
+  - question: Este hombre da nombre a un teorema que dice que, para un entero a, cuando p es primo, «a elevado a la p, menos a» será múltiplo de p. Este hombre dijo que no le cabía la demostración de un teorema en el margen de la Arithmetica cuando afirmó que no había soluciones enteras para «a elevado a la n más b elevado a la n igual a c elevado a la n» con n mayor que dos. Nombra a este matemático francés que da nombre a un «último teorema».
+    options:
+      - René Descartes
+      - Pierre de Fermat
+      - Blaise Pascal
+      - Évariste Galois
+    answer: Pierre de Fermat
+
+  - question: Según la ley de Planck, la radiancia espectral de estas cosas depende del cubo de la frecuencia, y tiende a la ley de Rayleigh-Jeans a bajas frecuencias. Para uno de estos objetos, cuya emisividad se considera igual a uno, la exitancia radiante es igual a una constante por la cuarta potencia de la temperatura, según la ley de Stefan-Boltzmann. Como emisores ideales, y a veces modelados como una cavidad con un agujero, nombra, por los puntos, estos objetos físicamente ideales que absorben toda la luz.
+    options: [ Cuerpos negros, Cuerpos grises, Cuerpos blancos, Cuerpos transparentes ]
+    answer: Cuerpos negros
+    explanation: En inglés también se escribe «blackbodies», en una sola palabra.
+
+  - question: Bajo la tutoría de Oystein Ore, esta persona escribió la tesis «Nuevos tipos de criterios de irreducibilidad». El lenguaje de programación COBOL recibió la influencia del lenguaje de procesamiento de datos de esta persona, creado para Remington Rand y llamado FLOW-MATIC. Una herramienta diseñada por esta persona funcionaba como un enlazador; era el sistema A-0, que generaba código máquina. Nombra a esta persona, contraalmirante de la Marina de los EE. UU. y figura pionera de la informática, que creó los primeros compiladores para lenguajes de programación.
+    options:
+      - Ada Lovelace
+      - Margaret Hamilton
+      - Katherine Johnson
+      - Grace Hopper
+    answer: Grace Hopper
+
+  - question: Según Michael Spivak, «la sustitución más astuta del mundo» es una sustitución de ángulo medio que lleva el nombre de esta función y que hace «t igual a esta función de x sobre dos». Esta función tiene asíntotas cada pi radianes, incluidas las de menos y más pi sobre dos. Nombra esta función trigonométrica, definida como la razón entre la longitud del cateto opuesto y la del cateto adyacente en un triángulo rectángulo.
+    options: [ Seno, Coseno, Tangente, Cotangente ]
+    answer: Tangente
+
+  - question: Aunque esta persona es conocida por sus logros en otra ciencia, su padre inventó la lente acromática. La innovación más notable de esta persona se inspiró en un artículo de un científico francés sobre la fermentación y la putrefacción. Después de saber que cierta sustancia se usaba para tratar las aguas residuales en Carlisle, esta persona empezó a aplicarla en las heridas quirúrgicas. Nombra a este cirujano británico que fue pionero de la cirugía antiséptica y que da nombre a una marca de enjuague bucal.
+    options: [ John Snow, Joseph Lister, Edward Jenner, John Hunter ]
+    answer: Joseph Lister
+
+  - question: Según el teorema de Clausius, esta magnitud es igual a la integral de dQ sobre T, y permanece constante en los procesos que son a la vez adiabáticos y reversibles. Esta variable conjugada de la temperatura es igual a la constante de Boltzmann multiplicada por el logaritmo del número de microestados. La segunda ley de la termodinámica establece que esta magnitud siempre aumenta con el tiempo en un sistema aislado. Nombra esta magnitud, representada con la letra S, que es una medida del desorden de un sistema.
+    options: [ Entropía, Entalpía, Energía interna, Energía libre de Gibbs ]
+    answer: Entropía
+
+  - question: Las formas estables y maduras de esta molécula requieren que su forma precursora se estabilice con un capuchón en el extremo 5'. En la síntesis de esta molécula, los espliceosomas eliminan regiones no codificantes llamadas intrones. Para provocar una respuesta inmunitaria contra las proteínas de la espícula, esta molécula se usa en la vacuna contra la COVID-19 de Pfizer-BioNTech. Nombra esta molécula de cadena sencilla que sale del núcleo para ser traducida y formar proteínas.
+    options:
+      - ARN de transferencia
+      - ARN ribosómico
+      - ADN complementario
+      - ARN mensajero (ARNm)
+    answer: ARN mensajero (ARNm)
+
+  - question: Para unificar las configuraciones en este software, los usuarios pueden emplear un conjunto de programas llamado systemd. El núcleo de este software puede funcionar como hipervisor mediante el módulo Kernel-based Virtual Machine, que requiere extensiones de virtualización por hardware. Entre las distribuciones de este software que pueden ejecutar un entorno de escritorio llamado GNOME están Debian y Ubuntu. Linus Torvalds creó, por los puntos, ¿qué familia de sistemas operativos que tiene un pingüino como mascota?
+    options: [ Microsoft Windows, macOS, Linux, Unix ]
+    answer: Linux
+    explanation: "También se acepta: GNU/Linux."
+
+  - question: Estos diagramas estiman la función de densidad de probabilidad y se convierten en gráficas de frecuencia relativa cuando la longitud de los intervalos es uno. Estos diagramas se pueden construir con la regla de Sturges, que sugiere el número de clases. A diferencia de las gráficas de barras, representan datos cuantitativos; ¿cuáles son, por los puntos, estos diagramas estadísticos que se crean agrupando los datos en clases y luego graficando cuántos valores hay en cada clase?
+    options: [ Gráficas de barras, Histogramas, Diagramas de caja, Diagramas de dispersión ]
+    answer: Histogramas
+
+  - question: En este lugar, el Telescopio Espacial de Rayos Gamma Fermi descubrió un exceso de radiación gamma, que podría deberse a la autoaniquilación de materia oscura. Las burbujas de Fermi se encuentran alrededor de esta región, y el Disco Circumnuclear gira a su alrededor. Este lugar contiene un agujero negro supermasivo descubierto por Robert Brown y Bruce Balick, que es Sagitario A*. Nombra este punto de equilibrio de toda la masa de la Vía Láctea.
+    options: [ Centro galáctico, Brazo de Orión, Brazo de Perseo, Burbuja Local ]
+    answer: Centro galáctico
+    explanation: "También se acepta: núcleo galáctico."
+
+  - question: El último miembro de estos metales suele incluirse aunque forma parte de la serie de transición 6d. Los más pesados de estos metales llevan el nombre de Dmitri Mendeleev, Alfred Nobel y Ernest Lawrence, y entre estos metales están los elementos más pesados que se han producido en cantidades macroscópicas. El torio, el neptunio y el plutonio forman parte, por los puntos, ¿de qué grupo de metales con números atómicos del 89 al 102, que se muestran junto con los lantánidos en la parte inferior de la tabla periódica?
+    options:
+      - Lantánidos
+      - Metales de transición
+      - Metales alcalinotérreos
+      - Actínidos
+    answer: Actínidos
+    explanation: "También se acepta: actinoides."
+
+  - question: La variedad «mística» de este mineral ha sido tratada con deposición de vapor para crear un efecto con los colores del arcoíris. Al calentar una muestra de este mineral, David Brewster descubrió un líquido que llena cavidades, llamado brewsterlinita. Como mineral que define la dureza ocho en la escala de Mohs, ¿cuál es, por los puntos, este mineral que contiene aluminio y flúor, que se usa como piedra preciosa y tiene una forma anaranjada que es la piedra natal de noviembre?
+    options: [ Corindón, Fluorita, Topacio, Ortoclasa ]
+    answer: Topacio
+
+  - question: Este científico demostró que los diamantes están hechos de carbono al quemar uno dentro de un frasco de vidrio con una lupa y producir dióxido de carbono. Este químico se basó en el trabajo de Henry Cavendish para demostrar que el agua es una solución y no un elemento. Este científico, que dio nombre al oxígeno y al hidrógeno, estableció que la materia no se crea ni se destruye en las reacciones químicas. Nombra a este químico francés que formuló una ley de conservación de la masa.
+    options:
+      - Joseph Proust
+      - Antoine Lavoisier
+      - Claude Louis Berthollet
+      - Joseph Priestley
+    answer: Antoine Lavoisier
+
+  - question: Este filo se organiza en clases como Scyphozoa y Cubozoa. Los miembros de este filo usan la mesoglea como una especie de esqueleto hidrostático. Un miembro de este filo se llama carabela portuguesa, y las especies de este filo pueden tener formas corporales de medusa o de pólipo. Las hidras, las anémonas de mar y los corales son miembros, por los puntos, ¿de qué filo de animales que incluye a las medusas?
+    options: [ Cnidarios, Equinodermos, Moluscos, Anélidos ]
+    answer: Cnidarios
+
+  - question: En esta región, los muestreos suelen usar redes de neuston, que revelan que el polietileno y el polipropileno predominan por su baja densidad. Este fenómeno se concentra en una región de corrientes débiles y convergencia asociada a un giro subtropical situado en la parte norte de cierta masa de agua. Los esfuerzos para limpiar esta región incluyen sistemas de recolección pasiva que aprovechan los flujos superficiales convergentes. Nombra esta gran región de contaminación marina ubicada en el océano más grande del mundo.
+    options:
+      - Mancha de basura del océano Índico
+      - Zona muerta del golfo de México
+      - Zona muerta del mar Báltico
+      - Gran mancha de basura del Pacífico
+    answer: Gran mancha de basura del Pacífico
+
+  - question: Esta magnitud escalar se puede medir en una unidad llamada ergio y, aunque no es el torque, también se puede medir en pie-libra. Esta magnitud da nombre a un principio que se puede deducir de la segunda ley de Newton y que establece que esta magnitud es equivalente a la energía cinética de una partícula. La unidad del SI de esta magnitud es el joule. Nombra esta magnitud, que es la energía transferida hacia o desde un objeto, y que se calcula multiplicando la fuerza por el desplazamiento.
+    options: [ Potencia, Impulso, Trabajo, Torque ]
+    answer: Trabajo
+
+  - question: Tras el descubrimiento de este fósil, se hallaron varios fósiles que demuestran la presencia anterior de su especie en la zona, como Sangiran 2 y el niño de Mojokerto. Este fósil fue el fósil de homínido más antiguo encontrado hasta el descubrimiento del niño de Taung en 1924. Descubierto por Eugène Dubois, ¿cuál es, por los puntos, este fósil hallado en la isla que le da nombre, que ayudó a clasificar al Homo erectus?
+    options: [ Lucy, Hombre de Java, Hombre de Piltdown, Hombre de Cromañón ]
+    answer: Hombre de Java
+
+  - question: El rendimiento de estos elementos se mide con la vida nominal L10, que estima el número de revoluciones al que el 90 por ciento de ellos todavía funciona. Estos componentes pueden incluir una jaula o retén para mantener la separación entre los elementos rodantes individuales. Entre sus variantes están los de ranura profunda, los de contacto angular y los axiales, cada uno optimizado para distintas direcciones y magnitudes de carga. Nombra estos elementos rodantes esféricos que se usan para reducir la fricción entre piezas móviles.
+    options: [ Rodamientos de bolas, Bujes, Engranajes, Rótulas ]
+    answer: Rodamientos de bolas
+
+  - question: Frederick Vinton Hunt acuñó el nombre de esta tecnología y desarrolló su primera variedad moderna, por la que recibió la Medalla al Mérito. Los perfiles obtenidos con una variedad de esta tecnología permitieron a Marie Tharp descubrir el valle del rift central de la dorsal mesoatlántica. Funciona midiendo el eco que regresa de pulsos de ondas sonoras; ¿cuál es, por los puntos, esta tecnología que se usa para cartografiar el fondo marino y navegar bajo el agua?
+    options: [ Radar, Lidar, GPS, Sonar ]
+    answer: Sonar
+    explanation: Sonar es el acrónimo en inglés de «sound navigation and ranging» (navegación y medición de distancias por sonido).
+
+  - question: Los saurópsidos y los amniotas aparecieron por primera vez en la parte final de este periodo, en el que Euramérica y Siberia se unieron para formar el supercontinente Pangea. Debido al auge de los temnospóndilos en este periodo, a veces se le conoce como la Edad de los Anfibios. Debido a un colapso de las selvas tropicales durante este periodo, cierto tipo de bosque pudo haber quedado limitado a islas. Ubicado entre los periodos Pérmico y Devónico, ¿cuál es, por los puntos, este periodo geológico llamado así por su abundancia de carbón?
+    options: [ Devónico, Silúrico, Carbonífero, Cretácico ]
+    answer: Carbonífero
+
+  - question: Este bioma alberga la mayoría de las turberas de tipo muskeg del mundo. Los «árboles borrachos» son más comunes en estos biomas y se deben a un permafrost irregular. Estos biomas solo existen en el hemisferio norte y suelen tener suelos ácidos llamados podzol. Estos biomas, dominados por bosques de pinos y píceas, tienen su límite norte en la línea de árboles. Nombra estos biomas fríos, ubicados entre la tundra y los bosques templados.
+    options: [ Tundra, Taiga, Bosque templado caducifolio, Pastizal templado ]
+    answer: Taiga
+    explanation: "También se acepta: bosque boreal, bosque de nieve."
+
+  - question: Una de estas estrellas acumula materia de una estrella donante y provoca cambios de brillo, lo que dio origen al término «estrellas variables cataclísmicas». Estas estrellas pueden sufrir un proceso nuclear descontrolado llamado detonación de carbono. El límite superior de la masa de estas estrellas se alcanza cuando la presión de degeneración de los electrones ya no puede resistir la fuerza de gravedad, según el límite de Chandrasekhar. Nombra estas estrellas densas que no tienen suficiente masa para convertirse en estrellas de neutrones ni en agujeros negros.
+    options: [ Enanas blancas, Estrellas de neutrones, Gigantes rojas, Supergigantes azules ]
+    answer: Enanas blancas
+
+  - question: Antes del siglo XX, este compuesto se conocía comúnmente como «aceite de vitriolo». Cuando se combina con peróxido de hidrógeno, este compuesto forma un limpiador muy tóxico y peligroso llamado solución piraña. Este compuesto, que los alquimistas medievales conocían como aceite de vitriolo, se produce industrialmente mediante el proceso de contacto. Los destapacaños ácidos suelen contener altas concentraciones, por los puntos, ¿de qué compuesto, un ácido fuerte con fórmula química H2SO4?
+    options: [ Ácido nítrico, Ácido fosfórico, Ácido sulfuroso, Ácido sulfúrico ]
+    answer: Ácido sulfúrico
+
+  - question: La estrella más brillante de esta constelación es Spica, que se puede ubicar usando el Gran Carro y la constelación del Boyero. Esta constelación da nombre a un supercúmulo que incluye el Grupo Local de galaxias. Esta constelación está entre Leo y Libra; es la constelación más grande del zodiaco y representa finales de agosto y la mayor parte de septiembre. Nombra esta constelación que representa a una doncella.
+    options: [ Leo, Libra, Virgo, Escorpio ]
+    answer: Virgo
+
+  - question: El palmitato y el fosfato de sodio son dos formas de este antioxidante que se usan en cosméticos para lograr un tono de piel luminoso y uniforme. Esta vitamina es fundamental para la síntesis de catecolaminas, L-carnitina y colágeno. La deficiencia de este compuesto causa escorbuto, una enfermedad caracterizada por encías sangrantes y mala cicatrización de las heridas. Nombra esta vitamina hidrosoluble que la mayoría de los animales pueden sintetizar a partir de la glucosa, pero los humanos no.
+    options: [ Vitamina D, Vitamina C, Vitamina K, Vitamina B12 ]
+    answer: Vitamina C
+    explanation: "También se acepta: ácido L-ascórbico."
+
+  - question: La relación entre el aire seco y estos eventos se expresa en el índice de Haines. En estos eventos puede ocurrir una combustión súbita generalizada; además, pueden generar corrientes ascendentes que atraen aire fresco, y pueden extenderse hasta el dosel a través de ramas muertas, llamadas escaleras de combustible. El componente de propagación, el índice de sequía de Keetch-Byram y el componente de ignición son resultados de un sistema de clasificación que describe el peligro de estos eventos. Nombra estos eventos ecológicos en los que pueden arder los bosques.
+    options: [ Incendios forestales, Sequías, Olas de calor, Tormentas de polvo ]
+    answer: Incendios forestales
+    explanation: "También se acepta: incendios de vegetación, incendios de matorral."

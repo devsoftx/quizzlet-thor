@@ -1,0 +1,174 @@
+# Science Bee 2018–19 · Regional 1 · Ronda 1 — 32 preguntas.
+# Source: docs/2018-2019-EMS-SB-1-Set-1.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se añadieron para la opción múltiple.
+# Traducción al español de decks/science-bee-2018-19-regional-1-round-1.yaml.
+
+title: Science Bee 2018–19 · Regional 1 · Ronda 1
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: En 2016, el proyecto LIGO informó la detección de ondas de esta fuerza. La relatividad general afirma que esta fuerza es responsable de la curvatura del espacio-tiempo. De las cuatro fuerzas fundamentales, esta es la más débil. Newton formuló una ley universal del inverso del cuadrado para esta fuerza, que produce una aceleración de 9.8 metros por segundo en la superficie de la Tierra. Nombra esta fuerza descrita por las constantes G mayúscula y g minúscula, la atracción entre dos masas.
+    options:
+      - Gravedad
+      - Electromagnetismo
+      - Fuerza nuclear fuerte
+      - Fuerza nuclear débil
+    answer: Gravedad
+
+  - question: Un tipo de este aparato sin partes móviles, que usa solo una fuente de calor, fue inventado por Leo Szilard y Albert Einstein. Este aparato usa un ciclo de compresión de vapor que pasa por fases de condensación, evaporación y compresión. Entre los fluidos de trabajo que ayudaron a extender el uso de estos aparatos están los clorofluorocarbonos, como el freón. La nevera de hielo fue reemplazada, por el punto, ¿por qué electrodoméstico que mantiene fríos los alimentos?
+    options: [ Lavavajillas, Hornos de microondas, Lavadoras, Refrigeradores ]
+    answer: Refrigeradores
+
+  - question: Bernice Eddy descubrió que a millones de personas se les inyectaron células de mono que causan cáncer con las vacunas contra esta enfermedad. Las vacunas contra esta enfermedad fueron creadas por Albert Sabin y Jonas Salk. Franklin Delano Roosevelt padeció, por el punto, ¿qué enfermedad que causa la parálisis infantil?
+    options: [ Sarampión, Viruela, Polio, Tuberculosis ]
+    answer: Polio
+    explanation: "También se acepta: poliomielitis."
+
+  - question: Todo número natural mayor que 1 se puede descomponer en factores que son estos números, según el teorema fundamental de la aritmética. Si el máximo común divisor de dos números es 1, se dice que son “co-” seguido del nombre de estos números. El 2 es el único número par con esta propiedad, y estos números se contrastan con los números compuestos. Nombra estos números cuyos únicos divisores son el uno y ellos mismos.
+    options:
+      - Números compuestos
+      - Números primos
+      - Números perfectos
+      - Números cuadrados
+    answer: Números primos
+
+  - question: Según el principio de exclusión de Pauli, esta partícula no puede compartir exactamente el mismo estado de espín. Esta partícula, descubierta por J.J. Thomson, está presente en pares solitarios en los radicales libres. Según la regla del octeto, a los átomos les gusta tener cierto número de esta partícula. Esta partícula se cede en los enlaces iónicos y se comparte en los enlaces covalentes. Nombra esta partícula con carga negativa que gira alrededor del núcleo de los átomos.
+    options: [ Electrones, Protones, Neutrones, Fotones ]
+    answer: Electrones
+
+  - question: En este órgano, la vasopresina puede estimular la reabsorción de agua desde los conductos colectores. El líquido que entra en este órgano se difunde desde el glomérulo hacia la cápsula de Bowman que lo rodea. Los iones son absorbidos por las asas de Henle de este órgano, que se encuentran en miles de unidades funcionales llamadas nefronas. Los uréteres conectan estos órganos con la vejiga. Identifica estos órganos con forma de frijol que filtran la sangre para producir orina.
+    options: [ Pulmones, Glándulas suprarrenales, Intestinos, Riñones ]
+    answer: Riñones
+
+  - question: Esta fuerza se describe con la ley de Amontons y es proporcional a la fuerza normal sobre un objeto. La fuerza de arrastre es el equivalente aerodinámico de esta fuerza, que tiene formas estática y cinética. Esta fuerza a menudo se opone al cambio de movimiento y se puede reducir con lubricantes. Nombra esta fuerza de resistencia, que genera calor cuando te frotas las manos.
+    options: [ Fuerza normal, Tensión, Fricción, Gravedad ]
+    answer: Fricción
+
+  - question: Estos objetos son el tema del teorema de no pelo, que sostiene que se pueden caracterizar solo por su masa, su carga y su momento angular. La masa de uno de estos objetos determina su radio de Schwarzschild y, por lo tanto, su horizonte de sucesos o “punto sin retorno”. Nombra estos objetos astronómicos con singularidades en su centro que no dejan escapar nada, ni siquiera la luz.
+    options: [ Estrellas de neutrones, Agujeros negros, Enanas blancas, Gigantes rojas ]
+    answer: Agujeros negros
+
+  - question: La replicación de esta molécula es semiconservativa, y esta molécula se transcribe en el primer paso del dogma central. Está formada por un esqueleto de azúcar-fosfato y una secuencia de pares de bases de nucleótidos formados por adenina, timina, citosina y guanina. Rosalind Franklin descubrió originalmente la estructura de doble hélice de esta molécula, que luego fue publicada por Watson y Crick. Nombra esta molécula que almacena información en el código genético.
+    options: [ ADN, ARN, ATP, Glucosa ]
+    answer: ADN
+    explanation: "También se acepta: ácido desoxirribonucleico."
+
+  - question: Un isótopo de este elemento se bombardea con neutrones en un método para producir tritio. Las sales de este elemento se usan con frecuencia para tratar trastornos psiquiátricos. Este elemento se usa a veces para aumentar la eficiencia de la fundición del aluminio. Los iones de este elemento se usan con frecuencia en las baterías recargables de los teléfonos y las computadoras portátiles. Nombra este elemento de número atómico 3, representado por el símbolo Li.
+    options: [ Berilio, Potasio, Magnesio, Litio ]
+    answer: Litio
+
+  - question: Las perlas de Baily son un fenómeno visual que se observa durante uno de estos eventos. Justo antes y justo después de uno de estos eventos se produce un patrón alternado de líneas oscuras y claras llamadas bandas de sombra. Una variante de uno de estos eventos se llama total y hace que el cielo se oscurezca durante el día. Nombra estos eventos astronómicos en los que el Sol queda tapado, al menos en parte, por la Luna.
+    options:
+      - Eclipses lunares
+      - Tránsitos planetarios
+      - Eclipses solares
+      - Erupciones solares
+    answer: Eclipses solares
+
+  - question: El fósil más grande de este dinosaurio se excavó en la reserva india del río Cheyenne, en Dakota del Sur, y lleva el apodo de su descubridora, Sue Hendrickson. Ese fósil de este dinosaurio está en el Museo Field de Historia Natural de Chicago. Este carnívoro bípedo tenía una cabeza grande y extremidades anteriores cortas. Nombra este gran dinosaurio del período Cretácico cuyo nombre se traduce como “lagarto tirano rey”.
+    options: [ Velocirraptor, Tiranosaurio rex, Tricerátops, Estegosaurio ]
+    answer: Tiranosaurio rex
+    explanation: "También se acepta: T. rex."
+
+  - question: Este elemento, al igual que el nitrógeno, puede alcanzar una forma líquida a 4.2 kelvin y a menudo se usa para hacer overclocking a los procesadores. Las partículas alfa son idénticas a los núcleos de este elemento, el segundo más abundante del universo. Nombra este elemento, que se usa a menudo para inflar globos, de símbolo He.
+    options: [ Helio, Neón, Argón, Kriptón ]
+    answer: Helio
+
+  - question: La “singularidad” es una hipótesis según la cual la invención de la forma “súper” de esta tecnología desencadenará un crecimiento que podría llevar a la extinción humana. Entre los avances de esta tecnología está la creación de AlphaZero, de DeepMind, que derrotó a Stockfish en un enfrentamiento de mil partidas de ajedrez. Elon Musk advierte con frecuencia sobre el peligro de esta tecnología. Watson, de IBM, es un ejemplo, por el punto, ¿de qué tecnología de “máquinas pensantes”?
+    options:
+      - Computación cuántica
+      - Realidad virtual
+      - Computación en la nube
+      - Inteligencia artificial
+    answer: Inteligencia artificial
+    explanation: "También se acepta: IA, superinteligencia artificial."
+
+  - question: Algunas especies de cucos participan en la forma “de cría” de esta relación al poner sus huevos en los nidos de otras aves. Los helmintos y los protozoos pueden causar enfermedades al establecer esta relación. Esta relación se define como aquella en la que una especie se beneficia a costa de otra especie. Nombra esta relación en la que participan las pulgas, las garrapatas y las tenias.
+    options: [ Mutualismo, Comensalismo, Parasitismo, Competencia ]
+    answer: Parasitismo
+
+  - question: En 1883, John Augustus Roebling diseñó una de estas estructuras como un híbrido atirantado para dar soporte adicional al tablero. En la variedad en voladizo equilibrado de estas estructuras, el tramo suspendido se apoya en brazos de anclaje. El Akashi Kaikyo es el más largo de la variedad colgante de estas estructuras. Nombra estas estructuras entre las que está el Golden Gate de San Francisco, pintado de color naranja internacional.
+    options: [ Presas, Puentes, Túneles, Rascacielos ]
+    answer: Puentes
+    explanation: La pista de Roebling se refiere al puente de Brooklyn, que se inauguró en 1883.
+
+  - question: Este tipo de roca puede ser félsica o máfica según su composición química, y la peridotita es una de ellas, que se encuentra principalmente en el manto. Entre sus ejemplos están el granito y el basalto, y pueden ser extrusivas o intrusivas según se formen a partir de lava o de magma. Nombra esta clase de rocas que se contrasta con las sedimentarias y las metamórficas.
+    options:
+      - Rocas ígneas
+      - Rocas sedimentarias
+      - Rocas metamórficas
+      - Rocas clásticas
+    answer: Rocas ígneas
+
+  - question: En la membrana interna de esta estructura, los electrones pasan de la ubiquinona al citocromo c para impulsar la fosforilación oxidativa. Este organelo contiene un genoma circular de herencia materna. El oxalacetato se combina con el acetil-CoA para iniciar el ciclo del ácido cítrico en este organelo, que tiene pliegues llamados crestas. Por el punto, nombra este organelo eucariota que genera ATP, la “central energética de la célula”.
+    options: [ Núcleo, Aparato de Golgi, Retículo endoplasmático, Mitocondria ]
+    answer: Mitocondria
+
+  - question: En mecánica cuántica, el operador hamiltoniano describe la suma total de esta propiedad para un sistema. La primera ley de la termodinámica sostiene que esta propiedad siempre se conserva. Esta propiedad se mide en joules y se define como la capacidad de un sistema para realizar trabajo. Por el punto, ¿qué propiedad, que se presenta en formas “cinética” y “potencial”, le da a un material la capacidad de moverse?
+    options: [ Cantidad de movimiento, Potencia, Energía, Fuerza ]
+    answer: Energía
+
+  - question: El algoritmo de Dijkstra se usa en ejemplos ponderados de estos objetos. Si uno de estos objetos matemáticos no tiene ciclos de longitud impar, se llama bipartito y se puede colorear con dos colores. Si uno de estos objetos es conexo y no tiene ciclos, se llama árbol. Nombra estos objetos formados por vértices unidos por aristas.
+    options: [ Matrices, Grafos, Vectores, Conjuntos ]
+    answer: Grafos
+
+  - question: Las aberturas en esta estructura se llaman plasmodesmos. Las bacterias tienen peptidoglucano en esta estructura, y en los hongos está compuesta de quitina. La celulosa es la principal proteína que forma esta estructura resistente en las plantas, que les da su rigidez. Nombra esta estructura que rodea la membrana celular y que no se encuentra en las células animales.
+    options: [ Pared celular, Membrana celular, Citoesqueleto, Envoltura nuclear ]
+    answer: Pared celular
+    explanation: "Nota: la celulosa es un carbohidrato (polisacárido), no una proteína como dice la pregunta."
+
+  - question: En los bebés, esta estructura tiene fontanelas blandas que permiten que la calvaria se expanda. La sutura sagital divide en dos esta estructura, que tiene en su base un orificio llamado foramen magno. El hueso cigomático de esta estructura se articula con el maxilar para formar el piso de la cavidad orbitaria. Una rama del nervio trigémino en esta estructura recorre la mandíbula, o hueso de la quijada. Nombra esta estructura ósea que aloja el cerebro.
+    options: [ Caja torácica, Pelvis, Columna vertebral, Cráneo ]
+    answer: Cráneo
+    explanation: "También se acepta: calavera."
+
+  - question: Los condensados de Bose-Einstein solo existen en puntos cercanos a esta condición. La tercera ley de la termodinámica establece que, a este valor, los cristales no tienen entropía. Esta condición, la más baja en las escalas Rankine y Kelvin, no puede ser alcanzada por ningún aparato físico. Nombra esta temperatura, la más fría posible.
+    options:
+      - Punto triple del agua
+      - Punto de congelación del agua
+      - Cero absoluto
+      - Punto crítico
+    answer: Cero absoluto
+    explanation: El cero absoluto es 0 kelvin, aproximadamente -273.15 grados Celsius.
+
+  - question: Este bioma es el hogar principal del lagópodo alpino, cuya variedad de Svalbard es un ave terrestre exclusiva de ese archipiélago. El límite arbóreo es el punto donde se encuentran este bioma y la taiga. La vegetación de este bioma incluye líquenes y musgos, pero no árboles, debido a la gran altitud, el subsuelo de permafrost y las bajas temperaturas. Nombra este bioma frío que forma la mayor parte del círculo polar ártico.
+    options: [ Taiga, Tundra, Estepa, Sabana ]
+    answer: Tundra
+
+  - question: El pepsinógeno de este órgano se activa después de que se secreta ácido clorhídrico en este órgano. Las úlceras en este órgano pueden ser causadas por infecciones de Helicobacter pylori. El quimo producido en este órgano pasa al duodeno del intestino delgado. Nombra este órgano, entre el esófago y el intestino delgado, que secreta ácido gástrico para digerir los alimentos.
+    options: [ Estómago, Esófago, Páncreas, Intestino grueso ]
+    answer: Estómago
+
+  - question: Estas formaciones forman criptodomos y dejan calderas cuando colapsan. Entre las variedades de una sustancia producida por estas formaciones está el pahoehoe, y estas formaciones pueden ser de escudo, de cono o compuestas. Más del 75% de las activas en el mundo están en el Anillo de Fuego. El Vesubio y el monte Santa Helena son ejemplos, por el punto, ¿de qué aberturas de la corteza terrestre que expulsan lava?
+    options: [ Géiseres, Fuentes hidrotermales, Dolinas, Volcanes ]
+    answer: Volcanes
+
+  - question: Este elemento se une al oxígeno y al sodio en el blanqueador. Su forma diatómica es un gas amarillo, que fue el primer gas usado en la guerra química en la Primera Guerra Mundial. Este halógeno está debajo del flúor y encima del bromo en la tabla periódica. Se usa a menudo para limpiar piscinas, y su ion está unido al sodio en la sal de mesa. Nombra este elemento de número atómico 17 y símbolo Cl.
+    options: [ Yodo, Azufre, Cloro, Argón ]
+    answer: Cloro
+
+  - question: Estos eventos se pueden describir con la teoría del rebote elástico, y son comunes en las fallas de desplazamiento lateral. Estos desastres se originan en un punto conocido como su epicentro, y cuando ese punto está bajo el mar, estos eventos pueden causar tsunamis. La escala de Richter mide, por el punto, ¿qué desastres naturales que hacen temblar el suelo?
+    options: [ Tsunamis, Terremotos, Tornados, Inundaciones ]
+    answer: Terremotos
+    explanation: "También se acepta: sismos, temblores."
+
+  - question: Este elemento se produce mediante la fusión de oxígeno y helio en el proceso alfa. De todos los elementos con una capa p completa, este es el más ligero. Junto con otro elemento, este elemento forma un láser que produce luz de 633 nanómetros. Este elemento se usa con frecuencia en letreros por su capacidad de producir una luz brillante y característica. Nombra este gas noble, el segundo más ligero, de símbolo Ne.
+    options: [ Neón, Flúor, Xenón, Radón ]
+    answer: Neón
+
+  - question: Estos patógenos se clasifican con el sistema de clasificación de Baltimore, y su nombre viene de la palabra latina para “veneno”. Estos agentes infecciosos se conocen como fagos cuando infectan bacterias, y todavía se debate si pueden clasificarse como organismos vivos. Nombra estos agentes infecciosos, como los de la hepatitis y el ébola, que se apoderan de la maquinaria molecular de un huésped para crear copias de su propio genoma.
+    options: [ Bacterias, Priones, Protozoos, Virus ]
+    answer: Virus
+    explanation: "También se acepta: viriones, partículas virales."
+
+  - question: La sonda Cassini fue enviada a estudiar este planeta, y sus tormentas a menudo se llaman Grandes Manchas Blancas. Entre sus lunas están Encélado, Jápeto y una que tiene líquido en su superficie y una atmósfera de nitrógeno. Esa luna, llamada Titán, orbita este gigante gaseoso, el segundo más grande. Nombra este sexto planeta desde el Sol, que está rodeado por un gran sistema de anillos de hielo.
+    options: [ Júpiter, Urano, Saturno, Neptuno ]
+    answer: Saturno
+
+  - question: 60 átomos de este elemento forman las buckybolas, con forma de balón de fútbol. Como este elemento puede formar hasta cuatro enlaces, puede formar una gran variedad de estructuras complejas. Cuando este elemento se somete a altas presiones, puede formar diamantes. Nombra este elemento de símbolo C, la base de la vida.
+    options: [ Nitrógeno, Carbono, Oxígeno, Hidrógeno ]
+    answer: Carbono

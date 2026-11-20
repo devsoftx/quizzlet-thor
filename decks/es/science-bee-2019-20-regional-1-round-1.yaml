@@ -1,0 +1,157 @@
+# Science Bee 2019–20 · Regional 1 · Ronda 1 — 31 preguntas.
+# Source: docs/2019-2020-MS--1-Set-1.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se añadieron para la opción múltiple.
+# Traducción al español de decks/science-bee-2019-20-regional-1-round-1.yaml.
+
+title: Science Bee 2019–20 · Regional 1 · Ronda 1
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Las complicaciones de este órgano se observan típicamente en pacientes que presentan el signo de Levine. Los haces de Bachmann y las fibras de Purkinje despolarizan este órgano. Este órgano produce la señal del complejo QRS en un ECG. Este órgano se divide en cuatro cavidades conocidas como aurículas y ventrículos. Nombra este órgano cardiovascular que bombea sangre por todo el cuerpo.
+    options: [ Corazón, Pulmones, Hígado, Riñones ]
+    answer: Corazón
+
+  - question: En un alambre, esta magnitud varía de forma inversamente proporcional al área de la sección transversal y directamente proporcional a la longitud. El inverso de esta magnitud se mide en siemens y se llama conductancia. El componente ideal de circuito relacionado con esta magnitud se representa con un zigzag en un diagrama de circuito. Esta magnitud se mide en ohmios. Nombra esta magnitud que describe cuánto se opone un dispositivo al flujo eléctrico.
+    options: [ Capacitancia, Voltaje, Potencia eléctrica, Resistencia eléctrica ]
+    answer: Resistencia eléctrica
+
+  - question: Un conjunto de estos accidentes geográficos da nombre al período Jurásico. El proceso de plegamiento de la corteza puede crear estos accidentes geográficos. Entre las variedades de estas formas de relieve están las de plegamiento, las de bloque y las volcánicas. La orogénesis es la creación de una nueva cadena de estas masas de tierra debido al levantamiento de las placas tectónicas. Nombra este tipo de masa de tierra, de la cual son ejemplos el Kilimanjaro y el Everest.
+    options: [ Cañones, Deltas, Montañas, Penínsulas ]
+    answer: Montañas
+
+  - question: Esta función se generaliza mediante la función gamma. La fórmula de Stirling es una aproximación de esta función. Esta función aplicada a un entero positivo n está dada por n multiplicado por la cantidad n menos uno, y así sucesivamente hasta llegar a uno. Esta función da el número de maneras de ordenar n objetos distintos en fila. Nombra esta función que se simboliza con un signo de exclamación junto a un número.
+    options: [ Logaritmo, Factorial, Exponencial, Valor absoluto ]
+    answer: Factorial
+
+  - question: Este hombre inventó el fonógrafo y un proyector temprano conocido como cinetoscopio. Este hombre organizó, de forma polémica, la muerte de la elefanta Topsy. Este rival de George Westinghouse empleó en una ocasión a Nikola Tesla en su empresa Machine Works. Este “Mago de Menlo Park” encontró un uso práctico para el filamento de carbono, que más tarde sería reemplazado por el tungsteno. Nombra a este inventor estadounidense de la bombilla.
+    options:
+      - Thomas Edison
+      - Nikola Tesla
+      - George Westinghouse
+      - Alexander Graham Bell
+    answer: Thomas Edison
+
+  - question: Por masa química, este es el elemento más pesado del único ácido fuerte diprótico. Al unirse a seis átomos de flúor, este elemento forma un potente gas de efecto invernadero. Dos átomos de este elemento forman un “puente” covalente en las proteínas. Este elemento se encuentra debajo del oxígeno en la tabla periódica. Nombra este elemento, asociado con el fuego del infierno y con los malos olores, cuyo símbolo químico es S.
+    options: [ Fósforo, Cloro, Nitrógeno, Azufre ]
+    answer: Azufre
+
+  - question: Niko Tinbergen estudió los patrones de acción fija de agresión en algunos de estos animales. Uno de estos vertebrados fue clonado por primera vez por George Streisinger. Entre estos animales que no son mamíferos están el espinoso y uno llamado así por el patrón de cebra a lo largo de sus escamas. Nombra estos animales que respiran bajo el agua, entre los que están la trucha y el salmón.
+    options: [ Reptiles, Insectos, Peces, Roedores ]
+    answer: Peces
+
+  - question: Esta teoría puede ayudar a explicar la radiación adaptativa como la ocupación de diversos nichos. Esta teoría se formuló en parte a partir de observaciones de pinzones en las islas Galápagos. Quien formuló esta teoría se refirió a ella como “descendencia con modificación” y expuso sus descubrimientos en El origen de las especies. La selección natural es un mecanismo importante de esta teoría. Nombra esta teoría formulada por Charles Darwin.
+    options: [ Teoría celular, Evolución, Teoría microbiana, Tectónica de placas ]
+    answer: Evolución
+
+  - question: La forma de indentación de esta propiedad se mide con la escala Rockwell y con la escala Vickers, en la que se presiona un material con un indentador de diamante. El apatito tiene un valor de 5 en esta propiedad, mientras que el talco tiene un valor de 1. Esta propiedad se define como la resistencia de un mineral a ser rayado. Por el punto, ¿qué propiedad, medida con la escala de Mohs, tiene su valor natural más alto en el diamante?
+    options: [ Dureza, Brillo, Exfoliación, Peso específico ]
+    answer: Dureza
+
+  - question: Una ecuación descrita por esta ley se modifica con las constantes a y b para obtener la ecuación de van der Waals. Esta ley solo se aplica bajo los supuestos de la teoría cinética molecular. La ecuación descrita por esta ley puede deducirse combinando la ley de Boyle, la ley de Charles y la ley de Gay-Lussac. Nombra esta ley que relaciona el producto de la presión y el volumen de una sustancia ideal con su temperatura.
+    options: [ Ley de Henry, Ley de Raoult, Ley de Hess, Ley de los gases ideales ]
+    answer: Ley de los gases ideales
+    explanation: "También se acepta: PV = nRT."
+
+  - question: Según la primera ley de la termodinámica, el calor menos el trabajo es igual al cambio en la forma “interna” de esta magnitud. Una forma de esta magnitud es igual a un medio de m v al cuadrado, donde m es la masa y v es la velocidad. Esta magnitud se define típicamente como una medida de “la capacidad de realizar trabajo” y puede dividirse en componentes cinético y potencial. Nombra esta magnitud cuya unidad del SI es el joule.
+    options: [ Cantidad de movimiento, Potencia, Energía, Fuerza ]
+    answer: Energía
+
+  - question: Estos objetos pueden clasificarse en tres categorías principales a partir del trabajo de Luke Howard, quien desarrolló la nomenclatura latina común que se usa para describirlos. Entre sus tipos están los lenticulares, los nacarados y las estelas de condensación. Las clasificaciones comunes incluyen cirros, estratos o cúmulos. Nombra estas masas esponjosas de aire y vapor de agua que se forman en el cielo.
+    options: [ Auroras, Nubes, Arcoíris, Copos de nieve ]
+    answer: Nubes
+
+  - question: Un experimento con este organismo comparó la proporción de nitrógeno 14 y nitrógeno 15 en el ADN. Meselson y Stahl usaron este organismo para demostrar que la replicación del ADN es semiconservativa. Este organismo es infectado por el fago lambda. Los brotes de esta bacteria suelen ser causados por la cepa O157:H7. Nombra esta bacteria con forma de bastón que vive en el intestino y pertenece al género Escherichia.
+    options:
+      - E. coli
+      - Staphylococcus aureus
+      - Streptococcus pyogenes
+      - Mycobacterium tuberculosis
+    answer: E. coli
+    explanation: "También se acepta: Escherichia coli."
+
+  - question: El área del cielo que este objeto tapa se llama “zona de evitación”. Harlow Shapley creía que este objeto era el único de su tipo, una teoría que fue refutada en debates con Heber Doust Curtis gracias a la evidencia de Hubble sobre la vecina de esta galaxia, Andrómeda. Esta galaxia tiene en su centro un agujero negro llamado Sagitario A*. Nombra esta galaxia que contiene nuestro sistema solar.
+    options:
+      - Galaxia de Andrómeda
+      - Galaxia del Triángulo
+      - Gran Nube de Magallanes
+      - Vía Láctea
+    answer: Vía Láctea
+
+  - question: La forma wurtzita del nitruro de este elemento es más dura que el diamante. El oxígeno, el silicio y este elemento son los tres más comunes en el vidrio Pyrex. Este elemento comúnmente forma solo tres enlaces de valencia, lo que viola la regla del octeto. Este elemento es el metaloide más ligero de la tabla periódica y se encuentra justo a la izquierda del carbono. Nombra este elemento con número atómico cinco y símbolo B.
+    options: [ Carbono, Silicio, Boro, Berilio ]
+    answer: Boro
+
+  - question: Una de estas cosas, que lleva el nombre de Poisson, puede modelar eventos que ocurren con una tasa fija. El teorema del límite central explica cómo las variables aleatorias independientes pueden tender a una de estas cosas, descrita por la regla 68-95-99.7. Ese ejemplo de estas cosas estadísticas a veces lleva el nombre de Gauss y tiene forma de curva de campana. Nombra este recurso estadístico que puede ser uniforme o normal y que describe la dispersión de los datos.
+    options:
+      - Intervalo de confianza
+      - Distribución de probabilidad
+      - Recta de regresión
+      - Coeficiente de correlación
+    answer: Distribución de probabilidad
+
+  - question: Después de obtener el producto de esta tarea, se hace una concentración para eliminar la ganga. Esta tarea tiene variedades de tajo abierto, por franjas y subterránea. Un método eficaz para fracturar la roca en esta tarea era calentarla con fuego, y esa fue la razón de Alfred Nobel para inventar la dinamita. Nombra esta tarea de extraer material valioso de la Tierra, como carbón, diamantes y diversas menas.
+    options: [ Minería, Fundición, Refinación, Tala ]
+    answer: Minería
+
+  - question: Una reacción para fabricar jabón usa esta clase de moléculas junto con ésteres. El hidruro de sodio es un ejemplo “súper” de esta clase de moléculas. Las variantes de Lewis son las que donan pares de electrones. Entre los ejemplos comunes están el amoníaco, que es débil, y el hidróxido de sodio. Nombra esta clase de moléculas con pH mayor que siete que pueden neutralizarse con ácidos.
+    options: [ Ácidos, Alcanos, Agentes oxidantes, Bases ]
+    answer: Bases
+
+  - question: Este organelo es el sitio del ciclo Q, llamado así por la coenzima Q10. Cuando el citocromo c sale de este organelo, se inicia la apoptosis en la célula. La matriz de este organelo está separada del espacio intermembranoso por pliegues llamados crestas, que aumentan la superficie para la cadena de transporte de electrones. Nombra esta fábrica principal de síntesis de ATP, conocida cariñosamente como la “central energética de la célula”.
+    options: [ Núcleo, Aparato de Golgi, Mitocondria, Lisosoma ]
+    answer: Mitocondria
+
+  - question: El Reiner Gamma de este objeto es un ejemplo de los remolinos que llevan su nombre. Los estudios de George Darwin sobre este objeto lo llevaron a proponer la hipótesis del gran impacto para explicar su formación. Las regiones de lava caliente que se enfriaron y formaron manchas oscuras y planas crearon los mares de este objeto, como el mar de la Tranquilidad. Este objeto tiene fases gibosa creciente y gibosa menguante. Nombra este objeto que orbita la Tierra en aproximadamente 27 días.
+    options: [ Europa, Luna, Titán, Ganímedes ]
+    answer: Luna
+
+  - question: Se cree que el nombre de este tipo de proceso proviene de una deformación del nombre de un matemático árabe que inventó una forma de álgebra. El rendimiento asintótico de estos procesos suele expresarse con la notación “O grande”. Dijkstra da nombre a una de estas instrucciones que encuentra el camino más corto entre dos vértices de un grafo. Quicksort es un ejemplo de los que sirven para ordenar. Nombra este conjunto de instrucciones paso a paso que se le dan a una computadora para resolver un problema.
+    options: [ Algoritmos, Variables, Hojas de cálculo, Píxeles ]
+    answer: Algoritmos
+    explanation: La palabra viene del nombre del matemático al-Khwarizmi (en español, al-Juarismi).
+
+  - question: Erta Ale, en Etiopía, tiene un lago lleno de esta sustancia. Los domos que llevan el nombre de esta sustancia se forman cuando se acumula cerca de la boca eruptiva porque se mueve lentamente por el conducto. Esta sustancia se presenta en variedades pahoehoe y aa. Esta sustancia se enfría y forma rocas extrusivas como la piedra pómez, y se emite junto con tefra. Si esta sustancia se enfría con suficiente rapidez, forma la roca vítrea obsidiana. Nombra este fluido caliente expulsado por un volcán.
+    options: [ Magma, Ceniza volcánica, Vapor, Lava ]
+    answer: Lava
+    explanation: La roca fundida se llama magma cuando está bajo tierra y lava cuando sale en una erupción.
+
+  - question: El ECMA puede agregar grupos funcionales a un miembro de esta clase de compuestos. Wallace Carothers da nombre a una ecuación que describe el grado en que ocurre la formación de esta clase de compuestos. Pueden formarse entrecruzamientos entre las cadenas de esta clase de compuestos, que incluye plásticos como el teflón. Por el punto, ¿de qué clase de compuestos formados por monómeros que se repiten es el nailon un miembro sintético?
+    options: [ Monómeros, Aleaciones, Polímeros, Cerámicas ]
+    answer: Polímeros
+
+  - question: Justo debajo de la superficie superior de esta estructura está la capa en empalizada, que normalmente se encuentra encima de la capa esponjosa. Una cutícula cerosa reduce al mínimo la pérdida de agua de esta estructura. Esta estructura contiene pequeños orificios para el intercambio de gases llamados estomas. Este órgano vegetal está especializado en la fotosíntesis y contiene clorofila, que lo hace verde. Nombra esta estructura vegetal que cambia de color y cae de los árboles en otoño.
+    options: [ Raíz, Hoja, Tubérculo, Rizoma ]
+    answer: Hoja
+
+  - question: Dos ecuaciones diferenciales parciales lineales que llevan el nombre de este dispositivo describen el cambio de voltaje y de corriente durante la transmisión. Charles Wheatstone y W. F. Cooke crearon una versión temprana del sistema de agujas para este dispositivo. La versión de un solo cable de este dispositivo fue inventada por Samuel Morse. Nombra esta forma temprana de transmisión de mensajes a larga distancia cuyo nombre viene del griego y significa “escritura a lo lejos”.
+    options: [ Telégrafo eléctrico, Teléfono, Radio, Fax ]
+    answer: Telégrafo eléctrico
+
+  - question: Según la conjetura de Goldbach, todos los enteros con esta propiedad pueden escribirse como la suma de dos primos. Las funciones que se describen con este término son simétricas respecto al eje y. Elevar un número real negativo a un exponente natural que tiene esta propiedad siempre da un resultado positivo. El número primo más pequeño es el único primo con esta propiedad. Nombra esta propiedad que tienen los números divisibles entre dos.
+    options: [ Impar, Primo, Compuesto, Par ]
+    answer: Par
+
+  - question: James Challis desaprovechó la oportunidad de encontrar este objeto con los cálculos de John Couch Adams. Johann Gottfried Galle descubrió este planeta a partir de los cálculos de Urbain Le Verrier. Alrededor de este planeta orbita la luna retrógrada más grande del sistema solar, Tritón. El metano de la atmósfera de este planeta le da su característico color azul. Nombra este planeta, el más lejano de nuestro sistema solar y el octavo desde el Sol.
+    options: [ Saturno, Júpiter, Neptuno, Marte ]
+    answer: Neptuno
+
+  - question: "La variante hachimoji de este material tiene una mayor capacidad de almacenamiento. Este material puede cortarse con Cas9. La topoisomerasa corrige el superenrollamiento de este material. Su polimerasa homónima se une después de que la helicasa lo abre como un cierre. Este material está enrollado alrededor de las histonas en los cromosomas. Está formado por cuatro bases: adenina, timina, citosina y guanina. Nombra este material genético que se transcribe en ARN."
+    options: [ ATP, ADN, Hemoglobina, Colágeno ]
+    answer: ADN
+    explanation: "También se acepta: ácido desoxirribonucleico."
+
+  - question: Esta unidad se redefinió recientemente mediante mediciones de la constante de Planck; hasta entonces, era la única unidad del SI definida por un objeto físico. Las unidades estándar del momento de inercia se obtienen multiplicando esta unidad por metros cuadrados. Las balanzas miden en esta unidad del SI, normalmente en milésimas de ella. Nombra esta unidad de masa del SI, que equivale aproximadamente a 2.2 libras.
+    options: [ Kilogramo, Gramo, Newton, Mol ]
+    answer: Kilogramo
+
+  - question: Hennig Brand descubrió este elemento mientras intentaba convertir su orina en oro. Los trabajadores de las fábricas de cerillas sufrían deformaciones en la mandíbula por la exposición prolongada al alótropo blanco de este elemento. Este elemento da nombre a una forma de radiación que no se reemite de inmediato, a diferencia de la fluorescencia. Nombra este elemento con número atómico 15 y símbolo atómico P.
+    options: [ Azufre, Nitrógeno, Arsénico, Fósforo ]
+    answer: Fósforo
+
+  - question: En lenguajes como C++, este tipo de estructura de datos es similar a un arreglo, pero tiene tamaño dinámico. En álgebra lineal, esta palabra describe objetos matemáticos que pueden manipularse con el producto punto y el producto cruz. En biología, este término se refiere a los organismos que portan y transmiten enfermedades. La velocidad puede describirse con este término, a diferencia de la rapidez, que es escalar. Nombra este término que puede describir objetos matemáticos con magnitud y dirección.
+    options: [ Escalares, Matrices, Vectores, Tuplas ]
+    answer: Vectores
