@@ -14,6 +14,7 @@ cards:
   - question: Un objeto puede tenerla aunque mantenga la misma rapidez, si gira. Ocurre cuando cambia la velocidad, y un auto la tiene cuando aumenta su rapidez o cuando frena. Nombra la medida de qué tan rápido cambian la rapidez o la dirección, una palabra que a menudo se usa para decir «ir cada vez más rápido».
     options: [ Velocidad, Aceleración, Gravedad, Cantidad de movimiento ]
     answer: Aceleración
+    difficulty: medium
 
   - question: Las partículas de polvo que deja este objeto crean lluvias de meteoros cuando la Tierra pasa a través de ellas. Lleva el nombre de un astrónomo que se dio cuenta de que varios avistamientos eran en realidad el mismo objeto que regresaba. Nombra este famoso cometa que nos visita aproximadamente cada 76 años y que se espera que regrese en 2061.
     options:
@@ -22,22 +23,27 @@ cards:
       - Cometa Shoemaker–Levy 9
       - Cometa Encke
     answer: Cometa Halley
+    difficulty: medium
 
   - question: Estos agentes infecciosos no tienen ADN ni ARN. Son proteínas con la forma equivocada que pueden hacer que otras proteínas se plieguen mal y dañen el cerebro. Nombra estas proteínas mal plegadas relacionadas con la enfermedad de las vacas locas, cuyo nombre empieza con «pri».
     options: [ Virus, Bacterias, Hongos, Priones ]
     answer: Priones
+    difficulty: medium
 
   - question: Combinando varios de estos dispositivos básicos se puede hacer una herramienta más complicada. Pueden cambiar la intensidad o la dirección de una fuerza y ayudan a las personas a levantar o mover cosas. Nombra este grupo de herramientas básicas que incluye las palancas, las poleas, las rampas y las cuñas.
     options: [ Motores, Robots, Máquinas simples, Circuitos ]
     answer: Máquinas simples
+    difficulty: medium
 
   - question: Todos los puntos del borde de esta figura están a la misma distancia de su centro. Su contorno se llama circunferencia, y una línea que la atraviesa por el centro es un diámetro. Nombra esta figura redonda y plana que puedes trazar siguiendo el borde de una moneda.
     options: [ Elipse, Círculo, Cuadrado, Triángulo ]
     answer: Círculo
+    difficulty: easy
 
   - question: Dentro de este aparato, unas ruedas giratorias cambiaban una letra por otra. Las fuerzas alemanas lo usaron para ocultar mensajes durante la Segunda Guerra Mundial, y descifradores de códigos como Alan Turing trabajaron para leerlos. Nombra esta famosa máquina de cifrado cuyo nombre también significa misterio o acertijo.
     options: [ Máquina Enigma, Telégrafo, Máquina de escribir, Radar ]
     answer: Máquina Enigma
+    difficulty: medium
 
   - question: El miembro más grande de este grupo, Ganimedes, es más ancho que Mercurio. El grupo incluye a la volcánica Ío y a la helada Europa, y Galileo vio cuatro de sus miembros grandes con un telescopio. Nombra estas lunas que giran alrededor de Júpiter, el planeta más grande de nuestro sistema solar.
     options:
@@ -47,10 +53,12 @@ cards:
       - Lunas de Júpiter
     answer: Lunas de Júpiter
     explanation: Las cuatro grandes — Ío, Europa, Ganimedes y Calisto — se llaman lunas galileanas.
+    difficulty: medium
 
   - question: Algunas de estas células se tragan a los gérmenes, mientras que otras ayudan al cuerpo a reconocer a ciertos invasores. Viajan por la sangre y los tejidos del cuerpo y forman parte del sistema inmunológico. Nombra estas células de la sangre que combaten los gérmenes, a diferencia de los glóbulos rojos, que transportan oxígeno.
     options: [ Glóbulos rojos, Plaquetas, Glóbulos blancos, Células nerviosas ]
     answer: Glóbulos blancos
+    difficulty: easy
 
   - question: Algunos sistemas de este campo aprenden patrones a partir de muchos ejemplos. Pueden reconocer la voz, identificar objetos en fotos y ayudar a las computadoras a jugar. Nombra este tipo de tecnología informática que realiza tareas relacionadas con la inteligencia humana, y que a menudo se abrevia como IA.
     options:
@@ -59,56 +67,69 @@ cards:
       - Hojas de cálculo
       - Internet
     answer: Inteligencia artificial
+    difficulty: medium
 
   - question: Cerca de la parte superior de este tipo de nube tan alta se pueden formar cristales de hielo. Las fuertes corrientes de aire que suben en su interior pueden ayudar a formar granizo, y su parte superior a menudo se extiende en forma de yunque. Nombra estas enormes nubes de tormenta que traen truenos y relámpagos.
     options: [ Cumulonimbos, Cirros, Estratos, Niebla ]
     answer: Cumulonimbos
+    difficulty: hard
 
   - question: Las primeras aves aparecieron durante este período de la historia de la Tierra. El estegosaurio y los dinosaurios de cuello largo vivieron durante él, entre los períodos Triásico y Cretácico. Nombra este período de la era de los dinosaurios que completa el espacio en blanco del título de la película «Parque ___».
     options: [ Período Triásico, Período Cretácico, Edad de Hielo, Período Jurásico ]
     answer: Período Jurásico
+    difficulty: easy
 
   - question: Cada una de estas partes de una imagen puede guardar su propia información de color. Una imagen digital tiene filas y columnas de ellas, y al hacer zoom se pueden volver visibles. Nombra los diminutos cuadrados que forman una imagen digital, también llamados elementos de imagen.
     options: [ Bytes, Íconos, Píxeles, Fuentes ]
     answer: Píxeles
+    difficulty: medium
 
   - question: Si calculas esto para el área de un cuadrado, obtienes la longitud de uno de sus lados. Es lo contrario de multiplicar un número por sí mismo, así que aplicarlo a 25 da 5. Nombra esta operación que da 3 para 9 y 4 para 16, y que se escribe con el signo radical.
     options: [ Exponente, Raíz cuadrada, Fracción, Porcentaje ]
     answer: Raíz cuadrada
+    difficulty: medium
 
   - question: Este material puede enfriarse y formar superficies lisas y como de cuerdas, o ásperas y cortantes. Puede brillar de color anaranjado cuando está muy caliente y se endurece hasta volverse roca al enfriarse. Nombra la roca fundida que ha salido de un volcán, que se llama magma mientras todavía está bajo tierra.
     options: [ Lava, Magma, Obsidiana, Ceniza ]
     answer: Lava
     explanation: Es magma mientras sigue bajo tierra y lava cuando sale a la superficie.
+    difficulty: medium
 
   - question: Algunos ejemplos brillan con luz propia, mientras que otros reflejan la luz de estrellas cercanas. Estos objetos pueden ser lugares donde se forman nuevas estrellas, y entre los ejemplos famosos están las nubes de Orión y de Cabeza de Caballo. Nombra una enorme nube de gas y polvo en el espacio, cuyo nombre empieza con N.
     options: [ Galaxia, Cometa, Agujero negro, Nebulosa ]
     answer: Nebulosa
+    difficulty: medium
 
   - question: El nombre de esta familia de elementos significa «formadores de sales». Sus miembros pertenecen al grupo 17 e incluyen el flúor, el bromo y el yodo. Nombra este grupo de elementos que también incluye el cloro, el elemento que se usa para ayudar a mantener limpias las piscinas.
     options: [ Gases nobles, Metales alcalinos, Halógenos, Metaloides ]
     answer: Halógenos
+    difficulty: hard
 
   - question: El orden de cuatro bloques químicos diferentes ayuda a esta molécula a guardar instrucciones. Se encuentra en los cromosomas, y su forma parece una escalera torcida. Nombra esta molécula que lleva las instrucciones genéticas, conocida por las tres letras A, D y N.
     options: [ ARN, ADN, ATP, Proteína ]
     answer: ADN
     explanation: ADN significa ácido desoxirribonucleico.
+    difficulty: easy
 
   - question: Esta idea dice que los relojes en movimiento y los relojes bajo gravedades de distinta intensidad pueden marcar el tiempo a ritmos diferentes. Cambió la forma en que los científicos entienden el espacio, el tiempo y la gravedad, e incluye la famosa ecuación E igual a m c al cuadrado. Nombra la teoría de Einstein que tiene una forma «especial» y una «general».
     options: [ Relatividad, Evolución, Teoría del Big Bang, Tectónica de placas ]
     answer: Relatividad
+    difficulty: hard
 
   - question: Unas aberturas diminutas en esta parte de la planta dejan entrar y salir gases. Sus nervaduras transportan agua y azúcares, y su superficie ancha ayuda a captar la luz del sol para la fotosíntesis. Nombra esta parte de la planta, generalmente verde, que crece de un tallo y puede ponerse roja o amarilla en otoño.
     options: [ Raíz, Tallo, Flor, Hoja ]
     answer: Hoja
+    difficulty: easy
 
   - question: Las cifras decimales de este número siguen y siguen sin repetirse en un patrón fijo. Si divides la medida del contorno de un círculo entre la distancia que lo atraviesa por el centro, siempre obtienes este mismo número. Nombra este número que se usa en las fórmulas del círculo y que por lo general se redondea a 3.14.
     options: [ Cero, Infinito, Pi, Raíz cuadrada de 2 ]
     answer: Pi
+    difficulty: medium
 
   - question: Este metal es tan fácil de moldear que se puede martillar hasta formar láminas muy delgadas. No se oxida, y los joyeros describen su pureza en quilates. Nombra este valioso metal amarillo que se usa en anillos y monedas, y que a menudo se gana como medalla por el primer lugar.
     options: [ Plata, Oro, Hierro, Cobre ]
     answer: Oro
+    difficulty: easy
 
   - question: Los astrónomos también llaman M31 a esta galaxia. Es una enorme espiral que está a unos dos millones y medio de años luz, y es la galaxia grande más cercana a nuestra Vía Láctea. Nombra esta galaxia cuyo nombre empieza con «Andró».
     options:
@@ -117,6 +138,7 @@ cards:
       - Galaxia del Remolino
       - Galaxia del Triángulo
     answer: Galaxia de Andrómeda
+    difficulty: easy
 
   - question: El número e pertenece a este grupo, pero la raíz cuadrada de dos no. Estos números no se pueden escribir como fracciones de números enteros, y sus cifras decimales nunca terminan ni se repiten en un patrón fijo. Nombra este grupo especial de números que incluye a pi y a e; la segunda palabra de su nombre empieza con «tras».
     options:
@@ -126,36 +148,45 @@ cards:
       - Números trascendentes
     answer: Números trascendentes
     explanation: √2 es irracional pero no trascendente, así que «números irracionales» no es la respuesta.
+    difficulty: hard
 
   - question: Unos pelitos diminutos en estas partes de la planta aumentan la superficie que absorbe agua. Algunas plantas tienen una principal y gruesa, mientras que otras tienen una red ramificada de muchas delgadas. Nombra estas partes, generalmente subterráneas, que sujetan la planta al suelo y absorben agua y minerales.
     options: [ Hojas, Tallos, Raíces, Semillas ]
     answer: Raíces
+    difficulty: easy
 
   - question: Los científicos miden esta magnitud en unidades llamadas newtons. La gravedad es un ejemplo, y si cambia, puede hacer que un objeto vaya más rápido, más lento o gire. Nombra esta palabra científica que significa un empujón o un tirón.
     options: [ Energía, Fuerza, Masa, Rapidez ]
     answer: Fuerza
+    difficulty: easy
 
   - question: Una fotografía guardada como JPEG suele ser este tipo de imagen. Si la amplías demasiado, puede aparecer una cuadrícula de cuadritos diminutos y sus bordes se ven escalonados. Nombra este tipo de imagen formada por píxeles, también llamada mapa de bits.
     options: [ Imagen rasterizada, Imagen vectorial, Modelo 3D, Video ]
     answer: Imagen rasterizada
     explanation: También se llama imagen de mapa de bits.
+    difficulty: hard
 
   - question: Este fenómeno puede dejar una estrella de neutrones o un agujero negro. Durante un tiempo corto, puede brillar tanto como una galaxia entera y lanzar el material de una estrella a través del espacio. Nombra esta enorme explosión de una estrella, cuyo nombre empieza con «super».
     options: [ Nova, Llamarada solar, Cometa, Supernova ]
     answer: Supernova
+    difficulty: easy
 
   - question: Las enzimas de tu cuerpo son ejemplos de estas sustancias. Ayudan a que las reacciones químicas ocurran más rápido y, en total, no se gastan en el proceso. Nombra una sustancia que acelera una reacción química, una palabra que empieza con «cat».
     options: [ Solvente, Mezcla, Catalizador, Ácido ]
     answer: Catalizador
+    difficulty: easy
 
   - question: Los animales de este grupo tienen tres huesecillos en cada oído medio. Respiran aire con pulmones, y su cuerpo tiene pelo o pelaje en algún momento de su vida. Nombra este grupo de animales cuyas madres producen leche para sus crías, como los perros, los gatos y los seres humanos.
     options: [ Reptiles, Mamíferos, Aves, Anfibios ]
     answer: Mamíferos
+    difficulty: easy
 
   - question: Este material se rompe en pedazos curvos con bordes muy afilados. La gente lo ha usado para hacer puntas de flecha, y se forma cuando la lava se enfría sin que crezcan cristales visibles. Nombra este vidrio volcánico, generalmente negro, cuyo nombre empieza con «ob».
     options: [ Obsidiana, Granito, Piedra pómez, Mármol ]
     answer: Obsidiana
+    difficulty: easy
 
   - question: Al girar un anillo de este aparato, cambia la cantidad de aire que se mezcla con su combustible. Tiene un tubo de metal y puede producir una llama amarilla o una llama azul más caliente. Nombra este quemador de gas de laboratorio que lleva el nombre de un científico llamado Robert Bunsen.
     options: [ Placa calefactora, Lámpara de alcohol, Vela, Mechero Bunsen ]
     answer: Mechero Bunsen
+    difficulty: easy

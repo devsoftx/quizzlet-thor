@@ -219,6 +219,7 @@ describe("Spanish translations in /decks/es", () => {
         expect(card.options.indexOf(card.answer), where).toBe(source.options.indexOf(source.answer));
         expect(Boolean(card.explanation), where).toBe(Boolean(source.explanation));
         expect(card.shuffleOptions, where).toBe(source.shuffleOptions);
+        expect(card.difficulty, where).toBe(source.difficulty); // the Progress page groups a card the same in either language
         expect(card.question, where).not.toBe(source.question);
       });
     });
@@ -353,8 +354,8 @@ describe("difficulty", () => {
     });
   });
 
-  it("labels every card of the bundled decks", () => {
-    for (const entry of loadBundledDecks()) {
+  it("labels every card of the bundled decks and their translations", () => {
+    for (const entry of loadAllBundledDecks()) {
       if (!entry.ok) continue;
       const unlabeled = entry.deck.cards.filter((c) => !c.difficulty && !entry.deck.difficulty).map((c) => c.question.slice(0, 40));
       expect(unlabeled, entry.fileName).toEqual([]);

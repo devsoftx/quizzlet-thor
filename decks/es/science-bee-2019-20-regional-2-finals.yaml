@@ -19,34 +19,42 @@ cards:
       - Mitocondria
     answer: Aparato de Golgi
     explanation: "También se acepta: cuerpo de Golgi."
+    difficulty: medium
 
   - question: El primer máser lo creó Charles H. Townes usando este compuesto. Este compuesto se convierte en ácido nítrico en el proceso de Ostwald. Un proceso para sintetizar este compuesto suele usar un catalizador de hierro y es el proceso de Bosch-Haber. Este compuesto sencillo de 4 átomos se usa como fertilizante. Nombra este compuesto de fórmula NH3.
     options: [ Ácido nítrico, Metano, Óxido nitroso, Amoníaco ]
     answer: Amoníaco
+    difficulty: easy
 
   - question: Un gran ejemplo prehistórico de uno de estos cuerpos fue el Agassiz. La isla Royale, en uno de estos cuerpos de agua, se usó para estudiar las poblaciones de lobos. El tipo «de marmita» de estos cuerpos puede formarse por el retroceso de los glaciares. La erosión puede crear ejemplos de estos cuerpos con forma de U llamados «de herradura». Nombra estos grandes cuerpos de agua cerrados, entre los que están el Míchigan y el Superior.
     options: [ Océanos, Bahías, Lagos, Estrechos ]
     answer: Lagos
+    difficulty: easy
 
   - question: Para sortear la existencia de este tipo de materia, Mordehai Milgrom desarrolló la Dinámica Newtoniana Modificada. El modelo Lambda-CDM describe este tipo de materia como «fría». El hecho de que las galaxias giren más rápido de lo esperado, dadas las graves subestimaciones de su masa en los cálculos, llevó a formular este estado teórico de la materia. Nombra esta forma de materia, llamada así porque no se puede detectar con la luz.
     options: [ Energía oscura, Materia oscura, Antimateria, Materia degenerada ]
     answer: Materia oscura
+    difficulty: easy
 
   - question: El análogo rotacional de esta magnitud es el torque, mientras que esta magnitud sobre un área dada se llama presión. Esta magnitud puede equilibrarse y analizarse con diagramas de cuerpo libre. Cuando la causa la gravedad, esta magnitud se llama peso, y su valor neto sobre un cuerpo es igual a su masa por su aceleración. Nombra esta magnitud que se mide en newtons.
     options: [ Fuerza, Cantidad de movimiento, Energía, Aceleración ]
     answer: Fuerza
+    difficulty: easy
 
   - question: La dinámica de una de estas, esférica, en un fluido incompresible e infinito se describe con la ecuación de Rayleigh-Plesset. Según la leyenda, a Donald Glaser se le ocurrió la idea de una cámara de estas cosas para detectar partículas al verlas formar espuma en la parte de arriba de un vaso de cerveza. Se mantienen unidas porque la tensión superficial equilibra la presión, que puede hacer que revienten. Nombra estas bolsitas de aire atrapadas en un líquido.
     options: [ Ondulaciones, Remolinos, Cristales de hielo, Burbujas ]
     answer: Burbujas
+    difficulty: easy
 
   - question: Para dar ventilación a estas estructuras, Cresson Kearny diseñó una bomba de aire eficiente. Las «bombas sísmicas» se diseñaron como armas «destructoras» de estas estructuras. No son blocaos, pero durante la Segunda Guerra Mundial y la Guerra Fría se construyeron muchísimas de estas estructuras civiles; en la Guerra Fría, por miedo a la lluvia radiactiva. Nombra estos refugios fortificados diseñados para proteger a las personas de bombas, armas nucleares y ataques enemigos.
     options: [ Trincheras, Cuarteles, Búnkeres, Silos de misiles ]
     answer: Búnkeres
+    difficulty: hard
 
   - question: En una estructura cristalina formada por este tipo de enlaces, el cambio de entalpía puede calcularse a partir de la energía reticular con el ciclo de Born-Haber. Este tipo de enlace se forma con mayor facilidad entre átomos poco electronegativos y átomos muy electronegativos, como los metales alcalinos y los halógenos. Nombra este tipo de enlace, normalmente más fuerte que un enlace covalente, en el que un átomo cede por completo un electrón al otro.
     options: [ Enlaces covalentes, Enlaces iónicos, Enlaces metálicos, Puentes de hidrógeno ]
     answer: Enlaces iónicos
+    difficulty: easy
 
   - question: Junto con Jordan, este matemático da nombre a un método de eliminación para resolver ecuaciones lineales en forma matricial. Este matemático demostró que un heptadecágono se puede construir con regla y compás. Según la leyenda, de niño sumó los números del uno al cien mucho más rápido de lo que su maestro esperaba. Nombra a este matemático y físico alemán que da nombre a la distribución normal.
     options:
@@ -56,15 +64,18 @@ cards:
       - David Hilbert
     answer: Carl Friedrich Gauss
     explanation: La distribución normal también se llama distribución gaussiana o de Gauss.
+    difficulty: medium
 
   - question: Dos variedades de este tipo de nube son calvus y capillatus. Es la más grande de las dos nubes que pueden formar una línea de flanco. Este tipo de nube es la evolución de los cúmulos congestus, debido a fuertes y continuas corrientes de aire ascendentes que llevan vapor de agua con ellas. Nombra estas nubes cuyo nombre significa «nube de lluvia amontonada», que se abrevian Cb y suelen ser más grandes que los cúmulos.
     options: [ Cúmulos, Nimboestratos, Estratocúmulos, Cumulonimbos ]
     answer: Cumulonimbos
+    difficulty: medium
 
   - question: Poner varios de este tipo de circuito en un solo chip le da al chip «múltiples núcleos». Las instrucciones en lenguaje ensamblador le dicen a este tipo de circuito cómo comportarse; las recibe de la compilación de código escrito en un lenguaje de programación de alto nivel. Nombra estos chips de computadora, que se abrevian comúnmente CPU, que ejecutan las instrucciones en la computadora.
     options: [ Módulos de RAM, Tarjetas madre, Procesadores, Discos duros ]
     answer: Procesadores
     explanation: "También se acepta: microprocesadores, unidades centrales de procesamiento (CPU)."
+    difficulty: easy
 
   - question: Para esta enfermedad, Merck anunció un estudio llamado EPOCH para probar el verubecestat, un inhibidor de la beta-secretasa 1; el estudio no logró reducir los ovillos neurofibrilares causados por proteínas tau hiperfosforiladas ni los niveles de placas de beta-amiloide, dos rasgos presentes en el cerebro de los pacientes que padecen, para ganar el punto, ¿qué enfermedad neurodegenerativa, que representa alrededor del 70% de los casos de demencia?
     options:
@@ -73,72 +84,88 @@ cards:
       - Enfermedad de Huntington
       - Esclerosis múltiple
     answer: Enfermedad de Alzheimer
+    difficulty: medium
 
   - question: La fuente más común de este elemento es el mineral esfalerita. Este elemento y el cobre se apilaron para hacer la pila de Volta, precursora de la batería. Este elemento da nombre a un motivo de «dedo» de los factores de transcripción. En la galvanización, este elemento recubre una superficie metálica para evitar la oxidación. Nombra este elemento de número atómico treinta y símbolo químico Zn.
     options: [ Zinc, Cobre, Plomo, Magnesio ]
     answer: Zinc
+    difficulty: easy
 
   - question: Este movimiento se describe con el tercer ángulo de Euler. El cabeceo, la guiñada y el alabeo de un avión son las tres variantes principales de este movimiento. Al realizar este tipo de movimiento, un objeto puede empezar a mostrar nutación y precesión. La aceleración angular describe qué tan rápido este movimiento se acelera o se frena. Nombra este tipo de movimiento en el que un objeto da vueltas alrededor de uno de sus ejes, como los trompos de juguete.
     options: [ Traslación, Oscilación, Movimiento de proyectiles, Rotación ]
     answer: Rotación
     explanation: "También se acepta: giro."
+    difficulty: easy
 
   - question: Las células de Merkel de este órgano son un tipo de mecanorreceptor de forma ovalada. Los queratinocitos son un componente importante de este órgano. Este órgano, el más grande del cuerpo, es la primera línea de defensa del sistema inmunológico y el principal sitio de síntesis de vitamina D, gracias a una reacción con la luz del sol. Nombra este órgano formado por la dermis, que cubre el cuerpo humano.
     options: [ Hígado, Pulmones, Piel, Bazo ]
     answer: Piel
+    difficulty: easy
 
   - question: Entre las hipótesis sobre la fórmula de esta sustancia está la cal viva, porque se enciende al contacto con el agua. Los bizantinos usaron esta sustancia, a menudo lanzándola desde barcos, hasta que su fórmula se perdió en el siglo XIII. Nombra esta arma antigua que, según se dice, se parece al napalm moderno porque puede arder mientras flota sobre el agua.
     options: [ Pólvora, Fuego griego, Napalm, Termita ]
     answer: Fuego griego
+    difficulty: medium
 
   - question: En el hemisferio norte de este planeta se forman tormentas llamadas la Gran Mancha Blanca. En un sistema cercano a este planeta hay divisiones que llevan los nombres de Maxwell y Huygens. Encélado, luna de este planeta, es conocida por su alto albedo. La sonda Cassini exploró este planeta, cuya luna más grande es Titán. Nombra este sexto planeta desde el Sol, conocido por su gran sistema de anillos.
     options: [ Saturno, Júpiter, Urano, Neptuno ]
     answer: Saturno
+    difficulty: easy
 
   - question: En el experimento de Davisson-Germer, los electrones disparados contra este elemento mostraron un patrón de difracción. Este elemento se purifica usando gas de síntesis en el proceso Mond. Raney da nombre a un catalizador de este metal, que existe en el núcleo de la Tierra junto con el hierro. Este metal está entre el cobalto y el cobre en la tabla periódica. Nombra este metal de número atómico veintiocho y símbolo químico Ni.
     options: [ Cobalto, Cobre, Hierro, Níquel ]
     answer: Níquel
+    difficulty: easy
 
   - question: Un pariente cercano de este organismo es el teosinte. Barbara McClintock ganó el Premio Nobel de Fisiología o Medicina por descubrir los transposones, o «genes saltarines», en este organismo modelo. La mayor parte de la producción de etanol combustible renovable proviene de esta planta. Nombra este cultivo cuya fructosa se extrae para hacer un jarabe «alto en fructosa».
     options: [ Trigo, Arroz, Maíz, Soya ]
     answer: Maíz
     explanation: Su nombre científico es Zea mays.
+    difficulty: medium
 
   - question: Esta sustancia se purifica usando zeolitas en el proceso de craqueo. Un método polémico para extraer esta sustancia consiste en inyectar un fluido a alta presión para crear grietas en las rocas; ese método se llama fracturación hidráulica o fracking. Este recurso natural se usa para hacer asfalto y plásticos. Nombra este combustible fósil líquido que se usa para hacer gasolina.
     options: [ Carbón, Petróleo, Turba, Etanol ]
     answer: Petróleo
     explanation: "También se acepta: petróleo crudo."
+    difficulty: easy
 
   - question: Los hongos térmicamente dimórficos pueden existir tanto en forma de moho como de este otro miembro del reino de los hongos, que en cambio crece formando pseudohifas. Saccharomyces cerevisiae es un organismo modelo muy estudiado de este miembro del reino de los hongos. Este miembro del reino de los hongos forma burbujas de dióxido de carbono, lo que ayuda a elaborar la cerveza y hace que la masa se expanda. Nombra este tipo de hongo cuya variedad «de panadero» ayuda a que el pan crezca.
     options: [ Levadura, Moho, Seta, Liquen ]
     answer: Levadura
+    difficulty: easy
 
   - question: Junto con Joule, este científico da nombre a un efecto en el que los gases reales se expanden adiabáticamente en un proceso de estrangulamiento a través de una válvula o un tapón poroso. Este científico da nombre a una unidad del SI que corresponde a la escala de temperatura absoluta más usada, ya que el cero de esa escala marca el «cero absoluto». Nombra a este físico escocés que da nombre a la unidad del SI de temperatura.
     options: [ James Clerk Maxwell, Anders Celsius, James Joule, Lord Kelvin ]
     answer: Lord Kelvin
     explanation: Nació como William Thomson y llegó a ser el primer barón Kelvin.
+    difficulty: hard
 
   - question: La afirmación de que todo número tiene una factorización única en números primos es el teorema fundamental de este campo. La forma «modular» de este tipo de matemáticas trata con los residuos de la división. Este tipo de matemáticas da nombre a un tipo de sucesión con diferencia constante. Nombra esta rama fundamental de las matemáticas que trata con operaciones como la suma y la resta.
     options: [ Álgebra, Geometría, Aritmética, Cálculo ]
     answer: Aritmética
+    difficulty: medium
 
   - question: Después del hidrógeno, este es el compuesto más abundante del universo. Este compuesto reacciona con el agua en una reacción de desplazamiento. Una mezcla de este gas con hidrógeno gaseoso se llama gas de síntesis. Se forma junto con el agua en una reacción de combustión incompleta. Este gas causa falta de oxígeno por su fuerte afinidad por la hemoglobina. Nombra este gas venenoso de fórmula CO.
     options: [ Dióxido de carbono, Monóxido de carbono, Metano, Dióxido de azufre ]
     answer: Monóxido de carbono
+    difficulty: easy
 
   - question: Este estado de la materia tiene, en promedio, las conductividades térmicas más bajas. La mayoría de los miembros de «HONClBrIF» están en este estado de la materia. La forma ideal de este estado se modela con la ley V por P igual a n por R por T. Nombra este estado de la materia en el que el elemento o compuesto se mueve libremente y sus partículas no están débilmente unidas como en los líquidos.
     options: [ Gases, Líquidos, Sólidos, Condensados de Bose-Einstein ]
     answer: Gases
+    difficulty: medium
 
   - question: 109P/Swift-Tuttle es el objeto progenitor de uno de estos eventos, que ocurre en agosto y toma su nombre de la constelación de Perseo. El cometa Tempel-Tuttle está asociado con algunos de estos eventos, que ocurren en la constelación de Leo. Las Perseidas y las Leónidas son ejemplos de, para ganar el punto, ¿qué eventos en los que los meteoros parecen «estrellas fugaces» que salen de un solo punto en el espacio?
     options: [ Auroras, Eclipses lunares, Supernovas, Lluvias de meteoros ]
     answer: Lluvias de meteoros
     explanation: "También se acepta: tormentas de meteoros, estallidos de meteoros."
+    difficulty: easy
 
   - question: Fritz Haber ayudó a desarrollar el uso del fosgeno y el gas mostaza durante esta guerra, lo que le valió el apodo de «el padre de la guerra química». Los vehículos blindados con orugas, como el tanque Mark I, se usaron por primera vez durante la ofensiva del Somme de esta guerra. Nombra esta guerra mundial, en la que se aplicó la tecnología del siglo XX desarrollada durante esa década, librada entre los Aliados y las Potencias Centrales.
     options: [ Segunda Guerra Mundial, Guerra de Crimea, Primera Guerra Mundial, Guerra de Corea ]
     answer: Primera Guerra Mundial
     explanation: También se le llama la Gran Guerra.
+    difficulty: easy
 
   - question: En 1900, Max Planck estableció los principios fundamentales de esta teoría con su solución a la catástrofe ultravioleta. Una idea clave de esta teoría es que las funciones de onda «colapsan» al medirse. El gato de Schrödinger es un experimento mental sobre esta teoría. Nombra esta teoría de la microescala que usa la dualidad onda-partícula y limita los sistemas a valores discretos cuantizados.
     options:
@@ -147,19 +174,24 @@ cards:
       - Relatividad general
       - Mecánica clásica
     answer: Mecánica cuántica
+    difficulty: easy
 
   - question: Los miembros de Hirundinidae usan esta sustancia para ayudarse a construir sus nidos. Este líquido, obtenido de Drosophila melanogaster, se usó para descubrir los cromosomas politénicos. La glándula parótida es una de las tres glándulas que ayudan a producir este líquido. En el tubo digestivo, los azúcares se encuentran por primera vez con la enzima amilasa en este líquido. Nombra este líquido biológico que ayuda a prevenir la placa dental, producido en la boca por las glándulas que llevan su nombre.
     options: [ Saliva, Moco, Bilis, Lágrimas ]
     answer: Saliva
+    difficulty: easy
 
   - question: Como estas estructuras no siempre están relacionadas con la reproducción, se desarrolló la terminología de Humphrey-Parkes. Las barbas de estas estructuras salen de un raquis central. En fósiles de géneros como Archaeopteryx se encontraron versiones primitivas de estas estructuras. La plumología es el estudio del desarrollo y el uso de estas estructuras. Nombra estas estructuras epidérmicas de las aves que cumplen una función parecida a la del pelo en los mamíferos.
     options: [ Escamas, Picos, Garras, Plumas ]
     answer: Plumas
+    difficulty: easy
 
   - question: El desarrollo de un fluoróforo de este color les valió a Osamu Shimomura, Martin Chalfie y Roger Y. Tsien el Premio Nobel de Química de 2008. Un anillo de porfirina con un centro de magnesio es importante para una molécula que da esta pigmentación en membranas en forma de láminas incrustadas en el estroma. Una proteína fluorescente de la medusa A. victoria brilla de este color, igual que la clorofila. Nombra este color de las hojas de las plantas.
     options: [ Azul, Rojo, Verde, Amarillo ]
     answer: Verde
+    difficulty: easy
 
   - question: La estructura y distribución de un ecosistema formado por estas especies da título a la primera monografía de Charles Darwin. Los miembros de estas llamadas «flores de piedra» son hermatípicos y obtienen su energía de las zooxantelas. Para ganar el punto, nombra estos invertebrados marinos que son fundamentales para los ecosistemas que llevan su nombre, conocidos como arrecifes.
     options: [ Erizos de mar, Corales, Estrellas de mar, Percebes ]
     answer: Corales
+    difficulty: medium

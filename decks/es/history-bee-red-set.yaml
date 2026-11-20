@@ -14,15 +14,18 @@ cards:
     options: [ Jim Crow, Apartheid, Colonialismo, Feudalismo ]
     answer: Apartheid
     explanation: Las leyes de Jim Crow fueron un sistema de segregación similar en el sur de Estados Unidos.
+    difficulty: easy
 
   - question: ¿En qué idioma la palabra “apartheid” significa “separación”?
     options: [ Afrikáans, Zulú, Suajili, Inglés ]
     answer: Afrikáans
+    difficulty: medium
 
   - question: ¿Qué desierto fue una ruta comercial vital que conectaba el norte de África con el África subsahariana?
     options: [ Desierto de Kalahari, Desierto de Gobi, Desierto de Namib, Desierto del Sahara ]
     answer: Desierto del Sahara
     explanation: Las caravanas de camellos llevaban oro, sal y otras mercancías a través del Sahara.
+    difficulty: easy
 
   - question: En 1953, ¿quién se convirtió en una de las dos primeras personas en llegar a la cima del monte Everest, junto con Edmund Hillary?
     options:
@@ -32,29 +35,35 @@ cards:
       - Roald Amundsen
     answer: Tenzing Norgay
     explanation: Tenzing Norgay era un montañista sherpa de Nepal; Hillary era de Nueva Zelanda.
+    difficulty: medium
 
   - question: ¿En qué año Edmund Hillary y Tenzing Norgay llegaron por primera vez a la cima del monte Everest?
     options: [ "1912", "1937", "1953", "1969" ]
     answer: "1953"
     shuffleOptions: false
+    difficulty: hard
 
   - question: La India es la cuna del hinduismo, del jainismo y ¿de qué otra religión?
     options: [ Sijismo, Sintoísmo, Taoísmo, Judaísmo ]
     answer: Sijismo
     explanation: El budismo también nació en la India.
+    difficulty: medium
 
   - question: En 1938, a los dos años, Tenzin Gyatso fue reconocido como el 14.º portador de ¿qué título del budismo tibetano?
     options: [ Panchen Lama, Shogun, Maharajá, Dalái Lama ]
     answer: Dalái Lama
+    difficulty: easy
 
   - question: Angkor Wat, la estructura religiosa más grande del mundo, aparece en la bandera de ¿qué país?
     options: [ Tailandia, Laos, Camboya, Myanmar ]
     answer: Camboya
+    difficulty: medium
 
   - question: ¿Qué clase guerrera japonesa surgió en el siglo X como guardia de ricos terratenientes y desapareció a finales del siglo XIX, cuando Japón modernizó su ejército?
     options: [ Ninjas, Samuráis, Shogunes, Daimios ]
     answer: Samuráis
     explanation: Los shogunes eran gobernantes militares y los daimios eran señores poderosos; los samuráis estaban a su servicio.
+    difficulty: easy
 
   - question: Mesopotamia, parte del Creciente Fértil, se encontraba en las llanuras aluviales de ¿qué dos ríos?
     options:
@@ -64,15 +73,18 @@ cards:
       - Amarillo y Yangtsé
     answer: Tigris y Éufrates
     explanation: Mesopotamia significa “tierra entre ríos”.
+    difficulty: medium
 
   - question: ¿Qué faraón del antiguo Egipto murió en el año 30 a. C., lo que marcó el inicio del dominio romano en Egipto?
     options: [ Tutankamón, Ramsés II, Hatshepsut, Cleopatra ]
     answer: Cleopatra
+    difficulty: easy
 
   - question: Las guerras púnicas enfrentaron a la República romana con ¿qué potencia rival, por el control del Mediterráneo?
     options: [ Persia, Egipto, Cartago, Macedonia ]
     answer: Cartago
     explanation: Cartago era una ciudad del norte de África, en el actual Túnez. Su general Aníbal es famoso por cruzar los Alpes con elefantes de guerra.
+    difficulty: medium
 
   - question: ¿Qué dos casas reales lucharon en la guerra de las Dos Rosas por el trono inglés?
     options:
@@ -82,6 +94,7 @@ cards:
       - Borbón y Habsburgo
     answer: Lancaster y York
     explanation: El símbolo de Lancaster era una rosa roja y el de York, una rosa blanca.
+    difficulty: medium
 
   - question: Cuando Francia abolió su monarquía durante la Revolución francesa, ¿qué rey y qué reina fueron derrocados?
     options:
@@ -90,6 +103,7 @@ cards:
       - Enrique VIII y Ana Bolena
       - Fernando e Isabel
     answer: Luis XVI y María Antonieta
+    difficulty: easy
 
   - question: ¿Qué documento, firmado por el rey Juan de Inglaterra en 1215, estableció que el rey no estaba por encima de la ley?
     options:
@@ -99,16 +113,19 @@ cards:
       - Carta Magna
     answer: Carta Magna
     explanation: Su nombre en latín, Magna Carta, significa “Gran Carta”.
+    difficulty: easy
 
   - question: ¿Qué civilización indígena mesoamericana se extendió por lo que hoy son México, Guatemala, Belice, Honduras y El Salvador?
     options: [ Inca, Azteca, Maya, Olmeca ]
     answer: Maya
     explanation: Los incas vivían en América del Sur, a lo largo de la cordillera de los Andes.
+    difficulty: medium
 
   - question: El Imperio azteca se gobernaba desde ¿qué ciudad, ubicada donde hoy está la Ciudad de México?
     options: [ Cusco, Tenochtitlan, Teotihuacan, Chichén Itzá ]
     answer: Tenochtitlan
     explanation: Cusco era la capital del Imperio inca, en Perú.
+    difficulty: hard
 
   - question: ¿Qué conquistador español dirigió la conquista del Imperio azteca a principios del siglo XVI?
     options:
@@ -118,6 +135,7 @@ cards:
       - Fernando de Magallanes
     answer: Hernán Cortés
     explanation: Francisco Pizarro conquistó el Imperio inca.
+    difficulty: easy
 
   - question: ¿Bajo qué presidente de Estados Unidos se creó el Sistema de Autopistas Interestatales?
     options:
@@ -126,11 +144,13 @@ cards:
       - John F. Kennedy
       - Dwight D. Eisenhower
     answer: Dwight D. Eisenhower
+    difficulty: medium
 
   - question: ¿Qué edificio es la sede del Departamento de Defensa de Estados Unidos?
     options: [ La Casa Blanca, El Capitolio, El Pentágono, Fort Knox ]
     answer: El Pentágono
     explanation: Debe su nombre a su forma de cinco lados.
+    difficulty: easy
 
   - question: ¿Qué presidente puso en marcha el New Deal, con el que creó programas como el Cuerpo Civil de Conservación y la Seguridad Social?
     options:
@@ -139,6 +159,7 @@ cards:
       - Herbert Hoover
       - Woodrow Wilson
     answer: Franklin D. Roosevelt
+    difficulty: easy
 
   - question: El asentamiento de Jamestown, en Virginia, tuvo un trato estrecho con ¿qué grupo de nativos americanos, al que pertenecía Pocahontas?
     options:
@@ -147,6 +168,7 @@ cards:
       - Nación cheroqui
       - Wampanoag
     answer: Confederación Powhatan
+    difficulty: hard
 
   - question: ¿Cómo se llamaba la red secreta de rutas y casas seguras que ayudaba a las personas esclavizadas a escapar hacia la libertad?
     options:
@@ -156,11 +178,13 @@ cards:
       - Ferrocarril subterráneo
     answer: Ferrocarril subterráneo
     explanation: Harriet Tubman fue una de sus guías más famosas; a esos guías se les llamaba “conductores”.
+    difficulty: easy
 
   - question: ¿En qué misión de San Antonio el Ejército mexicano venció a los defensores texianos y tejanos tras un sitio de 13 días?
     options: [ Fuerte Sumter, Fuerte McHenry, El Álamo, Little Bighorn ]
     answer: El Álamo
     explanation: “¡Recuerden El Álamo!” se convirtió en un grito de guerra de la Revolución de Texas (1836).
+    difficulty: easy
 
   - question: ¿Qué servicio de correo a caballo conectó Misuri con California de 1860 a 1861?
     options:
@@ -170,7 +194,9 @@ cards:
       - Canal de Erie
     answer: Pony Express
     explanation: Dejó de funcionar cuando el telégrafo pudo enviar mensajes de un extremo a otro del país.
+    difficulty: medium
 
   - question: ¿Qué héroe popular de la Revolución estadounidense hizo una “cabalgata de medianoche” para avisar a las milicias coloniales que se acercaban las tropas británicas?
     options: [ Paul Revere, Benjamin Franklin, Nathan Hale, John Hancock ]
     answer: Paul Revere
+    difficulty: easy

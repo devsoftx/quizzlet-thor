@@ -14,37 +14,45 @@ cards:
     options: [ Río Congo, Río Níger, Río Zambeze, Río Orange ]
     answer: Río Níger
     explanation: El Nilo es el río más largo de África; le siguen el Congo y luego el Níger.
+    difficulty: medium
 
   - question: ¿En qué país se encuentra el monte Kilimanjaro, la montaña más alta de África?
     options: [ Tanzania, Kenia, Etiopía, Uganda ]
     answer: Tanzania
+    difficulty: easy
 
   - question: ¿Qué país del Sudeste Asiático, formado por miles de islas, tiene su capital en Manila?
     options: [ Indonesia, Malasia, Vietnam, Filipinas ]
     answer: Filipinas
+    difficulty: easy
 
   - question: ¿Cuál es el río más largo de China?
     options: [ Río Amarillo, Río Mekong, Río Yangtsé, Río de las Perlas ]
     answer: Río Yangtsé
+    difficulty: medium
 
   - question: Bangkok, la capital de Tailandia, está en el delta de ¿qué río?
     options: [ Río Mekong, Río Chao Phraya, Río Irrawaddy, Río Ganges ]
     answer: Río Chao Phraya
+    difficulty: hard
 
   - question: ¿Qué ciudad de Israel es considerada sagrada por los seguidores del judaísmo, el cristianismo y el islam?
     options: [ Jerusalén, Tel Aviv, Haifa, La Meca ]
     answer: Jerusalén
     explanation: La Meca, en Arabia Saudita, es la ciudad más sagrada del islam, pero no es sagrada para el judaísmo ni para el cristianismo.
+    difficulty: easy
 
   - question: "¿Qué gran isla comparten tres países: Indonesia, Malasia y Brunéi?"
     options: [ Sumatra, Java, Nueva Guinea, Borneo ]
     answer: Borneo
     explanation: "Nueva Guinea la comparten solo dos países: Indonesia y Papúa Nueva Guinea."
+    difficulty: medium
 
   - question: ¿Cuál es la ciudad más grande de Turquía, donde se encuentra Santa Sofía?
     options: [ Ankara, Esmirna, Estambul, Antalya ]
     answer: Estambul
     explanation: Estambul es la ciudad más grande, pero la capital de Turquía es Ankara.
+    difficulty: easy
 
   - question: Frente a la costa de Australia se encuentra la estructura más grande de la Tierra construida por seres vivos. ¿Qué es?
     options:
@@ -54,14 +62,17 @@ cards:
       - Doce Apóstoles
     answer: Gran Barrera de Coral
     explanation: El arrecife lo construyen unos animales diminutos llamados pólipos de coral.
+    difficulty: easy
 
   - question: ¿Cuál es el continente más al sur de la Tierra?
     options: [ Antártida, Australia, América del Sur, África ]
     answer: Antártida
+    difficulty: easy
 
   - question: ¿Cuál es el país más al sur de Oceanía?
     options: [ Australia, Fiyi, Papúa Nueva Guinea, Nueva Zelanda ]
     answer: Nueva Zelanda
+    difficulty: medium
 
   - question: ¿Qué estrecho separa la parte asiática de la parte europea de Turquía?
     options:
@@ -71,23 +82,28 @@ cards:
       - Estrecho de Ormuz
     answer: Bósforo
     explanation: Estambul está a ambos lados del Bósforo.
+    difficulty: medium
 
   - question: Viena, la capital de Austria, está a orillas de ¿qué río, el segundo más largo de Europa?
     options: [ Río Rin, Río Danubio, Río Volga, Río Sena ]
     answer: Río Danubio
     explanation: El Volga es el río más largo de Europa; el Danubio es el segundo.
+    difficulty: medium
 
   - question: ¿En qué capital se encuentran la Fontana de Trevi y el Coliseo?
     options: [ Roma, Atenas, París, Madrid ]
     answer: Roma
+    difficulty: easy
 
   - question: ¿Qué mar de gran importancia estratégica baña la península de Crimea?
     options: [ Mar Caspio, Mar Báltico, Mar Rojo, Mar Negro ]
     answer: Mar Negro
+    difficulty: medium
 
   - question: ¿Cuál es la isla más grande del mar Mediterráneo por superficie?
     options: [ Cerdeña, Chipre, Sicilia, Creta ]
     answer: Sicilia
+    difficulty: medium
 
   - question: ¿Qué dos países comparten la península ibérica?
     options:
@@ -96,32 +112,39 @@ cards:
       - Italia y Grecia
       - Portugal y Marruecos
     answer: España y Portugal
+    difficulty: easy
 
   - question: La fortaleza de Akershus está en Oslo, ¿capital de qué país?
     options: [ Noruega, Suecia, Dinamarca, Finlandia ]
     answer: Noruega
+    difficulty: easy
 
   - question: ¿Qué ciudad de Luisiana es conocida por su comida cajún y su celebración anual del Mardi Gras?
     options: [ Baton Rouge, Memphis, Houston, Nueva Orleans ]
     answer: Nueva Orleans
+    difficulty: easy
 
   - question: ¿Cuál es la isla más grande de Canadá?
     options: [ Isla Victoria, Terranova, Isla de Baffin, Isla de Vancouver ]
     answer: Isla de Baffin
+    difficulty: hard
 
   - question: El movimiento de las placas tectónicas bajo California acerca lentamente Los Ángeles a ¿qué ciudad?
     options: [ San Diego, San Francisco, Las Vegas, Sacramento ]
     answer: San Francisco
     explanation: Las dos ciudades están en lados opuestos de la falla de San Andrés.
+    difficulty: medium
 
   - question: ¿Cuál de los Grandes Lagos es el lago de agua dulce más grande del mundo por superficie?
     options: [ Lago Superior, Lago Míchigan, Lago Hurón, Lago Erie ]
     answer: Lago Superior
+    difficulty: medium
 
   - question: ¿Cuál de estos NO es uno de los cinco Grandes Lagos?
     options: [ Lago Ontario, Lago Hurón, Lago Erie, Lago Champlain ]
     answer: Lago Champlain
     explanation: Los cinco Grandes Lagos son el Superior, el Míchigan, el Hurón, el Erie y el Ontario.
+    difficulty: medium
 
   - question: ¿Cuál es el sistema montañoso más largo de América del Norte?
     options:
@@ -130,11 +153,13 @@ cards:
       - Montañas Rocosas
       - Cordillera de las Cascadas
     answer: Montañas Rocosas
+    difficulty: hard
 
   - question: La isla de Terranova forma una provincia canadiense junto con ¿qué región?
     options: [ Nueva Escocia, Labrador, Quebec, Nunavut ]
     answer: Labrador
     explanation: La provincia se llama Terranova y Labrador.
+    difficulty: medium
 
   - question: ¿En qué parque nacional de California se registró una vez la temperatura más alta jamás medida en la Tierra?
     options:
@@ -144,29 +169,36 @@ cards:
       - Parque nacional del Gran Cañón
     answer: Parque nacional del Valle de la Muerte
     explanation: Llegó a 134 °F (56.7 °C) en 1913.
+    difficulty: easy
 
   - question: El cabo Cod, en Massachusetts, está frente a ¿qué isla, al otro lado del agua?
     options: [ Long Island, Staten Island, Isla Mackinac, Martha's Vineyard ]
     answer: Martha's Vineyard
+    difficulty: hard
 
   - question: Situada junto a un puerto del mismo nombre, ¿qué ciudad es la más poblada de Carolina del Sur?
     options: [ Columbia, Savannah, Charleston, Myrtle Beach ]
     answer: Charleston
     explanation: Columbia es la capital de Carolina del Sur, y Savannah está en Georgia.
+    difficulty: medium
 
   - question: ¿Qué país centroamericano limita con El Salvador y Nicaragua y tiene su capital en Tegucigalpa?
     options: [ Guatemala, Honduras, Costa Rica, Panamá ]
     answer: Honduras
+    difficulty: medium
 
   - question: ¿En qué país está el glaciar Perito Moreno?
     options: [ Argentina, Chile, Perú, Bolivia ]
     answer: Argentina
+    difficulty: medium
 
   - question: ¿Cuál es el lago más grande de América del Sur por superficie?
     options: [ Lago de Nicaragua, Lago Poopó, Lago de Atitlán, Lago Titicaca ]
     answer: Lago Titicaca
     explanation: El lago Titicaca está en lo alto de los Andes, en la frontera entre Perú y Bolivia.
+    difficulty: medium
 
   - question: ¿Cuál es la capital de Cuba?
     options: [ Santo Domingo, San Juan, La Habana, Kingston ]
     answer: La Habana
+    difficulty: easy

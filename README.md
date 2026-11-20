@@ -277,7 +277,8 @@ Rules:
 - `difficulty` is `easy`, `medium` or `hard` (on a card, or on the deck for
   every card that doesn't say), judged for the deck's own audience. A card
   without one counts as `medium`. It's what the Progress page groups answers
-  by. Every card in `decks/` has one.
+  by. Every card in `decks/` has one, and a translation (`decks/es/`) keeps
+  its original's levels card for card.
 - Wrap text in quotes if it contains a `:` followed by a space, or starts with
   a special character like `*`, `&`, `!`, `[` or `{`.
 

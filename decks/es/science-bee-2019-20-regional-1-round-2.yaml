@@ -14,74 +14,91 @@ cards:
   - question: El metabolismo de esta molécula fue el centro del estudio de Jacques Monod y François Jacob sobre su operón homónimo. Esta molécula de azúcar tiene un enlace glucosídico beta 1,4 entre la glucosa y un azúcar de nombre parecido, y es descompuesta por una enzima que lleva su nombre, la cual conservan muchas personas de ascendencia escandinava. Nombra esta molécula de azúcar, presente en la leche, a la que la mayoría de las personas son “intolerantes”.
     options: [ Lactosa, Sacarosa, Maltosa, Fructosa ]
     answer: Lactosa
+    difficulty: hard
 
   - question: La teoría neutralista simboliza la tasa de estos eventos con la letra griega mu. Los términos “por desplazamiento del marco de lectura” y “puntual” designan dos variantes de estos eventos. Estos eventos son perjudiciales si el resultado disminuye la aptitud de un organismo. Estos eventos introducen nuevos alelos en una población. Pueden ocurrir en el ADN expuesto a la luz UV o a la radiación nuclear. Nombra estos eventos que causan alteraciones en el ADN de un organismo.
     options: [ Adaptaciones, Eventos de especiación, Extinciones, Mutaciones ]
     answer: Mutaciones
+    difficulty: easy
 
   - question: El cálculo de Isaac Newton de la velocidad de este fenómeno resultó demasiado bajo porque trató su propagación como un proceso isotérmico en lugar de adiabático. La interferencia entre dos ondas de este fenómeno produce las pulsaciones. Este fenómeno viaja a 343 metros por segundo y no puede percibirse por encima de 20 kilohertz. Nombra este fenómeno que se mide en decibeles y que produce el trueno.
     options: [ Luz, Calor, Sonido, Electricidad ]
     answer: Sonido
+    difficulty: medium
 
   - question: Mientras estudiaba estos eventos, H. F. Reid, de la Universidad Johns Hopkins, acuñó el término “rebote elástico” para describir los eventos más débiles que les siguen. Las ondas S y P de estos eventos se propagan desde un hipocentro. La magnitud de estos eventos se mide en la escala de Richter. Nombra estos eventos sísmicos que ocurren cuando las placas tectónicas se deslizan rápidamente una junto a otra a lo largo de fallas, lo que hace temblar el suelo.
     options: [ Tsunamis, Terremotos, Huracanes, Tornados ]
     answer: Terremotos
+    difficulty: easy
 
   - question: El efecto isotópico cinético se estudia reemplazando este elemento por deuterio. La donación de la forma con carga de este elemento caracteriza a los ácidos de Brønsted-Lowry. La cadena protón-protón convierte este elemento en helio. La forma gaseosa de este elemento se usa en los zepelines. Nombra este elemento, el más abundante y el más ligero del universo.
     options: [ Hidrógeno, Litio, Oxígeno, Nitrógeno ]
     answer: Hidrógeno
+    difficulty: medium
 
   - question: "Una parte de este órgano está poco desarrollada en la microtia. En otra parte de este órgano, el órgano de Corti se encuentra sobre la membrana basilar y capta los estímulos de las células ciliadas. La parte externa de este órgano es el pabellón auricular, mientras que, al otro lado del tímpano, tiene tres de los huesos más pequeños del cuerpo humano: el martillo, el yunque y el estribo. Nombra este órgano que controla la audición."
     options: [ Ojo, Nariz, Lengua, Oído ]
     answer: Oído
+    difficulty: easy
 
   - question: La forma pesada de este compuesto se usa en las torres de enfriamiento de las centrales nucleares. La densidad de este compuesto es máxima a 4 grados Celsius. Este compuesto se conoce como el solvente universal por su alta polaridad. Las soluciones acuosas se preparan con este solvente. Junto con la acetona, la forma destilada de este compuesto se usa para limpiar el material de vidrio en los laboratorios. Nombra este compuesto formado por dos átomos de hidrógeno y un átomo de oxígeno.
     options: [ Etanol, Peróxido de hidrógeno, Agua, Amoníaco ]
     answer: Agua
     explanation: El agua pesada (D2O) se usa como moderador de neutrones y refrigerante en algunos reactores nucleares.
+    difficulty: medium
 
   - question: Los sistemas de primer orden de esta disciplina matemática también se conocen como [esta palabra] “de predicados”. El álgebra de Boole se usa para representar valores de verdad en la forma proposicional de esta disciplina. No es filosofía, pero Aristóteles estableció los silogismos como una forma temprana de obtener conclusiones a partir de una inferencia válida en esta disciplina. Nombra esta palabra de 6 letras para el estudio del razonamiento, cuyo nombre viene de la palabra griega logos.
     options: [ Geometría, Lógica, Cálculo, Estadística ]
     answer: Lógica
+    difficulty: medium
 
   - question: Un sistema de carro y varilla funciona como uno de estos dispositivos “invertido” en la teoría de control. Foucault usó uno de estos dispositivos para demostrar la rotación de la Tierra. Las bolas de la cuna de Newton son las masas oscilantes de estos dispositivos. Christopher Huygens fue uno de los primeros en usar este dispositivo como reloj. Nombra este dispositivo formado por un peso suspendido de un pivote que oscila de un lado a otro.
     options: [ Péndulos, Resortes, Palancas, Poleas ]
     answer: Péndulos
+    difficulty: medium
 
   - question: La cuña frontal describe cómo una bolsa menos densa y más cálida de esta sustancia es forzada a subir sobre una bolsa más densa y más fría. Las térmicas son parcelas ascendentes de esta sustancia. Esta sustancia es forzada a pasar de baja a gran altitud en el ascenso orográfico. Esta sustancia está formada aproximadamente por un 21% de oxígeno y un 1% de argón. Nombra esta sustancia cuyo movimiento en masa causa los vientos.
     options: [ Agua de mar, Magma, Dióxido de carbono, Aire ]
     answer: Aire
     explanation: "También se acepta: masa de aire."
+    difficulty: medium
 
   - question: Esta magnitud alcanza su mínimo en el punto eutéctico de una mezcla. El etilenglicol reduce esta magnitud al romper los puentes de hidrógeno. Echar sal en las carreteras durante el invierno es una forma de reducir esta magnitud para el hielo. Cuando el agua llega a este punto, existe en equilibrio como sólido y como líquido. Esta magnitud es igual a 0 grados Celsius para el agua. Nombra esta temperatura a la que ocurre una transición de fase de sólido a líquido.
     options: [ Punto de ebullición, Punto de rocío, Punto de fusión, Punto crítico ]
     answer: Punto de fusión
     explanation: "También se acepta: punto de congelación."
+    difficulty: medium
 
   - question: Una de estas afirmaciones se refiere al “conjunto de todos los conjuntos que no se contienen a sí mismos” y fue formulada por Bertrand Russell. Enrico Fermi da nombre a una de estas afirmaciones sobre la falta de contacto con vida extraterrestre. La del mentiroso propone que “esta afirmación es falsa”. Nombra esta palabra de ocho letras para afirmaciones confusas que a menudo contienen contradicciones consigo mismas.
     options: [ Axiomas, Paradojas, Teoremas, Conjeturas ]
     answer: Paradojas
+    difficulty: hard
 
   - question: Un compuesto disulfuro que contiene este elemento se conoce como pirita u “oro de los tontos”. Las porfirinas que contienen este elemento a veces se llaman grupos hemo. Este elemento da nombre al tipo de magnetismo permanente del imán de barra común. Este elemento y el carbono se alean para formar el acero. Nombra este metal que da nombre al ferromagnetismo y cuyo símbolo atómico es Fe.
     options: [ Hierro, Zinc, Aluminio, Plomo ]
     answer: Hierro
+    difficulty: easy
 
   - question: En anatomía, los orificios de esta estructura se llaman fenestras. La trepanación es un método para aliviar la presión interna haciendo un “agujero de trépano” en esta estructura. Los huesos de esta estructura están unidos por suturas fibrosas. Esta estructura incluye los huesos frontales, occipitales y temporales. Nombra esta estructura ósea formada por ocho huesos craneales y catorce huesos faciales.
     options: [ Pelvis, Caja torácica, Columna vertebral, Cráneo ]
     answer: Cráneo
+    difficulty: medium
 
   - question: Según el teorema de no pelo, la masa, la carga y el momento angular de estos objetos los describen por completo. Uno de estos objetos, en M87, fue el primero en ser fotografiado, en 2019. Estos objetos pueden considerarse singularidades en el espacio-tiempo. La radiación de Hawking ocurre en los horizontes de sucesos de estos objetos. Nombra estos objetos de los que ni siquiera la luz puede escapar.
     options: [ Estrellas de neutrones, Enanas blancas, Agujeros negros, Gigantes rojas ]
     answer: Agujeros negros
+    difficulty: easy
 
   - question: Este fenómeno está relacionado con un campo que se representa con una B mayúscula. Según la ley de Faraday, el cambio en la magnitud de este fenómeno puede usarse para crear un potencial. La ley de Ampère describe cómo una corriente puede producir un valor distinto de cero de este fenómeno. Este fenómeno se mide típicamente en teslas. Nombra este fenómeno presente en los objetos que tienen un polo norte y un polo sur.
     options: [ Electricidad, Magnetismo, Gravedad, Radiactividad ]
     answer: Magnetismo
     explanation: "También se acepta: campo magnético."
+    difficulty: medium
 
   - question: Los dos anillos anchos de Gossamer de este planeta están formados principalmente por restos de Amaltea y Tebe. Algunos científicos han propuesto que este planeta actúa como una “esponja de asteroides” tras observar el choque de Shoemaker-Levy 9 contra este planeta. Galileo da nombre a las cuatro lunas más grandes de este planeta, entre ellas Ganímedes e Ío. Nombra este gigante gaseoso con una Gran Mancha Roja, el quinto planeta desde el Sol.
     options: [ Júpiter, Saturno, Urano, Neptuno ]
     answer: Júpiter
+    difficulty: easy
 
   - question: Euler demostró que los inversos de una cantidad infinita de estos números suman pi al cuadrado entre seis. Los números con esta propiedad son los únicos enteros positivos con una cantidad impar de divisores distintos. Dos números triangulares suman un número con esta propiedad. Los primeros ejemplos de estos números son uno, cuatro, nueve y dieciséis. Nombra estos números que son iguales a un entero multiplicado por sí mismo.
     options:
@@ -91,28 +108,34 @@ cards:
       - Números cuadrados
     answer: Números cuadrados
     explanation: También se llaman cuadrados perfectos.
+    difficulty: medium
 
   - question: Los Theridiidae crean la variante enmarañada de esta estructura. Otras variantes de esta estructura son la de embudo y la tubular, y la sustancia con la que se hace esta estructura tiene la misma resistencia a la tracción que el acero. Las grandes variantes en espiral de esta estructura se asocian con las tejedoras de orbes. Las tarántulas no usan esta estructura para capturar presas. Nombra esta estructura hecha de seda pegajosa, que usan las arañas para atrapar insectos desafortunados.
     options: [ Capullos, Colmenas, Telarañas, Nidos de pájaro ]
     answer: Telarañas
     explanation: "También se acepta: redes de araña."
+    difficulty: medium
 
   - question: Este elemento se encuentra junto con el azufre en el cinabrio. Las aleaciones que contienen este elemento se llaman amalgamas. El bromo y este elemento son los únicos líquidos a temperatura ambiente. Este elemento se usó en los primeros termómetros, y su uso en las fábricas de sombreros provocó un envenenamiento por este elemento llamado “enfermedad del sombrerero loco”. Nombra este elemento con número atómico 80 y símbolo Hg.
     options: [ Plomo, Mercurio, Oro, Cadmio ]
     answer: Mercurio
+    difficulty: easy
 
   - question: Entre las innovaciones militares de este hombre están los diseños de un rayo de calor para concentrar la energía del sol. Este hombre creó un tornillo para subir agua por una colina. Según la leyenda, este hombre descubrió un método para pesar una corona de oro, tras lo cual saltó de su bañera gritando “¡Eureka!” mientras corría desnudo por las calles. Nombra a este matemático griego de Siracusa que descubrió el principio de flotación.
     options: [ Arquímedes, Euclides, Pitágoras, Eratóstenes ]
     answer: Arquímedes
+    difficulty: medium
 
   - question: Estas partículas forman pares con sus opuestos, unos huecos que llevan un nombre parecido. Estos leptones tienen menos masa que los muones y los tauones. El positrón es la antipartícula de estas partículas. En realidad, estas partículas forman una distribución de probabilidad y no orbitan limpiamente alrededor del núcleo atómico. Nombra estas partículas elementales que tienen carga negativa.
     options: [ Protones, Neutrones, Fotones, Electrones ]
     answer: Electrones
+    difficulty: medium
 
   - question: El ciclo de crecimiento de esta estructura se divide en las fases anágena, telógena y catágena. Esta estructura biológica es rica en alfa-queratina, cuyos puentes disulfuro explican por qué huele mal al quemarse. Esta estructura proteica se divide en el bulbo y el folículo. El sebo aporta a esta estructura una grasa que los champús pueden eliminar. Nombra esta característica de los mamíferos que crece en la piel y en el cuero cabelludo de los humanos.
     options: [ Dientes, Glándulas sudoríparas, Pelo, Pecas ]
     answer: Pelo
     explanation: "También se acepta: folículo piloso."
+    difficulty: easy
 
   - question: La eficiencia máxima teórica de un objeto que usa este tipo de energía está dada por el límite de Shockley-Queisser. Los semiconductores pueden usarse para crear una unión p-n que aprovecha la potencia de este tipo de energía mediante el efecto fotovoltaico. Esta fuente de energía no biológica tiene un porcentaje de consumo menor que la eólica o la hidroeléctrica. Nombra esta forma de energía que proviene del sol.
     options:
@@ -121,10 +144,12 @@ cards:
       - Energía química
       - Energía eléctrica
     answer: Energía solar
+    difficulty: easy
 
   - question: Wladimir [“Vladimir”] Köppen desarrolló un esquema de clasificación de estos sistemas que los divide en cinco grupos. El aumento de los niveles de CO2 ha causado un efecto invernadero que provoca un cambio homónimo en estos sistemas, un fenómeno sinónimo de “calentamiento global”. Nombra esta palabra de cinco letras que define los patrones generales del tiempo atmosférico de una región determinada.
     options: [ Clima, Bioma, Ecosistema, Atmósfera ]
     answer: Clima
+    difficulty: medium
 
   - question: Las variantes modernas de estos dispositivos fabricadas en EE. UU. siguieron el diseño Teller-Ulam. Estos dispositivos funcionan encadenando colisiones de material subcrítico en el “método de cañón” o usando lentes explosivas dopadas químicamente. Estos dispositivos usan material fisible, como uranio enriquecido o plutonio. Nombra estas armas de destrucción masiva que pueden crear enormes nubes en forma de hongo y contaminación radiactiva.
     options:
@@ -134,23 +159,29 @@ cards:
       - Armas nucleares
     answer: Armas nucleares
     explanation: "También se aceptan: bombas atómicas, bombas de hidrógeno, bombas nucleares."
+    difficulty: medium
 
   - question: Este rango de radiación se rige por la ley de Bragg en su cristalografía homónima. Chandrasekhar da nombre a un telescopio que usa este rango de radiación. Rosalind Franklin usó este rango de radiación para tomar la Fotografía 51, que Watson y Crick usaron para determinar la estructura de doble hélice. Wilhelm Röntgen descubrió esta radiación, ubicada entre la ultravioleta y los rayos gamma. Nombra este rango de radiación, más conocido por usarse para obtener imágenes de los huesos.
     options: [ Rayos gamma, Rayos ultravioleta, Rayos X, Microondas ]
     answer: Rayos X
+    difficulty: medium
 
   - question: Solo el 10% de los nutrientes se retiene en el suelo de este bioma, lo que lleva a los agricultores a usar técnicas de tala y quema. El dosel superior de este bioma alberga aves del paraíso y tucanes. En el suelo de este bioma puedes encontrar ranas arborícolas de ojos rojos. Este bioma alberga la mayor biodiversidad. Para ganar el punto, ¿de qué bioma, caracterizado por árboles altos y abundantes precipitaciones, es un ejemplo la Amazonía?
     options: [ Sabana, Selva tropical, Desierto, Tundra ]
     answer: Selva tropical
+    difficulty: easy
 
   - question: Elevar i a la cuarta potencia da este número. Este es el único número natural con exactamente un divisor. Elevar x a menos este número da el inverso de x. Elevar un número a esta potencia devuelve el mismo número. Elevar un número a cero da este número. La identidad multiplicativa establece que un número real multiplicado por este número es igual a ese mismo número. Nombra este número, el entero positivo más pequeño.
     options: [ Uno, Cero, Dos, Menos uno ]
     answer: Uno
+    difficulty: medium
 
   - question: No es el basalto, pero esta roca félsica da nombre a una composición de rocas ígneas que tienen un punto de fusión más bajo que las rocas de composición andesítica. Esta roca intrusiva es de grano grueso, a diferencia de su equivalente extrusivo, la riolita. Esta roca es el componente principal de los domos que llevan su nombre en el Parque Nacional Yosemite. Nombra esta roca cuyo nombre proviene de su textura granulada.
     options: [ Basalto, Gabro, Diorita, Granito ]
     answer: Granito
+    difficulty: hard
 
   - question: La idea de estas cosas como unidad fundamental fue propuesta por primera vez por Matthias Schleiden y Theodor Schwann. La teoría del miasma prevaleció hasta el descubrimiento de esta unidad fundamental. La generación espontánea proponía que estas unidades fundamentales podían formarse a partir de materia muerta. Robert Hooke observó estas unidades en el corcho y las nombró así por las celdas en las que viven los monjes. Nombra estas unidades básicas fundamentales de la vida.
     options: [ Átomos, Tejidos, Células, Órganos ]
     answer: Células
+    difficulty: easy
