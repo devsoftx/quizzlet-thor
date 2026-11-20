@@ -14,21 +14,25 @@ cards:
   - question: ¿Cómo se llama una fuente termal que lanza al aire chorros de agua caliente y vapor con regularidad, como el Old Faithful en Yellowstone?
     options: [ Glaciar, Géiser, Laguna, Fiordo ]
     answer: Géiser
+    difficulty: easy
 
   - question: ¿Cuál es la capital de Arabia Saudita?
     options: [ Riad, Yeda, La Meca, Doha ]
     answer: Riad
     explanation: Doha es la capital de Catar.
+    difficulty: easy
 
   - question: ¿Qué región del océano Pacífico, cuyo nombre significa “islas pequeñas”, incluye Guam, Palaos y las islas Marshall?
     options: [ Melanesia, Polinesia, Indonesia, Micronesia ]
     answer: Micronesia
     explanation: "Micronesia también es el nombre de un país de esa región: los Estados Federados de Micronesia."
+    difficulty: medium
 
   - question: ¿Cómo se llama la franja de tierra seca que se extiende a lo largo del borde sur del desierto del Sahara?
     options: [ Kalahari, Magreb, Sahel, Serengueti ]
     answer: Sahel
     explanation: Sahel viene de la palabra árabe que significa “orilla”, es decir, la orilla del Sahara.
+    difficulty: medium
 
   - question: ¿Qué término describe minerales como el estaño, el tungsteno y el oro que se extraen en zonas de guerra, como el este de la República Democrática del Congo, y se venden para pagar los combates?
     options:
@@ -37,11 +41,13 @@ cards:
       - Combustibles fósiles
       - Piedras preciosas
     answer: Minerales de conflicto
+    difficulty: medium
 
   - question: ¿Cómo se llama el grupo de países europeos que eliminaron los controles de pasaportes en sus fronteras comunes?
     options: [ Espacio Schengen, Eurozona, Benelux, Balcanes ]
     answer: Espacio Schengen
     explanation: Debe su nombre a Schengen, un pueblo de Luxemburgo donde se firmó el acuerdo en 1985.
+    difficulty: medium
 
   - question: ¿Qué parque nacional de Utah es famoso por sus chimeneas de hadas, altas y delgadas agujas de roca anaranjada y roja?
     options:
@@ -50,43 +56,53 @@ cards:
       - Parque nacional Glacier
       - Parque nacional del Cañón Bryce
     answer: Parque nacional del Cañón Bryce
+    difficulty: easy
 
   - question: ¿Cómo se llama una pendiente o acantilado largo y empinado que separa dos zonas de terreno bastante planas situadas a diferentes alturas?
     options: [ Meseta, Delta, Escarpe, Istmo ]
     answer: Escarpe
+    difficulty: medium
 
   - question: ¿Qué río fluye desde China a través del norte de Vietnam, pasa por Hanói, llega al golfo de Tonkín y debe su nombre a su agua turbia de color marrón rojizo?
     options: [ Río Mekong, Río Rojo, Río Yangtsé, Río Irrawaddy ]
     answer: Río Rojo
+    difficulty: easy
 
   - question: ¿Qué estado de Estados Unidos alberga el Gran Cañón y tiene su capital en Phoenix?
     options: [ Arizona, Nuevo México, Nevada, Utah ]
     answer: Arizona
+    difficulty: easy
 
   - question: ¿Qué país del Cuerno de África tiene su capital en Mogadiscio y la costa más larga del África continental?
     options: [ Etiopía, Kenia, Eritrea, Somalia ]
     answer: Somalia
+    difficulty: medium
 
   - question: ¿Qué ciudad japonesa, conocida como “la cocina de la nación” por su comida, fue sede de la Exposición Universal de 2025?
     options: [ Kioto, Hiroshima, Osaka, Sapporo ]
     answer: Osaka
+    difficulty: medium
 
   - question: ¿Qué isla volcánica frente a la costa norte de Sicilia hace erupción con tanta frecuencia que la llaman el “Faro del Mediterráneo”?
     options: [ Monte Etna, Estrómboli, Vesubio, Santorini ]
     answer: Estrómboli
+    difficulty: hard
 
   - question: ¿Qué barrio de Los Ángeles es famoso por ser el centro de la industria cinematográfica estadounidense?
     options: [ Hollywood, Beverly Hills, Malibú, Pasadena ]
     answer: Hollywood
+    difficulty: easy
 
   - question: ¿Cómo se llama el lugar donde un río se encuentra con el mar y el agua dulce se mezcla con el agua salada?
     options: [ Afluente, Oasis, Acuífero, Estuario ]
     answer: Estuario
     explanation: Un afluente es un río más pequeño que desemboca en uno más grande.
+    difficulty: easy
 
   - question: ¿Qué estado de Estados Unidos tiene su capital en Little Rock y alberga el parque estatal Crater of Diamonds, donde los visitantes pueden excavar en busca de diamantes de verdad?
     options: [ Kansas, Oklahoma, Arkansas, Misuri ]
     answer: Arkansas
+    difficulty: medium
 
   - question: ¿Qué amplia avenida de la Ciudad de México está bordeada de monumentos como el Ángel de la Independencia?
     options:
@@ -96,6 +112,7 @@ cards:
       - Avenida Paulista
     answer: Paseo de la Reforma
     explanation: Los Campos Elíseos están en París, Las Ramblas en Barcelona y la Avenida Paulista en São Paulo.
+    difficulty: hard
 
   - question: ¿Cuál es el país más pequeño del hemisferio occidental, una nación caribeña de dos islas cuya capital es Basseterre?
     options:
@@ -104,6 +121,7 @@ cards:
       - Trinidad y Tobago
       - San Vicente y las Granadinas
     answer: San Cristóbal y Nieves
+    difficulty: hard
 
   - question: ¿Qué angosta vía marítima entre Irán y Omán une el golfo Pérsico con el océano abierto y por ella pasa gran parte del petróleo del mundo?
     options:
@@ -112,6 +130,7 @@ cards:
       - Canal de Suez
       - Estrecho de Ormuz
     answer: Estrecho de Ormuz
+    difficulty: medium
 
   - question: ¿Qué grupo de islas del lago Superior, frente al norte de Wisconsin, es famoso por sus cuevas marinas de arenisca y sus faros?
     options:
@@ -120,19 +139,23 @@ cards:
       - Islas Apóstol
       - Cayos de Florida
     answer: Islas Apóstol
+    difficulty: hard
 
   - question: ¿Cómo se llaman las personas de habla neerlandesa del norte de Bélgica?
     options: [ Valones, Flamencos, Vascos, Frisones ]
     answer: Flamencos
     explanation: Las personas de habla francesa del sur de Bélgica se llaman valones.
+    difficulty: medium
 
   - question: ¿Qué lago del norte de Kenia es el lago permanente de desierto más grande del mundo y tiene el apodo de “Mar de Jade” por su color?
     options: [ Lago Turkana, Lago Victoria, Lago Tanganica, Lago Chad ]
     answer: Lago Turkana
+    difficulty: hard
 
   - question: ¿Qué pueblo costero de Connecticut es famoso por su museo marítimo, donde los visitantes pueden subir al antiguo ballenero de madera Charles W. Morgan?
     options: [ New Haven, Hartford, Greenwich, Mystic ]
     answer: Mystic
+    difficulty: hard
 
   - question: ¿Qué asentamiento sumamente abarrotado de Hong Kong, demolido en la década de 1990, fue en su momento uno de los lugares más densamente poblados de la Tierra?
     options:
@@ -141,10 +164,12 @@ cards:
       - Ciudad amurallada de Kowloon
       - Isla de Lantau
     answer: Ciudad amurallada de Kowloon
+    difficulty: medium
 
   - question: Las islas volcánicas como Hawái e Islandia suelen tener playas de este color, porque su arena proviene de roca de lava desmenuzada. ¿De qué color son?
     options: [ Blancas, Negras, Rosadas, Amarillas ]
     answer: Negras
+    difficulty: easy
 
   - question: ¿Cuál es la segunda selva tropical más grande del mundo, en África central, hogar de gorilas y okapis?
     options:
@@ -154,10 +179,12 @@ cards:
       - Selva de Borneo
     answer: Selva del Congo
     explanation: Solo la selva amazónica es más grande.
+    difficulty: easy
 
   - question: ¿En qué isla hawaiana se encuentran Honolulu, Pearl Harbor y la playa de Waikiki?
     options: [ Maui, Kauai, Molokai, Oahu ]
     answer: Oahu
+    difficulty: easy
 
   - question: ¿Qué península del estado de Washington tiene un parque nacional con uno de los pocos bosques lluviosos templados de Estados Unidos, el bosque lluvioso Hoh?
     options:
@@ -166,6 +193,7 @@ cards:
       - Península Olímpica
       - Península de Kenai
     answer: Península Olímpica
+    difficulty: medium
 
   - question: ¿Cuál es la base de investigación más grande de la Antártida, administrada por Estados Unidos en la isla de Ross?
     options:
@@ -174,8 +202,10 @@ cards:
       - Estación Vostok
       - Estación Palmer
     answer: Estación McMurdo
+    difficulty: medium
 
   - question: ¿Cuál es la tercera montaña más alta del mundo, en la frontera entre Nepal y la India?
     options: [ Kanchenjunga, K2, Lhotse, Makalu ]
     answer: Kanchenjunga
     explanation: El monte Everest es la primera y el K2, la segunda.
+    difficulty: hard

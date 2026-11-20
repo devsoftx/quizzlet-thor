@@ -12,6 +12,8 @@ export interface DeckMessages {
   subjectInvalid: string;
   languageInvalid: (got: string) => string;
   enabledInvalid: (got: string) => string;
+  /** `where` is null for the deck's own difficulty, or a card ("Card 3 (…)"). */
+  difficultyInvalid: (where: string | null, got: string) => string;
   /** "Card 3" */
   card: (n: number) => string;
   /** "Card 3 ("What is…")": where a problem is, once the card has a question. */
@@ -34,6 +36,7 @@ export const deckMessagesEn: DeckMessages = {
   subjectInvalid: '"subject" must be nonempty text of at most 80 characters.',
   languageInvalid: (got) => `"language" must be a language code such as en or es (got "${got}").`,
   enabledInvalid: (got) => `"enabled" must be true or false (got "${got}").`,
+  difficultyInvalid: (where, got) => `${where ? `${where}: ` : ""}"difficulty" must be easy, medium or hard (got "${got}").`,
   card: (n) => `Card ${n}`,
   cardWithQuestion: (card, question) => `${card} ("${question}")`,
   notAMapping: (card) => `${card}: expected a mapping with question, options and answer.`,
@@ -54,6 +57,7 @@ export const deckMessagesEs: DeckMessages = {
   subjectInvalid: '"subject" debe ser un texto no vacío de 80 caracteres como máximo.',
   languageInvalid: (got) => `"language" debe ser un código de idioma como en o es (se encontró "${got}").`,
   enabledInvalid: (got) => `"enabled" debe ser true o false (se encontró "${got}").`,
+  difficultyInvalid: (where, got) => `${where ? `${where}: ` : ""}"difficulty" debe ser easy, medium o hard (se encontró "${got}").`,
   card: (n) => `Tarjeta ${n}`,
   cardWithQuestion: (card, question) => `${card} ("${question}")`,
   notAMapping: (card) => `${card}: se esperaba un bloque con question, options y answer.`,

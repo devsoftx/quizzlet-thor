@@ -14,23 +14,28 @@ cards:
   - question: Cuando estas estructuras se “cultivan”, pueden estar en suspensión o ser adherentes. Matthias Schleiden y Theodor Schwann desarrollaron una teoría sobre estas estructuras que tiene tres postulados. Un “ciclo” que lleva el nombre de estas estructuras incluye fases como G2, S y M. En las plantas, estas estructuras tienen una “pared” externa y una membrana, pero en los animales solo tienen membrana. Nombra estas unidades básicas de la vida que contienen organelos.
     options: [ Células, Tejidos, Átomos, Proteínas ]
     answer: Células
+    difficulty: easy
 
   - question: Esta palabra describe un tipo de sustancia cristalina que, en su variedad termotrópica, existe en fase esméctica o nemática. La cromatografía de tipo HPLC usa un disolvente a muy alta presión en este estado, que además se saltan las sustancias que pasan por deposición y sublimación. A menos 196 grados Celsius, el nitrógeno se encuentra en este estado. Nombra este estado de la materia que se forma cuando las sustancias se funden.
     options: [ Sólido, Gas, Plasma, Líquido ]
     answer: Líquido
+    difficulty: easy
 
   - question: La transferencia de estas partículas es el mecanismo central de las reacciones redox. Un ácido de Lewis se define por su capacidad de formar un enlace covalente con una de estas partículas. La adición de estas partículas puede llevar a la formación de un anión. Estas partículas forman una “nube” que lleva su nombre, compuesta por orbitales. Nombra estas partículas subatómicas con carga negativa.
     options: [ Protones, Neutrones, Electrones, Fotones ]
     answer: Electrones
+    difficulty: medium
 
   - question: Si se reemplaza un átomo de este compuesto por deuterio, se obtiene su forma “pesada”. Los hornos de microondas funcionan principalmente calentando este compuesto en los alimentos, debido a su gran momento dipolar. La presencia de un par de electrones libre en el átomo de oxígeno de este compuesto le da una geometría angular. Este compuesto polar se conoce como el “disolvente universal”. Nombra este compuesto formado por un átomo de oxígeno y dos de hidrógeno.
     options: [ Amoníaco, Agua, Metano, Peróxido de hidrógeno ]
     answer: Agua
+    difficulty: easy
 
   - question: Este objeto puede ser “rozado” por los Kracht y los Marsden. De este cuerpo surgen protuberancias y espículas. Ciertos objetos de este cuerpo siguen un ciclo de 11 años, pasan por el mínimo de Dalton y tienen temperaturas más bajas que la superficie que los rodea. La cromosfera se encuentra por fuera de la fotosfera de este cuerpo. Para ganar el punto, ¿de qué estrella, alrededor de la cual gira la Tierra, forma parte la corona?
     options: [ Sol, Sirio, Próxima Centauri, Estrella Polar ]
     answer: Sol
     explanation: "También se acepta su nombre en latín, Sol, que en español se escribe igual."
+    difficulty: easy
 
   - question: Los objetos que superan esta cantidad emiten radiación de Cherenkov. La velocidad dividida entre esta cantidad es igual a la beta relativista, que aparece en el denominador del factor de Lorentz. Según la teoría de la relatividad especial de Einstein, este valor es constante en todos los marcos de referencia inerciales. Nombra esta cantidad, representada con la letra “c”, que es de unos 300 millones de metros por segundo y representa la velocidad máxima a la que pueden viajar los objetos.
     options:
@@ -39,10 +44,12 @@ cards:
       - Velocidad terminal
       - Velocidad de la luz
     answer: Velocidad de la luz
+    difficulty: medium
 
   - question: En los humanos, el cono de mayor longitud de onda percibe principalmente este color, y las células que llevan el nombre de este color se llaman eritrocitos. Aunque pueden variar mucho, a las floraciones de algas a veces se les llama “mareas” de este color. La primera etapa de un moretón suele ser de este color, y la inflamación puede hacer que la piel se ponga de este color. Para ganar el punto, ¿qué color, que les da nombre, adquieren las células sanguíneas de los mamíferos debido al átomo de hierro de la hemoglobina?
     options: [ Azul, Verde, Rojo, Morado ]
     answer: Rojo
+    difficulty: easy
 
   - question: Según la leyenda, este pensador construyó una copia robótica de su hija Francine después de que ella murió de escarlatina. Junto con Snell, este pensador da nombre a la ley de la refracción. Este pensador fundó la geometría analítica al combinar el álgebra con los planos de coordenadas. Este hombre da nombre al sistema de coordenadas bidimensional más común. Nombra a este filósofo y matemático francés de inicios de la Edad Moderna, que afirmó “Pienso, luego existo”.
     options:
@@ -51,49 +58,60 @@ cards:
       - Gottfried Leibniz
       - Francis Bacon
     answer: René Descartes
+    difficulty: medium
 
   - question: El teorema del rango y la nulidad se aplica a estos objetos, y la curvatura local se describe con la variante “hessiana” de estos objetos. La ecuación A v igual a lambda v describe el vector propio y el valor propio de estos objetos. La expansión por menores se usa para hallar el determinante de estos objetos, que puede usarse para invertirlos. Nombra estos objetos matemáticos que son arreglos de números en filas y columnas.
     options: [ Matrices, Vectores, Polinomios, Gráficas ]
     answer: Matrices
+    difficulty: medium
 
   - question: En una vía metabólica de este organelo, el cianuro puede unirse al complejo IV y provocar asfixia. No son cloroplastos, pero se cree que estos organelos surgieron de la endosimbiosis entre una célula procariota y bacterias aerobias. Las personas obtienen estos organelos de los óvulos, así que el ADN que se transmite a través de ellos es materno. Nombra este organelo en el que se genera la mayor parte del ATP del cuerpo, lo que le dio el apodo de “la central energética de la célula”.
     options: [ Cloroplasto, Ribosoma, Núcleo, Mitocondria ]
     answer: Mitocondria
     explanation: "Plural: mitocondrias."
+    difficulty: easy
 
   - question: Debido a que carece de un núcleo diferenciado, este fenómeno en la Luna se concentra en la corteza. Las rocas que presentan este fenómeno de forma natural se llaman piedras imán. La teoría de la geodinamo propone que, en la Tierra, este fenómeno lo genera el núcleo externo líquido, lo que hace que las brújulas apunten al norte. Nombra este fenómeno que atrae metales como el níquel y el hierro.
     options: [ Gravedad, Electricidad estática, Magnetismo, Radiactividad ]
     answer: Magnetismo
+    difficulty: hard
 
   - question: La gravedad de este planeta induce fuerzas de marea que provocan vulcanismo en algunas de sus lunas. Alrededor de este planeta orbita la luna más grande del sistema solar, que es más grande que el planeta Mercurio. Entre las lunas de este planeta están Calisto, Ío, Ganímedes y Europa. En este planeta hay una enorme tormenta anticiclónica llamada la Gran Mancha Roja. Nombra este planeta, el más grande del sistema solar.
     options: [ Saturno, Júpiter, Neptuno, Urano ]
     answer: Júpiter
+    difficulty: easy
 
   - question: Dos científicos con este apellido descubrieron que al comprimir el cuarzo se genera un potencial eléctrico, con lo que descubrieron la piezoelectricidad. Una física con este apellido usó el trabajo de esos estudios para investigar las propiedades del uranio en la pechblenda. Henri Becquerel y dos personas con este apellido compartieron el Premio Nobel de Física de 1903. Di el apellido de una física que ganó dos premios Nobel por investigar la radiactividad y descubrir el radio y el polonio.
     options: [ Curie, Röntgen, Meitner, Planck ]
     answer: Curie
     explanation: Pierre y Jacques Curie descubrieron la piezoelectricidad; Marie y Pierre compartieron el Nobel de 1903.
+    difficulty: medium
 
   - question: Al escribir la configuración electrónica, estos elementos se representan con su nombre entre corchetes. Estos elementos tienden a tener radios atómicos relativamente pequeños porque tienen cargas nucleares efectivas altas. Estos elementos son, en su mayoría, poco reactivos porque tienen su capa de valencia llena de electrones. Nombra este grupo de elementos, que incluye el neón y el helio, ubicado en el extremo derecho de la tabla periódica.
     options: [ Halógenos, Metales alcalinos, Metales alcalinotérreos, Gases nobles ]
     answer: Gases nobles
     explanation: "También se acepta: grupo 18, grupo 8A."
+    difficulty: medium
 
   - question: La unidad centimorgan sirve para mapear loci en estas estructuras, formadas por brazos p y q. El entrecruzamiento ocurre entre pares homólogos de estas estructuras. Un cariotipo puede mostrar el número diploide de estas estructuras, que en los humanos es 46, así como la presencia de tres copias del número 21 en un paciente con síndrome de Down. Para ganar el punto, ¿cuáles son estas estructuras de ADN que se alinean en el ecuador durante la metafase de la mitosis?
     options: [ Genes, Centriolos, Cromosomas, Plásmidos ]
     answer: Cromosomas
+    difficulty: medium
 
   - question: Esta estructura está por encima de la discontinuidad de Moho, que la separa de la capa inferior. La parte externa de la litosfera está formada por esta capa, que puede ser oceánica o continental. Esta estructura se genera en las dorsales oceánicas, se destruye en las zonas de subducción y está compuesta principalmente de sílice y oxígeno. Para ganar el punto, nombra esta capa que descansa sobre el manto y es la más externa de la superficie de la Tierra.
     options: [ Manto, Corteza, Astenosfera, Núcleo interno ]
     answer: Corteza
+    difficulty: medium
 
   - question: La primera versión de esta tecnología consistía en inyectar a ratones o conejos fluidos corporales de la persona examinada. Otro ejemplo temprano de esta tecnología se basaba en observar si las ranas Xenopus ovulaban después de recibir una inyección. Esta tecnología funciona midiendo la gonadotropina coriónica humana en una muestra de orina. Nombra estos dispositivos que indican si una mujer lleva un feto en el útero.
     options: [ Pruebas de embarazo, Pruebas de ovulación, Pruebas de glucosa, Pruebas de alergia ]
     answer: Pruebas de embarazo
+    difficulty: easy
 
   - question: Cuando este elemento está presente, la espectrometría de masas muestra una proporción de tres a uno. El agua regia contiene ácido nítrico y un ácido con el anión de este elemento. El ácido del estómago contiene el ácido de este elemento, del cual hay dos átomos en el gas mostaza. La forma diatómica de este elemento es un gas verde, mientras que otra forma se usa para desinfectar piscinas. Nombra este halógeno de símbolo químico Cl.
     options: [ Flúor, Bromo, Yodo, Cloro ]
     answer: Cloro
+    difficulty: medium
 
   - question: Una empresa que administra uno de estos sistemas de software, llamado Ecosia, afirma ser amigable con el medio ambiente y planta árboles con sus ganancias. Tras la desindexación, estos programas dejan de mostrar la información. Estos programas identifican posibles coincidencias para las consultas mediante el rastreo web. Nombra estos programas web que se usan para encontrar información en internet; los más populares son Bing y Google.
     options:
@@ -102,27 +120,33 @@ cards:
       - Motores de búsqueda
       - Programas antivirus
     answer: Motores de búsqueda
+    difficulty: easy
 
   - question: En coordenadas polares, la ecuación “r igual a la constante A” produce una de estas figuras. El producto cartesiano de dos de estas figuras da un toro. Esta sección cónica se define por una excentricidad de cero, y no se puede construir, solo con regla y compás, un cuadrado con la misma área que esta figura. Para ganar el punto, ¿de qué figura bidimensional, formada por todos los puntos equidistantes de un centro fijo, se obtiene el área al multiplicar pi por el radio al cuadrado?
     options: [ Elipse, Círculo, Parábola, Hipérbola ]
     answer: Círculo
+    difficulty: medium
 
   - question: El hallazgo de que los componentes de esta partícula casi no contribuyen a su espín dio lugar a la “crisis del espín” que lleva su nombre. Algunas teorías de gran unificación plantean que esta partícula puede desintegrarse en un positrón y un pion neutro. Los rayos cósmicos están formados principalmente por estas partículas, que constan de dos quarks arriba y un quark abajo. Nombra esta partícula subatómica con carga positiva.
     options: [ Protón, Neutrón, Electrón, Muón ]
     answer: Protón
+    difficulty: medium
 
   - question: Entre los fármacos que tratan una enfermedad causada por este virus están la enfuvirtida y la lamivudina. Este virus del género Lentivirus puede presentarse con sarcoma de Kaposi. X4R5 es un subtipo de este virus que puede usar los receptores CXCR4 y CCR5 para entrar en la célula. El fármaco zidovudina, o AZT, reduce la actividad de la transcriptasa inversa de este virus, que infecta a los linfocitos T colaboradores. Nombra este retrovirus que causa el sida.
     options: [ VPH, Virus de la hepatitis C, Virus de la influenza, VIH ]
     answer: VIH
     explanation: Son las siglas de virus de inmunodeficiencia humana.
+    difficulty: easy
 
   - question: Un poema escrito después de uno de estos eventos dice que “al menos una cosa es segura, la luz tiene peso”. Ese poema lo escribió Arthur Eddington, quien puso a prueba la teoría de la relatividad general durante uno de estos eventos. Jules Janssen y Norman Lockyer descubrieron el helio en una línea espectral durante uno de estos eventos. Para ganar el punto, ¿qué eventos celestes, en los que se bloquea la luz del Sol, pueden ser de tipo “solar” y “lunar”?
     options: [ Equinoccios, Lluvias de meteoros, Eclipses, Auroras ]
     answer: Eclipses
+    difficulty: medium
 
   - question: Este elemento se extrae de sus minerales mediante coordinación con cianuro. Este elemento dispersó partículas alfa en un experimento, a veces llamado de Geiger y Marsden, con el que se descubrió el núcleo atómico. Este metal, el más maleable, se puede disolver con agua regia. La pirita de hierro se parece a este elemento, por lo que se le apoda “[este elemento] de los tontos”. Nombra este metal precioso de símbolo químico Au.
     options: [ Plata, Oro, Cobre, Plomo ]
     answer: Oro
+    difficulty: easy
 
   - question: Un supuesto de esta teoría es que la aptitud diferencial es heredable, y su principal defensor fue influenciado por Malthus. En la forma convergente de este proceso se crean estructuras análogas, y la variación genética es un requisito previo para que este proceso ocurra. Se plantea que este proceso ocurre por selección natural. Para ganar el punto, ¿cuál es esta teoría sobre los cambios heredados en las poblaciones a lo largo del tiempo, propuesta por Charles Darwin?
     options:
@@ -131,28 +155,35 @@ cards:
       - Teoría celular
       - Generación espontánea
     answer: Teoría de la evolución
+    difficulty: medium
 
   - question: La hiperhidrosis de este órgano puede tratarse con MiraDry, una técnica de microondas. Un síntoma temprano de la lepra es la pérdida de la sensibilidad al dolor en este órgano. Los pelos urticantes de algunas orugas irritan los ojos y también este órgano. Los ácaros de la sarna atacan las capas epidérmicas de este órgano, en el que la infección bacteriana de las glándulas sebáceas causa acné. Para ganar el punto, ¿a qué órgano externo del ser humano, que produce sudor, le da color el pigmento melanina?
     options: [ Hígado, Riñón, Pulmón, Piel ]
     answer: Piel
+    difficulty: easy
 
   - question: Cuando estos objetos se forman uno encima de otro, se les conoce como “píleo”. El término “nimbo” se refiere a ejemplos de estos objetos asociados con tormentas. A grandes altitudes, estos objetos están formados por cristales de hielo y se llaman “cirros”. Entre las variedades de estos objetos de niveles más bajos están los estratos y los cúmulos. Nombra estas grandes masas de vapor de agua de las que cae la lluvia.
     options: [ Masas de aire, Frentes meteorológicos, Nubes, Corrientes en chorro ]
     answer: Nubes
+    difficulty: medium
 
   - question: Los tipos de esta molécula llamados “si” y “mi” se usan en experimentos de “interferencia”. Un tipo de esta molécula puede ser “cargado” por la enzima aaRS y tiene forma de “hoja de trébol”. La estructura secundaria de esta molécula puede presentar “balanceo”, y el tipo “mensajero” de esta molécula contiene codones. Los ribosomas traducen esta molécula, que contiene uracilo, en proteínas. Nombra este ácido nucleico de una sola cadena que se contrasta con el ADN.
     options: [ ADN, ARN, ATP, Proteína ]
     answer: ARN
     explanation: Son las siglas de ácido ribonucleico.
+    difficulty: medium
 
   - question: Los tipos extremadamente viscosos de esta sustancia pueden formar coulées. Entre las formas comunes de esta sustancia están el ʻaʻā y el pahoehoe. Cuando sale bajo el agua, esta sustancia puede formar su variedad “almohadillada”. Las rocas ígneas extrusivas, como la piedra pómez, se forman por el enfriamiento de esta sustancia. Antes de ser expulsada, esta sustancia se conoce como magma. Nombra esta roca fundida que expulsan los volcanes.
     options: [ Lava, Ceniza volcánica, Obsidiana, Basalto ]
     answer: Lava
+    difficulty: medium
 
   - question: Una fórmula semiempírica para esta cantidad, que lleva el nombre de Bethe y Weizsäcker, también puede usarse para calcular la energía de enlace nuclear mediante el “defecto” que lleva su nombre. El bosón de Higgs les da a las partículas esta propiedad, que también es igual a la energía dividida entre la velocidad de la luz al cuadrado, según una fórmula propuesta por Albert Einstein. Nombra esta cantidad, representada con “m” y medida en kilogramos.
     options: [ Peso, Momento lineal, Densidad, Masa ]
     answer: Masa
+    difficulty: hard
 
   - question: Cuando se mezcla con asfalto, con este material se puede hacer “pavimento asfáltico”. En los edificios grandes, este material puede reforzarse con varillas de acero y, a diferencia del mortero, se usa principalmente como material de construcción en sí y no como aglutinante. Nombra este material, compuesto principalmente de trozos de roca unidos con cemento, que se usa para construir carreteras y aceras.
     options: [ Mortero, Ladrillo, Concreto, Grava ]
     answer: Concreto
+    difficulty: medium

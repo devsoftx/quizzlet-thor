@@ -250,3 +250,55 @@ describe("an expired round", () => {
     expect(saver.pending).toBe(0);
   });
 });
+
+describe("answer details (kid profiles' Progress page)", () => {
+  const detail = (question: string, picks: number[]) => ({
+    deckKey: "bundled:x.yaml",
+    deckTitle: "X",
+    cardKey: "0123456789abcdef",
+    question,
+    difficulty: "easy" as const,
+    ms: 1000,
+    picks,
+    answerIndex: 0,
+    optionCount: 2,
+    retry: false,
+  });
+
+  it("sends each answer's details with it, and resends the same ones after a failure", async () => {
+    const sent: Array<unknown[] | undefined> = [];
+    let fail = true;
+    const saver = new ScoreSaver(
+      async (_answers, { details }) => {
+        sent.push(details);
+        if (fail) {
+          fail = false;
+          throw Object.assign(new Error("network"), { status: 0 });
+        }
+        return { pointsEarned: 0, sessionPoints: 0, totalPoints: 0, leaderboard: null };
+      },
+      { onSaved: () => undefined, isExpired: () => false, onExpired: () => undefined },
+    );
+    saver.newRound();
+    saver.add(true, detail("A?", [1, 0]));
+    await saver.flush().catch(() => null); // the first send fails…
+    saver.add(false, detail("B?", [1]));
+    await saver.flush(); // …and goes again as it was, then the next answer
+    expect(sent.map((d) => (d as Array<{ question: string }> | undefined)?.map((x) => x.question))).toEqual([["A?"], ["A?"], ["B?"]]);
+  });
+
+  it("sends no details for answers that have none (a guest's)", async () => {
+    const sent: Array<unknown[] | undefined> = [];
+    const saver = new ScoreSaver(
+      async (_answers, { details }) => {
+        sent.push(details);
+        return { pointsEarned: 0, sessionPoints: 0, totalPoints: 0, leaderboard: null };
+      },
+      { onSaved: () => undefined, isExpired: () => false, onExpired: () => undefined },
+    );
+    saver.newRound();
+    saver.add(true);
+    await saver.flush();
+    expect(sent).toEqual([undefined]);
+  });
+});

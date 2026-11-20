@@ -2,11 +2,13 @@
 //
 //  1. Guest leaderboard data: keep the top guest entries, drop the rest.
 //  2. Stored files: delete uploads that were started and never saved.
+//  3. Kids' answers for the Progress page: delete those older than 180 days.
 //
 // Vercel sends `Authorization: Bearer $CRON_SECRET` with scheduled calls. The
 // route refuses everything else, and refuses to run at all without a secret.
 
 import { timingSafeEqual } from "node:crypto";
+import { PROGRESS_RETENTION_DAYS } from "../src/attempts.js";
 import { defaultDeps, type Deps } from "./deps.js";
 import { error, json } from "./http.js";
 import { errorName, securityEvent } from "./log.js";
@@ -59,6 +61,14 @@ async function removeAbandonedUploads(deps: Deps) {
   return { deleted };
 }
 
+/** Deletes kids' answers that are older than the Progress page keeps them. */
+async function pruneProgress(deps: Deps) {
+  if (!deps.accounts) return { skipped: true };
+  const removed = await deps.accounts.pruneAttempts(iso(deps.now() - PROGRESS_RETENTION_DAYS * 24 * 60 * 60 * 1000));
+  securityEvent("progress.pruned", { removed, keptDays: PROGRESS_RETENTION_DAYS });
+  return { removed };
+}
+
 /** GET (with the cron secret): run the cleanup. A failing task is logged and doesn't stop the other. */
 export async function runCleanup(request: Request, deps: Deps = defaultDeps()): Promise<Response> {
   if (!deps.cronSecret) return error(503, "The scheduled cleanup isn't set up yet (CRON_SECRET).");
@@ -67,7 +77,7 @@ export async function runCleanup(request: Request, deps: Deps = defaultDeps()): 
     return error(401, "Not allowed.");
   }
 
-  const tasks = { guests: pruneGuests, uploads: removeAbandonedUploads };
+  const tasks = { guests: pruneGuests, uploads: removeAbandonedUploads, progress: pruneProgress };
   const results: Record<string, unknown> = {};
   let failed = false;
   for (const [name, task] of Object.entries(tasks)) {

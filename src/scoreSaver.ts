@@ -1,6 +1,7 @@
 // Saves answer batches one at a time. A tab closing can interrupt the in-memory queue.
 
 import type { Leaderboard } from "./api";
+import type { AttemptDetail } from "./attempts";
 import { scoreRound } from "./points";
 
 export interface SavedScore {
@@ -13,7 +14,7 @@ export interface SavedScore {
 
 export type SubmitScore = (
   answers: boolean[],
-  options: { streakBefore: number; leaderboard: boolean; keepalive: boolean; batchId: string; deckId?: string; sessionTag?: string },
+  options: { streakBefore: number; leaderboard: boolean; keepalive: boolean; batchId: string; deckId?: string; sessionTag?: string; details?: AttemptDetail[] },
 ) => Promise<SavedScore>;
 
 interface Hooks {
@@ -31,11 +32,20 @@ interface Hooks {
 interface Round {
   /** Answers not saved yet. */
   answers: boolean[];
+  /** What each of those answers tells a parent's Progress page (kid profiles only; null for guests). */
+  details: (AttemptDetail | null)[];
   /** The streak just before answers[0], so bonuses match the live score. */
   streakBefore: number;
   deckId?: string;
   sessionTag?: string;
-  batch?: { id: string; answers: boolean[]; streakBefore: number; leaderboard: boolean };
+  batch?: { id: string; answers: boolean[]; details?: AttemptDetail[]; streakBefore: number; leaderboard: boolean };
+}
+
+/** The next batch of a round: what's waiting now, sent (and resent) as is until it's saved. */
+function newBatch(round: Round, leaderboard: boolean): NonNullable<Round["batch"]> {
+  const details = round.details.slice(0, round.answers.length);
+  const complete = details.length > 0 && details.every((d): d is AttemptDetail => d !== null);
+  return { id: crypto.randomUUID(), answers: round.answers.slice(), ...(complete ? { details } : {}), streakBefore: round.streakBefore, leaderboard };
 }
 
 export class ScoreSaver {
@@ -51,13 +61,15 @@ export class ScoreSaver {
 
   /** A new deck or retry: its streak starts from zero. */
   newRound(deckId?: string, sessionTag?: string): void {
-    this.rounds.push({ answers: [], streakBefore: 0, deckId, sessionTag });
+    this.rounds.push({ answers: [], details: [], streakBefore: 0, deckId, sessionTag });
   }
 
-  /** Records an answer and saves it in the background. */
-  add(correct: boolean): void {
+  /** Records an answer (with its details, for a kid profile) and saves it in the background. */
+  add(correct: boolean, detail?: AttemptDetail): void {
     if (this.rounds.length === 0) return; // No active round (for example, after expiry).
-    this.rounds.at(-1)!.answers.push(correct);
+    const round = this.rounds.at(-1)!;
+    round.answers.push(correct);
+    round.details.push(detail ?? null);
     if (this.rejected !== null) { this.hooks.onState?.("failed"); return; }
     this.hooks.onState?.("pending");
     this.flush().catch(() => undefined); // stays queued; retried on the next save
@@ -106,10 +118,11 @@ export class ScoreSaver {
       const round = this.rounds.find((r) => r.answers.length > 0);
       if (!round) break;
       const moreAfter = this.rounds.some((r) => r !== round && r.answers.length > 0);
-      const batch = round.batch ??= { id: crypto.randomUUID(), answers: round.answers.slice(), streakBefore: round.streakBefore, leaderboard: final && !moreAfter };
+      round.batch ??= newBatch(round, final && !moreAfter);
+      const batch = round.batch;
       this.hooks.onState?.("saving");
       try {
-        last = await this.submit(batch.answers, { streakBefore: batch.streakBefore, leaderboard: batch.leaderboard, keepalive, batchId: batch.id, deckId: round.deckId, sessionTag: round.sessionTag });
+        last = await this.submit(batch.answers, { streakBefore: batch.streakBefore, leaderboard: batch.leaderboard, keepalive, batchId: batch.id, deckId: round.deckId, sessionTag: round.sessionTag, ...(batch.details ? { details: batch.details } : {}) });
       } catch (err) {
         if (generation !== this.generation) return null;
         this.handleError(err, round.deckId);
@@ -117,6 +130,7 @@ export class ScoreSaver {
       }
       if (generation !== this.generation) return null;
       round.answers.splice(0, batch.answers.length);
+      round.details.splice(0, batch.answers.length);
       round.streakBefore = scoreRound(batch.answers, batch.streakBefore).streak;
       round.batch = undefined;
       this.hooks.onSaved(last);

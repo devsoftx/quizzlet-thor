@@ -97,7 +97,7 @@ With no Global Config connected, the board is on and nothing is blocked.
 Scheduled in `vercel.json` (04:17 UTC). It needs `CRON_SECRET` set in the project: Vercel sends it as a
 bearer token, and the route refuses to run without it (503) or with a wrong one (401).
 
-It does two things and logs both:
+It does three things and logs each:
 
 - `leaderboard.pruned`: keeps the top 1,000 guest entries and removes the rest. Kid profiles are never
   removed.
@@ -105,6 +105,8 @@ It does two things and logs both:
   reservation record; if the file isn't saved, the record expires after 15 minutes and stays. A day
   later the job deletes whatever was uploaded to that path and drops the record. (The same account's
   next upload clears its own abandoned ones sooner.)
+- `progress.pruned`: deletes kid profiles' answers (the Progress page's data, table `study_attempts`)
+  older than 180 days. They also go at once when their profile or account is deleted.
 
 The job only deletes a path the database has on record as "started, never saved". It never deletes a
 file because a record is *missing*, so pointing it at the wrong or an empty database deletes nothing.
@@ -142,11 +144,12 @@ or kid nickname. A session appears as `sessionHash`, which can't be turned back 
 | `session.started`, `session.revoked` | `sessionKind`: `guest`, `profile` or `kid` |
 | `session.name_taken`, `session.name_blocked` | A guest nickname refused |
 | `score.saved`, `score.replay`, `score.conflict`, `score.limited` | `limited`: answers arriving faster than the pace limit (429) |
+| `progress.refused`, `progress.error` | A kid's answer details (for the Progress page) were refused (`reason`) or couldn't be stored (`errorName`). The answers' points are saved either way |
 | `file.sign`, `file.sign.refused`, `file.confirmed`, `file.rejected`, `file.deleted` | `reason` says why |
 | `deck.created`, `deck.deleted` | |
 | `request.cross_site`, `request.error` | A write from another site (403); an unexpected error (500, with `requestId`) |
 | `csp.violation` | A browser's Content-Security-Policy report |
-| `leaderboard.pruned`, `file.orphan.deleted`, `cron.denied`, `cron.error` | The daily cleanup |
+| `leaderboard.pruned`, `file.orphan.deleted`, `progress.pruned`, `cron.denied`, `cron.error` | The daily cleanup |
 | `flags.error` | Global Config couldn't be read |
 
 Vercel keeps runtime logs only briefly. Set up a **log drain** to the team's log tool and record here

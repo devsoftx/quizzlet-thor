@@ -14,6 +14,7 @@ language: en                        # optional: the language the cards are writt
 enabled: true                       # required to show the deck (false = hidden)
 shuffle: true                       # shuffle the card order each round (default: true)
 shuffleOptions: true                # shuffle each card's answer options (default: true)
+difficulty: medium                  # optional: easy, medium or hard, for cards that don't say (default: medium)
 
 cards:
   # A card needs a question, at least 2 options, and an answer.
@@ -26,6 +27,7 @@ cards:
       - Mercury
     answer: Mars
     explanation: Iron oxide (rust) on its surface makes Mars look red.  # optional
+    difficulty: easy   # optional: easy, medium or hard (shown on a parent's Progress page)
 
   # Short list syntax works too:
   - question: What is the chemical symbol for gold?

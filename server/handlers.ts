@@ -1,4 +1,5 @@
 import { MAX_ROUND_LENGTH } from "../src/points.js";
+import { parseAttemptDetails } from "../src/attempts.js";
 import { createHash, randomBytes } from "node:crypto";
 import { deckIsFor } from "../src/account-shared.js";
 import { requireAccount } from "./account-handlers.js";
@@ -7,7 +8,7 @@ import { DEFAULT_FLAGS, isBlockedName } from "./flags.js";
 import { kidDevice, kidProfile } from "./kid-handlers.js";
 import { cookie, error, json, readCookie, readJson } from "./http.js";
 import { checkName, nameProblemMessage } from "./names.js";
-import { securityEvent, sessionHash } from "./log.js";
+import { errorName, securityEvent, sessionHash } from "./log.js";
 import { GUEST_NAME_DAYS, SESSION_TTL_SECONDS, type Session } from "./store.js";
 
 export type { Deps } from "./deps.js";
@@ -255,7 +256,10 @@ export async function submitScore(request: Request, deps: Deps = defaultDeps()):
     return error(400, "Invalid score batch ID.");
   }
 
-  const fingerprint = createHash("sha256").update(JSON.stringify({ answers, streakBefore: streakBefore ?? null, leaderboard: wantsBoard, deckId: body.deckId ?? null })).digest("hex");
+  // Details are part of the fingerprint only when sent, so a batch from before they existed matches as it did.
+  const fingerprint = createHash("sha256")
+    .update(JSON.stringify({ answers, streakBefore: streakBefore ?? null, leaderboard: wantsBoard, deckId: body.deckId ?? null, ...(body.details !== undefined ? { details: body.details } : {}) }))
+    .digest("hex");
   const saved = await deps.store.addScoreBatch(session, { id: batchId, fingerprint, answers, streakBefore: streakBefore as number | undefined }, deps.now());
   if (saved === "conflict") {
     securityEvent("score.conflict", { ...logFields, reason: "batch", batch: batchId });
@@ -268,9 +272,37 @@ export async function submitScore(request: Request, deps: Deps = defaultDeps()):
   }
   if (answers.length > 0) {
     securityEvent(saved.replay ? "score.replay" : "score.saved", { ...logFields, answers: answers.length, points: saved.pointsEarned, batch: batchId });
+    // Also on a replay: if storing the details failed the first time, this stores them (once).
+    if (body.details !== undefined) await recordProgress(session, batchId, answers, body.details, typeof body.deckId === "string" ? body.deckId : undefined, deps, logFields);
   }
   // A batch returns a stable receipt; the leaderboard is loaded separately (GET /api/leaderboard).
   return json({ pointsEarned: saved.pointsEarned, sessionPoints: saved.sessionPoints, totalPoints: saved.totalPoints, leaderboard: null });
+}
+
+/**
+ * Stores a kid profile's answer details for their parent's Progress page. The
+ * points are already saved: details that are refused, or that can't be stored,
+ * are logged and dropped, and never cost the learner their points.
+ */
+async function recordProgress(session: Session, batchId: string, answers: boolean[], raw: unknown, deckId: string | undefined, deps: Deps, logFields: Record<string, string | null>) {
+  const accountId = session.accountId ?? session.linkedAccountId;
+  if (!session.profileId || !accountId || !deps.accounts) return; // guests' answers are never recorded
+  const details = parseAttemptDetails(raw, answers);
+  if (typeof details === "string") {
+    securityEvent("progress.refused", { ...logFields, batch: batchId, reason: details });
+    return;
+  }
+  // A private deck's answers must name the deck this batch was checked for.
+  if (details.some((d) => d.deckKey.startsWith("account:") && d.deckKey !== `account:${deckId}`)) {
+    securityEvent("progress.refused", { ...logFields, batch: batchId, reason: "deck" });
+    return;
+  }
+  try {
+    const attempts = details.map((d, i) => ({ ...d, correct: answers[i] }));
+    await deps.accounts.forAccount(accountId).recordAttempts(session.profileId, batchId, attempts, new Date(deps.now()).toISOString());
+  } catch (err) {
+    securityEvent("progress.error", { ...logFields, batch: batchId, errorName: errorName(err) });
+  }
 }
 
 // --------------------------------------------------------- /api/leaderboard

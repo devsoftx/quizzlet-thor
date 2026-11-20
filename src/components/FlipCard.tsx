@@ -8,16 +8,20 @@ interface Props {
   card: Card;
   /** The language the deck is written in (for screen readers), when known. */
   lang?: string;
+  /** The answer checked (the card has flipped), or null. */
   picked: string | null;
+  /** The answer chosen but not checked yet. */
+  selected: string | null;
   earned: AnswerPoints | null;
   isLast: boolean;
-  onPick: (option: string) => void;
+  onChoose: (option: string) => void;
+  onSubmit: () => void;
   onNext: () => void;
 }
 
 const LETTERS = "ABCDEFGHIJ";
 
-export function FlipCard({ card, lang, picked, earned, isLast, onPick, onNext }: Props) {
+export function FlipCard({ card, lang, picked, selected, earned, isLast, onChoose, onSubmit, onNext }: Props) {
   const { t } = useI18n();
   const answered = picked !== null;
   const correct = picked === card.answer;
@@ -37,12 +41,15 @@ export function FlipCard({ card, lang, picked, earned, isLast, onPick, onNext }:
         <>
           <ol className="options">
             {card.options.map((option, i) => (
-              <li key={option}><button type="button" className="option" onClick={() => onPick(option)}>
+              <li key={option}><button type="button" className={`option${selected === option ? " is-selected" : ""}`} aria-pressed={selected === option} onClick={() => onChoose(option)}>
                 <span className="option__key" aria-hidden="true">{LETTERS[i] ?? i + 1}</span><span className="option__text" lang={lang}>{option}</span>
               </button></li>
             ))}
           </ol>
-          <p className="hint">{t.quiz.hint}</p>
+          <div className="question-sheet__check">
+            <button type="button" className="btn btn--primary" disabled={selected === null} onClick={onSubmit}>{t.quiz.check}</button>
+            <p className="hint">{t.quiz.hint}</p>
+          </div>
         </>
       ) : (
         <section ref={feedbackRef} tabIndex={-1} className={`field-feedback ${correct ? "is-correct" : "is-wrong"}`} aria-labelledby="feedback-title">

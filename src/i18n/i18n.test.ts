@@ -70,6 +70,7 @@ const SAME_IN_BOTH = new Set([
   "myFiles.types.PDF", // product names
   "myFiles.types.Word",
   "profiles.color", // "Color" is Spanish too
+  "progress.none", // a dash for "no value"
 ]);
 
 describe("the Spanish catalog", () => {

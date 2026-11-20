@@ -313,7 +313,7 @@ describe("route guard", () => {
   // kid.ts: invitation token or linked-device cookie; session.ts: sign-in for profile sessions;
   // csp-report.ts: browsers' policy-violation reports (logged, nothing else).
   const PUBLIC = ["csp-report.ts", "kid.ts", "leaderboard.ts", "score.ts", "session.ts"];
-  const SIGNED_IN = ["decks.ts", "files.ts", "invites.ts", "me.ts", "profiles.ts"];
+  const SIGNED_IN = ["decks.ts", "files.ts", "invites.ts", "me.ts", "profiles.ts", "progress.ts"];
   const CRON_SECRET = ["cron.ts"]; // only the scheduler, with its bearer token
 
   const apiDir = new URL("../api/", import.meta.url);

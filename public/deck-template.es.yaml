@@ -18,6 +18,7 @@ language: es                        # opcional: el idioma de las tarjetas (es = 
 enabled: true                       # obligatorio para mostrar el mazo (false = oculto)
 shuffle: true                       # mezclar el orden de las tarjetas en cada ronda (predeterminado: true)
 shuffleOptions: true                # mezclar las opciones de cada tarjeta (predeterminado: true)
+difficulty: medium                  # opcional: easy (fácil), medium (media) o hard (difícil), para las tarjetas que no lo indican (predeterminado: medium)
 
 cards:
   # Cada tarjeta necesita una pregunta, al menos 2 opciones y una respuesta.
@@ -30,6 +31,7 @@ cards:
       - Mercurio
     answer: Marte
     explanation: El óxido de hierro (herrumbre) de su superficie hace que Marte se vea rojo.  # opcional
+    difficulty: easy   # opcional: easy, medium o hard (se ve en la página Progreso de un adulto)
 
   # También funciona la forma corta de las listas:
   - question: ¿Cuál es el símbolo químico del oro?

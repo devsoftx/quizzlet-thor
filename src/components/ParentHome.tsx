@@ -11,6 +11,8 @@ interface Props {
   onPick: (profileId: string) => Promise<void>;
   onManage: () => void;
   onDecks: () => void;
+  /** Each kid's answers, card by card. */
+  onProgress: () => void;
   onFiles: () => void;
   onSettings: () => void;
   onSignOut: () => void;
@@ -37,6 +39,7 @@ export function ParentHome({
   onPick,
   onManage,
   onDecks,
+  onProgress,
   onFiles,
   onSettings,
   onSignOut,
@@ -61,6 +64,9 @@ export function ParentHome({
       <header className="parent-home__bar">
         <span><strong className="field-mark">Quizzlet</strong><br /><span className="muted">{t.parentHome.workspace(displayName)}</span></span>
         <span className="parent-home__actions">
+          <button type="button" className="btn btn--ghost" onClick={onProgress}>
+            {t.parentHome.progress}
+          </button>
           <button type="button" className="btn btn--ghost" onClick={onDecks}>
             {t.parentHome.myDecks}
           </button>

@@ -48,6 +48,7 @@ test.describe("response headers", () => {
     await page.getByRole("button", { name: /^Study / }).first().click();
     await page.getByRole("button", { name: /Start practice/ }).click();
     await page.locator(".options").getByRole("button").first().click();
+    await page.getByRole("button", { name: "Check answer" }).click();
     await expect(page.locator(".field-feedback")).toBeVisible();
     await page.getByRole("button", { name: "← Decks" }).click();
     await expect(page.getByRole("heading", { name: "Explore decks" })).toBeVisible();

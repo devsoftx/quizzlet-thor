@@ -14,50 +14,60 @@ cards:
   - question: ¿Qué enfermedad mortal, también llamada hidrofobia, se transmite por mordeduras de animales y hace que salga espuma por la boca?
     options: [ Malaria, Rabia, Tétanos, Sarampión ]
     answer: Rabia
+    difficulty: easy
 
   - question: ¿Qué dinosaurio fue el depredador de dos patas más grande de América del Norte durante el período Cretácico tardío?
     options: [ Tiranosaurio rex, Velocirraptor, Estegosaurio, Tricerátops ]
     answer: Tiranosaurio rex
     explanation: El estegosaurio y el tricerátops eran herbívoros.
+    difficulty: easy
 
   - question: ¿Qué órgano del sistema circulatorio bombea la sangre por todo el cuerpo?
     options: [ Pulmones, Hígado, Riñones, Corazón ]
     answer: Corazón
+    difficulty: easy
 
   - question: ¿De qué organismos unicelulares son ejemplos la Salmonella y la E. coli?
     options: [ Virus, Hongos, Bacterias, Algas ]
     answer: Bacterias
     explanation: Los virus ni siquiera están formados por células.
+    difficulty: medium
 
   - question: ¿Qué órgano del sistema digestivo conecta el estómago con el colon?
     options: [ Esófago, Intestino delgado, Hígado, Apéndice ]
     answer: Intestino delgado
     explanation: El esófago conecta tu boca con tu estómago.
+    difficulty: hard
 
   - question: ¿Cómo se llaman los mamíferos que cargan a sus crías en una bolsa?
     options: [ Marsupiales, Reptiles, Anfibios, Roedores ]
     answer: Marsupiales
     explanation: Los canguros, los koalas y las zarigüeyas son marsupiales.
+    difficulty: easy
 
   - question: ¿Cuántos huesos tiene el esqueleto humano adulto?
     options: [ "106", "150", "206", "306" ]
     answer: "206"
     explanation: Los bebés nacen con unos 300 huesos; muchos se fusionan a medida que crecen.
     shuffleOptions: false
+    difficulty: medium
 
   - question: ¿De qué era es la parte media el período Jurásico, cuando dominaban los dinosaurios?
     options: [ Era Paleozoica, Era Cenozoica, Era Mesozoica, Precámbrico ]
     answer: Era Mesozoica
     explanation: "El Mesozoico tiene tres períodos: Triásico, Jurásico y Cretácico."
+    difficulty: medium
 
   - question: ¿Cuál es el planeta más grande del sistema solar?
     options: [ Saturno, Júpiter, Neptuno, Tierra ]
     answer: Júpiter
+    difficulty: easy
 
   - question: ¿Qué luna de Júpiter se considera candidata a tener vida fuera de la Tierra?
     options: [ Europa, Ío, Fobos, Titán ]
     answer: Europa
     explanation: Ío es la luna volcánica de Júpiter. Fobos gira alrededor de Marte y Titán gira alrededor de Saturno.
+    difficulty: medium
 
   - question: ¿Más o menos cada cuánto tiempo vuelve a verse el cometa Halley desde la Tierra?
     options:
@@ -68,6 +78,7 @@ cards:
     answer: Aproximadamente cada 75 años
     explanation: Se vio por última vez en 1986 y se espera que regrese en 2061.
     shuffleOptions: false
+    difficulty: hard
 
   - question: ¿Aproximadamente a qué velocidad viaja la luz en el vacío?
     options:
@@ -78,67 +89,82 @@ cards:
     answer: Unos 300,000 km por segundo
     explanation: Exactamente 299,792,458 metros por segundo. (La guía de estudio dice 299,492,458 — es un error de imprenta.) La luz del Sol tarda unos 8 minutos en llegar a la Tierra.
     shuffleOptions: false
+    difficulty: medium
 
   - question: ¿Cómo se llama la poderosa explosión de una estrella?
     options: [ Agujero negro, Supernova, Nebulosa, Eclipse solar ]
     answer: Supernova
     explanation: Algunas supernovas ocurren cuando una estrella enana blanca acumula demasiado material y una fusión descontrolada la hace estallar.
+    difficulty: easy
 
   - question: ¿Qué metal es muy apreciado para monedas y joyas por su gran maleabilidad y su resistencia a la corrosión?
     options: [ Oro, Hierro, Cobre, Aluminio ]
     answer: Oro
     explanation: Maleable significa que se puede martillar hasta formar láminas delgadas sin que se rompa.
+    difficulty: medium
 
   - question: ¿Qué propiedad, representada con la letra griega rho (ρ), es la relación entre la masa y el volumen?
     options: [ Velocidad, Presión, Temperatura, Densidad ]
     answer: Densidad
+    difficulty: medium
 
   - question: ¿Qué aparato de laboratorio usa gas natural para producir una llama controlada?
     options: [ Vaso de precipitados, Tubo de ensayo, Mechero Bunsen, Microscopio ]
     answer: Mechero Bunsen
+    difficulty: medium
 
   - question: ¿Quién diseñó la primera tabla periódica de los elementos?
     options: [ Marie Curie, Dmitri Mendeleev, John Dalton, Antoine Lavoisier ]
     answer: Dmitri Mendeleev
+    difficulty: medium
 
   - question: ¿A qué grupo de la tabla periódica pertenecen el flúor, el cloro, el bromo y el yodo?
     options: [ Halógenos, Gases nobles, Metales alcalinos, Metaloides ]
     answer: Halógenos
+    difficulty: medium
 
   - question: ¿Qué elemento tiene número atómico 6 y símbolo C, y es la base de la química orgánica?
     options: [ Calcio, Cloro, Cobre, Carbono ]
     answer: Carbono
     explanation: El calcio es Ca, el cloro es Cl y el cobre es Cu.
+    difficulty: easy
 
   - question: ¿Cómo se llaman los elementos cuadrados más pequeños de una imagen rasterizada de computadora?
     options: [ Bytes, Vectores, Píxeles, Fuentes ]
     answer: Píxeles
     explanation: «Píxel» viene de la abreviatura del inglés «picture element», que significa «elemento de imagen».
+    difficulty: easy
 
   - question: ¿Qué campo de las ciencias de la computación permite que las máquinas realicen tareas asociadas con la inteligencia humana?
     options: [ Ciberseguridad, Inteligencia artificial, Bases de datos, Redes ]
     answer: Inteligencia artificial
+    difficulty: easy
 
   - question: ¿Qué nubes altas pueden causar fuertes tormentas eléctricas y tornados?
     options: [ Cumulonimbos, Cirros, Estratos, Altocúmulos ]
     answer: Cumulonimbos
+    difficulty: hard
 
   - question: ¿Qué corrientes de aire rápidas aprovechan los aviones para acortar los vuelos largos?
     options: [ Vientos alisios, Monzones, Brisas marinas, Corrientes en chorro ]
     answer: Corrientes en chorro
+    difficulty: medium
 
   - question: ¿Qué forma del carbono es el mineral natural más duro?
     options: [ Grafito, Cuarzo, Diamante, Carbón ]
     answer: Diamante
     explanation: El grafito, la «mina» de los lápices, también es carbono puro, pero es muy blando. Las distintas formas de un mismo elemento se llaman alótropos.
+    difficulty: easy
 
   - question: ¿Cómo se llaman las olas gigantes del océano causadas por el agua que desplaza un terremoto u otro evento sísmico?
     options: [ Huracanes, Tsunamis, Mareas, Corrientes de resaca ]
     answer: Tsunamis
+    difficulty: medium
 
   - question: ¿Cómo se llama una cadena o grupo de islas, como Hawái o las Galápagos?
     options: [ Archipiélago, Península, Istmo, Delta ]
     answer: Archipiélago
+    difficulty: medium
 
   - question: ¿Qué suele causar los terremotos?
     options:
@@ -147,15 +173,18 @@ cards:
       - Las mareas del océano
       - El movimiento de las placas tectónicas
     answer: El movimiento de las placas tectónicas
+    difficulty: easy
 
   - question: ¿Qué forma sólida de precipitación cae del cielo como suaves cristales de hielo?
     options: [ Granizo, Aguanieve, Nieve, Rocío ]
     answer: Nieve
     explanation: El granizo cae como bolitas duras de hielo, y el rocío ni siquiera es una precipitación.
+    difficulty: easy
 
   - question: ¿Cómo se llaman las aberturas en la superficie de un planeta por donde salen ceniza y lava?
     options: [ Géiseres, Volcanes, Cañones, Glaciares ]
     answer: Volcanes
+    difficulty: medium
 
   - question: ¿Por qué la mayoría de las hojas de las plantas son planas?
     options:
@@ -165,39 +194,48 @@ cards:
       - Para ayudar a la planta a mantenerse caliente
     answer: Para absorber la mayor cantidad posible de luz solar
     explanation: Las hojas usan la luz solar para fabricar alimento mediante la fotosíntesis.
+    difficulty: medium
 
   - question: ¿Cómo se llama un procedimiento paso a paso que garantiza la solución de un problema?
     options: [ Hipótesis, Ecuación, Teorema, Algoritmo ]
     answer: Algoritmo
+    difficulty: medium
 
   - question: ¿Cómo se llama un triángulo cuyos tres lados tienen longitudes diferentes?
     options: [ Isósceles, Equilátero, Escaleno, Rombo ]
     answer: Escaleno
     explanation: "Equilátero: los tres lados iguales. Isósceles: dos lados iguales. Un rombo tiene cuatro lados."
+    difficulty: medium
 
   - question: ¿A qué número es aproximadamente igual pi (π)?
     options: [ "1.41", "2.72", "3.14", "9.81" ]
     answer: "3.14"
     explanation: "Pi es un número trascendente: sus cifras decimales continúan para siempre sin un patrón que se repita."
     shuffleOptions: false
+    difficulty: easy
 
   - question: ¿Qué fórmula da el área de un círculo de radio r?
     options: [ π × r², 2 × π × r, π × d, 4 × r ]
     answer: π × r²
     explanation: 2 × π × r (que es igual a π × d) da la longitud de la circunferencia — la distancia alrededor del círculo.
+    difficulty: medium
 
   - question: ¿Cómo se llama el proceso por el cual el núcleo inestable de un átomo libera energía?
     options: [ Fotosíntesis, Evaporación, Magnetismo, Radiactividad ]
     answer: Radiactividad
+    difficulty: medium
 
   - question: ¿Qué fuerza se opone al movimiento entre dos superficies que están en contacto?
     options: [ Gravedad, Magnetismo, Fricción, Flotabilidad ]
     answer: Fricción
+    difficulty: easy
 
   - question: ¿Cómo se llama cualquier objeto que produce un campo magnético?
     options: [ Pila, Imán, Conductor, Aislante ]
     answer: Imán
+    difficulty: medium
 
   - question: ¿Cómo se llama la tasa de cambio de la velocidad de un objeto?
     options: [ Aceleración, Rapidez, Cantidad de movimiento, Masa ]
     answer: Aceleración
+    difficulty: medium

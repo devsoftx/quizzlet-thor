@@ -8,16 +8,20 @@ cards:
   - question: ¿Cuánto es 7 × 8?
     options: [54, 56, 58, 64]
     answer: 56
+    difficulty: easy
 
   - question: ¿Cuál es la raíz cuadrada de 144?
     options: [10, 11, 12, 14]
     answer: 12
+    difficulty: easy
 
   - question: ¿Cuál de estos es un número primo?
     options: [21, 27, 29, 33]
     answer: 29
     explanation: 21 = 3×7, 27 = 3×9, 33 = 3×11.
+    difficulty: medium
 
   - question: ¿Cuánto es el 15% de 200?
     options: [15, 20, 30, 35]
     answer: 30
+    difficulty: easy

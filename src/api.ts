@@ -10,6 +10,7 @@ import type {
   KidProfile,
   ProfileInput,
 } from "./account-shared";
+import type { AttemptDetail, ProgressData } from "./attempts";
 import { getLanguage, messagesFor } from "./i18n";
 import { translateServerMessage } from "./i18n/server-messages";
 
@@ -198,12 +199,12 @@ export const api = {
    */
   submitScore(
     answers: boolean[],
-    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId?: string; deckId?: string; sessionTag?: string },
+    options: { streakBefore: number; leaderboard: boolean; keepalive?: boolean; batchId?: string; deckId?: string; sessionTag?: string; details?: AttemptDetail[] },
   ): Promise<ScoreSave> {
     if (!options.sessionTag) return Promise.reject(new ApiError(t().api.noSessionTag, 409));
     return call<ScoreSave>("/api/score", {
       method: "POST",
-      body: { answers, streakBefore: options.streakBefore, leaderboard: options.leaderboard, batchId: options.batchId, deckId: options.deckId, sessionTag: options.sessionTag },
+      body: { answers, streakBefore: options.streakBefore, leaderboard: options.leaderboard, batchId: options.batchId, deckId: options.deckId, sessionTag: options.sessionTag, details: options.details },
       keepalive: options.keepalive,
     });
   },
@@ -213,6 +214,11 @@ export const api = {
   /** The account (created on first sign-in), its kid profiles and each kid's all-time points. */
   getMe(): Promise<{ account: AccountInfo; profiles: KidProfile[]; points: Record<string, number> }> {
     return call("/api/me");
+  },
+
+  /** One kid profile's answers in the last `days` days, for the Progress page. */
+  getProgress(profileId: string, days: number): Promise<ProgressData> {
+    return call(`/api/progress?profileId=${encodeURIComponent(profileId)}&days=${days}`);
   },
 
   async updateMe(patch: { displayName?: string; settings?: Partial<AccountSettings> }): Promise<AccountInfo> {

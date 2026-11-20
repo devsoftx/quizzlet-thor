@@ -47,6 +47,7 @@ export interface TestCard {
   options: string[];
   answer: string;
   explanation?: string;
+  difficulty?: "easy" | "medium" | "hard";
 }
 
 /** A small deck with known answers, always in this order. */
@@ -127,9 +128,13 @@ export async function startDeck(page: Page, title: string): Promise<void> {
   await expect(page.getByText("Take a moment to think")).toBeVisible();
 }
 
-/** Picks an answer on the current card and waits for the feedback. */
+/** The button that checks the chosen answer, in either language. */
+export const checkButton = (page: Page) => page.getByRole("button", { name: /^(Check answer|Comprobar respuesta)$/ });
+
+/** Chooses an answer on the current card, checks it, and waits for the feedback. */
 export async function answer(page: Page, option: string): Promise<void> {
   await page.locator(".options").getByRole("button", { name: option, exact: true }).click();
+  await checkButton(page).click();
   await expect(page.locator(".field-feedback")).toBeVisible();
 }
 
@@ -216,6 +221,22 @@ export function asParent(request: APIRequestContext, parentId: string) {
       await ok(request.delete(`/api/invites?deviceId=${deviceId}`, { headers }));
     },
   };
+}
+
+/**
+ * As a signed-in parent: studies a deck as one of their kids, then switches
+ * back to the parent's home. `round` is each card's picks in order (the last
+ * one is checked; earlier ones are changes of mind).
+ */
+export async function studyAsKid(page: Page, nickname: string, deckTitle: string, round: string[][]): Promise<void> {
+  await profileTile(page, nickname).click();
+  await expect(page.getByRole("heading", { name: "Explore decks" })).toBeVisible();
+  await startDeck(page, deckTitle);
+  for (const picks of round) {
+    for (const pick of picks.slice(0, -1)) await page.locator(".options").getByRole("button", { name: pick, exact: true }).click();
+    await answer(page, picks.at(-1)!);
+    await nextCard(page);
+  }
 }
 
 // ------------------------------------------------------------------ Kid devices

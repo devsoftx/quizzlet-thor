@@ -16,11 +16,13 @@ cards:
       - Heimdall
     answer: Odín
     explanation: Odín, el Padre de Todos, gobierna Asgard. La madre de Thor es la giganta Jörð.
+    difficulty: easy
 
   - question: ¿Cómo se llama el martillo de Thor?
     options: [Gungnir, Mjölnir, Gram, Hofund]
     answer: Mjölnir
     explanation: Gungnir es la lanza de Odín; Gram es la espada de Sigurd.
+    difficulty: easy
 
   - question: ¿Qué cabras tiran del carro de Thor?
     options:
@@ -30,21 +32,25 @@ cards:
       - Sleipnir y Svaðilfari
     answer: Tanngrisnir y Tanngnjóstr
     explanation: Thor puede comerse las cabras y devolverles la vida con Mjölnir. Huginn y Muninn son los cuervos de Odín.
+    difficulty: hard
 
   - question: ¿Quién es la esposa de Thor?
     options: [Freyja, Frigg, Sif, Idun]
     answer: Sif
     explanation: Sif es conocida por su cabello dorado, que Loki le cortó una vez.
+    difficulty: medium
 
   - question: En inglés, ¿qué día de la semana lleva el nombre de Thor?
     options: [Martes, Miércoles, Jueves, Viernes]
     answer: Jueves
     explanation: "En inglés, el jueves se llama Thursday, del inglés antiguo Þunresdæg: “el día de Thor”. En español, jueves viene de Júpiter, el dios romano del trueno."
+    difficulty: easy
 
   - question: ¿Cuántos reinos conecta el árbol del mundo Yggdrasil?
     options: [7, 9, 12]
     answer: 9
     shuffleOptions: false   # mantener los números en orden en esta tarjeta
+    difficulty: easy
 
   - question: ¿Qué criatura está destinado a matar Thor (y a morir luchando contra ella) en el Ragnarök?
     options:
@@ -54,18 +60,22 @@ cards:
       - Surtr
     answer: Jörmungandr
     explanation: Thor mata a la Serpiente de Midgard, da nueve pasos y cae muerto por su veneno.
+    difficulty: medium
 
   - question: ¿Cómo se llama el puente arcoíris que lleva a Asgard?
     options: [Bifröst, Gjallarbrú, Valaskjálf, Glaðsheimr]
     answer: Bifröst
     explanation: Heimdall vigila el Bifröst.
+    difficulty: easy
 
   - question: ¿Qué cinturón mágico duplica la fuerza de Thor?
     options: [Brísingamen, Megingjörð, Draupnir, Andvaranaut]
     answer: Megingjörð
     explanation: Brísingamen es el collar de Freyja; Draupnir es el anillo de oro de Odín.
+    difficulty: hard
 
   - question: ¿Quién se disfrazó de dama de honor de Thor para recuperar el martillo robado?
     options: [Loki, Baldur, Heimdall, Freyr]
     answer: Loki
     explanation: En la Þrymskviða, Thor se viste de Freyja y Loki de su doncella para engañar al gigante Þrymr.
+    difficulty: medium

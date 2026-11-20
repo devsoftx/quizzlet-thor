@@ -52,12 +52,14 @@ test.describe("a browser set to Spanish", () => {
     await expect(page.getByRole("heading", { name: PLANETAS[0].question })).toHaveAttribute("lang", "es");
 
     await page.locator(".options").getByRole("button", { name: "Venus", exact: true }).click();
+    await page.getByRole("button", { name: "Comprobar respuesta" }).click();
     const feedback = page.locator(".field-feedback");
     await expect(feedback).toContainText("Casi… veamos la respuesta");
     await expect(feedback).toContainText("La respuesta es Mercurio.");
     await expect(feedback).toContainText("Elegiste Venus.");
     await page.getByRole("button", { name: /Siguiente pregunta/ }).click();
     await page.locator(".options").getByRole("button", { name: "Marte", exact: true }).click();
+    await page.getByRole("button", { name: "Comprobar respuesta" }).click();
     await expect(feedback).toContainText("✓ ¡Correcto!");
     await expect(feedback).toContainText("+10 puntos");
     await page.getByRole("button", { name: /Ver resultados/ }).click();
