@@ -1,0 +1,172 @@
+# Science Bee 2019–20 · Regional 2 · Ronda 1 — 32 preguntas.
+# Source: docs/2019-2020-MS-SBee-Round-1-Set-2.pdf
+# El texto de las preguntas viene del documento; las opciones incorrectas se añadieron para la opción múltiple.
+# Traducción al español de decks/science-bee-2019-20-regional-2-round-1.yaml.
+
+title: Science Bee 2019–20 · Regional 2 · Ronda 1
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Estos cuerpos albergan un hábitat que puede ser de tipo franja, barrera o atolón. Las especies más densas que estos cuerpos, que descansan en su fondo, viven en la zona bentónica. Los nutrientes de estos cuerpos de agua provienen de emanaciones frías, fuentes hidrotermales, nieve marina o cadáveres de ballenas. Nombra estos cuerpos de agua, entre los que están el Ártico, el Atlántico y el Pacífico.
+    options: [ Océanos, Lagos, Ríos, Estuarios ]
+    answer: Océanos
+
+  - question: Entre las definiciones de estas sustancias están «aceptor de pares de electrones» y «donador de hidrógeno». Según pierdan o no todos sus protones en el agua, estas sustancias pueden clasificarse como fuertes o débiles. Estas sustancias dan nombre a un tipo de lluvia causada a menudo por la contaminación. Estas sustancias tienen un pH menor que siete y suelen tener sabor agrio. El vinagre y el jugo de limón son ejemplos de, ¿qué sustancias, que a menudo son corrosivas?
+    options: [ Bases, Sales, Alcoholes, Ácidos ]
+    answer: Ácidos
+
+  - question: Exalumnos y profesores de CalTech ayudan a dirigir el Laboratorio de Propulsión a Chorro de esta agencia. Esta agencia se ha encargado de explorar el cráter Gale con una máquina cuyo nombre propuso Clara Ma, una estudiante de sexto grado. La nave Orion de esta agencia lanzará la segunda misión Artemis en 2022. Nombra esta agencia espacial estadounidense que llevó a Buzz Aldrin y a Neil Armstrong a la Luna.
+    options: [ ESA, JAXA, NASA, Roscosmos ]
+    answer: NASA
+    explanation: NASA son las siglas en inglés de Administración Nacional de Aeronáutica y del Espacio (National Aeronautics and Space Administration).
+
+  - question: Un científico con este apellido da nombre a una temperatura por encima de la cual desaparece el ferromagnetismo. Dos científicos con este apellido descubrieron el elemento polonio. Una mujer con este apellido estudió en la Universidad Volante, una institución educativa clandestina en Polonia. Por su trabajo ganó dos premios Nobel, y acuñó el término radiactividad. Nombra este apellido de los físicos Pierre y Marie.
+    options: [ Becquerel, Curie, Rutherford, Meitner ]
+    answer: Curie
+
+  - question: Una técnica «integrada» para diseñar estos dispositivos se basa en sustratos semiconductores de silicio y maneja miles de millones de transistores. Kirchhoff da nombre a una ley de «mallas» y otra de «nodos» que rigen el comportamiento de estos dispositivos. «El voltaje es igual a la corriente por la resistencia» es el enunciado de la ley de Ohm, que rige estos dispositivos. Nombra estos dispositivos formados por componentes que permiten que fluya la electricidad.
+    options:
+      - Circuitos electrónicos
+      - Aislantes eléctricos
+      - Capacitores
+      - Imanes permanentes
+    answer: Circuitos electrónicos
+    explanation: "También se acepta: circuitos integrados."
+
+  - question: Una característica que lleva el nombre de este matemático se calcula como el número de vértices menos el número de aristas más el número de caras. Este matemático sentó las bases de la teoría de grafos al estudiar los puentes del problema de los siete puentes de Königsberg. Su constante homónima vale aproximadamente 2.718 y se representa con una e. Nombra a este prolífico matemático y físico suizo.
+    options:
+      - Daniel Bernoulli
+      - Carl Friedrich Gauss
+      - Joseph-Louis Lagrange
+      - Leonhard Euler
+    answer: Leonhard Euler
+
+  - question: Estas tres letras, sin contar la tilde, empiezan la primera palabra de un término de astronomía para regiones de alta luminosidad cuyas otras dos palabras son «activos» y «galácticos». Los nombres científicos que empiezan con estas tres letras suelen venir de la palabra latina para el hueso o las semillas dentro de un fruto. Nombra estas tres letras (sin tilde) con las que empieza el nombre de un orgánulo central terminado en «leo».
+    options: [ Mit, Rib, Nuc, Cit ]
+    answer: Nuc
+    explanation: Como en «núcleo» y en «núcleos galácticos activos».
+
+  - question: En estas estructuras, a los depósitos de calcita que fluyen rápido se les llama con cariño el «tocino» de estas estructuras. Los troglobios viven en estas estructuras de la topografía kárstica, que se forman por la disolución de las rocas. Las estalactitas cuelgan del techo de estas estructuras. Nombra estas estructuras, redes subterráneas con entradas en la superficie, que sirven como lugar de hibernación para murciélagos y osos.
+    options: [ Cañones, Cuevas, Géiseres, Arcos naturales ]
+    answer: Cuevas
+
+  - question: La probabilidad de encontrarse con estas entidades está expresada en la ecuación de Drake. La paradoja de Fermi surge de la alta probabilidad de que estas entidades existan, aunque no se ha descubierto ninguna. Se cree que, para existir, estas entidades tendrían que surgir en un sistema estelar, en un planeta con agua que esté dentro de la zona «Ricitos de Oro». Nombra este tipo teórico de vida que existe en planetas distintos al nuestro.
+    options:
+      - Vida extraterrestre
+      - Vida prehistórica
+      - Vida en aguas profundas
+      - Vida artificial
+    answer: Vida extraterrestre
+    explanation: "También se acepta: extraterrestres."
+
+  - question: Dos partículas cargadas que pasan por este tipo de evento pueden producir una forma de radiación llamada bremsstrahlung. La energía cinética no se conserva en los ejemplos inelásticos de este evento entre dos carritos. La cantidad de movimiento del sistema de los dos carritos se conserva tanto en los ejemplos elásticos como en los inelásticos de este evento. Nombra este evento en el que dos objetos entran en contacto e intercambian fuerza.
+    options: [ Oscilaciones, Reflexiones, Rotaciones, Colisiones ]
+    answer: Colisiones
+
+  - question: Dmitry Belyayev realizó un experimento que demostró que estos animales podían seleccionarse para mostrar afecto a los humanos; ese experimento logró la primera domesticación exitosa de la variedad plateada de estos animales. No son perros, pero la variedad más común de este género de cánidos se llama [este animal] rojo, por el color de su pelaje. Nombra estos animales cuya variedad verdadera se clasifica como Vulpes.
+    options: [ Chacales, Coyotes, Zorros, Dingos ]
+    answer: Zorros
+
+  - question: La escala de Mulliken de esta propiedad toma el promedio de la afinidad electrónica y la primera energía de ionización. Las diferencias en esta propiedad determinan si un enlace es iónico, covalente polar o covalente no polar. Una escala común para medir esta propiedad lleva el nombre de Pauling. El flúor tiene el valor más alto de, por el punto, ¿qué propiedad, la tendencia de los átomos a atraer electrones?
+    options:
+      - Afinidad electrónica
+      - Electronegatividad
+      - Energía de ionización
+      - Radio atómico
+    answer: Electronegatividad
+
+  - question: Pasar repetidamente por este proceso provoca que se acorten los telómeros. Un punto de control en este proceso asegura que los cinetocoros estén unidos a las fibras del huso. La citocinesis sigue poco después de este proceso, que ocurre después de la fase G2 y se abrevia M. Las fases de este proceso incluyen la profase, la anafase y la telofase. Nombra esta división asexual de una célula que produce dos células hijas idénticas.
+    options: [ Mitosis, Meiosis, Apoptosis, Interfase ]
+    answer: Mitosis
+
+  - question: El tipo kernmantle de este material tiene un núcleo de alta resistencia a la tracción rodeado por una capa exterior resistente a la abrasión. El tipo «dinámico» de este material se puede estirar, lo que lo hace útil en el montañismo y la escalada en roca. Nombra este tipo de material formado por fibras, como hilo o cordel, torcidas o trenzadas entre sí para darle resistencia a la tracción al jalar.
+    options: [ Cadena, Lona, Fieltro, Cuerda ]
+    answer: Cuerda
+
+  - question: Dos medicamentos para tratar esta afección, que se mide con la escala de Hamilton-Norwood, son el minoxidil y la finasterida. Alopecia es el nombre científico de esta afección, tratada con marcas como Propecia y Rogaine, así como con implantes foliculares. La forma «de patrón masculino» de esta afección ocurre en alrededor del 50% de los hombres. Nombra este proceso irreversible de caída del cabello.
+    options: [ Muda, Encanecimiento, Calvicie, Psoriasis ]
+    answer: Calvicie
+    explanation: "También se acepta: alopecia."
+
+  - question: Uno histórico de estos eventos tuvo lugar en Regio V, un sitio de excavación con capas de lapilli, donde se encontró un esqueleto aplastado bajo una roca gigante. Los peligros poco conocidos de estos eventos son un destructivo flujo de lodo de nombre javanés llamado lahar, y gases calientes y tefra que se mueven rápido, conocidos como flujo piroclástico. Nombra estos eventos catastróficos en los que los volcanes lanzan al aire lava y escombros a gran velocidad.
+    options: [ Terremotos, Erupciones volcánicas, Tsunamis, Incendios forestales ]
+    answer: Erupciones volcánicas
+    explanation: Regio V es un sitio de excavación en Pompeya, ciudad sepultada por el monte Vesubio en el año 79 d. C.
+
+  - question: El trabajo que realiza un gas es proporcional al cambio de esta magnitud cuando la presión se mantiene constante. Esta magnitud se lee en una bureta durante una titulación. El número de moles dividido entre la concentración es igual a esta magnitud. Para los líquidos, esta magnitud se expresa en litros. Nombra esta magnitud que se mide en metros cúbicos, la cantidad de espacio que ocupa un objeto.
+    options: [ Volumen, Masa, Densidad, Presión ]
+    answer: Volumen
+
+  - question: Los miembros del género Variola fueron el origen de esta enfermedad. Hubo soldados británicos que usaron como armas mantas infectadas con esta enfermedad. El primer tratamiento para esta enfermedad consistía en inocular una enfermedad parecida que afecta a las vacas. Edward Jenner creó la primera vacuna contra esta enfermedad. Nombra esta mortal enfermedad con pústulas, erradicada en 1980.
+    options: [ Varicela, Viruela bovina, Sarampión, Viruela ]
+    answer: Viruela
+
+  - question: Entre los tipos de familias de estos objetos hay cúmulos, agrupaciones y tribus. La Agencia Espacial Canadiense lanzó el microsatélite NEOSSat para detectar estos objetos. Los huecos de Kirkwood se llaman así por los huecos en la distribución de estos objetos. Entre los ejemplos grandes de estos objetos están los llamados Palas y Ceres. Nombra estos objetos planetoides que forman un cinturón, que lleva su nombre, entre Marte y Júpiter.
+    options: [ Meteoroides, Objetos del cinturón de Kuiper, Asteroides, Objetos de la nube de Oort ]
+    answer: Asteroides
+
+  - question: El nitrato de este elemento se usó para revelar las primeras fotografías. Este elemento tiene la mayor conductividad térmica y eléctrica de todos los metales y es el más ligero de los dos elementos del electro. El adjetivo «esterlina» indica una aleación compuesta en un 92.5% por este metal. Nombra este elemento de número atómico cuarenta y siete y símbolo químico Ag.
+    options: [ Oro, Plata, Cobre, Platino ]
+    answer: Plata
+
+  - question: Los niveles en la sangre de esta molécula están regulados por la insulina y el glucagón. Esta molécula es químicamente idéntica a la dextrosa. El disacárido sacarosa está formado por fructosa y esta otra molécula de azúcar. Este azúcar de seis carbonos es el punto de partida metabólico más común de la respiración celular. Nombra este azúcar que se descompone al comienzo de la glucólisis.
+    options: [ Glucosa, Fructosa, Galactosa, Sacarosa ]
+    answer: Glucosa
+
+  - question: Al principio, algunos científicos plantearon que esta clase de planetas solo podía formarse más allá de la línea de escarcha, una idea refutada con el descubrimiento de unos «calientes» que llevan el nombre de un planeta de nuestro sistema solar. Esta clase de planetas debe su nombre a su abundancia de hidrógeno y helio, a diferencia de los parecidos «gigantes de hielo», que tienen elementos más pesados. Nombra esta clase de gigantes que incluye a Júpiter y Saturno, llamada así por la fase de la materia más abundante en ellos.
+    options: [ Gigantes de hielo, Planetas terrestres, Supertierras, Gigantes gaseosos ]
+    answer: Gigantes gaseosos
+
+  - question: No son enteros, pero un ejemplo temprano de la función de emparejamiento de Cantor se usó para demostrar que este conjunto de números es numerable. Con una demostración por contradicción, Hípaso demostró que la raíz cuadrada de dos no pertenecía a este conjunto. Este subconjunto de los reales se representa con una Q mayúscula. Nombra este conjunto de números que se pueden expresar como el cociente de dos enteros, a diferencia de los irracionales.
+    options:
+      - Números imaginarios
+      - Números reales
+      - Números racionales
+      - Números irracionales
+    answer: Números racionales
+
+  - question: Hodgkin y Huxley desarrollaron un modelo de estas células después de experimentar con una de calamar gigante. Santiago Ramón y Cajal estableció la doctrina de estas células, según la cual se comunican en las sinapsis, algo que más tarde se descubrió que ocurre mediante neurotransmisores. Estas células se comunican mediante potenciales de acción que envían por sus axones y reciben en sus dendritas. Nombra este tipo de célula del tejido nervioso que se encuentra en el cerebro.
+    options: [ Glóbulos rojos, Neuronas, Células musculares, Osteocitos ]
+    answer: Neuronas
+
+  - question: Los eventos de este período son el tema de la teoría de la contingencia de Stephen Jay Gould. Charles Walcott descubrió muchos fósiles importantes de este período en el esquisto de Burgess. Este período fue precedido por el Ediacárico y seguido por el Ordovícico. Los trilobites y los moluscos aparecieron por primera vez durante este período. Nombra este primer período geológico de la Era Paleozoica, que da nombre a una explosión de biodiversidad.
+    options:
+      - Período Cámbrico
+      - Período Ediacárico
+      - Período Ordovícico
+      - Período Devónico
+    answer: Período Cámbrico
+
+  - question: Junto con el cromo, este es el único elemento del período cuatro que no cumple el principio de Aufbau. Este elemento está a la derecha de los elementos ferromagnéticos. La sal de sulfato de este elemento suele estar unida a cinco moléculas de agua y es de un color azul intenso. Al combinarse con estaño, este elemento forma la aleación llamada bronce. Nombra este metal de transición de número atómico veintinueve y símbolo químico Cu.
+    options: [ Zinc, Níquel, Hierro, Cobre ]
+    answer: Cobre
+
+  - question: Paul Boyer desarrolló el mecanismo «flip-flop» de la producción de esta molécula mediante la rotación de la subunidad gamma. Esta molécula se produce principalmente al establecer un gradiente de concentración de protones, seguido de la fosforilación oxidativa en la sintasa que lleva su nombre. Esta molécula se invierte al comienzo de la glucólisis. Nombra esta moneda energética de la célula que tiene tres grupos fosfato.
+    options: [ ADP, NADH, ATP, NADPH ]
+    answer: ATP
+    explanation: ATP son las siglas en inglés de adenosín trifosfato (adenosine triphosphate).
+
+  - question: La energía de una de estas partículas debe superar la función de trabajo para expulsar un electrón. Albert Einstein ganó su Premio Nobel de Física por usar esta partícula para explicar un efecto en el que se emitían electrones cuando estas partículas golpeaban un metal. Esta partícula es la mediadora de la fuerza electromagnética. Nombra esta partícula sin masa que transporta el fenómeno de la luz.
+    options: [ Electrones, Fotones, Gluones, Neutrinos ]
+    answer: Fotones
+
+  - question: Lindlar da nombre a un compuesto de este tipo que está «envenenado». Un convertidor que lleva el nombre de esta clase de compuestos reduce la toxicidad de los gases de escape de un vehículo. Son heterogéneos cuando están en una fase distinta a la de la reacción. Esta clase de compuestos reduce la energía de activación de una reacción, pero no se consume en la reacción. Nombra esta clase de compuestos que aceleran la velocidad de una reacción.
+    options: [ Catalizadores, Inhibidores, Agentes oxidantes, Soluciones amortiguadoras ]
+    answer: Catalizadores
+
+  - question: Poder usar solo cuatro de estos sin que dos nodos vecinos tengan el mismo da nombre a un teorema sobre grafos planos que fue la primera demostración asistida por computadora. El cerebro solo usa tres tipos de conos para percibir este fenómeno. Un prisma dispersivo separa un haz de luz blanca en estos fenómenos. Nombra esta cualidad de una sustancia que está determinada por la longitud de onda de la luz visible, como el rojo o el azul.
+    options: [ Formas, Texturas, Olores, Colores ]
+    answer: Colores
+    explanation: El teorema de los cuatro colores se demostró con ayuda de una computadora en 1976.
+
+  - question: Este aparato fue posible gracias a la invención del magnetrón de cavidad y se vendió primero con el nombre de Radarange. Según la leyenda, Percy Spencer inventó este aparato al darse cuenta de que el magnetrón había derretido una barra de chocolate que llevaba en el bolsillo, y después pudo usarlo para hacer palomitas de maíz. Nombra este tipo de horno eléctrico que usa la forma de radiación que le da nombre para calentar la comida.
+    options: [ Horno tostador, Horno de convección, Horno de microondas, Horno rostizador ]
+    answer: Horno de microondas
+
+  - question: Entre los intentos de debilitar estos eventos está uno que usó yoduro de plata en el Proyecto Stormfury. Entre los casos mayores de categoría 5 de estos eventos, medidos en la escala de Saffir-Simpson, están Kenna y Patricia. La división del Servicio Meteorológico Nacional que vigila estos eventos está en Miami. Afectan sobre todo a países del mar Caribe y a estados como Florida. Por el punto, ¿qué ciclones tropicales ocurren en el océano Atlántico?
+    options: [ Tornados, Huracanes, Monzones, Tormentas del noreste ]
+    answer: Huracanes

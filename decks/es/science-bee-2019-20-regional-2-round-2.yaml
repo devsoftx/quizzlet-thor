@@ -1,0 +1,167 @@
+# Science Bee 2019–20 · Regional 2 · Ronda 2 — 32 preguntas.
+# Source: docs/2019-2020-MS-S-Bee-Round-2-Set-2.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se añadieron para la opción múltiple.
+# Traducción al español de decks/science-bee-2019-20-regional-2-round-2.yaml.
+
+title: Science Bee 2019–20 · Regional 2 · Ronda 2
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Fourier da nombre a una ecuación que modela la conducción de esta magnitud. Además de por conducción, esta magnitud también puede transferirse por radiación o por convección. La temperatura puede ser constante y, aun así, puede haber un intercambio de flujo de esta magnitud entre dos cuerpos en equilibrio térmico. Nombra esta magnitud, que a menudo se simboliza con Q, que fluye de las temperaturas altas a las bajas.
+    options: [ Calor, Temperatura, Trabajo, Presión ]
+    answer: Calor
+
+  - question: Durante esta fase, la Luna comparte su longitud eclíptica con el Sol. Cuando hay una segunda luna de esta fase en un mismo mes, se le llama “luna negra”. Los eclipses solares solo pueden ocurrir durante esta fase lunar. Esta fase de la Luna está entre las fases de luna creciente y luna menguante. Nombra esta fase de la Luna en la que el disco lunar no se ve a simple vista.
+    options: [ Luna llena, Cuarto creciente, Cuarto menguante, Luna nueva ]
+    answer: Luna nueva
+    explanation: "También se acepta: luna oscura."
+
+  - question: Estas estructuras hacen que los humanos se clasifiquen como difiodontos, ya que pasan de ser deciduas a ser permanentes. Las lesiones incipientes en estas estructuras pueden convertirse en caries si no se tratan y no reciben suficiente flúor para recuperarse. No son hueso, pero están hechas de hidroxiapatita y se ubican entre el maxilar y la mandíbula. Nombra estas estructuras calcificadas que ayudan a masticar los alimentos.
+    options: [ Huesos, Uñas, Dientes, Encías ]
+    answer: Dientes
+
+  - question: Un tipo de esta reacción requiere un buen grupo saliente y, en el caso de una cinética de primer orden, forma un carbocatión intermedio trigonal plano. Dos reacciones de este tipo que ocurren por ataque nucleofílico se llaman reacciones SN1 y SN2. Este tipo de reacción tiene variedades de desplazamiento doble y de desplazamiento simple. Nombra este tipo de reacción química en la que un sustituyente se cambia por otro.
+    options:
+      - Reacción de adición
+      - Reacción de sustitución
+      - Reacción de combustión
+      - Reacción de descomposición
+    answer: Reacción de sustitución
+
+  - question: Un cuarenta y cinco por ciento de pureza es el límite entre los tipos subbituminoso y bituminoso de esta sustancia. Un método para limpiar esta sustancia se llama lixiviación cáustica fundida y elimina impurezas dañinas como el azufre. La turba es un precursor común de esta sustancia, entre cuyos tipos están el lignito y la antracita. Nombra esta roca negra que contiene carbono y se usa como combustible fósil.
+    options: [ Carbón, Petróleo, Grafito, Obsidiana ]
+    answer: Carbón
+
+  - question: En una distribución uniforme, esta magnitud es igual a a más b, entre 2. La variante “armónica” de este valor para dos números x e y está dada por “dos entre la cantidad uno entre x más uno entre y”. La desigualdad MA-MG relaciona la forma estándar de este valor con su forma “geométrica”. La forma “aritmética” de esta magnitud suma los valores y divide el resultado entre la cantidad de valores. Di este término, que significa el promedio de un conjunto de valores.
+    options: [ Mediana, Moda, Rango, Media ]
+    answer: Media
+
+  - question: Dominik Koll dirigió un equipo que recolectó 500 kilogramos de esta sustancia para estudiar el polvo interestelar. Ukichiro Nakaya elaboró un diagrama morfológico de cristales para clasificar los “copos” de esta sustancia según la temperatura. Esta sustancia no tiene tiempo de acumularse cuando cae en ráfagas breves y ligeras. Nombra esta sustancia que es arrastrada a gran velocidad durante las ventiscas.
+    options: [ Granizo, Aguanieve, Nieve, Escarcha ]
+    answer: Nieve
+    explanation: El equipo de Koll encontró hierro-60 interestelar en la nieve de la Antártida.
+
+  - question: Un gran filo cuyos miembros se conocen como [este término] segmentados también se conoce como anélidos. Los animales llamados [este término] parásitos se conocen como helmintos, entre los que están los anquilostomas y los oxiuros. Los redondos que son parásitos se alimentan de los intestinos de un animal. Nombra este término coloquial para unos animales viscosos y sin patas que se arrastran, entre ellos la común lombriz de tierra, que es rosada y come tierra.
+    options: [ Serpientes, Gusanos, Ciempiés, Escarabajos ]
+    answer: Gusanos
+
+  - question: Como fija la actina, la faloidina, un compuesto de un hongo, también tiene esta peligrosa propiedad. La DL50 es una medida de esta propiedad que se reporta con frecuencia. El pez globo fugu es conocido por un potente compuesto “tetrodo-” con esta propiedad. Como el arsénico tiene esta propiedad de forma natural, se usa en pesticidas y herbicidas. Nombra esta propiedad de los elementos y compuestos que son biológicamente peligrosos si se ingieren.
+    options: [ Toxicidad, Inflamabilidad, Radiactividad, Solubilidad ]
+    answer: Toxicidad
+
+  - question: John Wheeler propuso la hipótesis de que todas las partículas de este tipo eran en realidad una sola entidad universal. Los positrones equivalen a esta partícula viajando hacia atrás en el tiempo. El principio de exclusión de Pauli es la razón por la que solo un ejemplar con espín hacia arriba y otro con espín hacia abajo de este fermión pueden compartir todos los demás números cuánticos al ir llenando los orbitales atómicos. Nombra esta partícula fundamental que gira alrededor del núcleo atómico.
+    options: [ Protones, Neutrones, Quarks, Electrones ]
+    answer: Electrones
+
+  - question: La película “El cantor de jazz” fue el primer largometraje en aprovechar este fenómeno, lo que logró mediante el Vitaphone, y dio origen al género de las “películas habladas”. A Alexander Graham Bell se le atribuye un transmisor que permitía enviar y recibir este fenómeno. Nombra este fenómeno que se percibe como trueno cuando cae un rayo y que capta un micrófono.
+    options: [ Color, Ondas de radio, Sonido, Calor ]
+    answer: Sonido
+
+  - question: La variedad “de restricción” de estas proteínas sirve para cortar el ADN en secuencias definidas. La investigadora biomédica Maud Menten ayudó a Leonor Michaelis a desarrollar una ecuación para modelar matemáticamente la cinética de estas proteínas. Los nombres de estas proteínas suelen terminar en “-asa”, como las lipasas. Nombra estas proteínas que actúan como catalizadores biológicos y aceleran las reacciones en la célula.
+    options: [ Hormonas, Enzimas, Anticuerpos, Receptores ]
+    answer: Enzimas
+
+  - question: El ferroceno contiene dos ligandos con esta cantidad de átomos coordinados al hierro central. Una molécula cíclica con esta cantidad de átomos de carbono tiene conformaciones de sobre y torcida, uno menos que una molécula cíclica con conformaciones de silla y de bote. Este número es uno más que el número de enlaces que puede formar el carbono. Nombra este número, que es el número atómico del boro y el número de carbonos del pentano.
+    options: [ Cinco, Cuatro, Seis, Tres ]
+    answer: Cinco
+
+  - question: Para este tipo de máquina, Tsiolkovsky desarrolló una ecuación que modifica la segunda ley de Newton y relaciona el caudal másico y la velocidad de los gases de escape con el empuje. Las variantes de varias etapas de este vehículo pueden superar la velocidad de escape de la Tierra. Nombra este vehículo que se usa en fuegos artificiales, misiles y lanzamientos al espacio exterior.
+    options: [ Helicópteros, Globos aerostáticos, Planeadores, Cohetes ]
+    answer: Cohetes
+
+  - question: Dos regiones importantes del cerebro que se iluminan en las resonancias magnéticas funcionales y que estudia esta ciencia son el área de Broca y el área de Wernicke. La rama computacional de esta ciencia extrae morfemas y usa IA para analizar audio y texto. En esta ciencia se pueden usar resonancias magnéticas para visualizar los patrones de articulación de los hablantes. Nombra este estudio científico del lenguaje.
+    options: [ Sociología, Musicología, Lingüística, Arqueología ]
+    answer: Lingüística
+
+  - question: El buque japonés Chikyu busca llegar a esta región delimitada por las discontinuidades de Mohorovicic y de Gutenberg. Las “plumas” que llevan el nombre de esta región son una explicación propuesta para la existencia de los puntos calientes. Esta capa contiene la astenosfera y la parte inferior de la litosfera. Nombra esta capa viscosa de la Tierra que está entre el núcleo y la corteza.
+    options: [ Núcleo externo, Manto, Corteza, Núcleo interno ]
+    answer: Manto
+
+  - question: Los vasos sanguíneos dilatados en este órgano caracterizan la EVAG, que le da a este órgano un aspecto de sandía. Las células principales de este órgano liberan un precursor de la pepsina, que ayuda a descomponer las proteínas. En los rumiantes, este órgano está dividido en cuatro compartimentos especializados. Nombra este órgano que secreta jugo gástrico para descomponer los alimentos que recibe del esófago.
+    options: [ Estómago, Intestino delgado, Páncreas, Hígado ]
+    answer: Estómago
+
+  - question: Un elemento superenfriado de este grupo se usó para crear el primer condensado de Bose-Einstein. El catión de un elemento de este grupo se encuentra en el mineral halita. Por lo general, el hidrógeno no se considera parte de este grupo porque sus propiedades químicas son diferentes. Por el punto, ¿a qué grupo del extremo izquierdo de la tabla periódica pertenecen el rubidio y el francio?
+    options: [ Metales alcalinotérreos, Halógenos, Gases nobles, Metales alcalinos ]
+    answer: Metales alcalinos
+    explanation: "También se acepta: grupo 1."
+
+  - question: Las ecuaciones de Euler-Lagrange son fundamentales en un tipo de esta disciplina que trata de los cambios. Los teoremas de Stokes y de Gauss son generalizaciones de un teorema de esta disciplina. Uno de los fundadores de esta disciplina formuló las fluxiones y la notación de punto, aunque estas fueron reemplazadas por una formulación alternativa. Por el punto, ¿qué rama de las matemáticas, que trata de la integración y las derivadas, descubrieron de forma independiente Gottfried Leibniz e Isaac Newton?
+    options: [ Álgebra, Geometría, Cálculo, Estadística ]
+    answer: Cálculo
+
+  - question: Este fenómeno es más tranquilo en las latitudes del caballo. Un anemómetro, que consiste en cazoletas giratorias, mide la velocidad de este fenómeno. La fuerza de este fenómeno se reporta con la escala de Beaufort. El tipo “alisio” de este fenómeno ayuda a la navegación. El “enfriamiento” que produce este fenómeno reduce la temperatura aparente. Nombra este movimiento del aire desde zonas de alta presión hacia zonas de baja presión.
+    options: [ Corrientes oceánicas, Viento, Humedad, Lluvia ]
+    answer: Viento
+
+  - question: Una magnitud que lleva el nombre de esta propiedad puede calcularse con el teorema de los ejes paralelos. El momento angular es igual a esa magnitud multiplicada por la velocidad angular. Los “momentos” que llevan el nombre de esta propiedad son el análogo rotacional de la masa. A veces, a la primera ley de Newton se le llama “ley de [esta propiedad]”. Nombra esta propiedad, la tendencia de los objetos a resistirse al movimiento.
+    options: [ Inercia, Cantidad de movimiento, Gravedad, Elasticidad ]
+    answer: Inercia
+    explanation: "También se acepta: momento de inercia."
+
+  - question: Una complicación de esta condición, caracterizada por un recuento bajo de plaquetas y anemia hemolítica, es el síndrome HELLP. La depresión posparto es un vacío inesperado después de pasar por esta condición, durante la cual la placenta sirve de filtro para el cordón umbilical. Nombra esta condición que dura unos 9 meses en los humanos y durante la cual un bebé se desarrolla a partir de un embrión.
+    options: [ Menopausia, Pubertad, Menstruación, Embarazo ]
+    answer: Embarazo
+
+  - question: Un ejemplo de objeto con esta categoría que gira muy rápido es Haumea. Otro objeto que antes se clasificaba en esta categoría era Vesta. Los objetos con esta categoría no han despejado su órbita, pero deben tener forma esférica. Entre los ejemplos de objetos con esta clasificación están Eris y Ceres. Por el punto, ¿a qué categoría, cuyo nombre se debe a que estos objetos son más pequeños que un planeta, fue degradado Plutón?
+    options: [ Lunas, Cometas, Planetas enanos, Exoplanetas ]
+    answer: Planetas enanos
+    explanation: Plutón fue reclasificado como planeta enano en 2006.
+
+  - question: Rosalind Franklin obtuvo una imagen de esta molécula en la “Fotografía 51” mediante difracción de rayos X. Junto con Maurice Wilkins, James Watson y Francis Crick recibieron el Premio Nobel por descubrir la estructura de esta molécula. Esta molécula está formada por fosfatos, azúcares y las bases nitrogenadas adenina, timina, guanina y citosina. Nombra esta molécula de doble hélice, la base de toda la vida.
+    options:
+      - Ácido ribonucleico
+      - Ácido desoxirribonucleico
+      - Adenosín trifosfato
+      - Hemoglobina
+    answer: Ácido desoxirribonucleico
+    explanation: Su abreviatura habitual es ADN.
+
+  - question: Las neuronas receptoras de este sentido transmiten información a las células mitrales y a las células en penacho. La parte del cerebro responsable de este sentido, el rinencéfalo, es más pequeña en los humanos que en otros mamíferos. Este sentido está mediado por neuronas sensoriales olfativas en el bulbo olfatorio. La respuesta gustativa está mediada principalmente por este sentido, incluso más que por el gusto. Nombra esta sensación, mediada por la nariz, que sirve para detectar olores.
+    options: [ Olfato, Gusto, Oído, Tacto ]
+    answer: Olfato
+    explanation: "También se acepta: olfacción."
+
+  - question: Un tipo de suelo ácido de este bioma se llama podzol. Los árboles que crecen inclinados o de lado en este bioma se conocen como “árboles borrachos”. En su límite norte, este bioma se encuentra con la tundra, en el punto en el que el permafrost impide el crecimiento de los árboles. Este es el bioma terrestre más grande del planeta. Nombra este bioma frío que tiene muchos árboles de hoja perenne.
+    options: [ Tundra, Bosque templado caducifolio, Pradera, Taiga ]
+    answer: Taiga
+    explanation: La taiga también se conoce como bosque boreal.
+
+  - question: Los transistores PMOS y NMOS se usan juntos en un esquema MOS con el prefijo de esta letra en el diseño de circuitos integrados a muy gran escala. Un científico sueco da nombre a una escala de temperatura que se abrevia con esta letra. Esta letra es el prefijo de las unidades del SI para diez a la menos dos. Un lenguaje de computación con este nombre tiene sucesores llamados “plus plus” y “sharp”. Nombra esta letra, el símbolo atómico del carbono.
+    options: [ K, N, C, B ]
+    answer: C
+    explanation: Las pistas apuntan a CMOS, Celsius, centi-, C++/C# y el carbono.
+
+  - question: La longitud de la cadena alifática de estas moléculas se usa para clasificarlas como de cadena corta, de cadena media o de cadena larga. En promedio, estos macronutrientes tienen nueve calorías por gramo. El triglicérido es un ejemplo de este tipo de compuesto. Nombra este macronutriente, estructuralmente similar a los aceites, pero que se refiere más específicamente a los lípidos que son sólidos a temperatura ambiente.
+    options: [ Proteínas, Grasas, Carbohidratos, Azúcares ]
+    answer: Grasas
+
+  - question: Este hombre da nombre a una conjetura sobre la máxima eficiencia en el empaquetamiento de esferas. Una ley creada por este científico relaciona el cuadrado del periodo orbital con el cubo del semieje mayor de la órbita. Este astrónomo desarrolló las tres leyes del movimiento planetario, con lo que amplió el modelo heliocéntrico de Copérnico. Nombra a este astrónomo y matemático alemán.
+    options:
+      - Johannes Kepler
+      - Tycho Brahe
+      - Galileo Galilei
+      - Nicolás Copérnico
+    answer: Johannes Kepler
+
+  - question: Este proceso utiliza dos “complejos de sistema” que contienen pares especiales de moléculas designados P700 y P680. Este proceso usa la que se considera ampliamente la enzima abundante más ineficiente, la RuBisCo. El ciclo de Calvin es parte del ciclo dependiente de la luz de este proceso más amplio. Nombra este proceso que usan las plantas para convertir la luz en azúcares.
+    options:
+      - Respiración celular
+      - Quimiosíntesis
+      - Transpiración
+      - Fotosíntesis
+    answer: Fotosíntesis
+    explanation: "Nota: en realidad, el ciclo de Calvin es la etapa independiente de la luz de la fotosíntesis."
+
+  - question: A temperaturas cercanas al cero absoluto, una forma de este elemento adquiere superfluidez. Tres núcleos de este elemento se fusionan en el proceso triple alfa, mientras que la cadena protón-protón de las estrellas convierte el hidrógeno en este elemento. Este elemento tiene la primera energía de ionización más alta y es el gas noble más ligero. Nombra este elemento de símbolo químico He que se usa para inflar globos.
+    options: [ Hidrógeno, Neón, Helio, Argón ]
+    answer: Helio
+
+  - question: La dirección de estos objetos puede cambiarse con los timones de profundidad, mientras que el ángulo de ataque es una propiedad importante de sus perfiles aerodinámicos. Las coordenadas de estos objetos se especifican mediante el alabeo, el cabeceo y la guiñada. La sustentación, el empuje y la resistencia son factores esenciales en este medio de transporte, entre cuyos ejemplos comerciales están los de Airbus y Boeing. Nombra estos vehículos que viajan por el aire.
+    options: [ Submarinos, Aviones, Veleros, Autos de carreras ]
+    answer: Aviones
+    explanation: "También se acepta: aeronaves."

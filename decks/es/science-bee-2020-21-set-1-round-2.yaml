@@ -1,0 +1,160 @@
+# Science Bee 2020–21 · Set 1 · Ronda 2 — 31 preguntas.
+# Source: docs/2020-2021-EMS-SB-2-Set-1.pdf
+# El texto de las preguntas proviene del documento; las opciones incorrectas se agregaron para el formato de opción múltiple.
+# Traducción al español de decks/science-bee-2020-21-set-1-round-2.yaml.
+
+title: Science Bee 2020–21 · Set 1 · Ronda 2
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Este animal no humano se usa para preparar la antitoxina tetánica en gran parte del mundo en desarrollo. Nikolai Przewalski da nombre a una especie de este animal, cuya longitud de patas es un ejemplo común de selección direccional en los libros de texto. El diminuto Eohippus fue uno de los primeros antepasados de este animal, entre cuyas razas modernas está el clydesdale. Pariente cercano de las cebras, por el punto, ¿cuál es este animal domesticado al que se le puede poner una silla para montarlo?
+    options: [ Caballo, Camello, Vaca, Llama ]
+    answer: Caballo
+    explanation: "También se acepta: Equus, equino."
+
+  - question: Los tipos liofílicos de estas sustancias son más estables que los liofóbicos. Agregar agentes clarificantes a estas sustancias puede causar floculación. La espuma sólida y los soles son ejemplos de estas sustancias, y en el efecto Tyndall la dispersión de la luz por estas sustancias es más intensa para la luz azul que para la roja. Nombra estas mezclas en las que una sustancia está dispersa en otra, como los aerosoles y la leche.
+    options: [ Soluciones, Aleaciones, Compuestos, Coloides ]
+    answer: Coloides
+
+  - question: Este material es el componente principal de los mares lunares de la superficie de la Luna. Este material formó columnas hexagonales en Irlanda del Norte, creando la Calzada del Gigante. Los depósitos masivos de este material se llaman “inundaciones” y se crean por grandes erupciones volcánicas. La corteza oceánica está formada principalmente por esta roca. Nombra esta roca ígnea extrusiva de grano fino, que se forma por el enfriamiento rápido de la lava.
+    options: [ Granito, Obsidiana, Basalto, Piedra caliza ]
+    answer: Basalto
+
+  - question: Los tipos aleatorios de estas construcciones se llaman Las Vegas o Montecarlo según si pueden fallar o no. Dos de estas construcciones, que llevan el nombre de Kruskal y Prim, son “voraces”, es decir, siempre toman la decisión óptima a nivel local. La notación “O grande” describe el tiempo de ejecución de estos métodos, que pueden usar la técnica de “divide y vencerás”. Por el punto, ¿con qué métodos paso a paso, que usan las computadoras para resolver problemas, se pueden hacer búsquedas y ordenamientos?
+    options:
+      - Compiladores
+      - Algoritmos
+      - Lenguajes de programación
+      - Sistemas operativos
+    answer: Algoritmos
+
+  - question: El canal de YouTube de esta organización produce la serie Eons, que trata sobre la evolución y las formas de vida antiguas. Esta organización también distribuye la serie de divulgación científica Nova. Chris y Martin Kratt han protagonizado dos programas sobre ciencia animal para esta organización, empezando por Zoboombafoo. Equivalente televisivo de NPR, por el punto, ¿cuál es esta organización de televisión educativa sin fines de lucro, que transmite programas como Plaza Sésamo y Arthur?
+    options: [ PBS, BBC, National Geographic, Discovery Channel ]
+    answer: PBS
+    explanation: Son las siglas en inglés de Public Broadcasting Service (Servicio de Radiodifusión Pública).
+
+  - question: Como el organismo modelo Chlamydomonas tiene uno solo de estos organelos, y de gran tamaño, es fácil detectar a los mutantes que carecen de carotenoides. El tejido del mesófilo es rico en este organelo, cuyo estroma contiene la enzima rubisco para el ciclo de Calvin y cuyas membranas tilacoides son el lugar de las reacciones dependientes de la luz. Por el punto, ¿de qué organelos verdes de las células vegetales, donde ocurre la fotosíntesis, se libera oxígeno gaseoso?
+    options: [ Mitocondrias, Vacuolas, Ribosomas, Cloroplastos ]
+    answer: Cloroplastos
+
+  - question: Este proceso se describe mediante un conjunto de leyes que llevan el nombre de Alfred Fick. Este proceso puede modelarse como una caminata aleatoria o como movimiento browniano. Un tipo de este proceso que presenta el agua se conoce como ósmosis. Este proceso es impulsado por gradientes de concentración y se puede observar cuando un colorante se esparce en el agua. Nombra este proceso por el cual la materia se mueve de zonas de alta concentración a zonas de baja concentración.
+    options: [ Transporte activo, Convección, Difusión, Endocitosis ]
+    answer: Difusión
+
+  - question: Uno de estos cuerpos celestes tiene un satélite llamado Dáctilo. La sonda espacial Dawn visitó una región con muchos de estos cuerpos. Estos cuerpos forman los troyanos de Júpiter, y los huecos donde no se encuentran estos cuerpos llevan el nombre de Daniel Kirkwood. Uno de los más grandes de estos cuerpos se llama Vesta y se encuentra en una región entre Marte y Júpiter. Nombra estos cuerpos celestes que forman un “cinturón” del sistema solar que lleva su nombre.
+    options: [ Cometas, Asteroides, Lunas, Exoplanetas ]
+    answer: Asteroides
+
+  - question: Estos dispositivos pueden emitir pulsos mediante conmutación Q y, para funcionar, necesitan que haya más partículas en estado excitado que en estado fundamental, una condición conocida como inversión de población. El primero de estos dispositivos lo construyó Theodore Maiman con un cristal de rubí. Estos dispositivos funcionan mediante la emisión estimulada de su medio de ganancia. Nombra estos dispositivos que emiten un haz de luz coherente.
+    options: [ Láseres, LED, Bombillas incandescentes, Lámparas fluorescentes ]
+    answer: Láseres
+    explanation: Láser son las siglas en inglés de light amplification by stimulated emission of radiation (amplificación de luz por emisión estimulada de radiación).
+
+  - question: Un paso preliminar para fabricar este producto consiste en tratar sus ingredientes con agua, hidróxido de sodio y sulfuro de sodio en el proceso Kraft. El blanqueo de este producto con cloro elemental produce compuestos tóxicos de dioxinas cloradas. Después de llegar al mundo islámico, este producto empezó a reemplazar al pergamino y al papiro. Nombra este producto que se fabrica con pulpa de madera y sobre el que se suele escribir con lápiz.
+    options: [ Pergamino, Papiro, Pizarra, Papel ]
+    answer: Papel
+
+  - question: Esta cantidad aparece al cuadrado en el denominador de la desigualdad de Chebyshev. Para calcular la puntuación Z hay que dividir entre esta cantidad, que también se divide entre la raíz cuadrada del tamaño de la muestra para obtener el error estándar. La regla 68-95-99.7 de una distribución normal se define usando múltiplos de esta cantidad, que es la raíz cuadrada de la varianza. Nombra esta cantidad, representada con “sigma”, que indica qué tan dispersos están los datos de un conjunto respecto a la media.
+    options: [ Varianza, Media, Desviación estándar, Rango ]
+    answer: Desviación estándar
+
+  - question: Durante la mitosis, los cromosomas se condensan dentro de estos organelos, que están rodeados por una doble membrana conocida como su “envoltura”. Los complejos de poro permiten que el ARN entre y salga de estos organelos, a los que a veces se les llama el “centro de control” de la célula. Nombra estos organelos, que contienen la información genética de la célula.
+    options: [ Mitocondrias, Núcleos, Ribosomas, Lisosomas ]
+    answer: Núcleos
+    explanation: "Singular: núcleo."
+
+  - question: Al igual que el cromo, este elemento deja su subnivel 4s a medio llenar, lo que viola el principio de Aufbau. Este elemento les da sangre azul a los crustáceos por su presencia en la hemocianina. Combinado con estaño, este elemento forma bronce, y combinado con zinc forma latón. Cuando este elemento se oxida, se vuelve verde azulado. Este es el elemento más usado en los cables eléctricos. Nombra este elemento, un metal de transición, de símbolo Cu.
+    options: [ Cobre, Plata, Hierro, Níquel ]
+    answer: Cobre
+
+  - question: La parte inferior de esta región contiene la capa D doble prima, mientras que en su parte superior predominan la peridotita y el olivino. El límite entre la litosfera y la astenosfera está en esta región. Las ondas P pueden atravesar esta región, pero no la capa que está debajo de ella. Las “plumas” de esta región podrían impulsar su convección, que provoca la expansión del fondo oceánico. Nombra esta capa de la Tierra que está por encima del núcleo externo y por debajo de la corteza.
+    options: [ Corteza, Núcleo externo, Núcleo interno, Manto ]
+    answer: Manto
+
+  - question: La “ley” de estos dispositivos, que lleva su nombre, establece que el torque aplicado a ambos lados de estos dispositivos debe ser equivalente. Estos dispositivos se dividen en clases 1, 2 y 3 según la ubicación del fulcro. Estos dispositivos obtienen más ventaja mecánica cuando tienen brazos más largos, que reducen la fuerza que se necesita aplicar a lo largo de una distancia mayor. Nombra estas máquinas simples, de las que un subibaja es un ejemplo.
+    options: [ Poleas, Planos inclinados, Palancas, Tornillos ]
+    answer: Palancas
+
+  - question: Igualar a cero uno de estos objetos, el “característico”, permite hallar los valores propios de una matriz. Estos objetos de grado cinco o mayor no se pueden resolver algebraicamente. Estos objetos se pueden factorizar con la diferencia de cubos o la diferencia de cuadrados, y se pueden multiplicar con el método FOIL, llamado así por sus siglas en inglés. Nombra estos objetos con potencias enteras de variables, como los cúbicos y los cuadráticos.
+    options:
+      - Logaritmos
+      - Polinomios
+      - Funciones exponenciales
+      - Funciones trigonométricas
+    answer: Polinomios
+
+  - question: Durante este proceso, la cinasa Aurora B se localiza en un “huso” que lleva su nombre. En los organismos monocéntricos que pasan por este proceso, el cinetocoro está localizado. En una de las fases de este proceso, los cromosomas se alinean en una “placa”. Esta parte del ciclo celular ocurre después de la fase G2 y termina en la citocinesis, y entre sus fases están la metafase y la anafase. Nombra este proceso por el cual las células se dividen, que se contrasta con la meiosis.
+    options: [ Mitosis, Fisión binaria, Interfase, Apoptosis ]
+    answer: Mitosis
+
+  - question: Una reacción de química orgánica que rompe alquenos y alquinos usa la “lisis” por esta molécula. Esta molécula puede “agrietar” elastómeros como el caucho. La cantidad de esta sustancia en una columna vertical se mide en unidades Dobson. Los clorofluorocarbonos agotan una “capa” que contiene esta molécula protectora, que absorbe la radiación ultravioleta. Nombra esta molécula triatómica presente en la atmósfera, de fórmula química O3.
+    options: [ Dióxido de carbono, Óxido nitroso, Dióxido de azufre, Ozono ]
+    answer: Ozono
+
+  - question: Los tipos de este material que el viento puede arrastrar como polvo se conocen como loess. Este material puede perder sales y nutrientes por lixiviación con agua. A una variedad de este material, generalmente rica en humus, se le llama “franca”. Las capas de este material se conocen como horizontes, y este material se clasifica según cuánta arena, limo y arcilla contiene. Nombra este material en el que normalmente se siembran las semillas.
+    options: [ Roca madre, Grava, Suelo, Piedra caliza ]
+    answer: Suelo
+    explanation: "También se acepta: tierra."
+
+  - question: Debido a la existencia de partículas virtuales, estos objetos pueden “evaporarse”. Reinhard Genzel, Andrea Ghez y Roger Penrose ganaron el Premio Nobel de Física de 2020 por un descubrimiento relacionado con uno supermasivo de estos objetos llamado Sagitario A*. En los ejemplos de estos objetos que no giran, el radio de Schwarzschild define el horizonte de eventos. Nombra estos objetos de los que ni siquiera la luz puede escapar.
+    options: [ Estrellas de neutrones, Agujeros negros, Enanas blancas, Cuásares ]
+    answer: Agujeros negros
+
+  - question: La evidencia más antigua del uso controlado de este fenómeno está en la cueva Wonderwerk, en Sudáfrica. Probablemente el Homo erectus fue la primera especie en iniciar directamente el uso de este fenómeno. Entre los primeros métodos para producir este fenómeno a mano estaban el taladro de arco y golpear metal contra pedernal. Nombra este fenómeno que históricamente se ha usado a menudo como fuente de calor para cocinar alimentos.
+    options: [ Fuego, Electricidad, Rayos, Calor geotérmico ]
+    answer: Fuego
+    explanation: "También se acepta: combustión, llamas."
+
+  - question: Hoy en día, para bajar esta cantidad se prefieren menos los betabloqueadores que los inhibidores de la ECA, que actúan causando vasodilatación. Para medir esta cantidad se usa un esfigmomanómetro; sus componentes sistólico y diastólico pueden determinarse a mano con un estetoscopio y un brazalete inflable que se coloca alrededor del brazo. Por el punto, ¿qué cantidad cardiovascular tiene un valor normal de 120 sobre 80 milímetros de mercurio?
+    options:
+      - Glucosa en sangre
+      - Nivel de colesterol
+      - Temperatura corporal
+      - Presión arterial
+    answer: Presión arterial
+
+  - question: En la fecundación hay un pico en la concentración de este elemento en el citosol, conocido como la “bomba” o la “onda” que lleva su nombre. El catión 2+ de este elemento se almacena en el retículo sarcoplásmico de las células musculares. La luz del sol ayuda al cuerpo a producir vitamina D, que ayuda a absorber este elemento. Nombra este elemento que se encuentra en los huesos y tiene el símbolo Ca.
+    options: [ Sodio, Potasio, Calcio, Hierro ]
+    answer: Calcio
+
+  - question: Una teoría sugiere que este fenómeno está mediado por un bosón sin masa y de espín 2. Las observaciones de un eclipse solar demostraron que este fenómeno puede curvar la luz como parte de la “lente” que lleva su nombre. En la relatividad, esta fuerza se concibe como la curvatura del espacio-tiempo. En la Tierra, esta fuerza provoca una aceleración de 9.8 metros por segundo al cuadrado. Por el punto, nombra esta fuerza, la más débil de las fuerzas fundamentales, que hace que los objetos caigan al suelo.
+    options:
+      - Electromagnetismo
+      - Gravedad
+      - Fuerza nuclear fuerte
+      - Fuerza nuclear débil
+    answer: Gravedad
+
+  - question: Esta tecnología formaba parte del Kyocera VP-210, el primer teléfono celular equipado con ella. Además de la conexión de audio, Securus Technology ofrece este servicio a los reclusos. Junto con la mensajería instantánea, este es el principal servicio que ofrece Google Hangout. Debido a la pandemia de covid-19, la mayoría de las escuelas se han visto obligadas a funcionar a distancia mediante estos servicios. Nombra este servicio que ofrecen Skype, Facetime y Zoom.
+    options: [ Videollamadas, Mensajes de texto, Correo electrónico, Almacenamiento en la nube ]
+    answer: Videollamadas
+    explanation: También se llama videochat o videoconferencia.
+
+  - question: En estas estructuras, la banda de Caspary, que contiene suberina, obliga al agua a entrar en el simplasto. No son el brote, pero estas estructuras crecen en su “meristemo apical” y tienen geotropismo positivo. Las citocininas regulan el crecimiento de estas estructuras, que son “aéreas” en los manglares. Los nabos suecos y las zanahorias son ejemplos de estos órganos. Nombra estas estructuras de las plantas que absorben agua y nutrientes del suelo.
+    options: [ Tallos, Hojas, Flores, Raíces ]
+    answer: Raíces
+
+  - question: Entre las formaciones rocosas comunes en estos biomas están las hamadas y los ergs. La fotosíntesis CAM y la C4 evolucionaron entre las plantas de estos biomas, donde vive la mayoría de las xerófitas del mundo. Estos biomas suelen formarse en la “sombra pluviométrica” de las cordilleras. Estos biomas y las playas albergan la mayoría de las dunas de arena del mundo. Nombra estas regiones extremadamente áridas, como el Sahara.
+    options: [ Tundras, Sabanas, Desiertos, Taigas ]
+    answer: Desiertos
+
+  - question: Esta cantidad alcanza su mínimo en las mezclas binarias en el punto eutéctico. Para los compuestos de agua, esta cantidad puede hallarse multiplicando la molalidad por 1.86, como parte de una propiedad coligativa de “descenso”. Agregar cloruro de sodio hace que este punto baje en el agua, lo que permite usarlo para derretir el hielo de las carreteras. Nombra esta temperatura a la que un cambio de fase hace que los líquidos se conviertan en sólidos.
+    options: [ Punto de ebullición, Punto de congelación, Punto de rocío, Punto crítico ]
+    answer: Punto de congelación
+    explanation: "También se acepta: punto de fusión."
+
+  - question: Este orden se divide en estrepsirrinos y haplorrinos, que significan “nariz torcida” y “nariz simple”, respectivamente. Algo poco común es que la mayoría de los miembros de este orden no pueden sintetizar vitamina C. El colugo es el pariente más cercano de este orden, entre cuyos miembros están los gálagos, los tarseros y los loris. Nombra este orden taxonómico que incluye a los lémures, los monos y los simios, y que se define por tener pulgares oponibles.
+    options: [ Primates, Roedores, Murciélagos, Carnívoros ]
+    answer: Primates
+
+  - question: Voyager descubrió en el polo norte de este planeta un patrón de nubes llamado su “hexágono”. Unas depresiones en la superficie de una luna de este planeta reciben el apodo de “rayas de tigre”. Otra luna de este planeta, Prometeo, es un satélite pastor, y la división de Cassini está presente en una característica importante de este planeta. Con la menor densidad de todos los planetas del sistema solar, por el punto, ¿cuál es este sexto planeta desde el Sol, conocido por su extenso sistema de anillos?
+    options: [ Júpiter, Urano, Neptuno, Saturno ]
+    answer: Saturno
+
+  - question: El “vuelco” de estos lugares, que lleva su nombre, puede liberar mazuku mortales, nubes de dióxido de carbono que se mueven rápido. Dos de estos lugares en Camerún son los únicos que se sabe que han tenido erupciones límnicas. Estos lugares pueden volverse extremadamente salinos cuando son endorreicos, es decir, cuando no tienen salida de agua. Nombra estos cuerpos de agua sin corriente, entre los que hay ejemplos llamados Superior, Míchigan y Hurón.
+    options: [ Ríos, Océanos, Lagos, Pantanos ]
+    answer: Lagos

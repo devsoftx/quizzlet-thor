@@ -1,0 +1,174 @@
+# Science Bee 2022–23 Nacional · Final (secundaria) — 33 preguntas.
+# Source: docs/Copy of MS Science Bee Finals.pdf
+# El texto de las preguntas proviene del documento; las opciones de respuesta incorrectas se agregaron para la opción múltiple.
+# Traducción al español de decks/science-bee-2022-23-nationals-finals.yaml.
+
+title: Science Bee 2022–23 Nacional · Final (secundaria)
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: En estos diagramas, las variables RR Lyrae se ubican entre las marcas del eje x rotuladas «A» y «F». Las variables W Virginis se ubican en la franja de inestabilidad de estos diagramas, que contienen una sección rotulada como «secuencia principal», que se extiende desde arriba a la izquierda hasta abajo a la derecha. Nombrados en honor a dos astrónomos, ¿cuáles son, por los puntos, estos gráficos de dispersión que representan la relación entre la luminosidad y la temperatura de una estrella?
+    options:
+      - Diagramas H-R
+      - Diagramas de Hubble
+      - Diagramas de Feynman
+      - Diagramas de Minkowski
+    answer: Diagramas H-R
+    explanation: "También se acepta: diagramas de Hertzsprung-Russell, HRD."
+
+  - question: Un ejemplo de esta ley tiene que ver con la fermentación de la levadura al hornear pan, que implica la expansión del dióxido de carbono mientras el pan está en el horno. Un experimento que demuestra esta ley consiste en un globo que se arruga al colocarlo en un recipiente con nitrógeno líquido, pero que se vuelve a inflar solo cuando se lo saca. Nombra esta ley que establece que, a presión constante, el volumen de un gas ideal es proporcional a su temperatura.
+    options: [ Ley de Boyle, Ley de Avogadro, Ley de Dalton, Ley de Charles ]
+    answer: Ley de Charles
+
+  - question: Un experimento que demostró la existencia de este valor fue el experimento de Stern-Gerlach, en el que se vio que los átomos de plata se desviaban en dos direcciones. Según la regla de Hund, todos los electrones en orbitales ocupados por un solo electrón deben tener el mismo valor de esta magnitud. Según el principio de exclusión de Pauli, este valor es más un medio o menos un medio para los fermiones. Representado con una flecha hacia arriba o hacia abajo, ¿cuál es, por los puntos, este último número cuántico, el momento angular intrínseco de un electrón, denotado por ms?
+    options:
+      - Número cuántico principal
+      - Número cuántico magnético
+      - Espín del electrón
+      - Número cuántico azimutal
+    answer: Espín del electrón
+    explanation: "También se acepta: número cuántico de espín del electrón."
+
+  - question: Estos diagramas usan una flecha para señalar a un individuo llamado probando. En estos diagramas, las uniones consanguíneas se representan con una línea doble y las generaciones sucesivas se rotulan con números romanos. Una figura sombreada a la mitad en uno de estos diagramas indica un heterocigoto o portador de una afección como el daltonismo o la enfermedad de Huntington. Nombra estos diagramas que se usan para visualizar cómo se transmiten los trastornos genéticos a lo largo del linaje de una familia.
+    options: [ Cuadros de Punnett, Diagramas de pedigrí, Cariotipos, Cladogramas ]
+    answer: Diagramas de pedigrí
+    explanation: "También se acepta: árboles genealógicos."
+
+  - question: Este museo alberga el Planetario Fels, el segundo planetario más antiguo de los Estados Unidos. Este museo contiene un monumento nacional a la persona que le da su nombre, diseñado por John Windrim e inspirado en el Panteón de Roma. Esta institución también exhibe varias pertenencias de esa persona, como una armónica de cristal y un pararrayos. Nombra este museo de ciencias de Filadelfia, que lleva el nombre de un polímata estadounidense.
+    options:
+      - Instituto Franklin
+      - Museo Mütter
+      - Centro de Ciencias Carnegie
+      - Academia de Ciencias Naturales
+    answer: Instituto Franklin
+    explanation: Lleva el nombre de Benjamin Franklin.
+
+  - question: Las heridas en los tejidos del floema y del xilema provocan la liberación de estos compuestos para inducir la diferenciación celular. La forma más común y básica de estas hormonas es el ácido indol-3-acético. La liberación de estas hormonas baja el pH y descompone la celulosa de la pared celular para inducir tropismos. Nombra estas hormonas vegetales que promueven el alargamiento celular y regulan el crecimiento.
+    options: [ Citoquininas, Ácido abscísico, Estrigolactonas, Auxinas ]
+    answer: Auxinas
+
+  - question: Aparte de Venus, este es el único objeto conocido que tiene coronas parecidas a una «pista de carreras», entre ellas tres llamadas Elsinore, Arden e Inverness. Este cuerpo tiene un acantilado llamado Verona Rupes, un escarpe de 12 millas de altura que es el acantilado más alto del sistema solar. Este cuerpo lleva el nombre de la hija de Próspero en La tempestad de Shakespeare, obra que también da nombre a su luna vecina Ariel. Nombra este satélite, el más pequeño de los cinco satélites principales de Urano, que orbita junto a Umbriel, Titania y Oberón.
+    options: [ Ariel, Puck, Miranda, Calibán ]
+    answer: Miranda
+
+  - question: Una capa de esta parte del cuerpo, llamada «capa de células espinosas», alberga principalmente un macrófago residente del tejido llamado célula de Langerhans. Esa capa, el estrato espinoso, se une mediante desmosomas a la capa más profunda de esta parte del cuerpo, el estrato basal. Cerca del 90% de esta parte del cuerpo está formado por queratinocitos, aunque también contiene receptores del tacto llamados células de Merkel y melanocitos, que producen pigmento. Nombra esta capa más externa de la piel.
+    options: [ Dermis, Epidermis, Hipodermis, Endodermis ]
+    answer: Epidermis
+
+  - question: Dos de estas estructuras se enrollan una alrededor de la otra en el común motivo de cremallera de leucina, que se une al ADN. Estas estructuras ocupan una franja rectangular en el tercer cuadrante de un diagrama de Ramachandran porque tienen ángulos phi y psi de menos 60 y menos 45 grados. La prolina es conocida como un «rompedor» de estas estructuras, que tienen puentes de hidrógeno cada cuatro aminoácidos. Nombra estas estructuras secundarias de las proteínas, que se contrastan con las láminas beta y tienen un aspecto enrollado.
+    options: [ Hélices alfa, Láminas beta, Giros beta, Bucles omega ]
+    answer: Hélices alfa
+
+  - question: Cuando el tamaño de las células de estos organismos disminuye después de la división celular, unas células cigóticas especializadas llamadas auxosporas les devuelven su tamaño inicial. A estos organismos se les llama «joyas del mar» y «ópalos vivientes» porque sus paredes celulares, o frústulas, están compuestas de sílice, que es el componente principal del vidrio. Nombra estas algas unicelulares que habitan los ecosistemas marinos.
+    options: [ Dinoflagelados, Cocolitofóridos, Euglenoides, Diatomeas ]
+    answer: Diatomeas
+    explanation: "También se acepta: Bacillariophyta."
+
+  - question: Harvey Fletcher fue uno de los participantes de este experimento de 1909, realizado en el Laboratorio Ryerson de la Universidad de Chicago. Este experimento tomó en cuenta de forma incorrecta la viscosidad del aire al usar la ley de Stokes para calcular la fuerza de arrastre. En este experimento se colocaron dos superficies metálicas paralelas entre sí para observar un conjunto de gotitas. Nombra este experimento realizado por Robert Millikan que midió la carga del electrón.
+    options:
+      - Experimento de la lámina de oro de Rutherford
+      - Experimento de los rayos catódicos de Thomson
+      - Experimento de la gota de aceite de Millikan
+      - Experimento de Michelson-Morley
+    answer: Experimento de la gota de aceite de Millikan
+
+  - question: La tesis doctoral de Leif Størmer examinó el desarrollo de este organismo, al que agrupó como miembro de Artiopoda. Spriggina pudo haber sido un ancestro de estos organismos, que llegaron a dominar los ambientes marinos. Paradoxides y Phacops se encuentran entre los muchos géneros de estos organismos, que cumplían funciones como la de filtradores y la de depredadores del fondo marino. Nombra estos artrópodos marinos, hoy extintos, cuyo nombre significa «tres lóbulos».
+    options: [ Euriptéridos, Trilobites, Amonites, Graptolitos ]
+    answer: Trilobites
+
+  - question: Al demostrar el teorema de Vinograd, se puede usar una suma que lleva el nombre de este matemático, representada como «c sub q de n». Los primos que llevan el nombre de este matemático se definen como la diferencia entre pi de x y pi de (x - 2). Este hombre, que calculó la constante de Euler con 15 cifras decimales, era originario del actual Tamil Nadu. Nombra a este matemático indio que creó una fórmula para la serie infinita de pi.
+    options: [ Srinivasa Ramanujan, Aryabhata, Brahmagupta, Harish-Chandra ]
+    answer: Srinivasa Ramanujan
+
+  - question: Jinyou Liang afirma que la proporción de mezcla del vapor de agua en esta región va «desde <0.01 por ciento hasta unos pocos por ciento, según la altitud». Un estudio de 2023 encontró que, en la región ecuatorial, la altura máxima de esta región es de aproximadamente 18 kilómetros. Con un nombre que deriva de una palabra griega que significa «giratorio», esta región alberga la mayoría de los fenómenos meteorológicos y contiene aproximadamente 3/4 de la masa de la atmósfera del planeta. Con una altura promedio de 11 millas, ¿cuál es, por los puntos, esta capa más baja de la atmósfera?
+    options: [ Estratosfera, Mesosfera, Termosfera, Troposfera ]
+    answer: Troposfera
+
+  - question: La producción industrial de fosgeno suele implicar el paso de cloro y una forma purificada de este compuesto a través de un catalizador de carbón activado poroso. El proceso Fischer-Tropsch consiste en la obtención de hidrocarburos a partir de una mezcla de hidrógeno y este compuesto. Los mareos y la «piel rojo cereza» están entre los síntomas de una afección causada por la inhalación excesiva de este compuesto inodoro, conocida como «intoxicación» por este compuesto. Nombra este compuesto de fórmula química CO.
+    options: [ Dióxido de carbono, Óxido nítrico, Monóxido de carbono, Metano ]
+    answer: Monóxido de carbono
+
+  - question: El tipo «caja DEAD» de estas proteínas funciona durante el metabolismo del ARN. Ejemplos de estas proteínas, como Mcm2, se cargan en los sitios ori ricos en AT durante una etapa de «licenciamiento». Las topoisomerasas alivian la tensión creada por estas enzimas, que inician la replicación al romper los puentes de hidrógeno entre las bases nitrogenadas. Nombra esta clase de enzimas que desenrollan el ARN y el ADN.
+    options: [ Primasas, Helicasas, Ligasas, Polimerasas ]
+    answer: Helicasas
+
+  - question: Un lugar de Utah conocido como la variedad «Hurricane» de esta formación de relieve figuraba como poseedor de un «conglomerado Shinarump sin fallas». Escarpes de pendientes pronunciadas rodean la parte central de esta formación de relieve, cuyas cimas son más extensas que las de los cerros testigo. Una particularmente grande, conocida como la variedad «Grand», se encuentra en Colorado. Llamadas así porque se parecen a una mesa, ¿cuáles son, por los puntos, estas formaciones de relieve elevadas y de cima plana?
+    options: [ Mesas, Cerros testigo, Cuestas, Inselbergs ]
+    answer: Mesas
+    explanation: "También se acepta: cerros de cima plana, tepuyes."
+
+  - question: El lago Pohjalampi, en Finlandia, fue el lugar de un experimento que manipuló la densidad y esta magnitud en invertebrados. La cantidad total de carbono unido orgánicamente se usa a veces como indicador indirecto de esta magnitud ecológica. La producción primaria es una medida del aumento total de esta magnitud en un área determinada. Nombra esta magnitud igual a la cantidad total de materia viva que se encuentra en un ecosistema específico.
+    options: [ Biodiversidad, Capacidad de carga, Densidad de población, Biomasa ]
+    answer: Biomasa
+
+  - question: "El interés de este hombre por la anestesia se hizo evidente en su ensayo de 1847 Sobre la inhalación del vapor de éter, publicado después de que administrara cloroformo a la reina Victoria durante el parto del príncipe Leopoldo. Este hombre escribió: «Sospeché cierta contaminación del agua de la muy concurrida bomba pública de la calle Broad», en respuesta al brote de cólera de 1854 en el Soho de Londres. Nombra a este médico inglés considerado el «padre de la epidemiología»."
+    options: [ Joseph Lister, Edward Jenner, John Snow, William Harvey ]
+    answer: John Snow
+
+  - question: El descubrimiento de estos objetos cerca de Trachilos, en Creta, es evidencia de que los primeros homininos pudieron haber vivido en Europa además de en África. Los ejemplos más antiguos de estos objetos producidos por homininos se encuentran en Laetoli, Tanzania, y se formaron en ceniza volcánica. Examinar la separación entre estos objetos da la mejor evidencia de la velocidad de un dinosaurio, y pueden usarse para determinar el bipedalismo. Nombra estos tipos de fósiles, que se contrastan con los fósiles corporales, formados por marcas hundidas y no por huesos conservados.
+    options:
+      - Fósiles guía
+      - Huellas fósiles
+      - Inclusiones en ámbar
+      - Microfósiles
+    answer: Huellas fósiles
+    explanation: "También se acepta: fósiles traza, rastros de huellas, icnofósiles."
+
+  - question: La parte inferior de este tipo específico de estructura está formada principalmente por cumulados ultramáficos que provienen de fundidos de una región adyacente más profunda. Los huecos en esta región específica se rellenan con una papilla de cristales que luego se convierte en diques laminados y lava almohadillada. Esta estructura específica está compuesta de basalto, más denso, lo que hace que se subduzca bajo su contraparte continental terrestre. Nombra esta porción de la litosfera cubierta por agua.
+    options: [ Corteza oceánica, Corteza continental, Astenosfera, Manto superior ]
+    answer: Corteza oceánica
+    explanation: "También se acepta: placas oceánicas."
+
+  - question: Estos organismos usan las fibras de su cola para sujetarse a su presa e iniciar una unión reversible e irreversible. El tipo virulento de estos organismos se reproduce mediante el ciclo lítico, a diferencia de la variedad templada. Algunos de estos organismos se integran en el genoma de sus huéspedes mediante la lisogenia, como se ve en su tipo lambda. Nombra estos virus cuyo nombre se debe a que infectan procariotas.
+    options: [ Retrovirus, Coronavirus, Tobamovirus, Bacteriófagos ]
+    answer: Bacteriófagos
+    explanation: A menudo se abrevia como «fagos».
+
+  - question: Este científico extendió la noción de cuerpo rígido a la relatividad especial con la «rigidez» que lleva su nombre. Este hombre es, por orden alfabético, el primero de quienes dan nombre a un método que combina las entalpías de ionización y de atomización de un elemento usando la ley de Hess. Junto con J. Robert Oppenheimer, este hombre da nombre a una aproximación que supone que el movimiento de los núcleos atómicos y el de los electrones pueden tratarse por separado. Nombra a este físico alemán que, junto con Fritz Haber, da nombre a un ciclo que se usa para calcular la energía reticular de un cristal.
+    options: [ Werner Heisenberg, Arnold Sommerfeld, Max Born, Max von Laue ]
+    answer: Max Born
+
+  - question: Los 1,4-ciclohexadienos se obtienen a partir de arenos en un tipo de esta reacción que lleva el nombre de Arthur Birch. Esta reacción da nombre a una forma de eliminación en la química organometálica. La hidrogenación es una clase de este tipo de reacción, que ocurre en el cátodo de una celda electroquímica. ¿Con qué tipo de reacción, por los puntos, en la que una especie gana electrones, se contrasta la oxidación?
+    options: [ Oxidación, Reducción, Hidrólisis, Neutralización ]
+    answer: Reducción
+
+  - question: La fosa de las Caimán alberga el sitio más profundo conocido de estos ecosistemas, llamado «Beebe»; estos ecosistemas suelen formarse en límites de placas divergentes. Animales como el gusano de Pompeya y el caracol de pie escamoso prosperan en estos ecosistemas porque obtienen energía y nutrientes de bacterias que realizan quimiosíntesis. Las fumarolas negras y las blancas son los dos tipos de, por los puntos, ¿qué estructuras que emiten fluidos ricos en minerales en el fondo del océano profundo?
+    options: [ Fuentes hidrotermales, Montes submarinos, Fosas oceánicas, Llanuras abisales ]
+    answer: Fuentes hidrotermales
+
+  - question: El autor original del motor Servo es esta organización, y esta empresa desarrolló un cliente de correo electrónico llamado Thunderbird. Jason Calacanis afirmó que obtuvo más de $70 millones en 2006 gracias a la inclusión de una función de búsqueda de Google en el producto más conocido de esta empresa. Ese producto de código abierto lanzado por esta empresa fue competidor de Internet Explorer. Nombra esta empresa que desarrolló el navegador Firefox.
+    options: [ Opera Software, Apple, Microsoft, Mozilla ]
+    answer: Mozilla
+    explanation: "También se acepta: Fundación Mozilla."
+
+  - question: Esta constelación alberga una figura a veces llamada el Carro de Carlos y contiene un asterismo llamado los Tres Saltos de la Gacela. Merak es la estrella beta de esta constelación, que también incluye una figura formada por cuatro componentes de un cuenco y tres de un mango. Un asterismo con forma de arado en esta constelación se conoce popularmente como el Gran Cucharón. Nombra esta constelación cuyo nombre en latín significa «gran osa».
+    options: [ Osa Menor, Dragón, Osa Mayor, Casiopea ]
+    answer: Osa Mayor
+
+  - question: IR8 fue una variedad de este cultivo desarrollada en la década de 1960, principalmente para su cultivo en Filipinas y la India. Las nuevas variedades genéticamente modificadas de este cultivo aumentaron mucho los rendimientos en la segunda mitad del siglo XX y se convirtieron en una parte clave de la Revolución Verde. O. glaberrima y O. sativa son dos cultivares que sirven de base para el desarrollo de un Nuevo [este cultivo] para África. Nombra este cereal de grano blanco que se cultiva en campos inundados.
+    options: [ Cebada, Arroz, Avena, Centeno ]
+    answer: Arroz
+
+  - question: Un sistema binario de estos objetos llamado Luhman 16 está ubicado a 6.5 años luz del Sol. No son planetas; estos objetos presentan el mecanismo de Kelvin–Helmholtz y se identifican con una técnica que mide su tipo espectral y su contenido de litio. A diferencia de los miembros de la secuencia principal, estos cuerpos no pueden mantener la fusión de hidrógeno en helio. Nombra estas estrellas frías y de poca masa que a veces se conocen como «estrellas fallidas».
+    options: [ Enanas marrones, Enanas rojas, Enanas amarillas, Gigantes rojas ]
+    answer: Enanas marrones
+
+  - question: La notación de Voigt puede usarse para expresar esta ley como una matriz de flexibilidad de seis por seis, que Cauchy usó en su generalización de esta ley a cuerpos tridimensionales. La forma generalizada de esta ley puede escribirse usando tanto el coeficiente de Poisson como el módulo de Young. Los materiales a los que se aplica esta ley se llaman elásticos lineales. Nombra esta ley que describe la compresión de un resorte y que a menudo se escribe como F = kx.
+    options: [ Ley de Pascal, Ley de Coulomb, Segunda ley de Newton, Ley de Hooke ]
+    answer: Ley de Hooke
+
+  - question: Neso y Sao orbitan este planeta, que tiene un anillo que lleva el nombre de un hombre que predijo su posición, John Couch Adams. En 1989, la sonda Voyager 2 sobrevoló la Gran Mancha Oscura de este planeta. La luna más grande de este planeta tiene una notable órbita retrógrada y se llama Tritón. El radio de este gigante gaseoso es menos de 1000 kilómetros menor que el de Urano. Nombra este octavo planeta desde el Sol.
+    options: [ Urano, Saturno, Neptuno, Júpiter ]
+    answer: Neptuno
+
+  - question: Un postulado que lleva el nombre de este hombre, escrito como E = nhv, afirma que los osciladores tienen energía cuantizada en ciertos conjuntos de materia. Una ley sobre la densidad de la radiación emitida por un cuerpo negro lleva el nombre de este hombre, al igual que un valor de 6.63 por 10^-34 joules por segundo. Identifica a este físico alemán que da nombre a una constante simbolizada con una h minúscula.
+    options: [ Max Born, Max Planck, Heinrich Hertz, Werner Heisenberg ]
+    answer: Max Planck
+
+  - question: Una esfera experimenta este proceso en la solución de Mie. Se dice que la radiación sometida a este proceso sufre reflexiones difusas. Una mayor transmisión para las longitudes de onda más largas es característica de la variedad Tyndall de este fenómeno. En el tipo elástico de este proceso, la dirección de propagación puede cambiar sin que las colisiones causen pérdida de energía. Nombra este proceso que describe la desviación de la luz de una trayectoria recta.
+    options: [ Dispersión, Absorción, Polarización, Interferencia ]
+    answer: Dispersión
