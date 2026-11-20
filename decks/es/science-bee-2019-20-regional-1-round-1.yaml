@@ -47,7 +47,7 @@ cards:
     options: [ Teoría celular, Evolución, Teoría microbiana, Tectónica de placas ]
     answer: Evolución
 
-  - question: La forma de indentación de esta propiedad se mide con la escala Rockwell y con la escala Vickers, en la que se presiona un material con un indentador de diamante. El apatito tiene un valor de 5 en esta propiedad, mientras que el talco tiene un valor de 1. Esta propiedad se define como la resistencia de un mineral a ser rayado. Por el punto, ¿qué propiedad, medida con la escala de Mohs, tiene su valor natural más alto en el diamante?
+  - question: La forma de indentación de esta propiedad se mide con la escala Rockwell y con la escala Vickers, en la que se presiona un material con un indentador de diamante. El apatito tiene un valor de 5 en esta propiedad, mientras que el talco tiene un valor de 1. Esta propiedad se define como la resistencia de un mineral a ser rayado. Para ganar el punto, ¿qué propiedad, medida con la escala de Mohs, tiene su valor natural más alto en el diamante?
     options: [ Dureza, Brillo, Exfoliación, Peso específico ]
     answer: Dureza
 
@@ -119,7 +119,7 @@ cards:
     answer: Lava
     explanation: La roca fundida se llama magma cuando está bajo tierra y lava cuando sale en una erupción.
 
-  - question: El ECMA puede agregar grupos funcionales a un miembro de esta clase de compuestos. Wallace Carothers da nombre a una ecuación que describe el grado en que ocurre la formación de esta clase de compuestos. Pueden formarse entrecruzamientos entre las cadenas de esta clase de compuestos, que incluye plásticos como el teflón. Por el punto, ¿de qué clase de compuestos formados por monómeros que se repiten es el nailon un miembro sintético?
+  - question: El ECMA puede agregar grupos funcionales a un miembro de esta clase de compuestos. Wallace Carothers da nombre a una ecuación que describe el grado en que ocurre la formación de esta clase de compuestos. Pueden formarse entrecruzamientos entre las cadenas de esta clase de compuestos, que incluye plásticos como el teflón. Para ganar el punto, ¿de qué clase de compuestos formados por monómeros que se repiten es el nailon un miembro sintético?
     options: [ Monómeros, Aleaciones, Polímeros, Cerámicas ]
     answer: Polímeros
 

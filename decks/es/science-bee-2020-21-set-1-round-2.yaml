@@ -11,7 +11,7 @@ shuffle: true
 shuffleOptions: true
 
 cards:
-  - question: Este animal no humano se usa para preparar la antitoxina tetánica en gran parte del mundo en desarrollo. Nikolai Przewalski da nombre a una especie de este animal, cuya longitud de patas es un ejemplo común de selección direccional en los libros de texto. El diminuto Eohippus fue uno de los primeros antepasados de este animal, entre cuyas razas modernas está el clydesdale. Pariente cercano de las cebras, por el punto, ¿cuál es este animal domesticado al que se le puede poner una silla para montarlo?
+  - question: Este animal no humano se usa para preparar la antitoxina tetánica en gran parte del mundo en desarrollo. Nikolai Przewalski da nombre a una especie de este animal, cuya longitud de patas es un ejemplo común de selección direccional en los libros de texto. El diminuto Eohippus fue uno de los primeros antepasados de este animal, entre cuyas razas modernas está el clydesdale. Pariente cercano de las cebras, para ganar el punto, ¿cuál es este animal domesticado al que se le puede poner una silla para montarlo?
     options: [ Caballo, Camello, Vaca, Llama ]
     answer: Caballo
     explanation: "También se acepta: Equus, equino."
@@ -24,7 +24,7 @@ cards:
     options: [ Granito, Obsidiana, Basalto, Piedra caliza ]
     answer: Basalto
 
-  - question: Los tipos aleatorios de estas construcciones se llaman Las Vegas o Montecarlo según si pueden fallar o no. Dos de estas construcciones, que llevan el nombre de Kruskal y Prim, son “voraces”, es decir, siempre toman la decisión óptima a nivel local. La notación “O grande” describe el tiempo de ejecución de estos métodos, que pueden usar la técnica de “divide y vencerás”. Por el punto, ¿con qué métodos paso a paso, que usan las computadoras para resolver problemas, se pueden hacer búsquedas y ordenamientos?
+  - question: Los tipos aleatorios de estas construcciones se llaman Las Vegas o Montecarlo según si pueden fallar o no. Dos de estas construcciones, que llevan el nombre de Kruskal y Prim, son “voraces”, es decir, siempre toman la decisión óptima a nivel local. La notación “O grande” describe el tiempo de ejecución de estos métodos, que pueden usar la técnica de “divide y vencerás”. Para ganar el punto, ¿con qué métodos paso a paso, que usan las computadoras para resolver problemas, se pueden hacer búsquedas y ordenamientos?
     options:
       - Compiladores
       - Algoritmos
@@ -32,12 +32,12 @@ cards:
       - Sistemas operativos
     answer: Algoritmos
 
-  - question: El canal de YouTube de esta organización produce la serie Eons, que trata sobre la evolución y las formas de vida antiguas. Esta organización también distribuye la serie de divulgación científica Nova. Chris y Martin Kratt han protagonizado dos programas sobre ciencia animal para esta organización, empezando por Zoboombafoo. Equivalente televisivo de NPR, por el punto, ¿cuál es esta organización de televisión educativa sin fines de lucro, que transmite programas como Plaza Sésamo y Arthur?
+  - question: El canal de YouTube de esta organización produce la serie Eons, que trata sobre la evolución y las formas de vida antiguas. Esta organización también distribuye la serie de divulgación científica Nova. Chris y Martin Kratt han protagonizado dos programas sobre ciencia animal para esta organización, empezando por Zoboombafoo. Equivalente televisivo de NPR, para ganar el punto, ¿cuál es esta organización de televisión educativa sin fines de lucro, que transmite programas como Plaza Sésamo y Arthur?
     options: [ PBS, BBC, National Geographic, Discovery Channel ]
     answer: PBS
     explanation: Son las siglas en inglés de Public Broadcasting Service (Servicio de Radiodifusión Pública).
 
-  - question: Como el organismo modelo Chlamydomonas tiene uno solo de estos organelos, y de gran tamaño, es fácil detectar a los mutantes que carecen de carotenoides. El tejido del mesófilo es rico en este organelo, cuyo estroma contiene la enzima rubisco para el ciclo de Calvin y cuyas membranas tilacoides son el lugar de las reacciones dependientes de la luz. Por el punto, ¿de qué organelos verdes de las células vegetales, donde ocurre la fotosíntesis, se libera oxígeno gaseoso?
+  - question: Como el organismo modelo Chlamydomonas tiene uno solo de estos organelos, y de gran tamaño, es fácil detectar a los mutantes que carecen de carotenoides. El tejido del mesófilo es rico en este organelo, cuyo estroma contiene la enzima rubisco para el ciclo de Calvin y cuyas membranas tilacoides son el lugar de las reacciones dependientes de la luz. Para ganar el punto, ¿de qué organelos verdes de las células vegetales, donde ocurre la fotosíntesis, se libera oxígeno gaseoso?
     options: [ Mitocondrias, Vacuolas, Ribosomas, Cloroplastos ]
     answer: Cloroplastos
 
@@ -109,7 +109,7 @@ cards:
     answer: Fuego
     explanation: "También se acepta: combustión, llamas."
 
-  - question: Hoy en día, para bajar esta cantidad se prefieren menos los betabloqueadores que los inhibidores de la ECA, que actúan causando vasodilatación. Para medir esta cantidad se usa un esfigmomanómetro; sus componentes sistólico y diastólico pueden determinarse a mano con un estetoscopio y un brazalete inflable que se coloca alrededor del brazo. Por el punto, ¿qué cantidad cardiovascular tiene un valor normal de 120 sobre 80 milímetros de mercurio?
+  - question: Hoy en día, para bajar esta cantidad se prefieren menos los betabloqueadores que los inhibidores de la ECA, que actúan causando vasodilatación. Para medir esta cantidad se usa un esfigmomanómetro; sus componentes sistólico y diastólico pueden determinarse a mano con un estetoscopio y un brazalete inflable que se coloca alrededor del brazo. Para ganar el punto, ¿qué cantidad cardiovascular tiene un valor normal de 120 sobre 80 milímetros de mercurio?
     options:
       - Glucosa en sangre
       - Nivel de colesterol
@@ -121,7 +121,7 @@ cards:
     options: [ Sodio, Potasio, Calcio, Hierro ]
     answer: Calcio
 
-  - question: Una teoría sugiere que este fenómeno está mediado por un bosón sin masa y de espín 2. Las observaciones de un eclipse solar demostraron que este fenómeno puede curvar la luz como parte de la “lente” que lleva su nombre. En la relatividad, esta fuerza se concibe como la curvatura del espacio-tiempo. En la Tierra, esta fuerza provoca una aceleración de 9.8 metros por segundo al cuadrado. Por el punto, nombra esta fuerza, la más débil de las fuerzas fundamentales, que hace que los objetos caigan al suelo.
+  - question: Una teoría sugiere que este fenómeno está mediado por un bosón sin masa y de espín 2. Las observaciones de un eclipse solar demostraron que este fenómeno puede curvar la luz como parte de la “lente” que lleva su nombre. En la relatividad, esta fuerza se concibe como la curvatura del espacio-tiempo. En la Tierra, esta fuerza provoca una aceleración de 9.8 metros por segundo al cuadrado. Para ganar el punto, nombra esta fuerza, la más débil de las fuerzas fundamentales, que hace que los objetos caigan al suelo.
     options:
       - Electromagnetismo
       - Gravedad
@@ -151,7 +151,7 @@ cards:
     options: [ Primates, Roedores, Murciélagos, Carnívoros ]
     answer: Primates
 
-  - question: Voyager descubrió en el polo norte de este planeta un patrón de nubes llamado su “hexágono”. Unas depresiones en la superficie de una luna de este planeta reciben el apodo de “rayas de tigre”. Otra luna de este planeta, Prometeo, es un satélite pastor, y la división de Cassini está presente en una característica importante de este planeta. Con la menor densidad de todos los planetas del sistema solar, por el punto, ¿cuál es este sexto planeta desde el Sol, conocido por su extenso sistema de anillos?
+  - question: Voyager descubrió en el polo norte de este planeta un patrón de nubes llamado su “hexágono”. Unas depresiones en la superficie de una luna de este planeta reciben el apodo de “rayas de tigre”. Otra luna de este planeta, Prometeo, es un satélite pastor, y la división de Cassini está presente en una característica importante de este planeta. Con la menor densidad de todos los planetas del sistema solar, para ganar el punto, ¿cuál es este sexto planeta desde el Sol, conocido por su extenso sistema de anillos?
     options: [ Júpiter, Urano, Neptuno, Saturno ]
     answer: Saturno
 

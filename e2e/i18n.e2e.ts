@@ -84,6 +84,25 @@ test.describe("a browser set to Spanish", () => {
     await expect(page.getByRole("alert")).toHaveText("Por favor, usa letras de un solo alfabeto en tu apodo.");
   });
 
+  test("reads the built-in decks in Spanish, and the originals again in English", async ({ page }) => {
+    await page.goto("/");
+    await startGuestInSpanish(page, unique("Lector"));
+    const spanish = page.getByRole("heading", { name: "Science Bee · Guía de estudio del Red Set" });
+    await expect(spanish).toHaveAttribute("lang", "es");
+    await expect(page.getByRole("heading", { name: "Science Bee · Red Set Study Guide" })).toHaveCount(0);
+    // A translated deck is in the app's language, so it needs no language tag.
+    await expect(page.locator(".deck", { has: spanish })).not.toContainText("Inglés");
+
+    await page.getByRole("button", { name: "Estudiar Science Bee · Guía de estudio del Red Set" }).click();
+    await page.getByRole("button", { name: /Empezar a practicar/ }).click();
+    await expect(page.locator(".question-sheet .question")).toHaveAttribute("lang", "es");
+    await page.getByRole("button", { name: "← Mazos" }).click();
+
+    await page.getByRole("button", { name: "English" }).click();
+    await expect(page.getByRole("heading", { name: "Science Bee · Red Set Study Guide" })).toHaveAttribute("lang", "en");
+    await expect(page.getByRole("heading", { name: "Science Bee · Guía de estudio del Red Set" })).toHaveCount(0);
+  });
+
   test("reads a broken deck's problems in Spanish", async ({ page }) => {
     await page.goto("/");
     await startGuestInSpanish(page, unique("Rota"));

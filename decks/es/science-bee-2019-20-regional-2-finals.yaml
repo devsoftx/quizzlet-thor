@@ -66,7 +66,7 @@ cards:
     answer: Procesadores
     explanation: "También se acepta: microprocesadores, unidades centrales de procesamiento (CPU)."
 
-  - question: Para esta enfermedad, Merck anunció un estudio llamado EPOCH para probar el verubecestat, un inhibidor de la beta-secretasa 1; el estudio no logró reducir los ovillos neurofibrilares causados por proteínas tau hiperfosforiladas ni los niveles de placas de beta-amiloide, dos rasgos presentes en el cerebro de los pacientes que padecen, por el punto, ¿qué enfermedad neurodegenerativa, que representa alrededor del 70% de los casos de demencia?
+  - question: Para esta enfermedad, Merck anunció un estudio llamado EPOCH para probar el verubecestat, un inhibidor de la beta-secretasa 1; el estudio no logró reducir los ovillos neurofibrilares causados por proteínas tau hiperfosforiladas ni los niveles de placas de beta-amiloide, dos rasgos presentes en el cerebro de los pacientes que padecen, para ganar el punto, ¿qué enfermedad neurodegenerativa, que representa alrededor del 70% de los casos de demencia?
     options:
       - Enfermedad de Parkinson
       - Enfermedad de Alzheimer
@@ -130,7 +130,7 @@ cards:
     options: [ Gases, Líquidos, Sólidos, Condensados de Bose-Einstein ]
     answer: Gases
 
-  - question: 109P/Swift-Tuttle es el objeto progenitor de uno de estos eventos, que ocurre en agosto y toma su nombre de la constelación de Perseo. El cometa Tempel-Tuttle está asociado con algunos de estos eventos, que ocurren en la constelación de Leo. Las Perseidas y las Leónidas son ejemplos de, por el punto, ¿qué eventos en los que los meteoros parecen «estrellas fugaces» que salen de un solo punto en el espacio?
+  - question: 109P/Swift-Tuttle es el objeto progenitor de uno de estos eventos, que ocurre en agosto y toma su nombre de la constelación de Perseo. El cometa Tempel-Tuttle está asociado con algunos de estos eventos, que ocurren en la constelación de Leo. Las Perseidas y las Leónidas son ejemplos de, para ganar el punto, ¿qué eventos en los que los meteoros parecen «estrellas fugaces» que salen de un solo punto en el espacio?
     options: [ Auroras, Eclipses lunares, Supernovas, Lluvias de meteoros ]
     answer: Lluvias de meteoros
     explanation: "También se acepta: tormentas de meteoros, estallidos de meteoros."
@@ -160,6 +160,6 @@ cards:
     options: [ Azul, Rojo, Verde, Amarillo ]
     answer: Verde
 
-  - question: La estructura y distribución de un ecosistema formado por estas especies da título a la primera monografía de Charles Darwin. Los miembros de estas llamadas «flores de piedra» son hermatípicos y obtienen su energía de las zooxantelas. Por el punto, nombra estos invertebrados marinos que son fundamentales para los ecosistemas que llevan su nombre, conocidos como arrecifes.
+  - question: La estructura y distribución de un ecosistema formado por estas especies da título a la primera monografía de Charles Darwin. Los miembros de estas llamadas «flores de piedra» son hermatípicos y obtienen su energía de las zooxantelas. Para ganar el punto, nombra estos invertebrados marinos que son fundamentales para los ecosistemas que llevan su nombre, conocidos como arrecifes.
     options: [ Erizos de mar, Corales, Estrellas de mar, Percebes ]
     answer: Corales

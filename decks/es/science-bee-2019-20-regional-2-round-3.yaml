@@ -37,7 +37,7 @@ cards:
       - Punto crítico
     answer: Equilibrio químico
 
-  - question: 496 y 8128 son dos ejemplos de estos números, de los cuales se conocen 51 en total, que corresponden a los 51 números primos de Mersenne conocidos. “Deficiente” y “abundante” son adjetivos para los números que no son de este tipo. Como 1, 2, 4, 7 y 14 son divisores de 28 y suman 28, el 28 es un número de este tipo. Por el punto, ¿de qué tipo de número, igual a la suma de sus divisores propios, es el seis el ejemplo más pequeño?
+  - question: 496 y 8128 son dos ejemplos de estos números, de los cuales se conocen 51 en total, que corresponden a los 51 números primos de Mersenne conocidos. “Deficiente” y “abundante” son adjetivos para los números que no son de este tipo. Como 1, 2, 4, 7 y 14 son divisores de 28 y suman 28, el 28 es un número de este tipo. Para ganar el punto, ¿de qué tipo de número, igual a la suma de sus divisores propios, es el seis el ejemplo más pequeño?
     options:
       - Números perfectos
       - Números primos
@@ -49,7 +49,7 @@ cards:
     options: [ Presas, Torres, Diques, Puentes ]
     answer: Puentes
 
-  - question: Entre los ejemplos de estos objetos están Juan de Fuca y Nazca. Vine, Matthews y Morley predijeron que estos objetos contribuían a la expansión del fondo oceánico. Transformante, divergente y convergente son tres tipos de límites entre estos objetos, que pueden formar montañas y causar terremotos. Por el punto, ¿qué grandes secciones de la corteza terrestre causan la deriva continental?
+  - question: Entre los ejemplos de estos objetos están Juan de Fuca y Nazca. Vine, Matthews y Morley predijeron que estos objetos contribuían a la expansión del fondo oceánico. Transformante, divergente y convergente son tres tipos de límites entre estos objetos, que pueden formar montañas y causar terremotos. Para ganar el punto, ¿qué grandes secciones de la corteza terrestre causan la deriva continental?
     options: [ Plumas del manto, Fosas oceánicas, Placas tectónicas, Arcos volcánicos ]
     answer: Placas tectónicas
 

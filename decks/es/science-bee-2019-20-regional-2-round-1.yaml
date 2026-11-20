@@ -71,7 +71,7 @@ cards:
     options: [ Chacales, Coyotes, Zorros, Dingos ]
     answer: Zorros
 
-  - question: La escala de Mulliken de esta propiedad toma el promedio de la afinidad electrónica y la primera energía de ionización. Las diferencias en esta propiedad determinan si un enlace es iónico, covalente polar o covalente no polar. Una escala común para medir esta propiedad lleva el nombre de Pauling. El flúor tiene el valor más alto de, por el punto, ¿qué propiedad, la tendencia de los átomos a atraer electrones?
+  - question: La escala de Mulliken de esta propiedad toma el promedio de la afinidad electrónica y la primera energía de ionización. Las diferencias en esta propiedad determinan si un enlace es iónico, covalente polar o covalente no polar. Una escala común para medir esta propiedad lleva el nombre de Pauling. El flúor tiene el valor más alto de, para ganar el punto, ¿qué propiedad, la tendencia de los átomos a atraer electrones?
     options:
       - Afinidad electrónica
       - Electronegatividad
@@ -167,6 +167,6 @@ cards:
     options: [ Horno tostador, Horno de convección, Horno de microondas, Horno rostizador ]
     answer: Horno de microondas
 
-  - question: Entre los intentos de debilitar estos eventos está uno que usó yoduro de plata en el Proyecto Stormfury. Entre los casos mayores de categoría 5 de estos eventos, medidos en la escala de Saffir-Simpson, están Kenna y Patricia. La división del Servicio Meteorológico Nacional que vigila estos eventos está en Miami. Afectan sobre todo a países del mar Caribe y a estados como Florida. Por el punto, ¿qué ciclones tropicales ocurren en el océano Atlántico?
+  - question: Entre los intentos de debilitar estos eventos está uno que usó yoduro de plata en el Proyecto Stormfury. Entre los casos mayores de categoría 5 de estos eventos, medidos en la escala de Saffir-Simpson, están Kenna y Patricia. La división del Servicio Meteorológico Nacional que vigila estos eventos está en Miami. Afectan sobre todo a países del mar Caribe y a estados como Florida. Para ganar el punto, ¿qué ciclones tropicales ocurren en el océano Atlántico?
     options: [ Tornados, Huracanes, Monzones, Tormentas del noreste ]
     answer: Huracanes

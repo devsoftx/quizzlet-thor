@@ -27,7 +27,7 @@ cards:
     options: [ Amoníaco, Agua, Metano, Peróxido de hidrógeno ]
     answer: Agua
 
-  - question: Este objeto puede ser “rozado” por los Kracht y los Marsden. De este cuerpo surgen protuberancias y espículas. Ciertos objetos de este cuerpo siguen un ciclo de 11 años, pasan por el mínimo de Dalton y tienen temperaturas más bajas que la superficie que los rodea. La cromosfera se encuentra por fuera de la fotosfera de este cuerpo. Por el punto, ¿de qué estrella, alrededor de la cual gira la Tierra, forma parte la corona?
+  - question: Este objeto puede ser “rozado” por los Kracht y los Marsden. De este cuerpo surgen protuberancias y espículas. Ciertos objetos de este cuerpo siguen un ciclo de 11 años, pasan por el mínimo de Dalton y tienen temperaturas más bajas que la superficie que los rodea. La cromosfera se encuentra por fuera de la fotosfera de este cuerpo. Para ganar el punto, ¿de qué estrella, alrededor de la cual gira la Tierra, forma parte la corona?
     options: [ Sol, Sirio, Próxima Centauri, Estrella Polar ]
     answer: Sol
     explanation: "También se acepta su nombre en latín, Sol, que en español se escribe igual."
@@ -40,7 +40,7 @@ cards:
       - Velocidad de la luz
     answer: Velocidad de la luz
 
-  - question: En los humanos, el cono de mayor longitud de onda percibe principalmente este color, y las células que llevan el nombre de este color se llaman eritrocitos. Aunque pueden variar mucho, a las floraciones de algas a veces se les llama “mareas” de este color. La primera etapa de un moretón suele ser de este color, y la inflamación puede hacer que la piel se ponga de este color. Por el punto, ¿qué color, que les da nombre, adquieren las células sanguíneas de los mamíferos debido al átomo de hierro de la hemoglobina?
+  - question: En los humanos, el cono de mayor longitud de onda percibe principalmente este color, y las células que llevan el nombre de este color se llaman eritrocitos. Aunque pueden variar mucho, a las floraciones de algas a veces se les llama “mareas” de este color. La primera etapa de un moretón suele ser de este color, y la inflamación puede hacer que la piel se ponga de este color. Para ganar el punto, ¿qué color, que les da nombre, adquieren las células sanguíneas de los mamíferos debido al átomo de hierro de la hemoglobina?
     options: [ Azul, Verde, Rojo, Morado ]
     answer: Rojo
 
@@ -79,11 +79,11 @@ cards:
     answer: Gases nobles
     explanation: "También se acepta: grupo 18, grupo 8A."
 
-  - question: La unidad centimorgan sirve para mapear loci en estas estructuras, formadas por brazos p y q. El entrecruzamiento ocurre entre pares homólogos de estas estructuras. Un cariotipo puede mostrar el número diploide de estas estructuras, que en los humanos es 46, así como la presencia de tres copias del número 21 en un paciente con síndrome de Down. Por el punto, ¿cuáles son estas estructuras de ADN que se alinean en el ecuador durante la metafase de la mitosis?
+  - question: La unidad centimorgan sirve para mapear loci en estas estructuras, formadas por brazos p y q. El entrecruzamiento ocurre entre pares homólogos de estas estructuras. Un cariotipo puede mostrar el número diploide de estas estructuras, que en los humanos es 46, así como la presencia de tres copias del número 21 en un paciente con síndrome de Down. Para ganar el punto, ¿cuáles son estas estructuras de ADN que se alinean en el ecuador durante la metafase de la mitosis?
     options: [ Genes, Centriolos, Cromosomas, Plásmidos ]
     answer: Cromosomas
 
-  - question: Esta estructura está por encima de la discontinuidad de Moho, que la separa de la capa inferior. La parte externa de la litosfera está formada por esta capa, que puede ser oceánica o continental. Esta estructura se genera en las dorsales oceánicas, se destruye en las zonas de subducción y está compuesta principalmente de sílice y oxígeno. Por el punto, nombra esta capa que descansa sobre el manto y es la más externa de la superficie de la Tierra.
+  - question: Esta estructura está por encima de la discontinuidad de Moho, que la separa de la capa inferior. La parte externa de la litosfera está formada por esta capa, que puede ser oceánica o continental. Esta estructura se genera en las dorsales oceánicas, se destruye en las zonas de subducción y está compuesta principalmente de sílice y oxígeno. Para ganar el punto, nombra esta capa que descansa sobre el manto y es la más externa de la superficie de la Tierra.
     options: [ Manto, Corteza, Astenosfera, Núcleo interno ]
     answer: Corteza
 
@@ -103,7 +103,7 @@ cards:
       - Programas antivirus
     answer: Motores de búsqueda
 
-  - question: En coordenadas polares, la ecuación “r igual a la constante A” produce una de estas figuras. El producto cartesiano de dos de estas figuras da un toro. Esta sección cónica se define por una excentricidad de cero, y no se puede construir, solo con regla y compás, un cuadrado con la misma área que esta figura. Por el punto, ¿de qué figura bidimensional, formada por todos los puntos equidistantes de un centro fijo, se obtiene el área al multiplicar pi por el radio al cuadrado?
+  - question: En coordenadas polares, la ecuación “r igual a la constante A” produce una de estas figuras. El producto cartesiano de dos de estas figuras da un toro. Esta sección cónica se define por una excentricidad de cero, y no se puede construir, solo con regla y compás, un cuadrado con la misma área que esta figura. Para ganar el punto, ¿de qué figura bidimensional, formada por todos los puntos equidistantes de un centro fijo, se obtiene el área al multiplicar pi por el radio al cuadrado?
     options: [ Elipse, Círculo, Parábola, Hipérbola ]
     answer: Círculo
 
@@ -116,7 +116,7 @@ cards:
     answer: VIH
     explanation: Son las siglas de virus de inmunodeficiencia humana.
 
-  - question: Un poema escrito después de uno de estos eventos dice que “al menos una cosa es segura, la luz tiene peso”. Ese poema lo escribió Arthur Eddington, quien puso a prueba la teoría de la relatividad general durante uno de estos eventos. Jules Janssen y Norman Lockyer descubrieron el helio en una línea espectral durante uno de estos eventos. Por el punto, ¿qué eventos celestes, en los que se bloquea la luz del Sol, pueden ser de tipo “solar” y “lunar”?
+  - question: Un poema escrito después de uno de estos eventos dice que “al menos una cosa es segura, la luz tiene peso”. Ese poema lo escribió Arthur Eddington, quien puso a prueba la teoría de la relatividad general durante uno de estos eventos. Jules Janssen y Norman Lockyer descubrieron el helio en una línea espectral durante uno de estos eventos. Para ganar el punto, ¿qué eventos celestes, en los que se bloquea la luz del Sol, pueden ser de tipo “solar” y “lunar”?
     options: [ Equinoccios, Lluvias de meteoros, Eclipses, Auroras ]
     answer: Eclipses
 
@@ -124,7 +124,7 @@ cards:
     options: [ Plata, Oro, Cobre, Plomo ]
     answer: Oro
 
-  - question: Un supuesto de esta teoría es que la aptitud diferencial es heredable, y su principal defensor fue influenciado por Malthus. En la forma convergente de este proceso se crean estructuras análogas, y la variación genética es un requisito previo para que este proceso ocurra. Se plantea que este proceso ocurre por selección natural. Por el punto, ¿cuál es esta teoría sobre los cambios heredados en las poblaciones a lo largo del tiempo, propuesta por Charles Darwin?
+  - question: Un supuesto de esta teoría es que la aptitud diferencial es heredable, y su principal defensor fue influenciado por Malthus. En la forma convergente de este proceso se crean estructuras análogas, y la variación genética es un requisito previo para que este proceso ocurra. Se plantea que este proceso ocurre por selección natural. Para ganar el punto, ¿cuál es esta teoría sobre los cambios heredados en las poblaciones a lo largo del tiempo, propuesta por Charles Darwin?
     options:
       - Teoría de la evolución
       - Teoría microbiana
@@ -132,7 +132,7 @@ cards:
       - Generación espontánea
     answer: Teoría de la evolución
 
-  - question: La hiperhidrosis de este órgano puede tratarse con MiraDry, una técnica de microondas. Un síntoma temprano de la lepra es la pérdida de la sensibilidad al dolor en este órgano. Los pelos urticantes de algunas orugas irritan los ojos y también este órgano. Los ácaros de la sarna atacan las capas epidérmicas de este órgano, en el que la infección bacteriana de las glándulas sebáceas causa acné. Por el punto, ¿a qué órgano externo del ser humano, que produce sudor, le da color el pigmento melanina?
+  - question: La hiperhidrosis de este órgano puede tratarse con MiraDry, una técnica de microondas. Un síntoma temprano de la lepra es la pérdida de la sensibilidad al dolor en este órgano. Los pelos urticantes de algunas orugas irritan los ojos y también este órgano. Los ácaros de la sarna atacan las capas epidérmicas de este órgano, en el que la infección bacteriana de las glándulas sebáceas causa acné. Para ganar el punto, ¿a qué órgano externo del ser humano, que produce sudor, le da color el pigmento melanina?
     options: [ Hígado, Riñón, Pulmón, Piel ]
     answer: Piel
 
