@@ -53,13 +53,30 @@ export const TEMPLATE_URL = TEMPLATE_URLS.en;
 const IMPORTED_KEY = "quizzlet:imported-decks";
 const BEST_KEY = "quizzlet:best-scores";
 
-// Every .yaml/.yml file in /decks is bundled in. In dev, adding or editing a
-// file there updates the app automatically.
-const bundledFiles = import.meta.glob<string>(["/decks/*.yaml", "/decks/*.yml"], {
+// Every .yaml/.yml file in /decks is bundled in, and so are its translations,
+// kept under the same file name in a folder named after their language
+// (decks/es/ for Spanish). In dev, adding or editing a file there updates the
+// app automatically.
+const bundledFiles = import.meta.glob<string>(["/decks/*.yaml", "/decks/*.yml", "/decks/*/*.yaml", "/decks/*/*.yml"], {
   query: "?raw",
   import: "default",
   eager: true,
 });
+
+/** A file in decks/: an original, or its translation in decks/<translation>/. */
+interface BundledFile {
+  fileName: string;
+  /** The language folder a translation is in ("es"); null for an original. */
+  translation: string | null;
+  text: string;
+}
+
+function bundledFileList(): BundledFile[] {
+  return Object.entries(bundledFiles).map(([path, text]) => {
+    const [first, second] = path.replace(/^\/decks\//, "").split("/");
+    return second ? { fileName: second, translation: first, text } : { fileName: first, translation: null, text };
+  });
+}
 
 function toEntry(id: string, fileName: string, source: DeckSource, text: string, messages?: DeckMessages): DeckEntry {
   const result = parseDeck(text, titleFromFileName(fileName, messages), messages);
@@ -81,19 +98,36 @@ function sortName(entry: DeckEntry): string {
   return entry.ok ? entry.deck.title : entry.fileName;
 }
 
+function bundledEntry(file: BundledFile, messages?: DeckMessages): DeckEntry {
+  const path = file.translation ? `${file.translation}/${file.fileName}` : file.fileName;
+  const entry = toEntry(`bundled:${path}`, path, "bundled", file.text, messages);
+  // Originals are written in English unless their file says otherwise, so screen
+  // readers read them in an English voice even when the app is in Spanish; a
+  // translation is in its folder's language.
+  const language = file.translation ?? "en";
+  return entry.ok && !entry.deck.language ? { ...entry, deck: { ...entry.deck, language } } : entry;
+}
+
+const byName = (a: DeckEntry, b: DeckEntry) => sortName(a).localeCompare(sortName(b));
+
 /**
- * The decks in decks/. They are written in English unless their file says
- * otherwise (`language: es`), so screen readers read them in an English voice
- * even when the app is in Spanish.
+ * The decks in decks/, in `language` where a translation exists (decks/es/ for
+ * Spanish) and as written otherwise: one entry per deck either way.
  */
-export function loadBundledDecks(messages?: DeckMessages): DeckEntry[] {
-  return Object.entries(bundledFiles)
-    .map(([path, text]) => {
-      const fileName = path.replace(/^.*\//, "");
-      const entry = toEntry(`bundled:${fileName}`, fileName, "bundled", text, messages);
-      return entry.ok && !entry.deck.language ? { ...entry, deck: { ...entry.deck, language: "en" } } : entry;
-    })
-    .sort((a, b) => sortName(a).localeCompare(sortName(b)));
+export function loadBundledDecks(messages?: DeckMessages, language = "en"): DeckEntry[] {
+  const files = bundledFileList();
+  const translated = new Map(files.filter((f) => f.translation === language).map((f) => [f.fileName, f]));
+  return files
+    .filter((f) => f.translation === null)
+    .map((f) => bundledEntry(translated.get(f.fileName) ?? f, messages))
+    .sort(byName);
+}
+
+/** Every file in decks/, originals and translations alike (to check them all). */
+export function loadAllBundledDecks(messages?: DeckMessages): DeckEntry[] {
+  return bundledFileList()
+    .map((f) => bundledEntry(f, messages))
+    .sort(byName);
 }
 
 // --- A parent's private decks ---
