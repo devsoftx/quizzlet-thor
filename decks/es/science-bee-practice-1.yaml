@@ -1,0 +1,148 @@
+# Preguntas de práctica del Science Bee 2026, para 2.º a 4.º grado — preguntas 1 a 30 de 91.
+# Source: docs/2026_Science_Bee_Practice_Questions_Grades_2_to_4.docx
+# El texto de las preguntas proviene del documento; las opciones incorrectas se agregaron para la opción múltiple.
+# Traducción al español de decks/science-bee-practice-1.yaml.
+
+title: Science Bee Práctica · Parte 1
+description: "Preguntas de práctica para 2.º a 4.º grado, 1–30 (de 91). Para leer en voz alta: la pista más fácil va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Una pirámide de energía usa estas posiciones para mostrar cómo se mueve la energía de los alimentos a través de un ecosistema. Las plantas suelen ocupar la primera posición; los animales que comen plantas, la segunda; y los animales que se comen a esos animales, la tercera. Nombra estos niveles de alimentación de una cadena alimentaria; la segunda palabra de su nombre empieza con «tróf».
+    options: [ Redes alimentarias, Niveles tróficos, Hábitats, Biomas ]
+    answer: Niveles tróficos
+    explanation: También se llaman niveles de alimentación.
+
+  - question: Los científicos clasifican estas tormentas observando los daños que causan sus vientos. Pueden formarse debajo de poderosas nubes de tormenta y hacer girar por el aire polvo y otros objetos. Nombra estas columnas de aire giratorias que tocan el suelo, a menudo parecen embudos y también se llaman torbellinos.
+    options: [ Tornados, Huracanes, Ventiscas, Tsunamis ]
+    answer: Tornados
+    explanation: También se llaman torbellinos.
+
+  - question: Casi toda la masa de un átomo está concentrada en esta pequeñísima parte. Los electrones se encuentran fuera de ella, y por lo general contiene protones y neutrones. Nombra este denso centro del átomo, que tiene el mismo nombre que el centro de control de la célula.
+    options: [ Electrón, Neutrón, Molécula, Núcleo ]
+    answer: Núcleo
+
+  - question: Algunos de estos seres vivos ayudan a hacer yogur y queso. Cada uno está formado por una sola célula, y algunos ayudan a nuestro cuerpo, mientras que otros pueden enfermarnos. Nombra estos diminutos organismos, entre los que están la E. coli y la Salmonella; algunos son gérmenes que se tratan con antibióticos.
+    options: [ Virus, Hongos, Bacterias, Algas ]
+    answer: Bacterias
+
+  - question: El oxígeno gaseoso y el ozono son ejemplos de distintas formas de un mismo elemento. El carbono también puede tener propiedades muy diferentes según cómo se ordenen sus átomos, como en el diamante y el grafito. Nombra esta capacidad de un elemento de existir en distintas formas, una palabra que empieza con «alo».
+    options: [ Aleaciones, Alotropía, Isótopos, Evaporación ]
+    answer: Alotropía
+    explanation: El diamante y el grafito son alótropos (formas distintas) del carbono.
+
+  - question: Esta propiedad no cambia cuando un objeto se traslada de la Tierra a la Luna. Los objetos que tienen más de ella son más difíciles de acelerar o de frenar, y es diferente del peso. Nombra la cantidad de materia de un objeto, que se mide en gramos o kilogramos.
+    options: [ Masa, Peso, Volumen, Densidad ]
+    answer: Masa
+    explanation: Tu masa es la misma en la Luna, pero tu peso es menor.
+
+  - question: Estos animales tenían una cubierta exterior dura dividida a lo largo en tres lóbulos. Vivían en océanos antiguos, y muchos podían enrollarse como las cochinillas. Nombra estos animales marinos extintos que a menudo se encuentran como fósiles segmentados, cuyo nombre empieza con «tri».
+    options: [ Tricerátops, Amonites, Cangrejos herradura, Trilobites ]
+    answer: Trilobites
+
+  - question: Las moléculas de agua se ordenan en patrones de seis lados a medida que crecen los cristales de este material. Sus cristales se forman en nubes frías y pueden unirse para formar copos más grandes. Nombra esta precipitación congelada que cae en copos blancos y sirve para hacer un muñeco de nieve.
+    options: [ Granizo, Aguanieve, Nieve, Lluvia ]
+    answer: Nieve
+
+  - question: El número de estas partículas les indica a los científicos a qué elemento pertenece un átomo. Están en el centro del átomo junto con los neutrones, y su carga eléctrica es opuesta a la del electrón. Nombra estas partículas con carga positiva del núcleo de un átomo.
+    options: [ Electrón, Protón, Neutrón, Fotón ]
+    answer: Protón
+
+  - question: Este órgano tiene secciones que suben, cruzan y bajan dentro de tu barriga. Les quita el agua a los restos de comida y ayuda a convertirlos en desechos sólidos. Nombra esta parte principal del intestino grueso, cuyo nombre de cinco letras empieza con C.
+    options: [ Colon, Estómago, Hígado, Apéndice ]
+    answer: Colon
+
+  - question: En las profundidades de la Tierra, el gran calor y la presión pueden convertir el carbono en este cristal. Raya otros minerales y también se usa en herramientas que cortan materiales duros. Nombra este mineral natural, el más duro de todos, una gema brillante que a menudo se monta en anillos.
+    options: [ Cuarzo, Grafito, Rubí, Diamante ]
+    answer: Diamante
+
+  - question: El agua hace esto a una temperatura más baja en una montaña alta que al nivel del mar. Mientras ocurre, se forman burbujas de vapor de agua en todo el líquido, que suben a la superficie. Nombra lo que hace el agua cuando se calienta a unos 100 grados Celsius al nivel del mar y burbujea en una olla.
+    options: [ Congelarse, Derretirse, Hervir, Condensarse ]
+    answer: Hervir
+
+  - question: Esta estructura del cuerpo almacena minerales como el calcio. Protege los órganos y trabaja con los músculos para ayudarte a moverte. Nombra la estructura formada por todos tus huesos, incluidos el cráneo, las costillas y la columna vertebral.
+    options: [ Músculos, Esqueleto, Piel, Sistema nervioso ]
+    answer: Esqueleto
+
+  - question: Algunos ejemplos de este relieve crecen a medida que una serie de volcanes submarinos llega a la superficie. Indonesia y Filipinas son ejemplos, con agua que separa muchos pedazos de tierra. Nombra esta palabra que designa un grupo o una cadena de islas, como Hawái.
+    options: [ Archipiélago, Península, Istmo, Continente ]
+    answer: Archipiélago
+
+  - question: Los científicos creen que algunos cometas comienzan en esta región sus largos viajes hacia el Sol. Es una enorme y lejana capa de objetos helados, mucho más allá de los planetas y del cinturón de Kuiper. Nombra esta nube de cometas propuesta, que lleva el nombre del astrónomo Jan Oort.
+    options: [ Cinturón de Kuiper, Cinturón de asteroides, Vía Láctea, Nube de Oort ]
+    answer: Nube de Oort
+
+  - question: El nombre de este dinosaurio significa «rey lagarto tirano». Cazaba sobre dos poderosas patas traseras y tenía mandíbulas enormes, pero brazos muy pequeños. Nombra este famoso dinosaurio carnívoro al que a menudo llaman T. rex.
+    options: [ Velocirraptor, Estegosaurio, Tiranosaurio rex, Braquiosaurio ]
+    answer: Tiranosaurio rex
+
+  - question: Las refinerías separan este material en partes que tienen distintas temperaturas de ebullición. Proviene del subsuelo y se usa para fabricar gasolina, diésel y muchos plásticos. Nombra este combustible fósil líquido, también llamado crudo.
+    options: [ Gas natural, Petróleo, Carbón, Uranio ]
+    answer: Petróleo
+    explanation: También se le llama crudo.
+
+  - question: Las iguanas marinas, que nadan para conseguir alimento, viven de forma natural en estas islas. Las tortugas gigantes y unas aves llamadas pinzones de Darwin también viven en este grupo de islas que pertenece a Ecuador. Nombra estas islas del Pacífico, famosas por la visita de Charles Darwin y por sus animales poco comunes.
+    options:
+      - Islas Galápagos
+      - Islas de Hawái
+      - Islas Canarias
+      - Islas Malvinas
+    answer: Islas Galápagos
+
+  - question: Las células de este tejido vegetal forman tubos que transportan azúcar disuelto. Lleva el alimento fabricado en las hojas a las partes que están creciendo y a las zonas de almacenamiento, como las raíces y los frutos. Nombra este tejido que transporta azúcar y es el compañero del xilema (que transporta agua); su nombre empieza con «flo».
+    options: [ Xilema, Clorofila, Estomas, Floema ]
+    answer: Floema
+    explanation: El xilema sube el agua desde las raíces; el floema transporta el azúcar.
+
+  - question: Una estrella llamada Sirio B es un ejemplo de este objeto. Puede concentrar aproximadamente la masa del Sol en algo del tamaño de la Tierra, y se enfría lentamente a medida que envejece. Nombra este centro pequeño y denso que queda de una estrella como el Sol, cuyo nombre combina un color con una palabra que significa muy pequeño.
+    options: [ Gigante roja, Agujero negro, Enana blanca, Estrella de neutrones ]
+    answer: Enana blanca
+
+  - question: Las diferencias entre el aire cálido y el frío ayudan a crear estas bandas de viento que se mueven rápido. Por lo general soplan de oeste a este, muy por encima del suelo, y ayudan a mover los sistemas meteorológicos. Nombra estas corrientes de aire de alta velocidad que los aviones pueden aprovechar para hacer un viaje más rápido.
+    options: [ Vientos alisios, Corrientes en chorro, Corrientes oceánicas, Monzones ]
+    answer: Corrientes en chorro
+
+  - question: Los cambios en las instrucciones de una célula pueden provocar este grupo de enfermedades. Las células crecen sin control, y algunas pueden formar bultos dañinos o extenderse a otras partes del cuerpo. Nombra este grupo de enfermedades que a menudo se tratan con cirugía, quimioterapia o radiación.
+    options: [ Cáncer, Diabetes, Gripe, Asma ]
+    answer: Cáncer
+
+  - question: A este combustible se le agrega un olor fuerte para que la gente note las fugas. Proviene del subsuelo, es principalmente metano y a menudo llega a los edificios por tuberías. Nombra este combustible gaseoso que se usa en muchas estufas de cocina y calefactores de las casas.
+    options: [ Gasolina, Carbón, Leña, Gas natural ]
+    answer: Gas natural
+
+  - question: Si cortas por la mitad uno con forma de barra, obtienes dos más pequeños, cada uno con dos polos. Estos objetos pueden atraer el hierro, y los polos iguales se repelen entre sí. Nombra un objeto con polo norte y polo sur, que a menudo se usa para sostener una nota en el refrigerador.
+    options: [ Pila, Bombilla, Imán, Palanca ]
+    answer: Imán
+
+  - question: Unos bultitos diminutos con forma de dedo recubren este órgano y lo ayudan a sacar los nutrientes de los alimentos. Es un tubo largo y enrollado donde ocurre gran parte de la digestión y de la absorción de nutrientes. Nombra este órgano digestivo que está después del estómago y antes del intestino grueso.
+    options: [ Intestino grueso, Intestino delgado, Esófago, Estómago ]
+    answer: Intestino delgado
+
+  - question: Algunas sustancias químicas que antes se usaban en aerosoles y refrigeradores dañaron esta parte de la atmósfera. Está muy por encima de la mayoría de las nubes y contiene un gas formado por tres átomos de oxígeno. Nombra esta capa protectora que bloquea gran parte de la dañina luz ultravioleta del Sol.
+    options: [ Capa de ozono, Troposfera, Ionosfera, Magnetosfera ]
+    answer: Capa de ozono
+
+  - question: Dos autos que se mueven igual de rápido pueden tener valores diferentes de esta magnitud si viajan en direcciones distintas. Los científicos la describen con un número y una dirección, como diez metros por segundo hacia el este. Nombra esta palabra que significa rapidez en una dirección determinada.
+    options: [ Rapidez, Aceleración, Distancia, Velocidad ]
+    answer: Velocidad
+    explanation: La velocidad es la rapidez en una dirección determinada — la «rapidez» por sí sola no tiene dirección.
+
+  - question: Esta estructura celular tiene una parte grande y una parte pequeña que trabajan juntas. Sigue un mensaje copiado del ADN y une en cadenas unos bloques de construcción llamados aminoácidos. Nombra esta diminuta estructura celular que fabrica proteínas, a veces llamada la fábrica de proteínas de la célula.
+    options: [ Núcleo, Mitocondria, Ribosoma, Membrana celular ]
+    answer: Ribosoma
+
+  - question: Este proceso convierte parte de la materia en energía en lo profundo de las estrellas. Une diminutos centros atómicos y, en el Sol, convierte el hidrógeno en helio. Nombra este proceso nuclear que une los átomos en lugar de dividirlos y que le da al Sol su energía.
+    options: [ Fisión nuclear, Fusión nuclear, Combustión, Fotosíntesis ]
+    answer: Fusión nuclear
+    explanation: La fisión divide los átomos; la fusión los une.
+
+  - question: Las limaduras de hierro pueden mostrar la forma de esta región invisible. Rodea un cable por el que pasa corriente o un imán, y la aguja de una brújula se alinea con ella. Nombra este campo alrededor de un imán donde actúan las fuerzas magnéticas.
+    options:
+      - Campo magnético
+      - Campo gravitacional
+      - Corriente eléctrica
+      - Onda sonora
+    answer: Campo magnético
