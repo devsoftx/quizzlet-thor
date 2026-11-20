@@ -1,0 +1,176 @@
+# Science Bee 2023–24 Nacional · Final — 33 preguntas.
+# Source: docs/Copy of Science Bee Finals Fix.pdf
+# El texto de las preguntas proviene del documento; las opciones de respuesta incorrectas se agregaron para la opción múltiple.
+# Traducción al español de decks/science-bee-2023-24-nationals-finals.yaml.
+
+title: Science Bee 2023–24 Nacional · Final
+description: "Una ronda anterior del Science Bee. Preguntas para leer en voz alta: la pista más reveladora va al final."
+language: es
+enabled: true
+shuffle: true
+shuffleOptions: true
+
+cards:
+  - question: Los fósiles de estos animales, emparentados con los Chasmosaurus de aspecto parecido, alguna vez se identificaron erróneamente como bisontes antiguos. Se planteó la hipótesis de que estos animales eran ejemplares juveniles de Torosaurus. Los fósiles de estos animales son el fósil estatal de Dakota del Sur, y dos de sus subespecies eran horridus y prorsus. El Tyrannosaurus rex fue probablemente el principal depredador de, por los puntos, ¿qué dinosaurios que quizá se defendían con sus tres cuernos?
+    options: [ Triceratops, Styracosaurus, Protoceratops, Centrosaurus ]
+    answer: Triceratops
+
+  - question: El Laboratorio de Flotabilidad Neutral de esta instalación es una gran piscina hecha para simular actividades extravehiculares. Esta instalación está ubicada en terrenos donados por Humble Oil y la Universidad Rice. Esta instalación contiene un área que lleva el nombre de Christopher C. Kraft Jr., desde donde se dirigieron los vuelos de los programas Skylab y Gemini. Sede del entrenamiento de vuelos espaciales tripulados de la NASA y del Centro de Control de Misión, ¿cuál es, por los puntos, esta instalación de Houston que lleva el nombre del 36.º presidente?
+    options:
+      - Centro Espacial Kennedy
+      - Centro Marshall de Vuelos Espaciales
+      - Centro de Vuelo Espacial Goddard
+      - Centro Espacial Johnson
+    answer: Centro Espacial Johnson
+    explanation: Antes se llamaba Centro de Naves Espaciales Tripuladas.
+
+  - question: Si la configuración inicial de este objeto se asigna al azar, solo hay un 8% de probabilidad de que se pueda completar. Las formas de mover este objeto se indican con las letras mayúsculas y minúsculas F, B, U, D, L y R. Entre las variantes de este objeto está el Pyraminx. Los principiantes suelen resolver este objeto capa por capa, y quizá primero aprendan a resolver una sola cara. ¿Qué colorido rompecabezas físico, tema de las competencias de speedcubing, creó un profesor húngaro de arquitectura?
+    options: [ Megaminx, Skewb, Cubo de Rubik, Square-1 ]
+    answer: Cubo de Rubik
+
+  - question: El estudio de estas estructuras anatómicas se llama desmología. Las versiones artificiales de estas estructuras anatómicas, como el LARS, están hechas de materiales poliméricos y usan partes intraóseas e intraarticulares. Estas estructuras anatómicas, también llamadas «articular larua», tienen formas que incluyen las capsulares y las cruzadas. A diferencia de los tendones, ¿cuál es, por los puntos, este tipo de tejido que une un hueso con otro e incluye el LCA, que se lesiona con frecuencia?
+    options: [ Tendones, Ligamentos, Cartílago, Meniscos ]
+    answer: Ligamentos
+
+  - question: Una carta del Reino Unido que enumera estos fenómenos se divide en tres columnas de trece filas marcadas con rombos. Estos fenómenos son más intensos durante la sicigia, una condición en la que tres cuerpos están alineados. Estos fenómenos pueden producir «ondas» que llevan su nombre (macareos) y que remontan entradas de agua estrechas, y producen variedades «vivas» y «muertas». Nombra estos fenómenos causados por la atracción gravitatoria de la Luna sobre la Tierra.
+    options: [ Mareas, Corrientes oceánicas, Marejadas ciclónicas, Seiches ]
+    answer: Mareas
+
+  - question: La enzima DD-transpeptidasa es inactivada por una clase de estos compuestos que contienen un anillo de amida de cuatro miembros. La resistencia a estos compuestos puede ser conferida por casetes de genes que se transfieren horizontalmente en plásmidos. Los organismos gramnegativos suelen producir betalactamasas para descomponer una clase de estos compuestos que incluye la cefalosporina y la penicilina. Nombra estos compuestos que combaten las infecciones bacterianas.
+    options: [ Antivirales, Antifúngicos, Antihistamínicos, Antibióticos ]
+    answer: Antibióticos
+    explanation: "También se acepta: antibacterianos."
+
+  - question: Los tipos de este material que el viento puede arrastrar como polvo se conocen como loess. Este material puede perder sales y nutrientes por lixiviación con agua. A una variedad de este material, por lo general rica en humus, se le llama «franco». Los estratos de este material se conocen como horizontes, y este material se clasifica según la cantidad de arena, limo y arcilla que contiene. Identifica esta sustancia en la que se siembran las semillas.
+    options: [ Roca madre, Grava, Suelo, Piedra caliza ]
+    answer: Suelo
+
+  - question: Mientras trabajaba en el Estudio del Ecosistema de Hubbard Brook, Gene Likens descubrió este fenómeno por primera vez en América del Norte. Numerosos estudios han relacionado la mayor frecuencia de este fenómeno en ciertos ecosistemas con la disminución de las poblaciones de arce azucarero. Las emisiones de óxidos de nitrógeno pueden causar esta forma de precipitación que hace que los edificios de acero se corroan. Con mayores cantidades de iones de hidrógeno, ¿cuál es, por los puntos, esta forma de precipitación caracterizada por un pH bajo?
+    options: [ Lluvia helada, Lluvia ácida, Aguanieve, Granizo ]
+    answer: Lluvia ácida
+
+  - question: Este programa fue el primero en ofrecer comercialmente las tablas dinámicas. Los datos de este programa son la fuente más usada para crear macros con el lenguaje Visual Basic para Aplicaciones. A diferencia de un competidor de Google, este programa usa la función «Inmovilizar paneles» en lugar de inmovilizar columnas y filas. El tipo de archivo propio de este programa usa la extensión .xls. Nombra este programa de Microsoft para manejar hojas de cálculo.
+    options: [ Microsoft Excel, Microsoft Access, Microsoft Word, Lotus 1-2-3 ]
+    answer: Microsoft Excel
+
+  - question: Este animal de la familia Culicidae tiene alrededor de 3,600 especies, cuyas primeras etapas de vida son principalmente acuáticas, y sus huevos se depositan sobre todo en agua estancada. La saliva de este animal puede reducir la hemostasia en aquellos a quienes pica, y este animal prefiere picar a personas con temperatura corporal alta o con sangre tipo O. Entre las especies de este animal está Aedes aegypti, que puede transmitir el dengue. Identifica este insecto, el principal vector de la malaria.
+    options: [ Mosca tsetsé, Mosca de la arena, Tábano, Mosquito ]
+    answer: Mosquito
+
+  - question: Antes usado en prismas para infrarrojo, este compuesto, que se usa en el proceso Castner-Keller, ha sido reemplazado en gran parte en esa función por el seleniuro de zinc. Este compuesto forma ceniza de soda en el proceso Solvay, y es la materia prima del proceso cloro-álcali. Solo los disolventes muy polares disuelven este compuesto, que se funde a 801 grados Celsius. Nombra este compuesto iónico que forma la halita, y otra versión del cual se usa comúnmente para sazonar la comida en todos los hogares.
+    options:
+      - Hidróxido de sodio
+      - Carbonato de sodio
+      - Cloruro de sodio
+      - Cloruro de calcio
+    answer: Cloruro de sodio
+    explanation: "También se acepta: sal de mesa, NaCl."
+
+  - question: Uno de estos ecosistemas, llamado Castillo de Loki, aportó la mejor evidencia hasta la fecha de que los eucariotas son un subconjunto de las arqueas. Se supone que el último antepasado común universal, o LUCA (por sus siglas en inglés), se originó en estos ecosistemas, habitados por anélidos quimiosintéticos como el gusano tubícola gigante. Nombra estos ecosistemas del fondo oceánico donde los animales se alimentan gracias a las estructuras volcánicas que les dan nombre.
+    options: [ Arrecifes de coral, Fuentes hidrotermales, Llanuras abisales, Bosques de kelp ]
+    answer: Fuentes hidrotermales
+    explanation: "También se acepta: fuentes del mar profundo, fumarolas negras, fumarolas blancas."
+
+  - question: La luna Dione está en resonancia orbital uno a dos con esta otra luna, que lleva el nombre de un gigante de la mitología griega. Los penachos de esta luna criovolcánica son responsables del anillo E de cierto planeta. La nave Cassini descubrió en esta luna cuatro fracturas llamadas «rayas de tigre». Nombra esta luna de Saturno, la de mayor albedo del sistema solar, que tiene un océano de agua líquida bajo su superficie helada.
+    options: [ Encélado, Tetis, Rea, Jápeto ]
+    answer: Encélado
+
+  - question: Esta es la afección más común causada por mutaciones en el gen DMD, el gen más grande del genoma humano. La forma de Becker de esta afección se debe a mutaciones ligadas al cromosoma X que no alteran el marco de lectura, y un tipo de esta afección, que afecta principalmente a los varones y comienza en la pelvis y los muslos, lleva el nombre de Duchenne. Nombra este trastorno genético que causa debilidad progresiva de los músculos esqueléticos.
+    options:
+      - Hemofilia
+      - Fibrosis quística
+      - Enfermedad de Huntington
+      - Distrofia muscular
+    answer: Distrofia muscular
+
+  - question: Otto Warburg descubrió un proceso en el que las células cancerosas obtienen energía principalmente mediante este proceso en lugar de la fosforilación. La fermentación consiste en este proceso, seguido de la regeneración del NAD+, que permite que este proceso continúe. Este proceso produce cuatro moléculas de ATP y dos moléculas de NADH, así como G3P, al dividir dos moléculas de G3P. Nombra esta primera etapa de la respiración celular que produce dos moléculas de piruvato a partir de glucosa.
+    options:
+      - Ciclo de Krebs
+      - Cadena de transporte de electrones
+      - Glucólisis
+      - Gluconeogénesis
+    answer: Glucólisis
+
+  - question: Los investigadores han llamado a la ausencia de estos objetos la «enfermedad del retraso migratorio». Una detección de estos objetos produce un colorante llamado «púrpura de Ruhemann» cuando los aminoácidos de ese colorante interactúan con un compuesto orgánico blanco llamado ninhidrina. El Sistema de Clasificación de Henry se usa para ordenar las características de estos objetos, cuyos patrones comunes incluyen presillas, verticilos y arcos. Nombra estos identificadores humanos únicos que se encuentran en las puntas de los dedos de una persona.
+    options: [ Patrones del iris, Huellas dactilares, Perfiles de ADN, Registros dentales ]
+    answer: Huellas dactilares
+
+  - question: Este científico del siglo II distinguió entre los nervios motores y los sensitivos, así como entre la sangre arterial y la venosa. Este científico demostró que la voz proviene de la laringe, y realizó algunas de las primeras cirugías de cataratas, entre otros procedimientos. El tratado Que el mejor médico es también filósofo lo escribió, por los puntos, ¿qué médico e investigador griego de Pérgamo, que mejoró la teoría de los humores corporales de Hipócrates?
+    options: [ Galeno, Hipócrates, Avicena, Dioscórides ]
+    answer: Galeno
+    explanation: "También se acepta: Claudius Galenus, Galeno de Pérgamo."
+
+  - question: En física, el número de Deborah representa la rapidez con la que se almacena o se libera la energía descrita por este adjetivo. En la computación en la nube, este adjetivo describe la facilidad con la que un proveedor de servicios puede aumentar o reducir sus recursos. En economía, la demanda de un bien descrita con este adjetivo será sensible a un cambio en el precio. Nombra esta palabra de ocho letras que describe un choque entre dos cuerpos en el que se conserva la energía cinética total, así como una banda de goma.
+    options: [ Plástico, Inelástico, Cinético, Elástico ]
+    answer: Elástico
+    explanation: La respuesta oficial da la forma del sustantivo, «elasticidad».
+
+  - question: Las nebulosas del Corazón y del Alma se encuentran cerca de esta constelación, que contiene parte del Grupo Maffei 1 en el Supercúmulo de Virgo. Una galaxia de esta constelación descubierta por Lewis Swift es la galaxia con brote estelar conocida más cercana, IC 10. La estrella más brillante de esta constelación es Schedar, y en esta constelación ocurrió la supernova de Tycho Brahe. Identifica esta constelación, que lleva el nombre de la madre de Andrómeda y tiene forma de «W».
+    options: [ Cefeo, Andrómeda, Casiopea, Cisne ]
+    answer: Casiopea
+
+  - question: Las unidades de cuidados intensivos que se especializan en tratar estas lesiones también tratan el síndrome de Stevens-Johnson y la NET. En estas lesiones, unas zonas de isquemia rodean la zona de coagulación, que se trata con injertos de espesor parcial y desbridamiento. La fórmula de Parkland calcula los líquidos necesarios para tratar estas lesiones dolorosas. La gravedad de estas lesiones se representa con uno de tres grados. Nombra estas lesiones causadas por las llamas.
+    options: [ Laceraciones, Quemaduras, Abrasiones, Contusiones ]
+    answer: Quemaduras
+
+  - question: Esta reacción química es usada por enzimas como la amilasa presente en la saliva, que descompone el almidón en dextrinas. La ruptura que ocurre durante esta reacción puede darse por varios mecanismos, como la sustitución nucleofílica o las reacciones de eliminación, con un fluido común que actúa a la vez como disolvente y como reactivo. Nombra esta reacción de doble descomposición en la que una molécula de agua rompe un enlace químico dentro de otra molécula.
+    options:
+      - Hidrólisis
+      - Síntesis por deshidratación
+      - Hidrogenación
+      - Esterificación
+    answer: Hidrólisis
+
+  - question: La descarga en este tejido es el movimiento de los componentes de la savia que lleva su nombre, principalmente nutrientes, moléculas de señalización y agua, y puede ocurrir por la vía simplástica o por la apoplástica. Este tejido está formado por células acompañantes y elementos cribosos, cuyas paredes celulares perforadas facilitan el movimiento eficiente del azúcar. Nombra este tejido vascular que se especializa en transportar productos orgánicos, como la sacarosa, por toda la planta, y que suele ir acompañado del xilema.
+    options: [ Xilema, Cámbium vascular, Esclerénquima, Floema ]
+    answer: Floema
+
+  - question: Observar la variedad de ultra alta energía de este fenómeno es el propósito del Observatorio Pierre Auger, en Argentina. Cuando este fenómeno interactúa con la atmósfera, produce grandes cantidades de piones y muones, lo que desencadena su tipo secundario. Este fenómeno se descubrió por primera vez al observar radiación ionizante durante vuelos en globo realizados por Victor Hess. Nombra estos haces de partículas de energía extremadamente alta, como núcleos atómicos.
+    options: [ Viento solar, Rayos catódicos, Rayos cósmicos, Estallidos de rayos gamma ]
+    answer: Rayos cósmicos
+
+  - question: El isótopo 10 de este elemento se usa en la terapia de captura de neutrones en tratamientos experimentales contra el cáncer cerebral. En septiembre de 2017, el rover Curiosity detectó este elemento químico en el cráter Gale de Marte, lo que apoya la idea de que el planeta rojo puede sostener la vida. Con una capacidad única para aceptar tres electrones debido a su orbital p vacío, ¿cuál es, por los puntos, este metaloide de número atómico cinco y símbolo B?
+    options: [ Berilio, Boro, Silicio, Arsénico ]
+    answer: Boro
+
+  - question: El elemento químico descubierto más recientemente, hasta 2024, pertenece a este grupo de la tabla periódica. Otro elemento de este grupo sin isótopos estables es el elemento natural más raro de la corteza terrestre. Un elemento de este grupo con número atómico 35 es uno de los dos únicos elementos que son líquidos a temperatura ambiente. El astato, el bromo y el cloro son ejemplos de, por los puntos, ¿qué grupo de elementos de la tabla periódica, notable por su altísima reactividad?
+    options: [ Halógenos, Gases nobles, Metales alcalinos, Calcógenos ]
+    answer: Halógenos
+    explanation: "También se acepta: grupo 17."
+
+  - question: Las secuencias de escape en este lenguaje se marcan con el carácter «&» (ampersand). El grupo WHATWG se centra en este lenguaje, cuya cuarta versión se llamó inicialmente Cougar. Este lenguaje define varios niveles de encabezado y usa elementos marcados con etiquetas, como la etiqueta de párrafo, que se escriben entre corchetes angulares. Nombra este lenguaje de marcado que se usa junto con CSS y JavaScript y que organiza el contenido para un navegador web.
+    options: [ CSS, PHP, SQL, HTML ]
+    answer: HTML
+    explanation: HTML son las siglas en inglés de HyperText Markup Language («lenguaje de marcado de hipertexto»).
+
+  - question: Arquímedes demostró que la cuadratura de esta curva es igual a cuatro tercios del área de cierto triángulo inscrito. Se puede usar un trozo de cuerda y un alfiler para dibujar esta curva usando la definición de su directriz y su foco. Esta curva es una de las cuatro secciones cónicas que se pueden formar, junto con las circunferencias, las elipses y las hipérbolas. Identifica esta curva, que se forma al graficar funciones que son polinomios cuadráticos, como y igual a x al cuadrado.
+    options: [ Hipérbola, Cicloide, Parábola, Catenaria ]
+    answer: Parábola
+
+  - question: Enormes depósitos de esta sustancia se formaron en los «bosques de carbón» del Pérmico, y este material puede albergar el musgo Sphagnum. Los histosoles pueden estar formados por esta sustancia, que se encuentra en ecosistemas árticos llamados muskegs. Esta sustancia, también abundante en los páramos, se forma en zonas saturadas de agua llamadas pantanos. Común en los humedales de tipo ciénaga, ¿cuál es, por los puntos, esta capa orgánica superficial del suelo formada por materia orgánica acumulada?
+    options: [ Lignito, Turba, Suelo franco, Loess ]
+    answer: Turba
+
+  - question: En esta región, la transferencia de energía y de masa está dominada por los flujos zonales más que por los meridionales. El modelo de tres celdas describe la transmisión de energía y la circulación general dentro de esta región, que en términos generales se define por presentar inversión atmosférica. El borde inferior de esta región es la capa límite planetaria, y es en esta capa de la atmósfera donde ocurren prácticamente todos los fenómenos meteorológicos. Nombra esta capa más baja de la atmósfera de la Tierra.
+    options: [ Troposfera, Mesosfera, Termosfera, Exosfera ]
+    answer: Troposfera
+
+  - question: Este científico presentó la primera demostración de fotografía en color del mundo cuando Thomas Sutton tomó una imagen de una cinta de tartán. Las ecuaciones en derivadas parciales que suelen llevar el nombre de este autor de «Una teoría dinámica del campo electromagnético» incluyen la ley de Gauss, la ley de Ampère y la ley de inducción de Faraday. Identifica a este físico escocés cuyas ecuaciones, que llevan su nombre, relacionan los campos eléctricos y magnéticos con las cargas en movimiento y las corrientes eléctricas.
+    options:
+      - Michael Faraday
+      - Lord Kelvin
+      - André-Marie Ampère
+      - James Clerk Maxwell
+    answer: James Clerk Maxwell
+
+  - question: Se ha documentado que las nutrias de río se alimentan en uno de estos accidentes no fluviales, cerca del brazo de mar de Saanich, llamado McKenzie. Los primeros exploradores definían estos accidentes como una masa de agua de la que podían salir con una sola bordada. Los científicos han estudiado el crecimiento de la población de atún rojo del sur en uno de estos accidentes, llamado la «Gran Australiana», y la parte oriental del golfo de Guinea es uno de estos accidentes, llamado Bonny. Nombra estas curvas de un río o de una costa.
+    options: [ Fiordos, Estuarios, Ensenadas, Lagunas ]
+    answer: Ensenadas
+
+  - question: Estas toxinas bloquean los receptores nicotínicos de acetilcolina en la unión neuromuscular e impiden la contracción muscular. Usadas históricamente como relajantes musculares durante las cirugías, estas toxinas se han usado tradicionalmente en dardos de cerbatana para cazar por pueblos indígenas sudamericanos como los kalinago o los yagua. Introducido como paralizante en la anestesia durante la década de 1940, ¿cuál es, por los puntos, este extracto obtenido de la planta Strychnos toxifera?
+    options: [ Atropina, Curare, Tetrodotoxina, Ouabaína ]
+    answer: Curare
+
+  - question: Una forma de definir la entalpía es como la transformada de Legendre de esta otra función de estado. La temperatura absoluta de un gas ideal está directamente relacionada con esta magnitud, que es igual a la cantidad de calor añadida en un calorímetro de bomba. La primera ley de la termodinámica establece que el calor suministrado a un sistema, más el trabajo realizado sobre él, es igual al cambio de esta magnitud. Nombra esta propiedad termodinámica simbolizada con una U mayúscula.
+    options: [ Energía interna, Entalpía, Entropía, Capacidad calorífica ]
+    answer: Energía interna
